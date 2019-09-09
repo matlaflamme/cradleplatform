@@ -62,3 +62,21 @@
 * Only a select few people should be Administrators
   * Developers
   * Research leads
+
+
+## Security
+
+Since we are dealing with health information we need to be very careful about how we handle it. As of writing this, we don't know if there are any special laws or guidelines that we need to conform to, so the following are simply suggestions.
+
+* Transmissions between the application should be encrypted
+
+  > Impl. Note: There are two ways we could go about this, either rely on HTTPS, or manually encrypt/decrypt data before and after transmission on both ends.
+  >
+  > I'd recommend the latter: using some standard encryption algorithm (e.g., AES-128 or RSA to encrypt the body of an HTTP request before sending it to the server). The reason for this is that we won't need to worry about creating or acquiring the required certificates needed for HTTPS. Though this can be subject for debate if others have better ideas.
+
+* Some data should be stored encrypted in the database
+  * What data should and should not be encrypted is subject to further analysis
+
+    > Impl. Question: How to go about storing encryption keys in a safe and secure way?
+
+* Need to enforce strict user permissions according the defined [access levels](#access-levels)
