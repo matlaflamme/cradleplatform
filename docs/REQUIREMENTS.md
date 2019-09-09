@@ -44,6 +44,16 @@
 
     > Question: Need to fully clarify what the health workers should be able to do.
 
+* Health workers should be able to view the entire history for a patient
+  * This includes health, and medication trends
+  * Should be viewable as graphs, lists and, possibly, as raw data
+
+* Health workers should be able to access referral information in **real time**
+
+  > Impl. Note: This may warrant some sort of notification system for the web application.
+  >
+  > One idea would be to have some sort of "dashboard" or "home page" which would be the first thing a user sees when they log in and displays relevant information: including notifications about new referrals.
+
 #### Statistical Analyser
 
 * Analysers should have access to most data that has been collected
