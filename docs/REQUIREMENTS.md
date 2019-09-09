@@ -6,7 +6,7 @@
 
 > Question: Do patients get access to this and if so what can they view?
 
-* The web application must support 3 levels of access
+* The web application must support 4 levels of access
   * Must have a way for users to log in
   * The system must be able to determine the level of access for the current user when they make a request to the server
 
