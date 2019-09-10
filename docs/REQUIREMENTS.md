@@ -7,6 +7,9 @@
     * [Statistical Analyser](#statistical-analyser)
     * [Administrator](#administrator)
 * [Security](#security)
+* [Backend](#backend)
+  * [API](#api)
+  * [Database](#database)
 
 ## Web Application
 
@@ -98,3 +101,53 @@ Since we are dealing with health information we need to be very careful about ho
     > Impl. Question: How to go about storing encryption keys in a safe and secure way?
 
 * Need to enforce strict user permissions according the defined [access levels](#access-levels)
+
+## Backend
+
+* Both the mobile and web applications must be able to sync with a common server
+
+* Server should expose a public API which the mobile and web applications will use to update and pull data from the database (see [API](#api))
+
+### API
+
+* The API must be secure (see [Security](#security))
+  * i.e., only authorized personal should be able to `GET` / `POST` data
+
+* Must have a way to create new patients
+
+* Must have a way to upload a reading for a patient
+  * Only VHTs and Health Workers should have access to this method
+
+* Must have a way to create a referral for a specific patient
+
+* Must have a way to query/update information about a patient
+  * This information should include:
+    * Personal information: name, age, pregnant or not, etc.
+    * History of blood pressure readings
+    * History of medication
+    * History of symptoms
+    * Other important information
+  * This information should be available to:
+    * VHTs (read/write)
+    * Health Workers (read/write)
+    * Statistical Analysers (readonly by proxy)
+      * The analysers should be able to view histories and trends as a whole; they should not be able to relate an individual history/reading back to a specific patient
+
+* Must have a way to query the patients for a particular VHT
+  * Needed so that a VHT can view their patients
+
+* Must have a way to query various information about a specific VHT
+  * e.g., number of readings performed, number of referrals made, etc.
+  * Needed for VHT monitoring
+
+* Must have a way to query the patients for a particular Health Worker
+  * Needed so that a Health Worker can view their patients
+
+* Must have a way to query for notification for a specific user
+
+### Database
+
+* The database must be secure so that in the possible event of a data breach, personal health information is safe (see [Security](#security))
+
+* The database should have some sort of replication system to prevent against data loss in the event of a failed HDD or server
+  * Note: This is probably outside of the scope of the course project, but would be and absolute necessity for production use. We should avoid making any design decisions which would make it difficult to implement.
