@@ -1,5 +1,13 @@
 # Requirements
 
+* [Web Application](#web-application)
+  * [Access Levels](#access-levels)
+    * [VHT](#vht)
+    * [Health Workers](#health-workers)
+    * [Statistical Analyser](#statistical-analyser)
+    * [Administrator](#administrator)
+* [Security](#security)
+
 ## Web Application
 
 ### Access Levels
