@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // TODO
     // Encrypt default user password so it's hidden
-    
+
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
