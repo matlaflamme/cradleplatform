@@ -14,6 +14,11 @@
 
 ## Mobile Application
 
+* App must be able to upload readings to the server
+* App must be able to sync with the server to retrieve relevant data
+  * This should happen periodically and when the VHT takes a reading or makes a referral
+* App must be able to send referrals via SMS
+* App should recommend actions to take based on a reading
 
 
 ## Web Application
