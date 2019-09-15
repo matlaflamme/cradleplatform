@@ -13,6 +13,7 @@ This file lays out the coding convention for this project. These conventions tak
     * [The Model Package](#the-model-package)
     * [The Service Package](#the-service-package)
   * [Annotations](#annotations)
+* [Android App](#android-app)
 * [JavaScript](#javascript)
 * [HTML](#html)
 
@@ -260,6 +261,14 @@ class Person {
     }
 }
 ```
+
+## Android App
+
+When working on the modifying the Android application, try and match the style of the surrounding code. For example, if 4 spaces are used for indentation, use 4 spaces instead of a tab.
+
+If it is unclear what style to use, the above [Java](#java) style guide may be used.
+
+> **Important**: **Never mix tabs and spaces** for indentation! When working on the Android app, always use the same indentation style as the surrounding code.
 
 ## JavaScript
 
