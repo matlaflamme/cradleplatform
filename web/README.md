@@ -2,6 +2,8 @@
 
 ## Getting Started
 
+Install Docker: https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
 ### Build and run locally
 
 ```
