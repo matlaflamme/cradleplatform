@@ -53,7 +53,6 @@ public class MockUserController {
 	public User create(@RequestBody Map<String, String> body) {
 		String userId = body.get("userId");
 		String password = body.get("password");
-		System.out.printf("Creating %s with password %s\n", userId, password);
 		return userRepository.save(new User(userId, password));
 	}
 
