@@ -57,7 +57,7 @@ public class MockUserController {
 		return userRepository.save(new User(userId, password));
 	}
 
-	@PostMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") int id) throws DatabaseException {
 		try {
 			userRepository.deleteById(id);
