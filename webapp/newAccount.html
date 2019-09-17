@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+	<title>My first Vue app</title>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+<p>Create a new account</p>
+<div id="newAccount">
+	<p>
+		<input type="radio" id="worker" value="worker" v-model="picked" v-on:change="changeSelection">
+		<label for="worker">Clinic worker</label>
+		<input type="radio" id="clinic" value="clinic" v-model="picked" v-on:change="changeSelection">
+		<label for="clinic">Health Clinic</label>
+	</p>
+</div>
+<form id="newWorker" v-if="workerForm">
+	<p>Create a new Health Clinic worker account</p>
+	<input type="text" v-model="firstName" placeholder="First Name">
+	<br>
+	<input type="text" v-model="lastName" placeholder="Last Name">
+	<br>
+	<input type="text" v-model="idNumber" placeholder="ID Number">
+	<br>
+	<input type="text" v-model="phoneNumber" placeholder="Phone Number">
+	<br>
+	<button v-on:click="submitForm">Create Account</button>
+</form>
+<form id="newClinic" v-if="clinicForm">
+	<p>Configure a new Health Clinic</p>
+	<input type="text" v-model="clinicName" placeholder="Clinic Name">
+	<br>
+	<input type="text" v-model="clinicLocation" placeholder="Location">
+	<br>
+	<input type="text" v-model="clinicPhoneNum" placeholder="Phone Number">
+	<br>
+	<button v-on:click="submitForm">Create Clinic</button>
+</form>
+
+<script src="newAccount.js"></script>
+</body>
+</html>
