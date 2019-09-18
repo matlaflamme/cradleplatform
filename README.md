@@ -31,6 +31,33 @@ Build scripts for both Unix and Windows are provided in the `web` directory (`cr
 
 > **Important** (Windows Only): If you have the MySQL service running, you may not be able to launch the application with Docker due to MySQL's port already being in use. If this is the case, simply stop the MySQL service and try again.
 
+## Running the Web Application in IntelliJ
+
+The following configuration steps must be done to allow the web application to run properly in IntelliJ.
+
+1. Start the MySQL server with Docker, the database server must be running for the application to work (it can be stopped by using the `stop-db` command instead of `start-db`).
+
+```
+# Unix
+$ ./cradle-web.py local start-db
+
+# Windows
+PS> .\cradle-web.ps1 local start-db
+```
+
+2. Configure environment variables in IntelliJ
+
+* Go to: Run > Edit Configurations...
+* With "WebApplication" selected on the left hand side, copy the bellow text into the "Environment Variables: " text box on the right.
+
+```
+DB_HOST=localhost;DB_PORT=3306;DB_USER=admin;DB_PASSWORD=super-strong-password
+```
+
+* Click "OK" then build and run the application though IntelliJ like normal.
+
+## Running the Web Application in Docker 
+
 Build and run the server application:
 
 ```
@@ -79,6 +106,8 @@ For console level access to a running database use the following command (note t
 ```
 docker exec -it web_db_1 mysql -u admin -psuper-strong-password
 ```
+
+If the server was started without docker-compose, use `local_web_db_1` for the container name.
 
 ## Teams
 
