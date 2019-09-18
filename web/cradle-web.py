@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import subprocess
 import sys
 
@@ -37,6 +38,9 @@ USAGE: cradle-web.py local COMMAND
 Local Commands:
   build     Build the application
   run       Build and run the application
+  start-db  Starts MySQL server using Docker
+  stop-db   Stops MysSQL server
+  purge-db  Deletes MySQL container, DATABASE WILL BE LOST
 """
 
 
@@ -124,11 +128,36 @@ def local_run():
     exec_cmd(["java", "-jar", "web*.jar"])
 
 
+mysql_container_name = "local_web_db_1"
+
+def local_start_db():
+    exec_cmd([
+        "docker", 
+        "run",
+        "--name=" + mysql_container_name,
+        "-p", "3306:3306",
+        "--mount",
+        "type=bind,src=" + os.getcwd() + "/scripts/db-initializer-scripts,dst=/docker-entrypoint-initdb.d",
+        "-d",
+        "mysql/mysql-server"])
+
+
+def local_stop_db():
+    exec_cmd(["docker", "stop", mysql_container_name])
+
+
+def local_purge_db():
+    exec_cmd(["docker", "rm", mysql_container_name])
+
+
 def cmd_local(argv):
     exit_if_empty(argv, local_usage)
     commands = {
         "build": local_build,
-        "run": local_run
+        "run": local_run,
+        "start-db": local_start_db,
+        "stop-db": local_stop_db,
+        "purge-db": local_purge_db
     }
     cmd = commands.get(argv[0])
     if cmd == None:
