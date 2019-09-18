@@ -61,13 +61,32 @@ function Invoke-Local {
         [string] $LocalCommand
     )
 
+    $MySQLContainerName = "local_web_db_1"
     switch ($LocalCommand) {
         "build" { .\mvnw.cmd }
         "run" {
             .\mvnw.cmd package
             java -jar target\web*.jar
         }
-        Default {}
+        "start-db" {
+            docker.exe run --name $MySQLContainerName -p "3306:3306" --mount "type=bind,src=$PWD\scripts\db-initializer-scripts,dst=/docker-entrypoint-initdb.d" -d "mysql/mysql-server"
+        }
+        "stop-db" {
+            docker.exe stop $MySQLContainerName
+        }
+        "purge-db" {
+            docker.exe rm $MySQLContainerName
+        }
+        Default {
+            Write-Host "USAGE: cradle-web.py local COMMAND
+
+Local Commands:
+  build     Build the application
+  run       Build and run the application
+  start-db  Starts MySQL server using Docker
+  stop-db   Stops MysSQL server
+  purge-db  Deletes MySQL container, DATABASE WILL BE LOST"
+        }
     }
 }
 
