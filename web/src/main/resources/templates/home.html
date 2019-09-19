@@ -6,7 +6,10 @@
     <body>
         <h1>Welcome!</h1>
 
-        <h1 th:inline="text">yoooo [[${#httpServletRequest.remoteUser}]]!</h1>
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+
+        <a href="/upload">Upload stuff!</a>
+
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>
