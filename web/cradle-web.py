@@ -117,6 +117,7 @@ def cmd_docker(argv):
         "pause": docker_pause,
         "ps": docker_ps,
         "purge": docker_purge,
+        "clean": docker_clean,
         "start": docker_start,
         "stop": docker_stop,
         "restart": docker_restart,
