@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 
-import com.cradlerest.web.storage.StorageProperties;
-import com.cradlerest.web.storage.StorageService;
+import com.cradlerest.web.service.storage.StorageProperties;
+import com.cradlerest.web.service.storage.StorageService;
 
 
 @SpringBootApplication

@@ -1,6 +1,7 @@
 package com.cradlerest.web.controller;
 
 import java.io.IOException;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.cradlerest.web.storage.StorageFileNotFoundException;
-import com.cradlerest.web.storage.StorageService;
+import com.cradlerest.web.service.storage.StorageFileNotFoundException;
+import com.cradlerest.web.service.storage.StorageService;
 
 @Controller
 public class FileUploadController {
@@ -57,6 +58,18 @@ public class FileUploadController {
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully uploaded " + file.getOriginalFilename() + "!");
+
+        return "redirect:/upload";
+    }
+
+    @PostMapping(value = "/upload_reading", consumes = "multipart/form-data")
+    public String handleReadingUpload(@RequestParam("userDataFile") MultipartFile file,
+                                      RedirectAttributes redirectAttributes) {
+
+        storageService.store(file);
+
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 

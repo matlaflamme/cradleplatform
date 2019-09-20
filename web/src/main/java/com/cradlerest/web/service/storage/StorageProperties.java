@@ -1,4 +1,4 @@
-package com.cradlerest.web.storage;
+package com.cradlerest.web.service.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
