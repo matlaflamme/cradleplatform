@@ -44,7 +44,7 @@ public class MockUserController {
 	public @ResponseBody User get(@PathVariable("id") int id) throws DatabaseException {
 		Optional<User> optUser = userRepository.findById(id);
 		if (!optUser.isPresent()) {
-			throw new EntityNotFoundException();
+			throw new EntityNotFoundException(id);
 		}
 		return optUser.get();
 	}
@@ -61,7 +61,7 @@ public class MockUserController {
 		try {
 			userRepository.deleteById(id);
 		} catch (Exception e) {
-			throw new EntityNotFoundException();
+			throw new EntityNotFoundException(id);
 		}
 	}
 }

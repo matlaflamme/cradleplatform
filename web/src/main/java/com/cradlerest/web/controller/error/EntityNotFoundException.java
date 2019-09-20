@@ -1,7 +1,6 @@
 package com.cradlerest.web.controller.error;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Database exception type denoting a request for an entity which does not
@@ -9,6 +8,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * HTTP Response Status: 404
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Entity Not Found")
 public class EntityNotFoundException extends DatabaseException {
+
+	public EntityNotFoundException(Object id) {
+		super(HttpStatus.NOT_FOUND, String.format("entity with id '%s' not found", id.toString()));
+	}
+
+	public EntityNotFoundException(String message) {
+		super(HttpStatus.NOT_FOUND, message);
+	}
+
+	public EntityNotFoundException(String message, Throwable cause) {
+		super(HttpStatus.NOT_FOUND, message, cause);
+	}
 }
