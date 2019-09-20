@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:v-on="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>My first Vue app</title>
+		<title>Login</title>
 		<script src="https://unpkg.com/vue"></script>
+		<link rel="stylesheet" href="css/login.css">
 	</head>
 	<body>
+		<h2>Login to your account</h2>
 		<form id="authInput">
 			<input type="text" v-model="username" placeholder="username">
 			<br>
-			<input type="text" v-model="password" placeholder="password">
+			<input type="password" v-model="password" placeholder="password">
 			<br>
 			<button v-on:click="submitInput">Sign In</button>
 			<button v-on:click="createAccount"><a href="newAccount.html">Create Account</a></button>
 		</form>
 
-		<script src="login.js"></script>
+		<script src="js/login.js"></script>
 	</body>
 </html>
