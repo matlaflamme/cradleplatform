@@ -11,7 +11,7 @@ import java.util.Optional;
  * @see User
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
-    // Optional list (may or may not be null / empty)
+    // Optional return (may or may not be null / empty)
     Optional<User> findByUsername(String name);
     void deleteByUsername(String name);
 }
