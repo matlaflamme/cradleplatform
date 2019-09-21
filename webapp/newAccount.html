@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:v-on="http://www.w3.org/1999/xhtml">
 	<head>
+		<!-- Boot strap style sheets and CDN -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -8,14 +9,14 @@
 
 		<title>Create new aacount</title>
 		<script src="https://unpkg.com/vue"></script>
-		<link rel="stylesheet" href="css/login.css">
+		<!-- <link rel="stylesheet" href="css/login.css"> Conflicting Style sheet to Boostrap -->
 
 	</head>
 	<body>
 		<div class="container">
 			<h2>Create a new account</h2>
 			<form id="newAccount" class="radio_btn_list">
-				<div class="custom-control custom-radio custom-control-inline">
+				<div class="custom-control custom-radio custom-control-inline"> <!--Boostrap auto-style-->
 					<input type="radio" id="worker" name="customRadioInline1" value="worker" class="custom-control-input" v-model="picked" v-on:change="changeSelection">
 					<label class="custom-control-label" for="worker">Clinic worker</label>
 				</div>
