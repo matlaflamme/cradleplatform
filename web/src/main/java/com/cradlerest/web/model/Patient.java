@@ -1,5 +1,7 @@
 package com.cradlerest.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -20,6 +22,7 @@ public class Patient {
 	private String name;
 
 	@Column(name = "dob")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 
 	public Patient() {}

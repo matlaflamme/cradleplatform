@@ -20,7 +20,7 @@ CREATE TABLE user (
 CREATE TABLE patient (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    dob DATE
+    dob DATE NOT NULL
 );
 
 CREATE TABLE reading (
@@ -47,8 +47,8 @@ INSERT INTO user  (user_id, password)
 VALUES ('vht', 'vht');
 
 
-INSERT INTO patient (id, name)
-VALUES ('001', 'Test Patient');
+INSERT INTO patient (id, name, dob)
+VALUES ('001', 'Test Patient', '1995-12-25');
 
 
 INSERT INTO reading (id, pid, systolic, diastolic, heart_rate, colour)
