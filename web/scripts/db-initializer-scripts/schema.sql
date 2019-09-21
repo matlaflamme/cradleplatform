@@ -17,6 +17,23 @@ CREATE TABLE user (
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE patient (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    dob DATE
+);
+
+CREATE TABLE reading (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pid VARCHAR(255) NOT NULL,
+    systolic INT NOT NULL,
+    diastolic INT NOT NULL,
+    heart_rate INT NOT NULL,
+    colour INT NOT NULL,
+    date DATE NOT NULL,
+    FOREIGN KEY (pid) REFERENCES patient (id)
+);
+
 
 -- Dummy Data
 
@@ -28,3 +45,14 @@ VALUES ('health', 'health');
 
 INSERT INTO user  (user_id, password)
 VALUES ('vht', 'vht');
+
+
+INSERT INTO patient (id, name)
+VALUES ('001', 'Test Patient');
+
+
+INSERT INTO reading (id, pid, systolic, diastolic, heart_rate, colour)
+VALUES (1, '001', 100, 80, 74, 1);
+
+INSERT INTO reading (id, pid, systolic, diastolic, heart_rate, colour)
+VALUES (2, '001', 130, 90, 80, 2);
