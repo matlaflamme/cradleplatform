@@ -1,15 +1,12 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.error.DatabaseException;
-import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.repository.PatientRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 /**
  * Controller responsible for managing requests dealing with patients.
@@ -26,19 +23,14 @@ import java.util.Optional;
 @RequestMapping("/api/patient")
 public class PatientController {
 
-	private PatientRepository patientRepository;
+	private PatientManagerService patientManagerService;
 
-	public PatientController(PatientRepository patientRepository) {
-		this.patientRepository = patientRepository;
+	public PatientController(PatientManagerService patientManagerService) {
+		this.patientManagerService = patientManagerService;
 	}
 
 	@GetMapping("/{id}")
-	public Patient patient(@PathVariable("id") String id) throws DatabaseException {
-		Optional<Patient> optionalPatient = patientRepository.findById(id);
-		if (optionalPatient.isEmpty()) {
-			// cast id to Object to use the Object constructor
-			throw new EntityNotFoundException((Object) id);
-		}
-		return optionalPatient.get();
+	public Patient patient(@PathVariable("id") String id) throws Exception {
+		return patientManagerService.getPatientWithId(id);
 	}
 }
