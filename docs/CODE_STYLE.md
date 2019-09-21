@@ -270,6 +270,59 @@ If it is unclear what style to use, the above [Java](#java) style guide may be u
 
 > **Important**: **Never mix tabs and spaces** for indentation! When working on the Android app, always use the same indentation style as the surrounding code.
 
+
+
 ## JavaScript
 
+When working with `.js` files, we primarily use them for **Vue Applications**. Vue variables are to be under `let`, not `var`. 
+
+All Javascript files are to be put into the `js` sub-folder of our *webapp* main folder. 
+
+Names should be in *camelCase* style -- **no underscores**. Vue variable should have the same name as the element `id` to reduce confusion and possible issues down the road. 
+
+Curly braces (`{}`) should be separated from any variables/data sets with **one space**. Additionally, colons (`:`) and parentheses (`()`) are to stick to the variable/data set.  The opening bracket will always be on the same line as what you are declaring, while the closing bracket will be on its own line with matching indentation as its declared counterpart.
+
+Equal signs (`=`) are to be separated by **one space** (note: `==` and `===` can stay conjoined -- obviously).
+
+No real requirements for Semi-colons. That is up to you.
+
+For example:
+
+```javascript
+let loginInput = new Vue({
+    el: '#loginInput',
+    data: {
+        user: '',
+        pass: ''
+    }
+})
+```
+
+
+
 ## HTML
+
+All `<script src=... /> ` tags are to be presented at the top of the HTML file within the `<head />` tags. 
+
+Indentations must be used with a singular use of the `TAB`  key -- **do not press TAB twice per indentation**. Each primary element (i.e., containers) will have their own indentation column with their nested elements appropriately indented once recursively. 
+
+Unless absolutely necessary (e.g., screen overflow), each element will be contained in a single line. 
+
+The element's `id` will be the first on the list of properties, proceeding appropriate element `type`. 
+
+Due to the nature of elements being long declarations, comments are to be placed **above** their respective line(s) of code. If necessary, separate each "chunk" of code by a blank space. 
+
+Line breaks can be placed either at the end of (short) lines as well as between two separated "chunks." Continuous streams of breaks can be conjoined into one line.
+
+For example:
+
+```html
+<!--This is my comment for myDiv-->
+<div id="registration">
+    <input type="text" id="user" placeholder="Username">
+    <br><br>
+    <!--Submit button-->
+    <button id="submit">Submit</button>
+</div>
+```
+
