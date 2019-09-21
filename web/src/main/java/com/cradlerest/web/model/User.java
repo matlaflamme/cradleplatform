@@ -36,6 +36,13 @@ public class User {
 		this.role = role;
 	}
 
+	public User(User user) {
+		this.id = user.getId();
+		this.userId = user.getUserId();
+		this.password = user.getPassword();
+		this.role = user.getRole();
+	}
+
 	public User(String userId, String password) {
 		this.userId = userId;
 		this.password = password;
