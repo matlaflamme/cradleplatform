@@ -1,7 +1,8 @@
+
 h2 {
     color: #0c9090; /* Green */
     text-align: center;
-    margin: 20px;
+    margin-top: 20px;
 }
 
 button {
@@ -51,8 +52,10 @@ input{
     padding: 3%;
     color: #555;
     font: 95% Arial, Helvetica, sans-serif;
-}
 
+
+
+}
 
 form p{
     padding:5px;
@@ -70,3 +73,6 @@ form label{
 p{
     font-size:10px;line-height: 18px;
 }
+
+
+
