@@ -30,7 +30,7 @@ CREATE TABLE reading (
     diastolic INT NOT NULL,
     heart_rate INT NOT NULL,
     colour INT NOT NULL,
-    date DATE NOT NULL,
+    date TIMESTAMP NOT NULL,
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
 
@@ -51,8 +51,11 @@ INSERT INTO patient (id, name, dob)
 VALUES ('001', 'Test Patient', '1995-12-25');
 
 
-INSERT INTO reading (id, pid, systolic, diastolic, heart_rate, colour)
-VALUES (1, '001', 100, 80, 74, 1);
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+VALUES ('001', 100, 80, 74, 1, '2019-10-20 20:12:32');
 
-INSERT INTO reading (id, pid, systolic, diastolic, heart_rate, colour)
-VALUES (2, '001', 130, 90, 80, 2);
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+VALUES ('001', 130, 90, 80, 2, '2019-10-22 6:37:00');
+
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+VALUES ('001', 130, 90, 80, 2, CURRENT_TIMESTAMP());

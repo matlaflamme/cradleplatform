@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.PatientManagerServiceImpl;
 import com.cradlerest.web.service.repository.PatientRepository;
+import com.cradlerest.web.service.repository.ReadingRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,12 +33,15 @@ public class PatientManagerServiceImplTests {
 
 		@Bean
 		PatientManagerService patientManagerService() {
-			return new PatientManagerServiceImpl(patientRepository);
+			return new PatientManagerServiceImpl(patientRepository, readingRepository);
 		}
 	}
 
 	@MockBean
 	PatientRepository patientRepository;
+
+	@MockBean
+	ReadingRepository readingRepository;
 
 	@Autowired
 	PatientManagerService patientManagerService;
