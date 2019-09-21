@@ -13,9 +13,9 @@
 	<body>
 		<h2>Login to your account</h2>
 		<form id="authInput">
-			<input type="text" v-model="username" placeholder="username">
+			<input type="text" v-model="username" placeholder="Username" required>
 			<br>
-			<input type="password" v-model="password" placeholder="password">
+			<input type="password" v-model="password" placeholder="Password" required>
 			<br>
 			<button v-on:click="submitInput">Sign In</button>
 			<button v-on:click="createAccount"><a href="newAccount.html">Create Account</a></button>
