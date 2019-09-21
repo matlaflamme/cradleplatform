@@ -24,12 +24,16 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
+	@Enumerated(EnumType.ORDINAL)
+	private Role role;
+
 	public User() {}
 
-	public User(Integer id, String userId, String password) {
+	public User(Integer id, String userId, String password, Role role) {
 		this.id = id;
 		this.userId = userId;
 		this.password = password;
+		this.role = role;
 	}
 
 	public User(String userId, String password) {
@@ -49,6 +53,8 @@ public class User {
 		this.password = password;
 	}
 
+	public void setRole(Role role) { this.role = role; } ;
+
 	public Integer getId() {
 		return id;
 	}
@@ -60,4 +66,7 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
+
+	public Role getRole() { return role; }
+
 }
