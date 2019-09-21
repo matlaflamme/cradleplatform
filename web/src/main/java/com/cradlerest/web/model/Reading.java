@@ -1,6 +1,10 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.service.DateDeserializer;
+import com.cradlerest.web.service.DateSerializer;
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -36,7 +40,6 @@ public class Reading {
 	private ReadingColour colour;
 
 	@Column(name = "date")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date date;
 
 	public Reading() {}
@@ -123,10 +126,12 @@ public class Reading {
 		this.colour = colour;
 	}
 
+	@JsonSerialize(using = DateSerializer.class)
 	public Date getDate() {
 		return date;
 	}
 
+	@JsonDeserialize(using = DateDeserializer.class)
 	public void setDate(Date date) {
 		this.date = date;
 	}
