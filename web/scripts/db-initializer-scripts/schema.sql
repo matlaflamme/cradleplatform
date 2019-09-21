@@ -12,20 +12,19 @@ USE cradlerest;
 
 -- For mock api testing: NOT FOR PRODUCTION USE!!!
 CREATE TABLE user (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     user_id VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL
 );
 
 
 -- Dummy Data
 
-INSERT INTO user (id, user_id, password, role)
-VALUES (1, 'admin', 'admin', 'Administrator');
+INSERT INTO user (user_id, password)
+VALUES ('admin', 'admin');
 
-INSERT INTO user  (id, user_id, password, role)
-VALUES (2, 'health', 'health', 'HealthWorker');
+INSERT INTO user  (user_id, password)
+VALUES ('health', 'health');
 
-INSERT INTO user  (id, user_id, password, role)
-VALUES (3, 'vht', 'vht', 'VHT');
+INSERT INTO user  (user_id, password)
+VALUES ('vht', 'vht');

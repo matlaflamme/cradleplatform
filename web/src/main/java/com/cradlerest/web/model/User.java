@@ -1,9 +1,6 @@
 package com.cradlerest.web.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Class {@code User} is a database entity holding data for users of the web
@@ -13,14 +10,18 @@ import javax.persistence.Id;
  * 	please revisit its implementation at a later date
  */
 @Entity
+@Table(name = "user")
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 
+	@Column(name = "user_id")
 	private String userId;
 
+	@Column(name = "password")
 	private String password;
 
 	public User() {}
