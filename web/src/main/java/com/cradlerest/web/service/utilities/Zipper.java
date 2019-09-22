@@ -1,20 +1,16 @@
 package com.cradlerest.web.service.utilities;
 
+import com.sun.el.stream.Stream;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
-import java.io.InputStream;
 
 
 public class Zipper {
@@ -53,12 +49,15 @@ public class Zipper {
     }
 
     // Source: https://www.journaldev.com/960/java-unzip-file-example
-    public static List<File> unZip(MultipartFile zipFile, String destDir) {
-        File dir = new File(destDir);
+    public static HashMap<String, byte[]> unZip(MultipartFile zipFile, String destDir) {
+//        File dir = new File(destDir);
         // create output directory if it doesn't exist
-        if(!dir.exists()) dir.mkdirs();
+//        if(!dir.exists()) dir.mkdirs();
 
+//        List<File> zippedFiles = new ArrayList<>();
+        HashMap<String, byte[]> zippedFiles = new HashMap<String, byte[]>();
         InputStream fis;
+
         //buffer for read and write data to file
         byte[] buffer = new byte[BUFFER_SIZE];
         try {
@@ -68,16 +67,29 @@ public class Zipper {
             while(ze != null){
 
                 String fileName = ze.getName();
-                File newFile = new File(destDir + File.separator + fileName);
-                System.out.println("Unzipping to "+newFile.getAbsolutePath());
-                //create directories for sub directories in zip
-                new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);
+//                InputStream zippedFile = InputStream.nullInputStream();
+
+                ByteArrayOutputStream zippedFile = new ByteArrayOutputStream();
+
                 int len;
                 while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
+                    zippedFile.write(buffer, 0, len);
                 }
-                fos.close();
+
+                zippedFile.flush();
+                byte[] byteArray = zippedFile.toByteArray();
+                zippedFiles.put(fileName, byteArray);
+
+//                File newFile = new File(destDir + File.separator + fileName);
+//                System.out.println("Unzipping to " + newFile.getAbsolutePath());
+//                //create directories for sub directories in zip
+//                new File(newFile.getParent()).mkdirs();
+//                FileOutputStream fos = new FileOutputStream(newFile);
+//                int len;
+//                while ((len = zis.read(buffer)) > 0) {
+//                    fos.write(buffer, 0, len);
+//                }
+//                fos.close();
                 //close this ZipEntry
                 zis.closeEntry();
                 ze = zis.getNextEntry();
@@ -90,7 +102,7 @@ public class Zipper {
             e.printStackTrace();
         }
 
-        return null;
+        return zippedFiles;
     }
 
 }

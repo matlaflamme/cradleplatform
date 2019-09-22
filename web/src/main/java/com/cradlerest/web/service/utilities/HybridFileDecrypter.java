@@ -1,10 +1,10 @@
 package com.cradlerest.web.service.utilities;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
@@ -14,10 +14,12 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -27,7 +29,7 @@ import javax.crypto.spec.PSource;
 import javax.crypto.spec.SecretKeySpec;
 
 public class HybridFileDecrypter {
-    private static final String TAG = "HybridFileEncrypter";
+    private static final String TAG = "HybridFileDecrypter";
 
     private static final int NUM_BITS_AES_KEY = 256;
 
@@ -38,42 +40,94 @@ public class HybridFileDecrypter {
     */
 
     // TODO : pull private key from file so it's not just sitting here in the open
-    private static final String PRIVATE_KEY = "    -----BEGIN RSA PRIVATE KEY-----                             " + LINEFEED +
-    "MIIEpQIBAAKCAQEAqC4A0onri/58QMcMNtmPnmt7quCOYswhsFIwReSzdRzbqxhH" + LINEFEED +
-    "DowsWfah8lEmF7l2X2znx0vFJ0d9bL/aixtJjSjm63c2h0o6P2G6Jk3cLc5eQ+fW" + LINEFEED +
-    "+u8IELg4I9VsLNso9hbhWVcwuU47oWL7FCdCgtV6Gr0tTPmnJfygkUHggK2mDkGg" + LINEFEED +
-    "j0mKfOU5TdNoUharvQMmu+d4o29gn+8thiZ5G70Jlgsmq0PjvXuKj+skfRcXcKHB" + LINEFEED +
-    "JhgU/0K9H1Y5itGYHSAnW05vJfSK2/uuXFjJ0zCO1noM3hACOFA+AIbiwTzDVlPa" + LINEFEED +
-    "J/HBIaxZn0Vdfr1A864+CC7RYXFF4OdE+hJbPQIDAQABAoIBAHDZraOY+H2P3kB5" + LINEFEED +
-    "UDDd/AkJhoo69FBHObPe8pVzyRekraI5QDT6yifz3ueCnFT/FfciVMTeiwS4a+k1" + LINEFEED +
-    "M6h0Pv6Bm7IU5HoTzNIK+aYKSNxTxd07DH6FNpxBgSpKY7QVu36mC8CvSPqPDGRW" + LINEFEED +
-    "zrPPREoWhUC8AFHOk+JhijzuP38X72E6PmRSQkkyA/Ye1E++Tzxo6Zs8gYwcMIxk" + LINEFEED +
-    "Pv6GDyV5FU3+fQmdiAyTulcwi6MobIJgwo65sXd683sEkqXMwJogUI+5V8x61bC+" + LINEFEED +
-    "8YukYFkVJKh02Vmbe+NGRu7TRkkRYIzy1ARl+lD25WJFMaK2Cppc5iD52FxE0NQ3" + LINEFEED +
-    "RljvEuECgYEA3haYF5+X4TrOmg1SsxMQMJo60PUfDRZ3I3jKz95INlzWEvjRFQlf" + LINEFEED +
-    "CyOZgatiZFmDklC1fKumDLzIkPzKfT+k4kZ/lFARlXOZixZPFuoV+zt+3Ghu65S8" + LINEFEED +
-    "TjKvlHzk/zuf8chaMl2VJ4wwCVAmZ/7MEtGJaacsNJkK1ehyGq6p+7MCgYEAwdwh" + LINEFEED +
-    "IY6u4AFgXDxXeodVqEs0h9zSZ66DjUBbBTOZEes8f3HY54ggExTynsmNh+gI+UGQ" + LINEFEED +
-    "HyGoGZPDpNvCARCjeazk+KlJwNctfJuX/nIuD0tVIJV676agd3DGR1AoopOtzrk4" + LINEFEED +
-    "SaDy2FIvBATrJkKQSCoEadZShS6vqeYPw/ooFU8CgYEAytmwScOHoj1of+UzaEU9" + LINEFEED +
-    "QGde2YVKu1WNtGScOok5RA4/qkyCDMjmevIlP/8ee7IXLwlw+1J89J1qRKPg/82l" + LINEFEED +
-    "+NeTqBAKP4u67wONccyWD0ckdIUe6yaLaJF7NhFtyILZcKojWGWJ2vl81sTSj6J3" + LINEFEED +
-    "G6kv7cS358Lx1rfdoOlwcWkCgYEAul7DZzyB+I66MdI9E2naOpIabWcozE6k3/33" + LINEFEED +
-    "w1domCZ7odY0fdqLY2znFyqTqw2y2tZiFNvJfNVm6C3xJA736nkCI+C0K/VyIHKB" + LINEFEED +
-    "PDhO+Zslus6aQp0BdfJwXIy+lBW/qZa9e2OFM9xGoOmNm9mwVgA2//zwlmNcs8ye" + LINEFEED +
-    "aX0sXdcCgYEAudjeQ2QawPz4b11whITH/emVkAjWTv8XmE7YLgxdZJ4Sg9plkyZA" + LINEFEED +
-    "Hv6vzVr4cI44GQ5Ns6C2yUlll0NZRwMiE6pTIPOCgl0c0YwZOQp93AIQxYuLBuLk" + LINEFEED +
-    "mN0KpMn5cBeDjWNn+DVU821y4PRmjTC51DlH3atqQxtUTv6wYo9pcHk=        " + LINEFEED +
-    "-----END RSA PRIVATE KEY-----                                   " + LINEFEED;
 
-    public static void hybridDecryptFile(File inputFile) {
-        // 1. Decrypt AES Key to Base64 string
-        // 2. Decrypt Initialization Vector (IV) to Base64 string
+    private static final String PRIVATE_KEY =
+    "-----BEGIN RSA PRIVATE KEY-----" +
+    "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCoLgDSieuL/nxA" +
+    "xww22Y+ea3uq4I5izCGwUjBF5LN1HNurGEcOjCxZ9qHyUSYXuXZfbOfHS8UnR31s" +
+    "v9qLG0mNKObrdzaHSjo/YbomTdwtzl5D59b67wgQuDgj1Wws2yj2FuFZVzC5Tjuh" +
+    "YvsUJ0KC1XoavS1M+acl/KCRQeCAraYOQaCPSYp85TlN02hSFqu9Aya753ijb2Cf" +
+    "7y2GJnkbvQmWCyarQ+O9e4qP6yR9FxdwocEmGBT/Qr0fVjmK0ZgdICdbTm8l9Irb" +
+    "+65cWMnTMI7WegzeEAI4UD4AhuLBPMNWU9on8cEhrFmfRV1+vUDzrj4ILtFhcUXg" +
+    "50T6Els9AgMBAAECggEAcNmto5j4fY/eQHlQMN38CQmGijr0UEc5s97ylXPJF6St" +
+    "ojlANPrKJ/Pe54KcVP8V9yJUxN6LBLhr6TUzqHQ+/oGbshTkehPM0gr5pgpI3FPF" +
+    "3TsMfoU2nEGBKkpjtBW7fqYLwK9I+o8MZFbOs89EShaFQLwAUc6T4mGKPO4/fxfv"+
+    "YTo+ZFJCSTID9h7UT75PPGjpmzyBjBwwjGQ+/oYPJXkVTf59CZ2IDJO6VzCLoyhs"+
+    "gmDCjrmxd3rzewSSpczAmiBQj7lXzHrVsL7xi6RgWRUkqHTZWZt740ZG7tNGSRFg"+
+    "jPLUBGX6UPblYkUxorYKmlzmIPnYXETQ1DdGWO8S4QKBgQDeFpgXn5fhOs6aDVKz"+
+    "ExAwmjrQ9R8NFncjeMrP3kg2XNYS+NEVCV8LI5mBq2JkWYOSULV8q6YMvMiQ/Mp9"+
+    "P6TiRn+UUBGVc5mLFk8W6hX7O37caG7rlLxOMq+UfOT/O5/xyFoyXZUnjDAJUCZn"+
+    "/swS0Ylppyw0mQrV6HIarqn7swKBgQDB3CEhjq7gAWBcPFd6h1WoSzSH3NJnroON"+
+    "QFsFM5kR6zx/cdjniCATFPKeyY2H6Aj5QZAfIagZk8Ok28IBEKN5rOT4qUnA1y18"+
+    "m5f+ci4PS1UglXrvpqB3cMZHUCiik63OuThJoPLYUi8EBOsmQpBIKgRp1lKFLq+p"+
+    "5g/D+igVTwKBgQDK2bBJw4eiPWh/5TNoRT1AZ17ZhUq7VY20ZJw6iTlEDj+qTIIM"+
+    "yOZ68iU//x57shcvCXD7Unz0nWpEo+D/zaX415OoEAo/i7rvA41xzJYPRyR0hR7r"+
+    "JotokXs2EW3IgtlwqiNYZYna+XzWxNKPoncbqS/txLfnwvHWt92g6XBxaQKBgQC6"+
+    "XsNnPIH4jrox0j0Tado6khptZyjMTqTf/ffDV2iYJnuh1jR92otjbOcXKpOrDbLa"+
+    "1mIU28l81WboLfEkDvfqeQIj4LQr9XIgcoE8OE75myW6zppCnQF18nBcjL6UFb+p"+
+    "lr17Y4Uz3Eag6Y2b2bBWADb//PCWY1yzzJ5pfSxd1wKBgQC52N5DZBrA/PhvXXCE"+
+    "hMf96ZWQCNZO/xeYTtguDF1knhKD2mWTJkAe/q/NWvhwjjgZDk2zoLbJSWWXQ1lH"+
+    "AyITqlMg84KCXRzRjBk5Cn3cAhDFi4sG4uSY3QqkyflwF4ONY2f4NVTzbXLg9GaN"+
+    "MLnUOUfdq2pDG1RO/rBij2lweQ=="+
+    "-----END RSA PRIVATE KEY-----";
+
+
+
+    public static void hybridDecryptFile(MultipartFile inputFile, String filePath) throws GeneralSecurityException, IOException {
+
+
         // 3. Convert both AES key and IV to binary format
         // 4. Convert both binaries to hexdumps format '16/1 "%02x"'
         // 5. Decrypt file using hexdumps
 
+        // Unzip uploaded file
+        HashMap<String, byte[]> files = Zipper.unZip(inputFile, filePath);
 
+        PrivateKey privateKey = convertRsaPemToPrivateKey(PRIVATE_KEY);
+
+        // Decrypt Initialization Vector (IV) to Base64 string
+        byte[] aesIvEncrypted = files.get("aes_iv.rsa");
+        String aesIv64 = decryptRSA(privateKey, aesIvEncrypted);
+        // Convert Base64 String to Hex
+        byte[] aesIvHex = Base64.getDecoder().decode(aesIv64);
+
+        
+        // Decrypt AES Key to Base64 string
+        byte[] aesKeyBytes = files.get("aes_key.rsa");
+        String aesKey = decryptRSA(privateKey, aesKeyBytes);
+        System.out.println(aesKey);
+
+
+
+    }
+
+    public static PrivateKey convertRsaPemToPrivateKey(String pkcsKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // source: https://stackoverflow.com/questions/7216969/getting-rsa-private-key-from-pem-base64-encoded-private-key-file#7221381
+        // Remove the first and last lines
+        final String HEADER = "-----BEGIN RSA PRIVATE KEY-----";
+        final String FOOTER = "-----END RSA PRIVATE KEY-----";
+
+        String privateKeyPEM = pkcsKey.trim();
+        if (!pkcsKey.startsWith(HEADER)) {
+            throw new InvalidKeySpecException("Private key must start with: " + HEADER);
+        }
+        if (!pkcsKey.endsWith(FOOTER)) {
+            throw new InvalidKeySpecException("Private key must end with: " + FOOTER);
+        }
+        privateKeyPEM = privateKeyPEM.replace(HEADER, "");
+        privateKeyPEM = privateKeyPEM.replace(FOOTER, "");
+//        privateKeyPEM = privateKeyPEM.replaceAll("\\n", "");
+        privateKeyPEM = privateKeyPEM.trim();
+
+//        System.out.print(TAG + ": " + privateKeyPEM);
+        // Base64 decode the data
+        byte[] keyBytes = Base64.getDecoder().decode(privateKeyPEM);
+        System.out.println(TAG + ": Decoded key bytes from base64 length: " + keyBytes.length);
+
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+
+        return kf.generatePrivate(spec);
     }
 
     private static String decryptFileWithAES(SecretKey secretAesKey, byte[] initializationVector, File sourceDataFile, File encryptedDataFile) throws GeneralSecurityException, IOException {
@@ -105,7 +159,7 @@ public class HybridFileDecrypter {
     }
 
     private static String decryptRSA(PrivateKey privateKey, byte[] data) throws GeneralSecurityException {
-        Cipher decrypt = Cipher.getInstance("RSA/ECB/OAEPPadding");
+        Cipher decrypt = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
         decrypt.init(Cipher.DECRYPT_MODE, privateKey, new OAEPParameterSpec("SHA-1", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT));
         String decryptedMessage = new String(decrypt.doFinal(data), StandardCharsets.UTF_8);
         return decryptedMessage;
