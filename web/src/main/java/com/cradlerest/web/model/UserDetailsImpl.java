@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 /*
- This class defines a user that has been authorized
+ This class defines an authorized user
 
  UserDetails interface provided by Spring Security
  https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetails.html
@@ -17,16 +17,18 @@ import java.util.List;
 public class UserDetailsImpl extends User implements UserDetails {
 
     // Creates a new authorized user
-    // You can reference this user through 'super'
+    // You can reference this user through 'super' e.g. super.getUserId() etc..
     public UserDetailsImpl(final User user) {
         super(user);
     }
+
     /*
      A user may have more role (I guess?)
      For now they only have one:
      HEALTHWORKER
      VHT
      ADMIN
+
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

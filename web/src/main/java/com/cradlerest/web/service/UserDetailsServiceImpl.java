@@ -14,6 +14,7 @@ import java.util.Optional;
 
 /*
 User handler for database
+Relies on class: UserDetailsImpl
 
  */
 @Service
@@ -22,12 +23,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    // Returns list of all users found in database with 'name'
+    // TODO: Restrict usernames to be unique
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        Optional<User> usersOptional = userRepository.findByUsername(name);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> usersOptional = userRepository.findByUsername(username);
 
+        // No users are found
         if (usersOptional == null) {
-            throw new UsernameNotFoundException("User '" + name + "' not found");
+            throw new UsernameNotFoundException("User '" + username + "' not found");
         }
 
         // Creates the authenticated user(s)
