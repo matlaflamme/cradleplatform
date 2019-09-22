@@ -39,8 +39,8 @@ public class Reading {
 	@Enumerated(EnumType.ORDINAL)
 	private ReadingColour colour;
 
-	@Column(name = "date")
-	private Date date;
+	@Column(name = "timestamp")
+	private Date timestamp;
 
 	public Reading() {}
 
@@ -50,14 +50,14 @@ public class Reading {
 			int diastolic,
 			int heartRate,
 			ReadingColour colour,
-			Date date
+			Date timestamp
 	) {
 		this.patient = patient;
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
 		this.colour = colour;
-		this.date = date;
+		this.timestamp = timestamp;
 	}
 
 	public Reading(
@@ -67,7 +67,7 @@ public class Reading {
 			int diastolic,
 			int heartRate,
 			ReadingColour colour,
-			Date date
+			Date timestamp
 	) {
 		this.id = id;
 		this.patient = patient;
@@ -75,7 +75,7 @@ public class Reading {
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
 		this.colour = colour;
-		this.date = date;
+		this.timestamp = timestamp;
 	}
 
 	public int getId() {
@@ -127,12 +127,12 @@ public class Reading {
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
-	public Date getDate() {
-		return date;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
 	@JsonDeserialize(using = DateDeserializer.class)
-	public void setDate(Date date) {
-		this.date = date;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 }

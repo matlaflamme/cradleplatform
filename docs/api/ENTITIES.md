@@ -125,7 +125,7 @@ the most recent reading will be the first item in the array.
             "diastolic": 100,
             "heartRate": 80,
             "colour": 2,
-            "date": "2019-09-24 12:31:34"
+            "timestamp": "2019-09-24 12:31:34"
         },
         {
             "id": 2,
@@ -133,7 +133,7 @@ the most recent reading will be the first item in the array.
             "diastolic": 90,
             "heartRate": 80,
             "colour": 1,
-            "date": "2019-09-22 06:37:00"
+            "timestamp": "2019-09-22 06:37:00"
         },
         {
             "id": 1,
@@ -141,7 +141,7 @@ the most recent reading will be the first item in the array.
             "diastolic": 80,
             "heartRate": 74,
             "colour": 0,
-            "date": "2019-09-20 20:12:32"
+            "timestamp": "2019-09-20 20:12:32"
         }
     ],
     "symptoms": []
@@ -161,7 +161,7 @@ Holds information about a single CRADLE reading.
 | `diastolic` | `number` | `false` | Diastolic (bottom number) reading |
 | `heartRate` | `number` | `false` | Heart rate reading |
 | `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW, 2=RED}` |
-| `date`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+| `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
 ### Example
 
@@ -172,6 +172,6 @@ Holds information about a single CRADLE reading.
     "diastolic": 80,
     "heartRate": 74,
     "colour": 0,
-    "date": "2019-09-20 20:12:32"
+    "timestamp": "2019-09-20 20:12:32"
 }
 ```

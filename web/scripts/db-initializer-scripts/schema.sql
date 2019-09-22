@@ -40,7 +40,7 @@ CREATE TABLE reading (
     diastolic INT NOT NULL,
     heart_rate INT NOT NULL,
     colour INT NOT NULL,                -- enumerated {green, yellow, red}
-    date DATETIME NOT NULL,
+    timestamp DATETIME NOT NULL,
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
 
@@ -82,14 +82,14 @@ VALUES ('002',          -- id
         NULL);          -- other symptoms
 
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
 VALUES ('001', 100, 80, 74, 0, '2019-09-20 20:12:32');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
 VALUES ('001', 130, 90, 80, 1, '2019-09-22 6:37:00');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
 VALUES ('001', 130, 100, 80, 2, '2019-09-24 12:31:34');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, date)
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
 VALUES ('002', 140, 80, 93, 2, '2018-06-12 08:54:15')

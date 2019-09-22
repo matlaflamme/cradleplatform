@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface ReadingRepository extends JpaRepository<Reading, Integer> {
 
-	@Query("SELECT r FROM Reading r JOIN FETCH r.patient p WHERE p.id = ?1 ORDER BY r.date DESC")
+	@Query("SELECT r FROM Reading r JOIN FETCH r.patient p WHERE p.id = ?1 ORDER BY r.timestamp DESC")
 	List<Reading> findAllByPatientId(@NotNull String patientId);
 }
