@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for services dealing with patient management.
@@ -28,4 +29,8 @@ public interface PatientManagerService {
 	Patient getPatientWithId(@NotNull String id) throws Exception;
 
 	List<Reading> getReadingsForPatientWithId(@NotNull String id);
+
+	Patient constructPatient(Map<String, String> body) throws Exception;
+
+	Reading constructReading(Map<String, String> body) throws Exception;
 }
