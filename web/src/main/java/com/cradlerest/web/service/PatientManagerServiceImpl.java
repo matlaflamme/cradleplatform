@@ -46,7 +46,6 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			// properties declared public to avoid having to write getters/setters for local class
 
 			@JsonUnwrapped
-			@SuppressWarnings("WeakerAccess")
 			public Patient patient;
 
 			@SuppressWarnings("WeakerAccess")
