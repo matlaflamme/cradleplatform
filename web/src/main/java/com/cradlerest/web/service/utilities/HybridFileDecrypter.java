@@ -63,7 +63,7 @@ public class HybridFileDecrypter {
 
 
     public static void hybridDecryptFile(MultipartFile inputFile, String filePath) throws GeneralSecurityException, IOException {
-        
+
         // Unzip uploaded file
         HashMap<String, byte[]> encryptedFiles = Zipper.unZip(inputFile.getInputStream(), filePath);
 
@@ -83,7 +83,6 @@ public class HybridFileDecrypter {
 
         // Use the IV and AES key to decrypt the data
         ByteArrayInputStream decryptedZip = decryptFileWithAES(aesKeyHex, aesIvHex, encryptedFiles.get("data.zip.aes"));
-        System.out.println(decryptedZip);
 
         // Unzip the decrypted data
         HashMap<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip, filePath);
