@@ -21,28 +21,17 @@ import java.util.List;
 public class UserDetailsImpl extends User implements UserDetails {
 
     // Creates a new authorized user
-<<<<<<< HEAD
     // You can reference this user through 'super' e.g. super.getUserId() etc..
     public UserDetailsImpl(final User user) {
         super(user);
     }
-
-=======
-    // You can reference this user through 'super'
-    public UserDetailsImpl(final User user) {
-        super(user);
-    }
->>>>>>> b32061d... Created UserDetailsImpl class
     /*
      A user may have more role (I guess?)
      For now they only have one:
      HEALTHWORKER
      VHT
      ADMIN
-<<<<<<< HEAD
 
-=======
->>>>>>> b32061d... Created UserDetailsImpl class
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,11 +42,7 @@ public class UserDetailsImpl extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-<<<<<<< HEAD
         return super.getUsername();
-=======
-        return super.getUserId();
->>>>>>> b32061d... Created UserDetailsImpl class
     }
 
     public String getPassword() {
