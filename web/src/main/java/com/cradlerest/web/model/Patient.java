@@ -19,7 +19,7 @@ public class Patient {
 	private String id;
 
 	@Column(name = "village")
-	private int villageNumber;
+	private Integer villageNumber;
 
 	@Column(name = "initials")
 	private String initials;
@@ -33,7 +33,7 @@ public class Patient {
 	private Sex sex;
 
 	@Column(name = "is_pregnant")
-	private boolean isPregnant;
+	private Boolean isPregnant;
 
 	@Column(name = "gestational_age")
 	private Integer gestationalAge;
@@ -81,7 +81,7 @@ public class Patient {
 		this.id = id;
 	}
 
-	public int getVillageNumber() {
+	public Integer getVillageNumber() {
 		return villageNumber;
 	}
 
@@ -113,7 +113,7 @@ public class Patient {
 		this.sex = sex;
 	}
 
-	public boolean isPregnant() {
+	public Boolean isPregnant() {
 		return isPregnant;
 	}
 

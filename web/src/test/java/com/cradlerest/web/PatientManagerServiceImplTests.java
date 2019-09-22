@@ -3,6 +3,7 @@ package com.cradlerest.web;
 import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Sex;
+import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.PatientManagerServiceImpl;
 import com.cradlerest.web.service.repository.PatientRepository;
@@ -53,21 +54,16 @@ public class PatientManagerServiceImplTests {
 		// 	https://www.baeldung.com/spring-boot-testing
 
 		Date dateOfBirth = new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime();
-		Patient taki = new Patient(
-				"001",
-				1,
-				"AB",
-				dateOfBirth,
-				Sex.MALE,
-				false,
-				null,
-				null,
-				null,
-				null
-		);
+		Patient patient = new PatientBuilder()
+				.id("001")
+				.villageNumber(1)
+				.initials("AB")
+				.dateOfBirth(dateOfBirth)
+				.sex(Sex.MALE)
+				.build();
 
-		Mockito.when(patientRepository.findById(taki.getId()))
-				.thenReturn(Optional.of(taki));
+		Mockito.when(patientRepository.findById(patient.getId()))
+				.thenReturn(Optional.of(patient));
 
 		Mockito.when(patientRepository.findById("000"))
 				.thenReturn(Optional.empty());
@@ -85,6 +81,8 @@ public class PatientManagerServiceImplTests {
 				.isEqualTo("AB");
 		assertThat(result.getDateOfBirth())
 				.isEqualTo(new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime());
+		assertThat(result.isPregnant())
+				.isEqualTo(false);
 	}
 
 	@Test(expected = EntityNotFoundException.class)
