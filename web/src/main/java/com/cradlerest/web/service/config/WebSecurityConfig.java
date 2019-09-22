@@ -20,6 +20,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				// Disable security on all "/mock-api" routes (for testing)
 				.antMatchers("/mock-api/**", "/upload_reading", "/upload").permitAll()
+				// Disable security on all "/api" routes (for testing)
+				.antMatchers("/api/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
@@ -32,8 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().httpBasic().and().csrf().disable();
 	}
 
-	// TODO
-	// Encrypt default user password so it's hidden
+	// TODO : Encrypt default user password so it's hidden
 
 	@Bean
 	@Override

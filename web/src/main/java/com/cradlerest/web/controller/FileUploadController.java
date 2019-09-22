@@ -27,59 +27,59 @@ import com.cradlerest.web.service.storage.StorageService;
 @Controller
 public class FileUploadController {
 
-    private final StorageService storageService;
+	private final StorageService storageService;
 
-    @Autowired
-    public FileUploadController(StorageService storageService) {
-        this.storageService = storageService;
-    }
+	@Autowired
+	public FileUploadController(StorageService storageService) {
+		this.storageService = storageService;
+	}
 
-    @GetMapping("/upload")
-    public String listUploadedFiles(Model model) throws IOException {
+	@GetMapping("/upload")
+	public String listUploadedFiles(Model model) throws IOException {
 
-        model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
+		model.addAttribute("files", storageService.loadAll().map(
+				path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+						"serveFile", path.getFileName().toString()).build().toString())
+				.collect(Collectors.toList()));
 
-        return "uploadForm";
-    }
+		return "uploadForm";
+	}
 
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+	@GetMapping("/files/{filename:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
-        Resource file = storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
+		Resource file = storageService.loadAsResource(filename);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	}
 
-    @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+	@PostMapping("/upload")
+	public String handleFileUpload(@RequestParam("file") MultipartFile file,
+								   RedirectAttributes redirectAttributes) {
 
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+		storageService.store(file);
+		redirectAttributes.addFlashAttribute("message",
+				"You successfully uploaded " + file.getOriginalFilename() + "!");
 
-        return "redirect:/upload";
-    }
+		return "redirect:/upload";
+	}
 
-    @PostMapping(value = "/upload_reading", consumes = "multipart/form-data")
-    public String handleReadingUpload(@RequestParam("userDataFile") MultipartFile file,
-                                      RedirectAttributes redirectAttributes) {
+	@PostMapping(value = "/upload_reading", consumes = "multipart/form-data")
+	public String handleReadingUpload(@RequestParam("userDataFile") MultipartFile file,
+									  RedirectAttributes redirectAttributes) {
 
-        storageService.store(file);
+		storageService.store(file);
 
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+		redirectAttributes.addFlashAttribute("message",
+				"You successfully uploaded " + file.getOriginalFilename() + "!");
 
-        return "redirect:/upload";
-    }
+		return "redirect:/upload";
+	}
 
-    @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-        return ResponseEntity.notFound().build();
-    }
+	@ExceptionHandler(StorageFileNotFoundException.class)
+	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+		return ResponseEntity.notFound().build();
+	}
 
 }
