@@ -1,6 +1,7 @@
 package com.cradlerest.web.service.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,7 +13,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import javax.sql.DataSource;
 
 /*
 Defines the conditions for Java Spring Security
@@ -24,6 +26,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	UserDetailsService userDetailsService;
+
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return super.userDetailsService();
+	}
 
 	// AuthenticationManagerBuilder docs
 	// https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/config/annotation/authentication/builders/AuthenticationManagerBuilder.html
@@ -46,9 +53,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.hasRole("ADMIN")
 					.anyRequest().authenticated()
 				.antMatchers("/healthworker")
-					.hasAnyRole("HEALTHWORKER", "ADMIN")
+					.hasAnyRole("HEALTHWORKER", "ADMIN") // match with 1 or more
 				.antMatchers("/vht")
-					.hasAnyRole("VHT", "ADMIN")
+					.hasAnyRole("VHT", "ADMIN") // match with 1 or more
 				.and()
 				.formLogin()
 					.loginPage("/login")
@@ -80,19 +87,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		};
 	}
-
-//
-//	@Bean
-//	@Override
-//	public UserDetailsService userDetailsService() {
-//		UserDetails user =
-//				User.withDefaultPasswordEncoder()
-//						.username("user1")
-//						.password("password")
-//						.roles("USER")
-//						.build();
-//
-//		return new InMemoryUserDetailsManager(user);
-//	}
 
 }
