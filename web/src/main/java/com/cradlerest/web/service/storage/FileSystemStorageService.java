@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import com.cradlerest.web.service.utilities.HybridFileDecrypter;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
+
+import com.cradlerest.web.service.utilities.Zipper;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -40,12 +44,14 @@ public class FileSystemStorageService implements StorageService {
                         "Cannot store file with relative path outside current directory "
                                 + filename);
             }
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING);
-            }
+//            Zipper.unZip(file, this.rootLocation.toString());
+
+//            try (InputStream inputStream = file.getInputStream()) {
+//                Files.copy(inputStream, this.rootLocation.resolve(filename),
+//                    StandardCopyOption.REPLACE_EXISTING);
+//            }
         }
-        catch (IOException e) {
+        catch (Throwable e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
