@@ -3,7 +3,6 @@ package com.cradlerest.web.service.utilities;
 
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -81,24 +80,27 @@ public class HybridFileDecrypter {
         // 5. Decrypt file using hexdumps
 
         // Unzip uploaded file
-        HashMap<String, byte[]> files = Zipper.unZip(inputFile, filePath);
+        HashMap<String, byte[]> encryptedFiles = Zipper.unZip(inputFile.getInputStream(), filePath);
 
         PrivateKey privateKey = convertRsaPemToPrivateKey(PRIVATE_KEY);
 
         // Decrypt Initialization Vector (IV) to Base64 string
-        byte[] aesIvEncrypted = files.get("aes_iv.rsa");
+        byte[] aesIvEncrypted = encryptedFiles.get("aes_iv.rsa");
         String aesIv64 = decryptRSA(privateKey, aesIvEncrypted);
         // Convert Base64 String to Hex
         byte[] aesIvHex = Base64.getDecoder().decode(aesIv64);
 
-        
         // Decrypt AES Key to Base64 string
-        byte[] aesKeyBytes = files.get("aes_key.rsa");
+        byte[] aesKeyBytes = encryptedFiles.get("aes_key.rsa");
         String aesKey = decryptRSA(privateKey, aesKeyBytes);
-        System.out.println(aesKey);
+        byte[] aesKeyHex = Base64.getDecoder().decode(aesKey);
 
 
+        ByteArrayInputStream decryptedZip = decryptFileWithAES(aesKeyHex, aesIvHex, encryptedFiles.get("data.zip.aes"));
+        System.out.println(decryptedZip);
 
+        HashMap<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip, filePath);
+        System.out.println(decryptedFiles);
     }
 
     public static PrivateKey convertRsaPemToPrivateKey(String pkcsKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -114,6 +116,7 @@ public class HybridFileDecrypter {
         if (!pkcsKey.endsWith(FOOTER)) {
             throw new InvalidKeySpecException("Private key must end with: " + FOOTER);
         }
+
         privateKeyPEM = privateKeyPEM.replace(HEADER, "");
         privateKeyPEM = privateKeyPEM.replace(FOOTER, "");
 //        privateKeyPEM = privateKeyPEM.replaceAll("\\n", "");
@@ -130,36 +133,36 @@ public class HybridFileDecrypter {
         return kf.generatePrivate(spec);
     }
 
-    private static String decryptFileWithAES(SecretKey secretAesKey, byte[] initializationVector, File sourceDataFile, File encryptedDataFile) throws GeneralSecurityException, IOException {
+    private static ByteArrayInputStream decryptFileWithAES(byte[] secretAesKey, byte[] initializationVector, byte[] sourceData) throws GeneralSecurityException, IOException {
         // Get Cipher instance for AES algorithm (public key)
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
         // Initialize cipher
-        SecretKeySpec sKeySpec = new SecretKeySpec(secretAesKey.getEncoded(), "AES");
+        SecretKeySpec sKeySpec = new SecretKeySpec(secretAesKey, "AES");
         cipher.init(Cipher.DECRYPT_MODE, sKeySpec, new IvParameterSpec(initializationVector));
 
         // Encrypt the byte data
-        try (FileOutputStream fosData = new FileOutputStream(encryptedDataFile);
-             FileInputStream fisData = new FileInputStream(sourceDataFile))
-        {
-            final int BUFF_SIZE = 1024 * 1024;
-            byte[] buffer = new byte[BUFF_SIZE];
 
-            while (fisData.available() > 0) {
+        final int BUFF_SIZE = 1024 * 1024;
+        byte[] buffer = new byte[BUFF_SIZE];
+
+        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+        try (ByteArrayInputStream byteArray = new ByteArrayInputStream(sourceData)) {
+            while (byteArray.available() > 0) {
                 // get data
-                int bytesRead = fisData.read(buffer);
+                int bytesRead = byteArray.read(buffer);
                 // encrypt
                 byte[] encryptedBytes = cipher.doFinal(buffer, 0, bytesRead);
                 // write to output file
-                fosData.write(encryptedBytes);
+                byteOutput.write(encryptedBytes);
             }
         }
-
-        return "";
+        ByteArrayInputStream decryptedBytes = new ByteArrayInputStream(byteOutput.toByteArray());
+        return decryptedBytes;
     }
 
     private static String decryptRSA(PrivateKey privateKey, byte[] data) throws GeneralSecurityException {
-        Cipher decrypt = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
+        Cipher decrypt = Cipher.getInstance("RSA/ECB/OAEPPadding");
         decrypt.init(Cipher.DECRYPT_MODE, privateKey, new OAEPParameterSpec("SHA-1", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT));
         String decryptedMessage = new String(decrypt.doFinal(data), StandardCharsets.UTF_8);
         return decryptedMessage;

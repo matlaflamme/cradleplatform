@@ -49,20 +49,18 @@ public class Zipper {
     }
 
     // Source: https://www.journaldev.com/960/java-unzip-file-example
-    public static HashMap<String, byte[]> unZip(MultipartFile zipFile, String destDir) {
+    public static HashMap<String, byte[]> unZip(InputStream zipFile, String destDir) {
 //        File dir = new File(destDir);
         // create output directory if it doesn't exist
 //        if(!dir.exists()) dir.mkdirs();
 
 //        List<File> zippedFiles = new ArrayList<>();
         HashMap<String, byte[]> zippedFiles = new HashMap<String, byte[]>();
-        InputStream fis;
 
         //buffer for read and write data to file
         byte[] buffer = new byte[BUFFER_SIZE];
-        try {
-            fis = zipFile.getInputStream();
-            ZipInputStream zis = new ZipInputStream(fis);
+        try { ;
+            ZipInputStream zis = new ZipInputStream(zipFile);
             ZipEntry ze = zis.getNextEntry();
             while(ze != null){
 
@@ -97,7 +95,7 @@ public class Zipper {
             //close last ZipEntry
             zis.closeEntry();
             zis.close();
-            fis.close();
+            zipFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
