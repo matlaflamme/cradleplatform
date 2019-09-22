@@ -18,42 +18,138 @@ public class Patient {
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "village")
+	private int villageNumber;
+
+	@Column(name = "initials")
+	private String initials;
 
 	@Column(name = "dob")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 
+	@Column(name = "sex")
+	@Enumerated(EnumType.ORDINAL)
+	private Sex sex;
+
+	@Column(name = "is_pregnant")
+	private boolean isPregnant;
+
+	@Column(name = "gestational_age")
+	private Integer gestationalAge;
+
+	@Column(name = "medical_history")
+	private String medicalHistory;
+
+	@Column(name = "drug_history")
+	private String drugHistory;
+
+	@Column(name = "other_symptoms")
+	private String otherSymptoms;
+
 	public Patient() {}
 
-	public Patient(String id, String name, Date dateOfBirth) {
+	public Patient(
+			String id,
+			int villageNumber,
+			String initials,
+			Date dateOfBirth,
+			Sex sex,
+			boolean isPregnant,
+			Integer gestationalAge,
+			String medicalHistory,
+			String drugHistory,
+			String otherSymptoms
+	) {
 		this.id = id;
-		this.name = name;
+		this.villageNumber = villageNumber;
+		this.initials = initials;
 		this.dateOfBirth = dateOfBirth;
+		this.sex = sex;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
+		this.medicalHistory = medicalHistory;
+		this.drugHistory = drugHistory;
+		this.otherSymptoms = otherSymptoms;
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getVillageNumber() {
+		return villageNumber;
+	}
+
+	public void setVillageNumber(int villageNumber) {
+		this.villageNumber = villageNumber;
+	}
+
+	public String getInitials() {
+		return initials;
+	}
+
+	public void setInitials(String initials) {
+		this.initials = initials;
 	}
 
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public Sex getSex() {
+		return sex;
+	}
+
+	public void setSex(Sex sex) {
+		this.sex = sex;
+	}
+
+	public boolean isPregnant() {
+		return isPregnant;
+	}
+
+	public void setPregnant(boolean pregnant) {
+		isPregnant = pregnant;
+	}
+
+	public Integer getGestationalAge() {
+		return gestationalAge;
+	}
+
+	public void setGestationalAge(Integer gestationalAge) {
+		this.gestationalAge = gestationalAge;
+	}
+
+	public String getMedicalHistory() {
+		return medicalHistory;
+	}
+
+	public void setMedicalHistory(String medicalHistory) {
+		this.medicalHistory = medicalHistory;
+	}
+
+	public String getDrugHistory() {
+		return drugHistory;
+	}
+
+	public void setDrugHistory(String drugHistory) {
+		this.drugHistory = drugHistory;
+	}
+
+	public String getOtherSymptoms() {
+		return otherSymptoms;
+	}
+
+	public void setOtherSymptoms(String otherSymptoms) {
+		this.otherSymptoms = otherSymptoms;
 	}
 }

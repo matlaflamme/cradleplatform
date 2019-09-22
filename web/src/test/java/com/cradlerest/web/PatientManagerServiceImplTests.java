@@ -2,6 +2,7 @@ package com.cradlerest.web;
 
 import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.model.Sex;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.PatientManagerServiceImpl;
 import com.cradlerest.web.service.repository.PatientRepository;
@@ -52,7 +53,18 @@ public class PatientManagerServiceImplTests {
 		// 	https://www.baeldung.com/spring-boot-testing
 
 		Date dateOfBirth = new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime();
-		Patient taki = new Patient("001", "Taki", dateOfBirth);
+		Patient taki = new Patient(
+				"001",
+				1,
+				"AB",
+				dateOfBirth,
+				Sex.MALE,
+				false,
+				null,
+				null,
+				null,
+				null
+		);
 
 		Mockito.when(patientRepository.findById(taki.getId()))
 				.thenReturn(Optional.of(taki));
@@ -68,9 +80,9 @@ public class PatientManagerServiceImplTests {
 		assertThat(result.getId())
 				.isEqualTo(id);
 
-		// sanity check the other patient data as well
-		assertThat(result.getName())
-				.isEqualTo("Taki");
+		// sanity check some of the other patient data as well
+		assertThat(result.getInitials())
+				.isEqualTo("AB");
 		assertThat(result.getDateOfBirth())
 				.isEqualTo(new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime());
 	}
