@@ -25,13 +25,13 @@ public class UserDetailsImpl extends User implements UserDetails {
     public UserDetailsImpl(final User user) {
         super(user);
     }
+
     /*
      A user may have more role (I guess?)
      For now they only have one:
      HEALTHWORKER
      VHT
      ADMIN
-
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

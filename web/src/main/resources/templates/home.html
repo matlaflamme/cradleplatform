@@ -4,18 +4,15 @@
         <title>Welcome Page</title>
     </head>
     <body>
-    <body>
         <h1>Welcome!</h1>
-        <a style="color: blue" th:href="@{/admin}">User Page</a>
+        <a style="color: blue" th:href="@{/admin}">admin Page</a>
         <br />
-        <a style="color: blue" th:href="@{/vht}">Admin Page</a>
+        <a style="color: blue" th:href="@{/vht}">vht Page</a>
         <br />
-        <a style="color: blue" th:href="@{/healthworker}">Admin Page</a>
-    </body>
-        <h1>Welcome!</h1>
+        <a style="color: blue" th:href="@{/healthworker}">healthworker Page</a>
 
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/login}" method="get">
             <input type="submit" value="Login"/>
         </form>
     </body>

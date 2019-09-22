@@ -12,12 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Dummy controller for testing database interaction with {@code User} entities.
- *
- * Simply provides an API for creating, querying, and deleting {@code User}
- * entities within the database.
- *
- * Provides the following endpoints:
+ * Controller for Login
  *
  * @see User
  */
