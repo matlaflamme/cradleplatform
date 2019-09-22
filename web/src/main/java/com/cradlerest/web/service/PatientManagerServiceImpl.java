@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,6 +23,40 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	public PatientManagerServiceImpl(PatientRepository patientRepository, ReadingRepository readingRepository) {
 		this.patientRepository = patientRepository;
 		this.readingRepository = readingRepository;
+	}
+
+	/**
+	 * Returns an entire patient profile by combining a patient entity with all
+	 * of the readings associated with it.
+	 *
+	 * Return type is a local class which is serializable to a JSON object
+	 * which contains all of the fields of {@code Patient} along with a
+	 * {@code readings} field: which contain an array of {@code Reading} objects.
+	 *
+	 * @param id The identifier for the desired user.
+	 * @return An aggregate object containing the full profile for the user.
+	 * @throws EntityNotFoundException If no such user with the given {@param id}
+	 * 	exists in the database.
+	 */
+	@Override
+	public Object getFullPatientProfile(@NotNull String id) throws EntityNotFoundException {
+		class AggregatePatientProfile {
+			// properties declared public to avoid having to write getters/setters for local class
+
+			@JsonUnwrapped
+			@SuppressWarnings("WeakerAccess")
+			public Patient patient;
+
+			@SuppressWarnings("WeakerAccess")
+			public List<Reading> readings;
+
+			private AggregatePatientProfile(Patient patient, List<Reading> readings) {
+				this.patient = patient;
+				this.readings = readings;
+			}
+		}
+
+		return new AggregatePatientProfile(getPatientWithId(id), getReadingsForPatientWithId(id));
 	}
 
 	@Override

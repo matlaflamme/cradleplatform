@@ -3,7 +3,6 @@ package com.cradlerest.web.controller;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.service.PatientManagerService;
-import com.cradlerest.web.service.repository.PatientRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +15,17 @@ import java.util.List;
  *
  * Implements the following endpoints:
  *
- * - {@code GET:/api/patient/{id}}: Returns information about the patient with
- * 	a given {@code id}.
+ * - {@code GET:/api/patient/{id}}: Returns the full patient profile for
+ * 	patient with a given {@code id}.
+ *
+ * - {@code GET:/api/patient/{id}/info}: Returns only the patient information
+ * 	for a patient with a given {@code id}.
+ *
+ * - {@code GET:/api/patient/{id}/readings}: Returns the readings associated
+ * 	with the patient with a given {@code id}.
  *
  * @see Patient
- * @see PatientRepository
+ * @see PatientManagerService
  */
 @RestController
 @RequestMapping("/api/patient")
@@ -33,7 +38,12 @@ public class PatientController {
 	}
 
 	@GetMapping("/{id}")
-	public Patient patient(@PathVariable("id") String id) throws Exception {
+	public Object profile(@PathVariable("id") String id) throws Exception {
+		return patientManagerService.getFullPatientProfile(id);
+	}
+
+	@GetMapping("/{id}/info")
+	public Patient info(@PathVariable("id") String id) throws Exception {
 		return patientManagerService.getPatientWithId(id);
 	}
 
