@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cradlerest.web.service.utilities.HybridFileDecrypter;
 
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -19,11 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Stream;
 
-import com.cradlerest.web.service.utilities.Zipper;
+import java.util.stream.Stream;
 
 @Service
 public class FileSystemStorageService implements StorageService {

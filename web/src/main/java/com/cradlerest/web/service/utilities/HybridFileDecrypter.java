@@ -1,6 +1,5 @@
 package com.cradlerest.web.service.utilities;
 
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -8,20 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.PrivateKey;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import java.util.Base64;
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
@@ -30,9 +23,6 @@ import javax.crypto.spec.SecretKeySpec;
 public class HybridFileDecrypter {
     private static final String TAG = "HybridFileDecrypter";
 
-    private static final int NUM_BITS_AES_KEY = 256;
-
-    private static final String LINEFEED = "\r\n";
 
     /* Linux command for creating new public key:
     openssl rsa -in private.pem -outform PEM -pubout -out public.pem
@@ -73,34 +63,36 @@ public class HybridFileDecrypter {
 
 
     public static void hybridDecryptFile(MultipartFile inputFile, String filePath) throws GeneralSecurityException, IOException {
-
-
-        // 3. Convert both AES key and IV to binary format
-        // 4. Convert both binaries to hexdumps format '16/1 "%02x"'
-        // 5. Decrypt file using hexdumps
-
+        
         // Unzip uploaded file
         HashMap<String, byte[]> encryptedFiles = Zipper.unZip(inputFile.getInputStream(), filePath);
 
         PrivateKey privateKey = convertRsaPemToPrivateKey(PRIVATE_KEY);
 
-        // Decrypt Initialization Vector (IV) to Base64 string
+        // Decrypt Initialization Vector (IV) to Base64 string with Private Key
         byte[] aesIvEncrypted = encryptedFiles.get("aes_iv.rsa");
         String aesIv64 = decryptRSA(privateKey, aesIvEncrypted);
         // Convert Base64 String to Hex
         byte[] aesIvHex = Base64.getDecoder().decode(aesIv64);
 
-        // Decrypt AES Key to Base64 string
+        // Decrypt AES Key to Base64 string with Private Key
         byte[] aesKeyBytes = encryptedFiles.get("aes_key.rsa");
         String aesKey = decryptRSA(privateKey, aesKeyBytes);
+        // Convert Base64 String to Hex
         byte[] aesKeyHex = Base64.getDecoder().decode(aesKey);
 
-
+        // Use the IV and AES key to decrypt the data
         ByteArrayInputStream decryptedZip = decryptFileWithAES(aesKeyHex, aesIvHex, encryptedFiles.get("data.zip.aes"));
         System.out.println(decryptedZip);
 
+        // Unzip the decrypted data
         HashMap<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip, filePath);
-        System.out.println(decryptedFiles);
+
+        // TODO : figure out what to do with the unencrypted files...
+        for (HashMap.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
+            System.out.println(readingFile.getKey());
+            // byte[] rFile = readingFile.getValue();
+        }
     }
 
     public static PrivateKey convertRsaPemToPrivateKey(String pkcsKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -119,10 +111,8 @@ public class HybridFileDecrypter {
 
         privateKeyPEM = privateKeyPEM.replace(HEADER, "");
         privateKeyPEM = privateKeyPEM.replace(FOOTER, "");
-//        privateKeyPEM = privateKeyPEM.replaceAll("\\n", "");
         privateKeyPEM = privateKeyPEM.trim();
 
-//        System.out.print(TAG + ": " + privateKeyPEM);
         // Base64 decode the data
         byte[] keyBytes = Base64.getDecoder().decode(privateKeyPEM);
         System.out.println(TAG + ": Decoded key bytes from base64 length: " + keyBytes.length);

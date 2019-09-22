@@ -1,11 +1,8 @@
 package com.cradlerest.web.service.utilities;
 
-import com.sun.el.stream.Stream;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.zip.ZipEntry;
@@ -50,11 +47,7 @@ public class Zipper {
 
     // Source: https://www.journaldev.com/960/java-unzip-file-example
     public static HashMap<String, byte[]> unZip(InputStream zipFile, String destDir) {
-//        File dir = new File(destDir);
-        // create output directory if it doesn't exist
-//        if(!dir.exists()) dir.mkdirs();
 
-//        List<File> zippedFiles = new ArrayList<>();
         HashMap<String, byte[]> zippedFiles = new HashMap<String, byte[]>();
 
         //buffer for read and write data to file
@@ -65,8 +58,6 @@ public class Zipper {
             while(ze != null){
 
                 String fileName = ze.getName();
-//                InputStream zippedFile = InputStream.nullInputStream();
-
                 ByteArrayOutputStream zippedFile = new ByteArrayOutputStream();
 
                 int len;
