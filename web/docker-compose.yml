@@ -1,0 +1,22 @@
+version: "3"
+services:
+  db:
+    image: "mysql/mysql-server"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - "./scripts/db-initializer-scripts:/docker-entrypoint-initdb.d"
+  web:
+    build: .
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    expose:
+      - "3306"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=admin
+      - DB_PASSWORD=super-strong-password
