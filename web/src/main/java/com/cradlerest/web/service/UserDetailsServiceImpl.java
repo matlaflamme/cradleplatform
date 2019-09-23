@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -26,15 +28,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // TODO: Restrict usernames to be unique
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> usersOptional = userRepository.findByUsername(username);
-
-        // No users are found
-        if (usersOptional == null) {
-            throw new UsernameNotFoundException("User '" + username + "' not found");
-        }
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        userOptional.orElseThrow(() -> new UsernameNotFoundException("No user found with username " + username));
 
         // Creates the authenticated user(s)
-        UserDetails authorizedUserDetails = new UserDetailsImpl(usersOptional.get());
+        UserDetails authorizedUserDetails = userOptional.map(UserDetailsImpl::new).get();
 
         // Will throw exception if user detail is invalid (locked, expired, disabled, credentials expired)
         // https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/authentication/AccountStatusUserDetailsChecker.java

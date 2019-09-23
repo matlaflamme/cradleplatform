@@ -53,13 +53,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.hasRole("ADMIN")
 					.anyRequest().authenticated()
 				.antMatchers("/healthworker")
-					.hasAnyRole("HEALTHWORKER", "ADMIN") // match with 1 or more
+					.hasRole("HEALTHWORKER") // match with 1 or more
 				.antMatchers("/vht")
-					.hasAnyRole("VHT", "ADMIN") // match with 1 or more
+					.hasRole("VHT") // match with 1 or more
 				.and()
 				.formLogin()
 					.loginPage("/login")
-					.defaultSuccessUrl("/home")
+					.defaultSuccessUrl("/")
 					.failureUrl("/login?error")
 					.permitAll()
 				.and()
