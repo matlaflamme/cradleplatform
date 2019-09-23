@@ -11,6 +11,10 @@ import java.util.zip.ZipOutputStream;
 
 
 public class Zipper {
+
+	/* Zipper Class
+	Zip and unzip files
+	 */
 	private static final int BUFFER_SIZE = 1024*1024;
 
 	public static File zip(List<File> files, File zipFile) {
@@ -69,17 +73,7 @@ public class Zipper {
 				byte[] byteArray = zippedFile.toByteArray();
 				zippedFiles.put(fileName, byteArray);
 
-//                File newFile = new File(destDir + File.separator + fileName);
-//                System.out.println("Unzipping to " + newFile.getAbsolutePath());
-//                //create directories for sub directories in zip
-//                new File(newFile.getParent()).mkdirs();
-//                FileOutputStream fos = new FileOutputStream(newFile);
-//                int len;
-//                while ((len = zis.read(buffer)) > 0) {
-//                    fos.write(buffer, 0, len);
-//                }
-//                fos.close();
-				//close this ZipEntry
+
 				zis.closeEntry();
 				ze = zis.getNextEntry();
 			}

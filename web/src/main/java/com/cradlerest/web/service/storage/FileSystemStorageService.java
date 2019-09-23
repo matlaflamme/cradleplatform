@@ -23,6 +23,10 @@ import java.util.stream.Stream;
 @Service
 public class FileSystemStorageService implements StorageService {
 
+	/*
+	Save files to disk
+	 */
+
 	private final Path rootLocation;
 
 	@Autowired

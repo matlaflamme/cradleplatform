@@ -22,7 +22,27 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class HybridFileDecrypter {
 	private static final String TAG = "HybridFileDecrypter";
+	/* Encryption Design:
+     - AES is symmetric, requiring a single private key plus an initialization vector (IV)
+     - RSA is asymmetric, requiring a public key for encryption, but limits on data length (~60-117 bytes)
+     - Hybrid Cryptosystem:
+        * AES encrypt data with a random key
+        * RSA encrypt the AES key & IV
+    */
 
+    /* Linux commands to process the generated file:
+    unzip encrypted_reading_*.zip
+    openssl rsautl -decrypt -inkey ./private.pem -in aes_key.rsa -out aes_key.base64 -oaep
+    openssl rsautl -decrypt -inkey ./private.pem -in aes_iv.rsa -out iv.base64 -oaep
+
+    base64 -d aes_key.base64 > aes_key.bin
+    base64 -d iv.base64 > iv.bin
+    hexdump -e '16/1 "%02x"' aes_key.bin > aes_key.hex
+    hexdump -e '16/1 "%02x"' iv.bin > iv.hex
+
+    openssl enc -d -aes-256-cbc -in data.zip.aes -out data_decoded.zip -K `cat aes_key.hex` -iv `cat iv.hex`
+    unzip data_decoded.zip
+    */
 
     /* Linux command for creating new public key:
     openssl rsa -in private.pem -outform PEM -pubout -out public.pem
