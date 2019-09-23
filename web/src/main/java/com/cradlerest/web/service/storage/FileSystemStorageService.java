@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cradlerest.web.service.utilities.HybridFileDecrypter;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -48,7 +49,7 @@ public class FileSystemStorageService implements StorageService {
 								+ filename);
 			}
 
-			HybridFileDecrypter.hybridDecryptFile(file, this.rootLocation.toString());
+//			HybridFileDecrypter.hybridDecryptFile(file);
 
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, this.rootLocation.resolve(filename),
@@ -57,6 +58,17 @@ public class FileSystemStorageService implements StorageService {
 		}
 		catch (Throwable e) {
 			throw new StorageException("Failed to store file " + filename, e);
+		}
+	}
+
+	@Override
+	public void storeBytes(ByteArrayInputStream bytesInput, String fileName) {
+		try (InputStream inputStream = bytesInput) {
+			Files.copy(inputStream, this.rootLocation.resolve(fileName),
+					StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (Throwable e) {
+			throw new StorageException("Failed to store file :", e);
 		}
 	}
 
