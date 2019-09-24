@@ -56,7 +56,7 @@ public class PatientManagerServiceImplTests {
 		Date dateOfBirth = new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime();
 		Patient patient = new PatientBuilder()
 				.id("001")
-				.villageNumber(1)
+				.villageNumber("1")
 				.initials("AB")
 				.dateOfBirth(dateOfBirth)
 				.sex(Sex.MALE)

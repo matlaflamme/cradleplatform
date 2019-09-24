@@ -11,9 +11,9 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.HashMap;
 
 import java.util.Base64;
+import java.util.Map;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
@@ -82,7 +82,7 @@ public class HybridFileDecrypter {
 
 
 
-	public static ByteArrayInputStream hybridDecryptFile(HashMap<String, byte[]> encryptedFiles) throws GeneralSecurityException, IOException {
+	public static ByteArrayInputStream hybridDecryptFile(Map<String, byte[]> encryptedFiles) throws GeneralSecurityException, IOException {
 
 		PrivateKey privateKey = convertRsaPemToPrivateKey(PRIVATE_KEY);
 

@@ -19,7 +19,7 @@ public class Patient {
 	private String id;
 
 	@Column(name = "village")
-	private Integer villageNumber;
+	private String villageNumber;
 
 	@Column(name = "initials")
 	private String initials;
@@ -51,7 +51,7 @@ public class Patient {
 
 	public Patient(
 			String id,
-			int villageNumber,
+			String villageNumber,
 			String initials,
 			Date dateOfBirth,
 			Sex sex,
@@ -81,11 +81,11 @@ public class Patient {
 		this.id = id;
 	}
 
-	public Integer getVillageNumber() {
+	public String getVillageNumber() {
 		return villageNumber;
 	}
 
-	public void setVillageNumber(int villageNumber) {
+	public void setVillageNumber(String villageNumber) {
 		this.villageNumber = villageNumber;
 	}
 

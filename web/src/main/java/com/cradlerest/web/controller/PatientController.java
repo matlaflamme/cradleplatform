@@ -56,13 +56,13 @@ public class PatientController {
 		return patientManagerService.constructPatient(body);
 	}
 
-//	@PostMapping("/encrypted_reading")
-//	public Patient decryptReading(@RequestParam("userDataFile") MultipartFile file) throws Exception {
-//		return patientManagerService.constructReading(file);
-//	}
+	@PostMapping("/encrypted_reading")
+	public Reading createReadingFromEncrypted(@RequestParam("userDataFile") MultipartFile file) throws Exception {
+		return patientManagerService.constructReadingFromEncrypted(file);
+	}
 
 	@PostMapping("/reading")
-	public Object createReading(@RequestBody Map<String, String> body) throws Exception {
+	public Reading createReading(@RequestBody Map<String, String> body) throws Exception {
 		return patientManagerService.constructReading(body);
 	}
 }

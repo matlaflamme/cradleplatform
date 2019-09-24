@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import org.json.JSONObject;
+
 import com.cradlerest.web.service.storage.StorageFileNotFoundException;
 import com.cradlerest.web.service.storage.StorageService;
 
@@ -50,14 +52,14 @@ public class FileUploadController {
 		return "uploadForm";
 	}
 
-//	@GetMapping("/files/{filename:.+}")
-//	@ResponseBody
-//	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-//
-//		Resource file = storageService.loadAsResource(filename);
-//		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-//				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
-//	}
+	@GetMapping("/files/{filename:.+}")
+	@ResponseBody
+	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+		Resource file = storageService.loadAsResource(filename);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	}
 
 	@PostMapping("/upload")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file,
@@ -100,6 +102,11 @@ public class FileUploadController {
 
 			for (HashMap.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
 				System.out.println(readingFile.getKey());
+
+				JSONObject reading = new JSONObject(new String(readingFile.getValue()));
+
+				System.out.println(reading.toString());
+
 				ByteArrayInputStream newFile = new ByteArrayInputStream(readingFile.getValue());
 				storageService.storeBytes(newFile, readingFile.getKey());
 			}

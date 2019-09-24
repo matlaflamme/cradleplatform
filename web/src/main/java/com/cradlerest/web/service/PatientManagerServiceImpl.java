@@ -4,11 +4,18 @@ import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.controller.error.NotImplementedException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
+import com.cradlerest.web.model.Sex;
+import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
+import com.cradlerest.web.service.utilities.HybridFileDecrypter;
+import com.cradlerest.web.service.utilities.Zipper;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -83,5 +90,50 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	@Override
 	public Reading constructReading(Map<String, String> body) throws Exception {
 		throw new NotImplementedException();
+	}
+
+	@Override
+	public Reading constructReadingFromEncrypted(MultipartFile file) throws Exception {
+		// Unzip uploaded file
+		Map<String, byte[]> encryptedFiles = Zipper.unZip(file.getInputStream());
+
+		// Decrypt unzipped files
+		ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
+
+		// Unzip the decrypted data
+		Map<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip);
+
+
+		for (Map.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
+
+			JSONObject reading = new JSONObject(new String(readingFile.getValue()));
+
+			String id = reading.getString("patientId");
+			String villageNumber = reading.getString("villageNumber");
+			String initials = reading.getString("patientName");
+			int ageYears = reading.getInt("ageYears");
+			String gender = reading.getString("patientSex");
+			List<Object> symptoms = reading.getJSONArray("symptoms").toList();
+			String gestationalAge = reading.getString("gestationalAgeValue");
+
+
+			Optional<Patient> optionalPatient = patientRepository.findById(id);
+			if (optionalPatient.isEmpty()) {
+				// patient id is not found, create new patient?
+				 Patient newPatient = new PatientBuilder()
+						 .id(id)
+						 .villageNumber(villageNumber)
+						 .initials(initials)
+						 .dateOfBirth(2000, 1, 1)
+						 .sex(Sex.UNKNOWN)
+						 .pregnant(gestationalAge == "N/A" || gestationalAge == "0")
+						 .build();
+				patientRepository.save(newPatient);
+
+			}
+
+		}
+
+		return null;
 	}
 }

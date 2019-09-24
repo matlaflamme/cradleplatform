@@ -41,7 +41,7 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder villageNumber(int number) {
+	public PatientBuilder villageNumber(String number) {
 		patient.setVillageNumber(number);
 		return this;
 	}
