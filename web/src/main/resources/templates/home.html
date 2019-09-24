@@ -1,14 +1,76 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Spring Security Example</title>
-    </head>
-    <body>
-        <h1>Welcome!</h1>
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<title>Home</title>
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<!-- Add this to <head> -->
+		<!-- Load required Bootstrap and BootstrapVue CSS -->
+		<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
 
-        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
-    </body>
+		<!-- Load polyfills to support older browsers -->
+		<script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+		<!-- Load Vue followed by BootstrapVue -->
+		<script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+		<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+		<link type="text/css" rel="stylesheet" href="/home.css">
+
+		<style> body { padding-top: 70px; }</style> <!--Padding so nav-bar doesn't cover content -->
+	</head>
+	<body>
+		<!-- Navbar stuff -->
+		<nav class="navbar navbar-dark navbar-fixed-top">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display-->
+				<div class="navbar-header">
+				<a class="navbar-brand" style="color: #ffffff" href="#">Cradle Web Platform</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="mainNavBar">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#" style="color: #ffffff">New Referrals <span class="sr-only">(current)</span></a></li>
+						<li><a href="#" style="color: #ffffff">Past Referrals</a></li>
+						<li><a href="#" style="color: #ffffff">All Referrals</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<button type="button" class="btn btn-default navbar-btn">Sign out</button>
+						<li><a href="#" style="color: #ffffff">Signed in as [[${#httpServletRequest.remoteUser}]]</a></li>
+					</ul>
+				</div>
+			</div> <!-- container -->
+		</nav>
+
+
+		<!--Grid of recent patient readings -->
+		<div class="container-fluid">
+			<div id="newReferralTable">
+				<patient-table></patient-table>
+			</div>
+		</div>
+
+		<div id="components-demo">
+			<button-counter></button-counter>
+		</div>
+
+
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out"/>
+		</form>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+		<script src="/home.js" type="module"></script>
+		<!-- Load Vue followed by BootstrapVue -->
+		<script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+		<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js">alert("inline script")</script>
+	</body>
 </html>
