@@ -21,7 +21,93 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
 
 ## Build Directions
 
-## Run Instructions
+> **Important**: When opening the project in IntelliJ, open the `cradlerest/web` directory and not the `cradlerest` root directory itself.
+
+Docker is required to build and run the server application. Docker Desktop can be downloaded from [here](https://www.docker.com/products/docker-desktop), you will need to create a free Docker Hub account to be able to download it. If you have trouble installing Docker Desktop, message Jeremy or Jon and we can help you install it.
+
+If you do not want to install Docker, then it is possible to run the server locally without it (though it is not recommended). If you would like to do this, then message Jeremy and we can go through the setup process together.
+
+Build scripts for both Unix and Windows are provided in the `web` directory (`cradle-web.py` and `cradle-web.ps1` respectively). The following example script commands assume you have Docker installed and that Docker Desktop is running.
+
+> **Important** (Windows Only): If you have the MySQL service running, you may not be able to launch the application with Docker due to MySQL's port already being in use. If this is the case, simply stop the MySQL service and try again.
+
+## Running the Web Application in IntelliJ
+
+The following configuration steps must be done to allow the web application to run properly in IntelliJ.
+
+1. Start the MySQL server with Docker, the database server must be running for the application to work (it can be stopped by using the `stop-db` command instead of `start-db`).
+
+```
+# Unix
+$ ./cradle-web.py local start-db
+
+# Windows
+PS> .\cradle-web.ps1 local start-db
+```
+
+2. Configure environment variables in IntelliJ
+
+* Go to: Run > Edit Configurations...
+* With "WebApplication" selected on the left hand side, copy the bellow text into the "Environment Variables: " text box on the right.
+
+```
+DB_HOST=localhost;DB_PORT=3306;DB_USER=admin;DB_PASSWORD=super-strong-password
+```
+
+* Click "OK" then build and run the application though IntelliJ like normal.
+
+## Running the Web Application in Docker 
+
+Build and run the server application:
+
+```
+# Unix
+$ ./cradle-web.py docker run
+
+# Windows
+PS> .\cradle-web.ps1 docker run
+```
+
+This command, first compiles the application, packages it into a `jar`, then deploys the application using Docker. If everything worked correctly, then the server should be running in the background (note that your terminal isn't locked waiting for the application to end). The web application is accessible via `http://localhost:8080`.
+
+To stop a running application:
+
+```
+# Unix
+$ ./cradle-web.py docker stop
+
+# Windows
+PS> .\cradle-web.ps1 docker stop
+```
+
+To start a stopped application:
+
+```
+# Unix
+$ ./cradle-web.py docker start
+
+# Windows
+PS> .\cradle-web.ps1 docker start
+```
+
+To get a fresh start (**this will delete the database and all its data!**):
+```
+# Unix
+$ ./cradle-web.py docker purge
+
+# Windows
+PS> .\cradle-web.ps1 docker purge
+```
+
+### Advanced
+
+For console level access to a running database use the following command (note that we may update the admin password to something not so silly).
+
+```
+docker exec -it web_db_1 mysql -u admin -psuper-strong-password
+```
+
+If the server was started without docker-compose, use `local_web_db_1` for the container name.
 
 ## Teams
 
