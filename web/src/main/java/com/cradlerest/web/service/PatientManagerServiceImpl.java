@@ -138,7 +138,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				readingPatient = new PatientBuilder()
 						.id(id)
 						.villageNumber(villageNumber)
-						.initials(initials)
+						.name(initials)
 						.dateOfBirth(2000, 1, 1)
 						.sex(Sex.UNKNOWN)
 						.gestationalAgeMonths(0)

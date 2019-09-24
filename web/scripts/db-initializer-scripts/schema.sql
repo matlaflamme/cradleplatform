@@ -19,8 +19,8 @@ CREATE TABLE user (
 
 CREATE TABLE patient (
     id VARCHAR(255) PRIMARY KEY,
-    village VARCHAR(16) NOT NULL,
-    initials VARCHAR(16) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    village VARCHAR(255) NOT NULL,
     dob DATE NOT NULL,
     sex INT NOT NULL,                   -- enumerated {male, female, unknown}
     is_pregnant BOOLEAN NOT NULL,
@@ -59,8 +59,8 @@ VALUES ('vht', 'vht');
 
 INSERT INTO patient
 VALUES ('001',          -- id
+        'Harumi Youko', -- name
         '1',              -- village number
-        'AB',           -- initials
         '1995-12-25',   -- date of birth
         1,              -- sex
         TRUE,           -- is pregnant?
@@ -71,8 +71,8 @@ VALUES ('001',          -- id
 
 INSERT INTO patient
 VALUES ('002',          -- id
+        'Lloyd Xavier Mann', -- name
         '3',              -- village number
-        'CD',           -- initials
         '1984-04-07',   -- date of birth
         0,              -- sex
         FALSE,          -- is pregnant?
