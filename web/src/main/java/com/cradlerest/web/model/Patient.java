@@ -1,6 +1,7 @@
 package com.cradlerest.web.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +18,9 @@ public class Patient {
 	@Id
 	@Column(name = "id")
 	private String id;
+
+	@Column(name = "name")
+	private String name;
 
 	@Column(name = "village")
 	private Integer villageNumber;
@@ -51,6 +55,7 @@ public class Patient {
 
 	public Patient(
 			String id,
+			String name,
 			int villageNumber,
 			String initials,
 			Date dateOfBirth,
@@ -62,6 +67,7 @@ public class Patient {
 			String otherSymptoms
 	) {
 		this.id = id;
+		this.name = name;
 		this.villageNumber = villageNumber;
 		this.initials = initials;
 		this.dateOfBirth = dateOfBirth;
@@ -79,6 +85,14 @@ public class Patient {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(@NotNull String name) {
+		this.name = name;
 	}
 
 	public Integer getVillageNumber() {

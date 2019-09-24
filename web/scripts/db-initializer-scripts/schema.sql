@@ -19,6 +19,7 @@ CREATE TABLE user (
 
 CREATE TABLE patient (
     id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
     village INT NOT NULL,
     initials VARCHAR(16) NOT NULL,
     dob DATE NOT NULL,
@@ -59,6 +60,7 @@ VALUES ('vht', 'vht');
 
 INSERT INTO patient
 VALUES ('001',          -- id
+        'Harumi Youko', -- name
         1,              -- village number
         'AB',           -- initials
         '1995-12-25',   -- date of birth
@@ -71,6 +73,7 @@ VALUES ('001',          -- id
 
 INSERT INTO patient
 VALUES ('002',          -- id
+        'Lloyd Xavier Mann', -- name
         3,              -- village number
         'CD',           -- initials
         '1984-04-07',   -- date of birth
