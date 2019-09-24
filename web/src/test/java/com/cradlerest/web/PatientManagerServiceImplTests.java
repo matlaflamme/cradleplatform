@@ -58,7 +58,6 @@ public class PatientManagerServiceImplTests {
 				.id("001")
 				.villageNumber(1)
 				.name("Taki Tachibana")
-				.initials("TT")
 				.dateOfBirth(dateOfBirth)
 				.sex(Sex.MALE)
 				.build();

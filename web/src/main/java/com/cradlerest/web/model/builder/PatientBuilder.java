@@ -51,11 +51,6 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder initials(@NotNull String initials) {
-		patient.setInitials(initials);
-		return this;
-	}
-
 	public PatientBuilder dateOfBirth(@NotNull Date date) {
 		patient.setDateOfBirth(date);
 		return this;
@@ -131,7 +126,6 @@ public class PatientBuilder {
 		assertNotNull(patient.getId(), "id");
 		assertNotNull(patient.getName(), "name");
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
-		assertNotNull(patient.getInitials(), "initials");
 		assertNotNull(patient.getDateOfBirth(), "dateOfBirth");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.isPregnant(), "isPregnant");
