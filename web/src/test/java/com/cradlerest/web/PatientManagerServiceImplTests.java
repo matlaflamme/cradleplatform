@@ -57,7 +57,7 @@ public class PatientManagerServiceImplTests {
 		Patient patient = new PatientBuilder()
 				.id("001")
 				.villageNumber(1)
-				.initials("AB")
+				.name("Taki Tachibana")
 				.dateOfBirth(dateOfBirth)
 				.sex(Sex.MALE)
 				.build();
@@ -77,8 +77,8 @@ public class PatientManagerServiceImplTests {
 				.isEqualTo(id);
 
 		// sanity check some of the other patient data as well
-		assertThat(result.getInitials())
-				.isEqualTo("AB");
+		assertThat(result.getName())
+				.isEqualTo("Taki Tachibana");
 		assertThat(result.getDateOfBirth())
 				.isEqualTo(new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime());
 		assertThat(result.isPregnant())

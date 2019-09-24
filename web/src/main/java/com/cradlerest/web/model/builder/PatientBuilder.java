@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
  *     Patient patient = new PatientBuilder()
  *             .id("001")
  *             .villageNumber(10)
- *             .initials("TS")
+ *             .name("Taki")
  *             .dateOfBirth(2000, 1, 1)
  *             .sex(Sex.Female)
  *             .pregnant(false)
@@ -41,13 +41,13 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder villageNumber(int number) {
-		patient.setVillageNumber(number);
+	public PatientBuilder name(@NotNull String name) {
+		patient.setName(name);
 		return this;
 	}
 
-	public PatientBuilder initials(@NotNull String initials) {
-		patient.setInitials(initials);
+	public PatientBuilder villageNumber(int number) {
+		patient.setVillageNumber(number);
 		return this;
 	}
 
@@ -124,8 +124,8 @@ public class PatientBuilder {
 
 	private void validate() throws InstantiationError {
 		assertNotNull(patient.getId(), "id");
+		assertNotNull(patient.getName(), "name");
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
-		assertNotNull(patient.getInitials(), "initials");
 		assertNotNull(patient.getDateOfBirth(), "dateOfBirth");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.isPregnant(), "isPregnant");
