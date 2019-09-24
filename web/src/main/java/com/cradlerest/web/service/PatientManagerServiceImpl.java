@@ -4,8 +4,10 @@ import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.controller.error.NotImplementedException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
+import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Sex;
 import com.cradlerest.web.model.builder.PatientBuilder;
+import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import com.cradlerest.web.service.utilities.HybridFileDecrypter;
@@ -16,6 +18,8 @@ import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -104,10 +108,12 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		Map<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip);
 
 
+		// TODO : format JSON so android matches Database
 		for (Map.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
 
 			JSONObject reading = new JSONObject(new String(readingFile.getValue()));
 
+			// Parse Uploaded JSON values
 			String id = reading.getString("patientId");
 			String villageNumber = reading.getString("villageNumber");
 			String initials = reading.getString("patientName");
@@ -116,21 +122,44 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			List<Object> symptoms = reading.getJSONArray("symptoms").toList();
 			String gestationalAge = reading.getString("gestationalAgeValue");
 
+			int diastolic = reading.getInt("bpDiastolic");
+			int systolic = reading.getInt("bpSystolic");
+			int heartRate = reading.getInt("heartRateBPM");
 
+			String dateCreated = reading.getString("dateTimeTaken");
+			ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
+			Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
+
+
+			Patient readingPatient;
 			Optional<Patient> optionalPatient = patientRepository.findById(id);
 			if (optionalPatient.isEmpty()) {
 				// patient id is not found, create new patient?
-				 Patient newPatient = new PatientBuilder()
-						 .id(id)
-						 .villageNumber(villageNumber)
-						 .initials(initials)
-						 .dateOfBirth(2000, 1, 1)
-						 .sex(Sex.UNKNOWN)
-						 .pregnant(gestationalAge == "N/A" || gestationalAge == "0")
-						 .build();
-				patientRepository.save(newPatient);
-
+				readingPatient = new PatientBuilder()
+						.id(id)
+						.villageNumber(villageNumber)
+						.initials(initials)
+						.dateOfBirth(2000, 1, 1)
+						.sex(Sex.UNKNOWN)
+						.gestationalAgeMonths(0)
+						.pregnant(gestationalAge != "N/A" && gestationalAge != "0")
+						.build();
+				patientRepository.save(readingPatient);
 			}
+			else {
+				readingPatient = optionalPatient.get();
+			}
+
+			// Create new reading
+			Reading newReading = new ReadingBuilder()
+					.pid(readingPatient)
+					.colour(ReadingColour.RED)
+					.diastolic(diastolic)
+					.systolic(systolic)
+					.heartRate(heartRate)
+					.timestamp(timestamp)
+					.build();
+			readingRepository.save(newReading);
 
 		}
 
