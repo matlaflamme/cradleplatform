@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByUsername(username);
         userOptional.orElseThrow(() -> new UsernameNotFoundException("No user found with username " + username));
-
+        System.out.println("username: " + username);
         // Creates the authenticated user(s)
         UserDetails authorizedUserDetails = userOptional.map(UserDetailsImpl::new).get();
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
         <title>Welcome Page</title>
     </head>
     <body>
@@ -10,9 +11,18 @@
         <a style="color: blue" th:href="@{/vht}">vht Page</a>
         <br />
         <a style="color: blue" th:href="@{/healthworker}">healthworker Page</a>
+        <div>
 
-        <form th:action="@{/login}" method="get">
-            <input type="submit" value="Login"/>
-        </form>
+        <div>
+            <form th:action="@{/login}" method="get">
+                <input type="submit" value="Login"/>
+            </form>
+        </div>
+            <h1 th:text="${accountName}"></h1>
+        <div>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Logout"/>
+            </form>
+        </div>
     </body>
 </html>

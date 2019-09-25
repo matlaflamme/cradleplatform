@@ -22,10 +22,10 @@ CREATE TABLE user (
 -- Dummy Data
 
 INSERT INTO user (user_id, password, role)
-VALUES ('admin', 'admin', 'ADMIN');
+VALUES ('admin', 'admin', 'ROLE_ADMIN');
 
 INSERT INTO user  (user_id, password, role)
-VALUES ('health', 'health', 'HEALTHWORKER');
+VALUES ('health', 'health', 'ROLE_HEALTHWORKER');
 
 INSERT INTO user  (user_id, password, role)
-VALUES ('vht', 'vht', 'VHT');
+VALUES ('vht', 'vht', 'ROLE_VHT');

@@ -1,5 +1,7 @@
 package com.cradlerest.web.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 /**
@@ -24,6 +26,7 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
+	@Column(name = "role")
 	@Enumerated(EnumType.STRING)
 	private Role role;
 

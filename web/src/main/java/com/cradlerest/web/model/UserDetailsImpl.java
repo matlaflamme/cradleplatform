@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,19 +8,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 /*
-<<<<<<< HEAD
- This class defines an authorized user
-=======
+
  This class defines a user that has been authorized
->>>>>>> b32061d... Created UserDetailsImpl class
 
  UserDetails interface provided by Spring Security
  https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetails.html
  */
 public class UserDetailsImpl extends User implements UserDetails {
-
     // Creates a new authorized user
     // You can reference this user through 'super' e.g. super.getUserId() etc..
     public UserDetailsImpl(final User user) {
@@ -36,7 +34,8 @@ public class UserDetailsImpl extends User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + super.getRole()));
+        System.out.println("role: " + super.getRole().name());
+        grantedAuthorities.add(new SimpleGrantedAuthority(super.getRole().name()));
         return grantedAuthorities;
     }
 

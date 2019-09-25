@@ -48,14 +48,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				// Disable security on all "/mock-api" routes (for testing)
-				.antMatchers("/", "/home").permitAll()
+				.antMatchers("/").permitAll()
 				.antMatchers("/admin")
 					.hasRole("ADMIN")
 					.anyRequest().authenticated()
 				.antMatchers("/healthworker")
-					.hasRole("HEALTHWORKER") // match with 1 or more
+					.hasRole("HEALTHWORKER")
+                    .anyRequest().authenticated()
 				.antMatchers("/vht")
-					.hasRole("VHT") // match with 1 or more
+					.hasRole("VHT")
+                    .anyRequest().authenticated()
 				.and()
 				.formLogin()
 					.loginPage("/login")
