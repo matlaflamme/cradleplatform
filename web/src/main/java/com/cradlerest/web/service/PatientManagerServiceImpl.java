@@ -142,7 +142,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 						.dateOfBirth(2000, 1, 1)
 						.sex(Sex.UNKNOWN)
 						.gestationalAgeMonths(0)
-						.pregnant(gestationalAge != "N/A" && gestationalAge != "0")
+						.pregnant(!gestationalAge.equals("N/A") && !gestationalAge.equals("0"))
 						.build();
 				patientRepository.save(readingPatient);
 			}

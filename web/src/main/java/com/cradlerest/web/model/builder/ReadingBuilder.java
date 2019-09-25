@@ -4,10 +4,9 @@ import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Patient;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
+
 
 /**
  * Simplifies the process of constructing {@code Reading} objects.
@@ -15,14 +14,14 @@ import java.util.GregorianCalendar;
  *
  * <h2>Example</h2>
  * <code>
- 	 Reading newReading = new ReadingBuilder()
- 		 .pid(readingPatient)
-		 .colour(ReadingColour.RED)
-		 .diastolic(diastolic)
-		 .systolic(systolic)
-		 .heartRate(heartRate)
-		 .timestamp(timestamp)
-		 .build();
+ *	 Reading newReading = new ReadingBuilder()
+ *		 .pid(readingPatient)
+ *		 .colour(ReadingColour.RED)
+ *		 .diastolic(diastolic)
+ *		 .systolic(systolic)
+ *		 .heartRate(heartRate)
+ *		 .timestamp(timestamp)
+ *		 .build();
  * </code>
  */
 public class ReadingBuilder {
