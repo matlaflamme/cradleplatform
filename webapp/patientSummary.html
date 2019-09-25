@@ -16,30 +16,30 @@
     <div class="container">
     <div class="patientInfo">
         <h6>Patient Name:</h6>
-        <p class="patientName">Parmis Naddaf <br> </p>
+        <p v-model="patientName" class="patientName">Parmis Naddaf <br> </p>
         <h6>ID:</h6>
-        <p class="patientId"> 62387608726 <br> </p>
+        <p v-model="patientId" class="patientId"> 62387608726 <br> </p>
         <h6>Date Of Birth:</h6>
-        <p class="DOB"> 09/19/1995 <br> </p>
+        <p v-model="DOB" class="DOB"> 09/19/1995 <br> </p>
 
     </div>
         <h2>Latest Reading</h2>
         <img src="img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">
         <p id="heart_beat">67</p>
-        <span id="statusColor" class="dot"></span>
+        <span v-model="statusColor" id="statusColor" class="dot"></span>
         <br>
         <h6 style="display:inline-block;">Blood Pressure:</h6>
-        <p id="BP" style="display: inline-block">180/20</p>
+        <p v-model="BP" id="BP" style="display: inline-block">180/20</p>
         <br>
         <h6 style="display:inline-block;">Gestational Age:</h6>
-        <p class="GestationalAge">21</p>
+        <p v-model="GestationalAge" class="GestationalAge">21</p>
         <p> Weeks</p>
         <h2>Symptoms</h2>
-        <div id="symptoms">Received overcame oh sensible so at an.
+        <div v-model="symptoms" id="symptoms">Received overcame oh sensible so at an.
             Formed do change merely to county it. Am separate contempt
             domestic to to oh. On relation my so addition branched.</div>
         <h2>Current Medications</h2>
-        <ul id="currentMedication">
+        <ul v-model="currentMedication" id="currentMedication">
             <li >item 1 </li>
             <li >item 2</li>
             <li >item 3</li>
@@ -49,7 +49,7 @@
 
     <div style="top: 66px; position: absolute;" class="container">
         <h2>Past Readings</h2>
-        <table class="table table-bordered" id="pastReadingList">
+        <table v-model= "pastReadingList" class="table table-bordered" id="pastReadingList">
             <thead>
             <tr>
                 <th>Date</th>
