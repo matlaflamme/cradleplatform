@@ -6,8 +6,5 @@ let patientSummary = new Vue({
         clinicPhoneNum : ''
     },
     methods: {
-        submitClinic() {
-            //create a new health clinic
-        }
     }
 });
