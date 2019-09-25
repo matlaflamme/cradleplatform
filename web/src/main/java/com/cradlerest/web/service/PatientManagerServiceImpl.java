@@ -71,6 +71,11 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	}
 
 	@Override
+	public List<Patient> getAllPatients() {
+		return patientRepository.findAll();
+	}
+
+	@Override
 	public List<Reading> getReadingsForPatientWithId(@NotNull String id) {
 		return readingRepository.findAllByPatientId(id);
 	}

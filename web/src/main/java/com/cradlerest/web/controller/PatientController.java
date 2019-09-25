@@ -35,6 +35,11 @@ public class PatientController {
 		this.patientManagerService = patientManagerService;
 	}
 
+	@GetMapping("/all")
+	public List<Patient> all() {
+		return patientManagerService.getAllPatients();
+	}
+
 	@GetMapping("/{id}")
 	public Object profile(@PathVariable("id") String id) throws Exception {
 		return patientManagerService.getFullPatientProfile(id);
