@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Simplifies the process of constructing {@code Patient} objects.
+ * Simplifies the process of constructing {@code Reading} objects.
  *
  *
  * <h2>Example</h2>
