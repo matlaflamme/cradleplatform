@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Controller for Login
+ * Controller for Login to handle routes to all the users (atm)
  *
  * @see User
  */
