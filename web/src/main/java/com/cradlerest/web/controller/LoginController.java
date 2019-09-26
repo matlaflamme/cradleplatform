@@ -30,19 +30,44 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping("/")
-    public String root() {
-        return "home";
-    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String login(Model model, Principal user) {
+    public String root(Model model, Principal user) {
         if (user != null) {
             model.addAttribute("accountName", "User: " + user.getName());
         } else {
             model.addAttribute("accountName", "Please login");
         }
         return "home";
+    }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public String adminPage(Model model, Principal user) {
+        if (user != null) {
+            model.addAttribute("accountName", "User: " + user.getName());
+        } else {
+            model.addAttribute("accountName", "Please login");
+        }
+        return "admin";
+    }
+
+    @RequestMapping(value = "/vht", method = RequestMethod.GET)
+    public String vhtPage(Model model, Principal user) {
+        if (user != null) {
+            model.addAttribute("accountName", "User: " + user.getName());
+        } else {
+            model.addAttribute("accountName", "Please login");
+        }
+        return "vht";
+    }
+
+    @RequestMapping(value = "/healthworker", method = RequestMethod.GET)
+    public String login(Model model, Principal user) {
+        if (user != null) {
+            model.addAttribute("accountName", "User: " + user.getName());
+        } else {
+            model.addAttribute("accountName", "Please login");
+        }
+        return "healthworker";
     }
 
 }

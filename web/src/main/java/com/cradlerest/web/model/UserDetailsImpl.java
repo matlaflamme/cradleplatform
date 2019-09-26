@@ -6,9 +6,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /*
 
@@ -33,10 +35,13 @@ public class UserDetailsImpl extends User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        System.out.println("role: " + super.getRole().name());
-        grantedAuthorities.add(new SimpleGrantedAuthority(super.getRole().name()));
-        return grantedAuthorities;
+        // Get all roles (in a string, separated by ',')
+        String userRoles = super.getRoles();
+        System.out.println("userRoles: " + userRoles);
+        return Arrays
+                .stream(userRoles.split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

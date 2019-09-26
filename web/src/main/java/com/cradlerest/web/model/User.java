@@ -27,23 +27,22 @@ public class User {
 	private String password;
 
 	@Column(name = "role")
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	private String roles; // ADMIN,VHT,HEALTHWORKER
 
 	public User() {}
 
-	public User(Integer id, String username, String password, Role role) {
+	public User(Integer id, String username, String password, String roles) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.role = role;
+		this.roles = roles;
 	}
 
 	public User(User user) {
 		this.id = user.getId();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
-		this.role = user.getRole();
+		this.roles = user.getRoles();
 	}
 
 	public User(String username, String password) {
@@ -63,7 +62,7 @@ public class User {
 		this.password = password;
 	}
 
-	public void setRole(Role role) { this.role = role; } ;
+	public void setRole(String roles) { this.roles = roles; } ;
 
 	public Integer getId() {
 		return id;
@@ -77,6 +76,6 @@ public class User {
 		return password;
 	}
 
-	public Role getRole() { return role; }
+	public String getRoles() { return roles; }
 
 }

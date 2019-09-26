@@ -70,6 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.permitAll()
 				.and()
 				.logout().permitAll()
+				.and()
+				.exceptionHandling().accessDeniedPage("/accessDenied")
 				// Enable POST and DELETE methods
 				.and().httpBasic()
 				.and().csrf().disable();

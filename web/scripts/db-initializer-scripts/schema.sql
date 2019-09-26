@@ -50,17 +50,12 @@ CREATE TABLE reading (
 
 INSERT INTO user (user_id, password, role)
 VALUES ('admin', 'admin', 'ROLE_ADMIN');
-
 INSERT INTO user  (user_id, password, role)
 VALUES ('health', 'health', 'ROLE_HEALTHWORKER');
-
-<<<<<<< HEAD
 INSERT INTO user  (user_id, password, role)
 VALUES ('vht', 'vht', 'ROLE_VHT');
-=======
-INSERT INTO user  (user_id, password)
-VALUES ('vht', 'vht');
-
+INSERT INTO user  (user_id, password, role)
+VALUES ('test', 'test', 'ROLE_ADMIN');
 
 INSERT INTO patient
 VALUES ('001',          -- id
@@ -98,4 +93,3 @@ VALUES ('001', 130, 100, 80, 2, '2019-09-24 12:31:34');
 
 INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
 VALUES ('002', 140, 80, 93, 2, '2018-06-12 08:54:15')
->>>>>>> b2f1265bffb40ec44203c6fc6b3c2ecd05d0a6e9
