@@ -22,8 +22,7 @@ public class Zipper {
 		try {
 			BufferedInputStream origin = null;
 			FileOutputStream dest = new FileOutputStream(zipFile.getAbsolutePath());
-			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-					dest));
+			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER_SIZE];
 
 			for (File file : files) {
@@ -50,7 +49,7 @@ public class Zipper {
 	}
 
 	// Source: https://www.journaldev.com/960/java-unzip-file-example
-	public static HashMap<String, byte[]> unZip(InputStream zipFile, String destDir) {
+	public static HashMap<String, byte[]> unZip(InputStream zipFile) {
 
 		HashMap<String, byte[]> zippedFiles = new HashMap<String, byte[]>();
 

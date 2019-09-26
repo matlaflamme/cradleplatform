@@ -41,15 +41,17 @@ public class PatientBuilder {
 		return this;
 	}
 
+
 	public PatientBuilder name(@NotNull String name) {
 		patient.setName(name);
 		return this;
 	}
 
-	public PatientBuilder villageNumber(int number) {
+	public PatientBuilder villageNumber(String number) {
 		patient.setVillageNumber(number);
 		return this;
 	}
+
 
 	public PatientBuilder dateOfBirth(@NotNull Date date) {
 		patient.setDateOfBirth(date);

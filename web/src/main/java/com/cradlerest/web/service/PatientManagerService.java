@@ -3,6 +3,7 @@ package com.cradlerest.web.service;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -33,4 +34,6 @@ public interface PatientManagerService {
 	Patient constructPatient(Map<String, String> body) throws Exception;
 
 	Reading constructReading(Map<String, String> body) throws Exception;
+
+	Reading constructReadingFromEncrypted(MultipartFile file) throws Exception;
 }

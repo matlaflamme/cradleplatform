@@ -11,9 +11,9 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.HashMap;
 
 import java.util.Base64;
+import java.util.Map;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
@@ -82,10 +82,7 @@ public class HybridFileDecrypter {
 
 
 
-	public static void hybridDecryptFile(MultipartFile inputFile, String filePath) throws GeneralSecurityException, IOException {
-
-		// Unzip uploaded file
-		HashMap<String, byte[]> encryptedFiles = Zipper.unZip(inputFile.getInputStream(), filePath);
+	public static ByteArrayInputStream hybridDecryptFile(Map<String, byte[]> encryptedFiles) throws GeneralSecurityException, IOException {
 
 		PrivateKey privateKey = convertRsaPemToPrivateKey(PRIVATE_KEY);
 
@@ -102,16 +99,10 @@ public class HybridFileDecrypter {
 		byte[] aesKeyHex = Base64.getDecoder().decode(aesKey);
 
 		// Use the IV and AES key to decrypt the data
-		ByteArrayInputStream decryptedZip = decryptFileWithAES(aesKeyHex, aesIvHex, encryptedFiles.get("data.zip.aes"));
+		ByteArrayInputStream decryptedFile = decryptFileWithAES(aesKeyHex, aesIvHex, encryptedFiles.get("data.zip.aes"));
 
-		// Unzip the decrypted data
-		HashMap<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip, filePath);
 
-		// TODO : figure out what to do with the unencrypted files...
-		for (HashMap.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
-			System.out.println(readingFile.getKey());
-			// byte[] rFile = readingFile.getValue();
-		}
+		return decryptedFile;
 	}
 
 	public static PrivateKey convertRsaPemToPrivateKey(String pkcsKey) throws NoSuchAlgorithmException, InvalidKeySpecException {

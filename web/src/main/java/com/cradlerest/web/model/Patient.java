@@ -23,7 +23,7 @@ public class Patient {
 	private String name;
 
 	@Column(name = "village")
-	private Integer villageNumber;
+	private String villageNumber;
 
 	@Column(name = "dob")
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -52,8 +52,8 @@ public class Patient {
 
 	public Patient(
 			String id,
+			String villageNumber,
 			String name,
-			int villageNumber,
 			Date dateOfBirth,
 			Sex sex,
 			boolean isPregnant,
@@ -82,20 +82,20 @@ public class Patient {
 		this.id = id;
 	}
 
+	public String getVillageNumber() {
+		return villageNumber;
+	}
+
+	public void setVillageNumber(String villageNumber) {
+		this.villageNumber = villageNumber;
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(@NotNull String name) {
 		this.name = name;
-	}
-
-	public Integer getVillageNumber() {
-		return villageNumber;
-	}
-
-	public void setVillageNumber(int villageNumber) {
-		this.villageNumber = villageNumber;
 	}
 
 	public Date getDateOfBirth() {
