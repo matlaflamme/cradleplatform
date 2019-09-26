@@ -29,6 +29,8 @@ public interface PatientManagerService {
 
 	Patient getPatientWithId(@NotNull String id) throws Exception;
 
+	List<Patient> getAllPatients();
+
 	List<Reading> getReadingsForPatientWithId(@NotNull String id);
 
 	Patient constructPatient(Map<String, String> body) throws Exception;
