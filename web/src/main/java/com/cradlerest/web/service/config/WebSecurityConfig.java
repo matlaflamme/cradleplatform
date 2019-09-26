@@ -18,8 +18,12 @@ import javax.sql.DataSource;
 
 /*
 Defines the conditions for Java Spring Security
- */
 
+use .antMatchers(Uri).hasRole(Role) to secure a uri
+
+use .antMatchers(Uri).hasAnyRole(Role,Role,Role) to secure a Uri for multiple users
+Equivalent to user having multiple roles in database "Role" column.
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
