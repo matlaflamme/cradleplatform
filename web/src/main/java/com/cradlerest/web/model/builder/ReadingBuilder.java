@@ -37,13 +37,13 @@ public class ReadingBuilder {
 		return reading;
 	}
 
-//	public ReadingBuilder id(@NotNull int id) {
-//		reading.setId(id);
-//		return this;
-//	}
+	public ReadingBuilder id(int id) {
+		reading.setId(id);
+		return this;
+	}
 
-	public ReadingBuilder pid(@NotNull Patient pid) {
-		reading.setPatient(pid);
+	public ReadingBuilder pid(@NotNull String pid) {
+		reading.setPatientId(pid);
 		return this;
 	}
 
@@ -80,8 +80,7 @@ public class ReadingBuilder {
 	}
 
 	private void validate() throws InstantiationError {
-//		assertNotNull(reading.getId(), "id");
-		assertNotNull(reading.getPatient(), "pid");
+		assertNotNull(reading.getPatientId(), "pid");
 		assertNotNull(reading.getColour(), "colour");
 		assertNotNull(reading.getHeartRate(), "heartRate");
 		assertNotNull(reading.getSystolic(), "systolic");

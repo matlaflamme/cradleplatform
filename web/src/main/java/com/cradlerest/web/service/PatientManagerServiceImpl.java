@@ -157,7 +157,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 			// Create new reading
 			Reading newReading = new ReadingBuilder()
-					.pid(readingPatient)
+					.pid(readingPatient.getId())
 					.colour(ReadingColour.RED)
 					.diastolic(diastolic)
 					.systolic(systolic)
