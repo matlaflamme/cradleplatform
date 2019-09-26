@@ -1,21 +1,42 @@
 # Coding Convention
 
-This file lays out the coding convention for this project. These conventions take inspiration from [this](https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt373/2019-7/links/files/CodeStyleGuide.html) style guide created by Brian Fraser.
+This file lays out the coding convention for this project. These conventions take inspiration from [this](https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt373/2019-7/links/files/CodeStyleGuide.html) style guide created by Brian Fraser. 
 
 ## Contents
 
-* [Java](#java)
-  * [Naming](#naming)
-  * [Comments](#comments)
-  * [Formatting](#formatting)
-  * [Package Structure](#package-structure)
-    * [The Controller Package](#the-controller-package)
-    * [The Model Package](#the-model-package)
-    * [The Service Package](#the-service-package)
-  * [Annotations](#annotations)
-* [Android App](#android-app)
-* [JavaScript](#javascript)
-* [HTML](#html)
+- [Commit Messages](#commit-messages)
+- [Java](#java)
+  - [Naming](#naming)
+  - [Comments](#comments)
+  - [Formatting](#formatting)
+  - [Package Structure](#package-structure)
+    - [The Controller Package](#the-controller-package)
+    - [The Model Package](#the-model-package)
+    - [The Service Package](#the-service-package)
+  - [Annotations](#annotations)
+- [Android App](#android-app)
+- [JavaScript](#javascript)
+- [HTML](#html)
+
+## Commit Messages
+
+When committing your work, it can be tedious when looking through all of our files. It is imperative that we keep a standard convention/style for our messages. Below are some of the guidelines that you are expected to follow beginning **09/29/19**:
+
+| **Message** | **Description**                                    | **Example**                        |
+| ----------- | -------------------------------------------------- | ---------------------------------- |
+| `[FIX]`     | You have fixed errors/bugs within a file (or more) | `[FIX]: Directory Path Correction` |
+| `[ADD]`     | You added a new file (or more) or feature(s)       | `[ADD]: Added loginPage.html`      |
+| `[DEL]`     | You have deleted a file (or more) or feature(s)    | `[DEL]: Removed errorFile.java`    |
+
+If you are working as a pair (or more), you can add your names in square brackets (lower-case) and separated by commas prefixing the above requirement:
+
+| **Example**                                                  |
+| ------------------------------------------------------------ |
+| `[parmis,mathieu][ADD]: allPatientView.html, js, css`        |
+| **Description**                                              |
+| Parmis and Mathieu both worked to add the new files: `allPatientView.html`, `.js`, and `.css` |
+
+
 
 ## Java
 
@@ -23,25 +44,25 @@ This file lays out the coding convention for this project. These conventions tak
 
 Classes, interfaces, enumerations, and other top-level declarations should use UpperCamelCase.
 
-``` java
+```java
 interface DatabaseContext { ... }
 ```
 
 Methods and properties should use lowerCamelCase.
 
-``` java
+```java
 void doStuff(int someParameter) { ... }
 ```
 
 Constants should use all uppercase letters with underscores.
 
-``` java
+```java
 long MY_NUMBER = 5;
 ```
 
 When appropriate, interfaces should try and use an "-able" suffix. If not appropriate for a specific context, a simple noun describing the interface is also acceptable.
 
-``` java
+```java
 // Not a great interface name
 interface ToInt {
     int toInt();
@@ -63,15 +84,16 @@ interface DatabaseContext {
 Each public or package-private class, interface, enumeration, etc. should have a class level JavaDoc comment describing the intent of the class, interface, etc.
 
 **JavaDoc Conventions**:
-* **Don't** use the `@author` tag, that's what Git is for
-* Use the `@see` tag to link to related classes/methods
-  * This tag works really nicely in Intellij so use it whenever acceptable
-* When documenting a method...
-  * There must be a `@param` tag for each parameter
-  * If the method returns someting, there must be a `@return` tag
-  * If the method throws an exception, there must be a `@throws` tag explaining the conditions for the exception to be thrown
-* **Don't** comment simple setters and getters
-* **Do** comment any method that is reasonably complex or has side effects
+
+- **Don't** use the `@author` tag, that's what Git is for
+- Use the `@see` tag to link to related classes/methods
+  - This tag works really nicely in Intellij so use it whenever acceptable
+- When documenting a method...
+  - There must be a `@param` tag for each parameter
+  - If the method returns someting, there must be a `@return` tag
+  - If the method throws an exception, there must be a `@throws` tag explaining the conditions for the exception to be thrown
+- **Don't** comment simple setters and getters
+- **Do** comment any method that is reasonably complex or has side effects
 
 ### Formatting
 
@@ -81,7 +103,7 @@ Use tabs instead of spaces when indenting.
 >
 > In Intellij this can be found under: 'Preferences > Editor > Code Style > Java' and, on the "Tabs and Indents" tab, check the box "Use tab character".
 
-``` java
+```java
 if (condition) {
 ⟼doStuff();
 }
@@ -89,7 +111,7 @@ if (condition) {
 
 Don't add a space between an opening/closing parentheses and whatever is inside. The same goes for subscripts.
 
-``` java
+```java
 // do
 while (true) { ... }
 array[computeIndex()];
@@ -101,7 +123,7 @@ array[ computeIndex() ];
 
 Use 1 space between a control structure keyword and its condition, and 1 space after the condition and before the opening brace.
 
-``` java
+```java
 while∙(true)∙{
 ⟼doStuff();
 }
@@ -109,7 +131,7 @@ while∙(true)∙{
 
 Use 1 space between binary operators and their operands, and no spaces between unary operators and their operand.
 
-``` java
+```java
 boolean x∙=a∙||∙(b∙&&∙!c);
 ```
 
@@ -131,7 +153,7 @@ Controller class names should end in `Controller`.
 
 Controllers should be specific, handling a single domain, rather than general purpose.
 
-``` java
+```java
 // Controller handling only patient related requests - GOOD
 @RestController
 class PatientController { ... }
@@ -139,6 +161,7 @@ class PatientController { ... }
 // The whole API - BAD
 @RestController
 class ApiController { ... }
+
 ```
 
 #### The Model Package
@@ -161,7 +184,7 @@ Bean factory classes should be named after the service they produce and end in `
 
 An example of a simple service for generating id numbers:
 
-``` java
+```java
 // file: com/cradlerest/web/service/IdGenerator.java
 
 // The service interface.
@@ -194,20 +217,22 @@ public class IdGeneratorConfig {
         return new IncrementingIdGenerator();
     }
 }
+
 ```
 
 ### Annotations
 
 Always use the `@Override` annotation when overriding a method from a super class or interface.
 
-``` java
+```java
 @Override
 public boolean equals(Object obj) { ... }
+
 ```
 
 Intellij has `@Nullable` and `@NotNull` annotations which allows the IDE to highlight places where a `NullPointerException` may occur. For ease of development and to catch more errors at/before compile-time please make use of these annotations wherever applicable.
 
-``` java
+```java
 // A method without annotations.
 void printStringLength(String str) {
     var length = str.length(); // NullPointerException if str == null
@@ -233,11 +258,12 @@ void printStringLength(@Nullable String str) {
         System.out.printf("length = %d\n", length);
     }
 }
+
 ```
 
 `@Nullable` and `@NotNull` work on properties and return types as well.
 
-``` java
+```java
 class Person {
     @NotNull
     private final String firstName;
@@ -260,6 +286,7 @@ class Person {
         return lastName;
     }
 }
+
 ```
 
 ## Android App
@@ -270,6 +297,61 @@ If it is unclear what style to use, the above [Java](#java) style guide may be u
 
 > **Important**: **Never mix tabs and spaces** for indentation! When working on the Android app, always use the same indentation style as the surrounding code.
 
+
+
 ## JavaScript
 
+When working with `.js` files, we primarily use them for **Vue Applications**. Vue variables are to be under `let`, not `var`. 
+
+All Javascript files are to be put into the `js` sub-folder of our *webapp* main folder. 
+
+Names should be in *camelCase* style -- **no underscores**. Vue variable should have the same name as the element `id` to reduce confusion and possible issues down the road. 
+
+Curly braces (`{}`) should be separated from any variables/data sets with **one space**. Additionally, colons (`:`) and parentheses (`()`) are to stick to the variable/data set.  The opening bracket will always be on the same line as what you are declaring, while the closing bracket will be on its own line with matching indentation as its declared counterpart.
+
+Equal signs (`=`) are to be separated by **one space** (note: `==` and `===` can stay conjoined -- obviously).
+
+No real requirements for Semi-colons. That is up to you.
+
+For example:
+
+```javascript
+let loginInput = new Vue({
+    el: '#loginInput',
+    data: {
+        user: '',
+        pass: ''
+    }
+})
+
+```
+
+
+
 ## HTML
+
+All `<script src=... /> ` tags are to be presented at the top of the HTML file within the `<head />` tags. 
+
+Indentations must be used with a singular use of the `TAB`  key -- **do not press TAB twice per indentation**. Each primary element (i.e., containers) will have their own indentation column with their nested elements appropriately indented once recursively. 
+
+Unless absolutely necessary (e.g., screen overflow), each element will be contained in a single line. 
+
+The element's `id` will be the first on the list of properties, proceeding appropriate element `type`. 
+
+Due to the nature of elements being long declarations, comments are to be placed **above** their respective line(s) of code. If necessary, separate each "chunk" of code by a blank space. 
+
+Line breaks can be placed either at the end of (short) lines as well as between two separated "chunks." Continuous streams of breaks can be conjoined into one line.
+
+For example:
+
+```html
+<!--This is my comment for myDiv-->
+<div id="registration">
+    <input type="text" id="user" placeholder="Username">
+    <br><br>
+    <!--Submit button-->
+    <button id="submit">Submit</button>
+</div>
+
+```
+
