@@ -38,9 +38,9 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String login(Model model, Principal user) {
         if (user != null) {
-            model.addAttribute("accountName", "Please login");
-        } else {
             model.addAttribute("accountName", "User: " + user.getName());
+        } else {
+            model.addAttribute("accountName", "Please login");
         }
         return "home";
     }
