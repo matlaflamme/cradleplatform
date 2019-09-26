@@ -2,7 +2,7 @@ package com.cradlerest.web.model.builder;
 
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
-import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.util.DateParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -70,6 +70,11 @@ public class ReadingBuilder {
 
 	public ReadingBuilder timestamp(@NotNull Date timestamp) {
 		reading.setTimestamp(timestamp);
+		return this;
+	}
+
+	public ReadingBuilder timestamp(@NotNull String timestampText) {
+		reading.setTimestamp(DateParser.parseDateTime(timestampText));
 		return this;
 	}
 
