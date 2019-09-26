@@ -43,25 +43,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.passwordEncoder(getPasswordEncoder());
 	}
 
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				// Disable security on all "/mock-api" routes (for testing)
-				.antMatchers("/").permitAll()
+				/*
+				The order of the antMatchers is important
+				E.g. if you permitAll "/", all consecutive URIs will be permitAll :)
+				 */
 				.antMatchers("/admin")
 					.hasRole("ADMIN")
-					.anyRequest().authenticated()
 				.antMatchers("/healthworker")
 					.hasRole("HEALTHWORKER")
-                    .anyRequest().authenticated()
 				.antMatchers("/vht")
 					.hasRole("VHT")
-                    .anyRequest().authenticated()
+				.antMatchers("/").permitAll()
 				.antMatchers("/mock-api/**", "/upload_reading", "/upload").permitAll()
 				// Disable security on all "/api" routes (for testing)
 				.antMatchers("/api/**").permitAll()
-				.anyRequest().authenticated()
 				.and()
 				.formLogin()
 					.loginPage("/login")
