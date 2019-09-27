@@ -94,12 +94,52 @@ None
 
 ### `POST /api/patient`
 
-Inserts a new patient entity into the database.
+Inserts a new patient entity into the database, or updates an existing one.
 
-> Not yet implemented
+Whether the method updates or creates a new patient depends on the `id` field of
+the request body. If a patient with the request `id` already exists, its data
+will be overwritten with the data in the request body (assuming the request body
+is valid).
+
+#### Request Body
+
+* Format: `JSON`
+  * i.e., `Content-Type: application/json` in the request header
+
+| Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `string` | `yes` | Unique identifier for the patient |
+| `name` | `string` | `yes` | Patient's name |
+| `villageNumber` | `string` | `yes` | Village number for the patient |
+| `dateOfBirth` | `string` | `yes` | Patient's birth date, in format "yyyy-MM-dd" |
+| `sex` | `number` | `yes` | Patient's sex, enumerated: {male=0, female=1, unkown=2} |
+| `pregnant` | `boolean` | If `sex` != Male (`0`) | Is the patient pregnant? |
+| `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient |
+| `medicalHistory` | `string` | `no` | Patient's medical history |
+| `drugHistory` | `string` | `no` | Patient's drug history |
+| `otherSympotoms` | `string` | `no` | Any other symptoms the patient has |
 
 ### `POST /api/reading`
 
 Inserts a new reading entity into the database.
 
-> Not yet implemented
+Inserts a new reading entity into the database, or updates an existing one.
+
+Like with patients, whether the method updates or creates a new patient depends
+on the `id` field of the request. If a reading with the request `id` is present,
+its data will be overwritten with the date in the request body (assuming the
+request body is valid).
+
+The `patientId` field has a foreign key constraint with `patient.id` meaning that
+a patient with the given `patientId` must exist in the system before the reading
+can be added.
+
+| Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `no` | Reading primary key, auto-generated if no present |
+| `patentId` | `string` | `yes` | Id of the patient that this reading is for |
+| `systolic` | `number` | `yes` | Systolic reading value |
+| `diastolic` | `number` | `yes` | Diastolic reading value |
+| `heartRate` | `number` | `yes` | Heart rate reading value |
+| `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow=1, red=2} |
+| `timestamp` | `string` | `yes` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |
