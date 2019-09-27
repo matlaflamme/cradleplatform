@@ -51,9 +51,10 @@ public class MockUserController {
 
 	@PostMapping("/add")
 	public User create(@RequestBody Map<String, String> body) {
-		String userId = body.get("userId");
+		String username = body.get("username");
 		String password = body.get("password");
-		return userRepository.save(new User(userId, password));
+		String roles = body.get("roles");
+		return userRepository.save(new User(username, password, roles));
 	}
 
 	@DeleteMapping("/{id}")

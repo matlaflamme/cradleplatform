@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 public class User {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -45,9 +44,10 @@ public class User {
 		this.roles = user.getRoles();
 	}
 
-	public User(String username, String password) {
+	public User(String username, String password, String roles) {
 		this.username = username;
 		this.password = password;
+		this.roles = roles;
 	}
 
 	public void setId(Integer id) {
