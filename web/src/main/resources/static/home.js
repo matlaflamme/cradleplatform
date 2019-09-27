@@ -31,11 +31,12 @@ Vue.component('patient-table', {
     methods: {
         viewPatientData: function (id) {
             console.log("View patient:"+id+" details");
-            let Url = "http://localhost:8080/mock-api/user/all";
+            // let Url = "http://localhost:8080/mock-api/user/all";
+            window.open("http://localhost:8080/patientSummary");
 
-            fetch(Url)
-                .then(data=>{return data.json()})
-                .then(res=>{console.log(res)})
+            // fetch(Url)
+            //     .then(data=>{return data.json()})
+            //     .then(res=>{console.log(res)})
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
