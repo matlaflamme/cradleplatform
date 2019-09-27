@@ -3,7 +3,6 @@
 ## Getting Started
 
 * Install [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-* Install [Docker Compose](https://linuxize.com/post/how-to-install-and-use-docker-compose-on-ubuntu-18-04/)
 * Install MySQL
   * [Windows Installer](https://dev.mysql.com/downloads/installer/)
   * macOS with Homebrew: `brew install mysql`

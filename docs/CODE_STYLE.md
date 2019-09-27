@@ -4,39 +4,19 @@ This file lays out the coding convention for this project. These conventions tak
 
 ## Contents
 
-- [Commit Messages](#commit-messages)
-- [Java](#java)
-  - [Naming](#naming)
-  - [Comments](#comments)
-  - [Formatting](#formatting)
-  - [Package Structure](#package-structure)
-    - [The Controller Package](#the-controller-package)
-    - [The Model Package](#the-model-package)
-    - [The Service Package](#the-service-package)
-  - [Annotations](#annotations)
-- [Android App](#android-app)
-- [JavaScript](#javascript)
-- [HTML](#html)
-
-## Commit Messages
-
-When committing your work, it can be tedious when looking through all of our files. It is imperative that we keep a standard convention/style for our messages. Below are some of the guidelines that you are expected to follow beginning **09/29/19**:
-
-| **Message** | **Description**                                    | **Example**                        |
-| ----------- | -------------------------------------------------- | ---------------------------------- |
-| `[FIX]`     | You have fixed errors/bugs within a file (or more) | `[FIX]: Directory Path Correction` |
-| `[ADD]`     | You added a new file (or more) or feature(s)       | `[ADD]: Added loginPage.html`      |
-| `[DEL]`     | You have deleted a file (or more) or feature(s)    | `[DEL]: Removed errorFile.java`    |
-
-If you are working as a pair (or more), you can add your names in square brackets (lower-case) and separated by commas prefixing the above requirement:
-
-| **Example**                                                  |
-| ------------------------------------------------------------ |
-| `[parmis,mathieu][ADD]: allPatientView.html, js, css`        |
-| **Description**                                              |
-| Parmis and Mathieu both worked to add the new files: `allPatientView.html`, `.js`, and `.css` |
-
-
+* [Commit Messages](#commit-messages)
+* [Java](#java)
+  * [Naming](#naming)
+  * [Comments](#comments)
+  * [Formatting](#formatting)
+  * [Package Structure](#package-structure)
+    * [The Controller Package](#the-controller-package)
+    * [The Model Package](#the-model-package)
+    * [The Service Package](#the-service-package)
+  * [Annotations](#annotations)
+* [Android App](#android-app)
+* [JavaScript](#javascript)
+* [HTML](#html)
 
 ## Commit Messages
 
@@ -64,25 +44,25 @@ If you are working as a pair (or more), you can add your names in square bracket
 
 Classes, interfaces, enumerations, and other top-level declarations should use UpperCamelCase.
 
-```java
+``` java
 interface DatabaseContext { ... }
 ```
 
 Methods and properties should use lowerCamelCase.
 
-```java
+``` java
 void doStuff(int someParameter) { ... }
 ```
 
 Constants should use all uppercase letters with underscores.
 
-```java
+``` java
 long MY_NUMBER = 5;
 ```
 
 When appropriate, interfaces should try and use an "-able" suffix. If not appropriate for a specific context, a simple noun describing the interface is also acceptable.
 
-```java
+``` java
 // Not a great interface name
 interface ToInt {
     int toInt();
@@ -104,16 +84,15 @@ interface DatabaseContext {
 Each public or package-private class, interface, enumeration, etc. should have a class level JavaDoc comment describing the intent of the class, interface, etc.
 
 **JavaDoc Conventions**:
-
-- **Don't** use the `@author` tag, that's what Git is for
-- Use the `@see` tag to link to related classes/methods
-  - This tag works really nicely in Intellij so use it whenever acceptable
-- When documenting a method...
-  - There must be a `@param` tag for each parameter
-  - If the method returns someting, there must be a `@return` tag
-  - If the method throws an exception, there must be a `@throws` tag explaining the conditions for the exception to be thrown
-- **Don't** comment simple setters and getters
-- **Do** comment any method that is reasonably complex or has side effects
+* **Don't** use the `@author` tag, that's what Git is for
+* Use the `@see` tag to link to related classes/methods
+  * This tag works really nicely in Intellij so use it whenever acceptable
+* When documenting a method...
+  * There must be a `@param` tag for each parameter
+  * If the method returns someting, there must be a `@return` tag
+  * If the method throws an exception, there must be a `@throws` tag explaining the conditions for the exception to be thrown
+* **Don't** comment simple setters and getters
+* **Do** comment any method that is reasonably complex or has side effects
 
 ### Formatting
 
@@ -123,7 +102,7 @@ Use tabs instead of spaces when indenting.
 >
 > In Intellij this can be found under: 'Preferences > Editor > Code Style > Java' and, on the "Tabs and Indents" tab, check the box "Use tab character".
 
-```java
+``` java
 if (condition) {
 ⟼doStuff();
 }
@@ -131,7 +110,7 @@ if (condition) {
 
 Don't add a space between an opening/closing parentheses and whatever is inside. The same goes for subscripts.
 
-```java
+``` java
 // do
 while (true) { ... }
 array[computeIndex()];
@@ -143,7 +122,7 @@ array[ computeIndex() ];
 
 Use 1 space between a control structure keyword and its condition, and 1 space after the condition and before the opening brace.
 
-```java
+``` java
 while∙(true)∙{
 ⟼doStuff();
 }
@@ -151,7 +130,7 @@ while∙(true)∙{
 
 Use 1 space between binary operators and their operands, and no spaces between unary operators and their operand.
 
-```java
+``` java
 boolean x∙=a∙||∙(b∙&&∙!c);
 ```
 
@@ -173,7 +152,7 @@ Controller class names should end in `Controller`.
 
 Controllers should be specific, handling a single domain, rather than general purpose.
 
-```java
+``` java
 // Controller handling only patient related requests - GOOD
 @RestController
 class PatientController { ... }
@@ -181,7 +160,6 @@ class PatientController { ... }
 // The whole API - BAD
 @RestController
 class ApiController { ... }
-
 ```
 
 #### The Model Package
@@ -204,7 +182,7 @@ Bean factory classes should be named after the service they produce and end in `
 
 An example of a simple service for generating id numbers:
 
-```java
+``` java
 // file: com/cradlerest/web/service/IdGenerator.java
 
 // The service interface.
@@ -237,22 +215,20 @@ public class IdGeneratorConfig {
         return new IncrementingIdGenerator();
     }
 }
-
 ```
 
 ### Annotations
 
 Always use the `@Override` annotation when overriding a method from a super class or interface.
 
-```java
+``` java
 @Override
 public boolean equals(Object obj) { ... }
-
 ```
 
 Intellij has `@Nullable` and `@NotNull` annotations which allows the IDE to highlight places where a `NullPointerException` may occur. For ease of development and to catch more errors at/before compile-time please make use of these annotations wherever applicable.
 
-```java
+``` java
 // A method without annotations.
 void printStringLength(String str) {
     var length = str.length(); // NullPointerException if str == null
@@ -278,12 +254,11 @@ void printStringLength(@Nullable String str) {
         System.out.printf("length = %d\n", length);
     }
 }
-
 ```
 
 `@Nullable` and `@NotNull` work on properties and return types as well.
 
-```java
+``` java
 class Person {
     @NotNull
     private final String firstName;
@@ -306,7 +281,6 @@ class Person {
         return lastName;
     }
 }
-
 ```
 
 ## Android App
@@ -343,7 +317,6 @@ let loginInput = new Vue({
         pass: ''
     }
 })
-
 ```
 
 
@@ -372,6 +345,5 @@ For example:
     <!--Submit button-->
     <button id="submit">Submit</button>
 </div>
-
 ```
 

@@ -61,16 +61,6 @@ Returns an `EntityNotFound` (404) exception if no patient with path variable
 `id` can be found in the database.
 
 
-### `GET /api/patient/all`
-
-Returns an array of all patients registered in the system.
-
-#### Returns
-
-Returns a JSON array of [reading](ENTITIES.md#patient) entities. If there are no
-patients in the system, an empty array is returned.
-
-
 ### `GET /api/patient/{id}/readings`
 
 Returns only the readings for the patient with a given `id`.
