@@ -1,7 +1,7 @@
 package com.cradlerest.web.service;
 
+import com.cradlerest.web.controller.error.BadRequestException;
 import com.cradlerest.web.controller.error.EntityNotFoundException;
-import com.cradlerest.web.controller.error.NotImplementedException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
@@ -14,6 +14,7 @@ import com.cradlerest.web.service.utilities.HybridFileDecrypter;
 import com.cradlerest.web.service.utilities.Zipper;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,6 +58,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			// properties declared public to avoid having to write getters/setters for local class
 
 			@JsonUnwrapped
+			@SuppressWarnings("WeakerAccess")
 			public Patient patient;
 
 			@SuppressWarnings("WeakerAccess")
@@ -71,6 +73,12 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		return new AggregatePatientProfile(getPatientWithId(id), getReadingsForPatientWithId(id));
 	}
 
+	/**
+	 * Returns the {@code Patient} object with a given {@param id}.
+	 * @param id Unique identifier for the requested patient.
+	 * @return The patient with {@param id}.
+	 * @throws Exception If no such patient exists or an error occurred.
+	 */
 	@Override
 	public Patient getPatientWithId(@NotNull String id) throws EntityNotFoundException {
 		Optional<Patient> optionalPatient = patientRepository.findById(id);
@@ -81,24 +89,69 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		return optionalPatient.get();
 	}
 
+	/**
+	 * Returns the list of all patients in the database.
+	 * @return All patients.
+	 */
 	@Override
 	public List<Patient> getAllPatients() {
 		return patientRepository.findAll();
 	}
 
+	/**
+	 * Returns the list of readings associated with the patient with a given
+	 * {@param id}.
+	 * @param id Unique identifier for a patient.
+	 * @return A list of readings, or, in the case of no such patient with the
+	 * 	requested id, an empty list.
+	 */
 	@Override
 	public List<Reading> getReadingsForPatientWithId(@NotNull String id) {
 		return readingRepository.findAllByPatientId(id);
 	}
 
+	/**
+	 * Creates a new, or updates an existing, patient in the system. If a patient
+	 * with the same id as {@param patient} exists, then that patient's profile
+	 * will be overwritten with the contents of {@param patient}. If no such
+	 * patient already exists, then a new one is created.
+	 *
+	 * @implNote The returned patient is not guarantied to be the same object
+	 * 	as {@param patient}.
+	 *
+	 * @param patient The patient to persist.
+	 * @return The saved patient.
+	 * @throws Exception If an error occurred.
+	 */
 	@Override
-	public Patient constructPatient(Map<String, String> body) throws Exception {
-		throw new NotImplementedException();
+	public Patient savePatient(@Nullable Patient patient) throws Exception {
+		if (patient == null) {
+			throw new BadRequestException("request body is null");
+		}
+		validatePatient(patient);
+		return patientRepository.save(patient);
 	}
 
+	/**
+	 * Creates a new, or updates an existing, reading in the system. If a reading
+	 * with the same id as {@param reading} exists, then that reading is
+	 * overwritten with the contents of {@param reading}. If no such reading
+	 * already exists, then a new one is created.
+	 *
+	 * @implNote The returned reading is not guarantied to be the same object
+	 * 	as {@param reading}.
+	 *
+	 * @param reading The reading to persist.
+	 * @return The saved reading.
+	 * @throws Exception If an error occurred.
+	 */
 	@Override
-	public Reading constructReading(Map<String, String> body) throws Exception {
-		throw new NotImplementedException();
+	public Reading saveReading(@Nullable Reading reading) throws Exception {
+		if (reading == null) {
+			throw new BadRequestException("request body is null");
+		}
+		validateReading(reading);
+		return readingRepository.save(reading);
 	}
 
 	@Override
@@ -169,5 +222,33 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		}
 
 		return null;
+	}
+
+	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {
+		if (field == null) {
+			throw BadRequestException.missingField(fieldName);
+		}
+	}
+
+	private void validatePatient(@NotNull Patient patient) throws BadRequestException {
+		assertNotNull(patient.getId(), "id");
+		assertNotNull(patient.getName(), "name");
+		assertNotNull(patient.getVillageNumber(), "villageNumber");
+		assertNotNull(patient.getDateOfBirth(), "dateOfBirth");
+		assertNotNull(patient.getSex(), "sex");
+		assertNotNull(patient.isPregnant(), "pregnant");
+		if (patient.isPregnant()) {
+			// gestational age is only required for patients that are pregnant
+			assertNotNull(patient.getGestationalAge(), "gestationalAge");
+		}
+	}
+
+	private void validateReading(@NotNull Reading reading) throws BadRequestException {
+		assertNotNull(reading.getPatientId(), "patientId");
+		assertNotNull(reading.getSystolic(), "systolic");
+		assertNotNull(reading.getDiastolic(), "diastolic");
+		assertNotNull(reading.getHeartRate(), "heartRate");
+		assertNotNull(reading.getColour(), "colour");
+		assertNotNull(reading.getTimestamp(), "timestamp");
 	}
 }
