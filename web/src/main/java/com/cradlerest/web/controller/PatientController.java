@@ -4,7 +4,6 @@ import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.service.PatientManagerService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -36,11 +35,6 @@ public class PatientController {
 		this.patientManagerService = patientManagerService;
 	}
 
-	@GetMapping("/all")
-	public List<Patient> all() {
-		return patientManagerService.getAllPatients();
-	}
-
 	@GetMapping("/{id}")
 	public Object profile(@PathVariable("id") String id) throws Exception {
 		return patientManagerService.getFullPatientProfile(id);
@@ -61,13 +55,8 @@ public class PatientController {
 		return patientManagerService.constructPatient(body);
 	}
 
-	@PostMapping("/encrypted_reading")
-	public Reading createReadingFromEncrypted(@RequestParam("userDataFile") MultipartFile file) throws Exception {
-		return patientManagerService.constructReadingFromEncrypted(file);
-	}
-
 	@PostMapping("/reading")
-	public Reading createReading(@RequestBody Map<String, String> body) throws Exception {
+	public Object createReading(@RequestBody Map<String, String> body) throws Exception {
 		return patientManagerService.constructReading(body);
 	}
 }

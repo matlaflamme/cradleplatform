@@ -49,7 +49,7 @@ entity, and, as such, must be separate entities.
 |:-:|:-:|:-:|:-|
 | `id` | `string` | `false` | Unique identifier for the patient |
 | `villageNumber` | `number` | `false` | Numerical identifier for the village in which the patient lives
-| `name` | `string` | `false` | Patient's name |
+| `initials` | `string` | `false` | Patient's initials |
 | `dateOfBirth` | `string` | `false` | Patient's date of birth formatted as "yyyy-MM-dd"
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}`
 | `pregnant` | `boolean` | `false` | Is the patient pregnant? |
@@ -64,7 +64,7 @@ entity, and, as such, must be separate entities.
 {
     "id": "001",
     "villageNumber": 1,
-    "initials": "Alpha Beta",
+    "initials": "AB",
     "dateOfBirth": "1995-12-25",
     "sex": 1,
     "gestationalAge": 16,
@@ -93,7 +93,7 @@ the most recent reading will be the first item in the array.
 |:-:|:-:|:-:|:-|
 | `id` | `string` | `false` | Unique identifier for the patient |
 | `villageNumber` | `number` | `false` | Numerical identifier for the village in which the patient lives
-| `name` | `string` | `false` | Patient's name |
+| `initials` | `string` | `false` | Patient's initials |
 | `dateOfBirth` | `string` | `false` | Patient's date of birth formatted as "yyyy-MM-dd"
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}`
 | `pregnant` | `boolean` | `false` | Is the patient pregnant? |
@@ -110,7 +110,7 @@ the most recent reading will be the first item in the array.
 {
     "id": "001",
     "villageNumber": 1,
-    "name": "Alpha Beta",
+    "initials": "AB",
     "dateOfBirth": "1995-12-25",
     "sex": 1,
     "gestationalAge": 16,

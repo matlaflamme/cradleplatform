@@ -80,15 +80,6 @@ def docker_purge():
     exec_cmd(["docker-compose", "down"])
 
 
-def docker_clean():
-    print("WARNING: you will lose any data stored in the database")
-    answer = input("Do you wish to continue? [y/n] ")
-    if answer != "y":
-        print("Aborted")
-        return
-    exec_cmd(["docker", "system", "prune", "-f"])
-    exec_cmd(["docker", "volume", "prune", "-f"])
-
 def docker_start():
     exec_cmd(["docker-compose", "start"])
     print("It may take a minute for the server to start up")
@@ -106,7 +97,7 @@ def docker_run():
     # build jar
     exec_cmd(["./mvnw", "package", "-DskipTests"])
     # deploy to docker
-    exec_cmd(["docker-compose", "up", "--build"])
+    exec_cmd(["docker-compose", "up", "--build", "-d"])
     print("It may take a minute for the server to start up")
 
 
@@ -117,7 +108,6 @@ def cmd_docker(argv):
         "pause": docker_pause,
         "ps": docker_ps,
         "purge": docker_purge,
-        "clean": docker_clean,
         "start": docker_start,
         "stop": docker_stop,
         "restart": docker_restart,
