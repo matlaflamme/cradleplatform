@@ -13,11 +13,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /*
-
- This class defines a user that has been authorized
-
- UserDetails interface provided by Spring Security
- https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetails.html
+ * This class defines a user that has been authorized
+ *
+ * UserDetails interface provided by Spring Security
+ * https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetails.html
  */
 public class UserDetailsImpl extends User implements UserDetails {
     // Creates a new authorized user
@@ -27,15 +26,13 @@ public class UserDetailsImpl extends User implements UserDetails {
     }
 
     /*
-     A user may have more role (I guess?)
-     For now they only have one:
-     HEALTHWORKER
-     VHT
-     ADMIN
+     * Returns list of authorities determined by user's roles
+	 * A user may have more role.
+     * Possible roles: HEALTHWORKER, VHT, ADMIN
+     * Java spring security auto parses ROLE_ADMIN as ADMIN
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Get all roles (in a string, separated by ',')
         String userRoles = super.getRoles();
         System.out.println("userRoles: " + userRoles);
         return Arrays
@@ -49,7 +46,7 @@ public class UserDetailsImpl extends User implements UserDetails {
         return super.getUsername();
     }
 
-    public String getPassword() {
+	public String getPassword() {
         return super.getPassword();
     }
 
