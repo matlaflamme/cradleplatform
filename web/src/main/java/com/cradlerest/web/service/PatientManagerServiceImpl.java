@@ -77,7 +77,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * Returns the {@code Patient} object with a given {@param id}.
 	 * @param id Unique identifier for the requested patient.
 	 * @return The patient with {@param id}.
-	 * @throws Exception If no such patient exists or an error occurred.
+	 * @throws EntityNotFoundException If no such patient exists or an error occurred.
 	 */
 	@Override
 	public Patient getPatientWithId(@NotNull String id) throws EntityNotFoundException {
@@ -121,10 +121,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 *
 	 * @param patient The patient to persist.
 	 * @return The saved patient.
-	 * @throws Exception If an error occurred.
+	 * @throws BadRequestException If an error occurred.
 	 */
 	@Override
-	public Patient savePatient(@Nullable Patient patient) throws Exception {
+	public Patient savePatient(@Nullable Patient patient) throws BadRequestException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
 		}
@@ -143,10 +143,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 *
 	 * @param reading The reading to persist.
 	 * @return The saved reading.
-	 * @throws Exception If an error occurred.
+	 * @throws BadRequestException If an error occurred.
 	 */
 	@Override
-	public Reading saveReading(@Nullable Reading reading) throws Exception {
+	public Reading saveReading(@Nullable Reading reading) throws BadRequestException {
 		if (reading == null) {
 			throw new BadRequestException("request body is null");
 		}
