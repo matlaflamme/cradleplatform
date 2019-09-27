@@ -1,5 +1,3 @@
-alert("File found");
-
 Vue.component('patient-table', {
     data: function() {
         console.log("helooooo");
@@ -33,20 +31,16 @@ Vue.component('patient-table', {
     methods: {
         viewPatientData: function (id) {
             console.log("View patient:"+id+" details");
+            let Url = "http://localhost:8080/mock-api/user/all";
+
+            fetch(Url)
+                .then(data=>{return data.json()})
+                .then(res=>{console.log(res)})
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
         }
     }
-});
-
-Vue.component('button-counter', {
-    data: function () {
-        return {
-            count: 0
-        }
-    },
-    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
 });
 
 new Vue({
@@ -61,5 +55,3 @@ new Vue({
     }
 
 });
-
-new Vue({el: '#components-demo'});

@@ -22,6 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/mock-api/**").permitAll()
 				// Disable security on all "/api" routes (for testing)
 				.antMatchers("/api/**").permitAll()
+				.antMatchers("/login*").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
