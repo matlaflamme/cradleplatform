@@ -6,10 +6,8 @@ import javax.persistence.*;
 
 /**
  * Class {@code User} is a database entity holding data for users of the web
- * system (health workers, VHTs, etc.).
+ * system (admin, health workers, VHTs).
  *
- * TODO: this class has been constructed for testing purposes,
- * 	please revisit its implementation at a later date
  */
 @Entity
 @Table(name = "user")
@@ -20,7 +18,7 @@ public class User {
 	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "user_id")
+	@Column(name = "username")
 	private String username;
 
 	@Column(name = "password")
@@ -45,9 +43,10 @@ public class User {
 		this.roles = user.getRoles();
 	}
 
-	public User(String username, String password) {
+	public User(String username, String password, String roles) {
 		this.username = username;
 		this.password = password;
+		this.roles = roles;
 	}
 
 	public void setId(Integer id) {

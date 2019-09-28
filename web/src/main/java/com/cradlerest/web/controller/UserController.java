@@ -18,20 +18,20 @@ import java.util.Optional;
  *
  * Provides the following endpoints:
  *
- * - {@code GET:/mock-api/user/all}: return all users in the database
- * - {@code GET:/mock-api/user/{id}}: return the user with a given {@code id}
- * - {@code POST:/mock-api/user/add}: create a new user
- * - {@code DELETE:/mock-api/user/{id}}: delete the user with a given {@code id}
+ * - {@code GET:/api/user/all}: return all users in the database
+ * - {@code GET:/api/user/{id}}: return the user with a given {@code id}
+ * - {@code POST:/api/user/add}: create a new user
+ * - {@code DELETE:/api/user/{id}}: delete the user with a given {@code id}
  *
  * @see User
  */
 @RestController
-@RequestMapping("/mock-api/user")
-public class MockUserController {
+@RequestMapping("/api/user")
+public class UserController {
 
 	private UserRepository userRepository;
 
-	public MockUserController(UserRepository userRepository) {
+	public UserController(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
@@ -51,9 +51,10 @@ public class MockUserController {
 
 	@PostMapping("/add")
 	public User create(@RequestBody Map<String, String> body) {
-		String userId = body.get("userId");
+		String username = body.get("username");
 		String password = body.get("password");
-		return userRepository.save(new User(userId, password));
+		String roles = body.get("roles");
+		return userRepository.save(new User(username, password, roles));
 	}
 
 	@DeleteMapping("/{id}")

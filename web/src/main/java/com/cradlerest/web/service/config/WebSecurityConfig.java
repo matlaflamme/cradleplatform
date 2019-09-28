@@ -13,15 +13,16 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 
 /*
-Defines the conditions for Java Spring Security
+ * Defines the conditions for Java Spring Security
  */
 
 @Configuration
 @EnableWebSecurity
+@Component
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -56,10 +57,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.hasRole("HEALTHWORKER")
 				.antMatchers("/vht")
 					.hasRole("VHT")
+				.antMatchers("/api/user")
+					.hasRole("ADMIN")
+				.antMatchers("/api/**", "/upload_reading", "/upload").permitAll().anyRequest().authenticated()
 				.antMatchers("/").permitAll()
-				.antMatchers("/mock-api/**", "/upload_reading", "/upload").permitAll()
-				// Disable security on all "/api" routes (for testing)
-				.antMatchers("/api/**").permitAll()
 				.and()
 				.formLogin()
 					.loginPage("/login")
@@ -67,7 +68,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.failureUrl("/login?error")
 					.permitAll()
 				.and()
-				.logout().permitAll()
+				.logout()
+					.logoutSuccessUrl("/")
+					.permitAll()
 				.and()
 				.exceptionHandling().accessDeniedPage("/accessDenied")
 				// Enable POST and DELETE methods
