@@ -164,7 +164,7 @@ running.
 ``` bash
 #
 # The following are the commands needed to setup the VM to run the webserver
-# They only need to be run once when initializing a fresh OS instal;
+# They only need to be run once when initializing a fresh OS install
 #
 
 # Clone repository
