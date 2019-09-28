@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -155,54 +157,41 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	}
 
 	@Override
-	public Reading constructReadingFromEncrypted(MultipartFile file) throws Exception {
-		// Unzip uploaded file
-		Map<String, byte[]> encryptedFiles = Zipper.unZip(file.getInputStream());
-
-		// Decrypt unzipped files
-		ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
-
+	public Reading constructReadingFromEncrypted(MultipartFile file) throws IOException, GeneralSecurityException {
+		JSONObject reading = decryptUpload(file);
 
 		// TODO : format JSON so android matches Database
-
-		JSONObject reading = new JSONObject(new String(decryptedZip.readAllBytes()));
-
 		String id = reading.getString("patientId");
 		String villageNumber = reading.getString("villageNumber");
 		String patientName = reading.getString("patientName");
 		String gender = reading.getString("patientSex");
 		String symptoms = reading.getJSONArray("symptoms").toString();
-		String gestationalAge = reading.getString("gestationalAgeValue");
 		String readingColour = reading.getString("readingColour");
+
+		boolean pregnant = reading.getBoolean("pregnant");
 
 		int ageYears = reading.getInt("ageYears");
 		int diastolic = reading.getInt("bpDiastolic");
 		int systolic = reading.getInt("bpSystolic");
 		int heartRate = reading.getInt("heartRateBPM");
+		int gestationalAge = reading.getInt("gestationalAgeInWeeks");
 
 		String dateCreated = reading.getString("dateTimeTaken");
 		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
 		Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
 
-
-		Patient readingPatient;
-		Optional<Patient> optionalPatient = patientRepository.findById(id);
-		if (optionalPatient.isEmpty()) {
-			// patient id is not found, create new patient?
-			readingPatient = new PatientBuilder()
-					.id(id)
-					.villageNumber(villageNumber)
-					.name(patientName)
-					.dateOfBirth(zonedDateTime.getYear() - ageYears, 1, 1)
-					.sex(Sex.valueOf(gender))
-					.pregnant(!gestationalAge.equals("N/A") && !gestationalAge.equals("0"))
-					.otherSymptoms(symptoms)
-					.build();
-			patientRepository.save(readingPatient);
-		}
-		else {
-			readingPatient = optionalPatient.get();
-		}
+		// Create or update patient
+		Patient readingPatient = new PatientBuilder()
+				.id(id)
+				.villageNumber(villageNumber)
+				.name(patientName)
+				.dateOfBirth(zonedDateTime.getYear() - ageYears, 1, 1)
+				.sex(Sex.valueOf(gender))
+				.pregnant(pregnant)
+				.gestationalAgeWeeks(gestationalAge)
+				.otherSymptoms(symptoms)
+				.build();
+		patientRepository.save(readingPatient);
 
 		// Create new reading
 		Reading newReading = new ReadingBuilder()
@@ -215,8 +204,18 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.build();
 		readingRepository.save(newReading);
 
-
 		return newReading;
+	}
+
+	private JSONObject decryptUpload(MultipartFile file) throws IOException, GeneralSecurityException {
+		// Unzip uploaded file
+		Map<String, byte[]> encryptedFiles = Zipper.unZip(file.getInputStream());
+
+		// Decrypt unzipped files
+		ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
+
+		JSONObject uploadedJSON = new JSONObject(new String(decryptedZip.readAllBytes()));
+		return uploadedJSON;
 	}
 
 	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {

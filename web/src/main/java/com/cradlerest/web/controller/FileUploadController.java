@@ -24,11 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import org.json.JSONObject;
 
 import com.cradlerest.web.service.storage.StorageFileNotFoundException;
 import com.cradlerest.web.service.storage.StorageService;
-import com.cradlerest.web.service.PatientManagerService;
 
 
 import com.cradlerest.web.util.HybridFileDecrypter;
@@ -103,17 +101,8 @@ public class FileUploadController {
 
 			// Decrypt unzipped files
 			ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
-			// Unzip the decrypted data
 
 
-
-
-//				System.out.println(readingFile.getKey());
-
-//			JSONObject reading = new JSONObject(new String(decryptedZip.readAllBytes()));
-//				System.out.println(reading.toString());
-
-//			ByteArrayInputStream newFile = new ByteArrayInputStream(decryptedZip.readAllBytes());
 			storageService.storeBytes(decryptedZip, "reading.json");
 
 
