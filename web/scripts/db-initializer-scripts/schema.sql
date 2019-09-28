@@ -46,21 +46,22 @@ CREATE TABLE reading (
 );
 
 -- Dummy Data
-
-INSERT INTO user (username, password, role)
-VALUES ('admin', 'admin', 'ROLE_ADMIN,ROLE_VHT,ROLE_HEALTHWORKER');
+-- To pre encode:
+-- https://www.browserling.com/tools/bcrypt
+INSERT INTO user (username, password, role) -- password: admin
+VALUES ('admin', '{bcrypt}$2a$10$1aYZ3QtMTK9k930s54ROmumfKskM1xLM1UznBgzjx4Mxn4tseLS4i', 'ROLE_ADMIN,ROLE_VHT,ROLE_HEALTHWORKER');
+INSERT INTO user  (username, password, role) -- password: health
+VALUES ('health', '{bcrypt}$2a$10$q26.1T6krvjYHT9Me3sqqeQld9uPviBqxVphDLuDLX8octw3iV8hC', 'ROLE_HEALTHWORKER');
 INSERT INTO user  (username, password, role)
-VALUES ('health', 'health', 'ROLE_HEALTHWORKER');
+VALUES ('vht', '{bcrypt}$2a$10$MMMLYEsDhbgEXRSg9agAL.NwSoXTcjfed980ClKAFu/nl/ol9W5xG', 'ROLE_VHT');
 INSERT INTO user  (username, password, role)
-VALUES ('vht', 'vht', 'ROLE_VHT');
+VALUES ('test', '{bcrypt}$2a$10$MOX4VmxWhj0rBEeD8JYFaODweciGexZggq0jiqGNBWIoPQZTf6KB2', 'ROLE_ADMIN');
 INSERT INTO user  (username, password, role)
-VALUES ('test', 'test', 'ROLE_ADMIN');
+VALUES ('adminvht', '{bcrypt}$2a$10$cDqOL/UNe5.4zGdR9EkMJOmUEq4RDuROMp.VFUAFBJX.tfGorrc/a', 'ROLE_VHT,ROLE_ADMIN');
 INSERT INTO user  (username, password, role)
-VALUES ('adminvht', 'adminvht', 'ROLE_VHT,ROLE_ADMIN');
+VALUES ('vhthealth', '{bcrypt}$2a$10$V1w/4w9OAtvKT00Q92rPp.iuxO4s43HOKppp5BPSXT1OnIDFG.KgC', 'ROLE_VHT,ROLE_HEALTH');
 INSERT INTO user  (username, password, role)
-VALUES ('vhthealth', 'vhthealth', 'ROLE_VHT,ROLE_HEALTH');
-INSERT INTO user  (username, password, role)
-VALUES ('adminhealth', 'adminhealth', 'ROLE_ADMIN,ROLE_HEALTH');
+VALUES ('adminhealth', '{bcrypt}$2a$10$Ytx8e2oCF7oidLZA.Bmi0.dtTZorDpijhmYV69sMyUIRKxfpw1rpy', 'ROLE_ADMIN,ROLE_HEALTH');
 
 
 INSERT INTO patient

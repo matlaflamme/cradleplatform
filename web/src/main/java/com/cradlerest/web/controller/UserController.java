@@ -4,6 +4,10 @@ import com.cradlerest.web.controller.error.DatabaseException;
 import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.User;
 import com.cradlerest.web.service.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +35,9 @@ public class UserController {
 
 	private UserRepository userRepository;
 
+	@Autowired
+	private PasswordEncoder  passwordEncoder;
+
 	public UserController(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
@@ -43,6 +50,7 @@ public class UserController {
 	@GetMapping("/{id}")
 	public @ResponseBody User get(@PathVariable("id") int id) throws DatabaseException {
 		Optional<User> optUser = userRepository.findById(id);
+
 		if (!optUser.isPresent()) {
 			throw new EntityNotFoundException(id);
 		}
@@ -52,7 +60,7 @@ public class UserController {
 	@PostMapping("/add")
 	public User create(@RequestBody Map<String, String> body) {
 		String username = body.get("username");
-		String password = body.get("password");
+		String password = passwordEncoder.encode(body.get("password"));
 		String roles = body.get("roles");
 		return userRepository.save(new User(username, password, roles));
 	}

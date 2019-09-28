@@ -70,4 +70,11 @@ public class LoginController {
         return "healthworker";
     }
 
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//	public String login(Model mode, String error, String logout) {
+//    	if (error) {
+//    		model.addAttribute("error", "Your username and password is invalid");
+//		}
+//	}
+
 }
