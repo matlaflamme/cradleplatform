@@ -10,6 +10,7 @@ var (
 	host     string
 	port     uint
 	protocol string
+	mode     string
 )
 
 // Parse registers an parses the global cli variables defined in this file.
@@ -17,6 +18,7 @@ func Parse() {
 	flag.StringVar(&host, "host", "localhost", "Hostname to run tests on")
 	flag.UintVar(&port, "port", 8080, "Port number to run tests on")
 	flag.StringVar(&protocol, "protocol", "http", "Web protocol to use when testing")
+	flag.StringVar(&mode, "mode", "serial", `Execution mode: either "serial" or "parallel`)
 	flag.Parse()
 }
 
@@ -38,4 +40,9 @@ func Protocol() string {
 // URL return the test url by combining the relevent command line args.
 func URL() string {
 	return protocol + "://" + host + ":" + strconv.Itoa(int(port))
+}
+
+// Mode returns the runtime mode to use when testing.
+func Mode() string {
+	return mode
 }

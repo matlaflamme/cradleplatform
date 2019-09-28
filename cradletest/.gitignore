@@ -1,6 +1,7 @@
 # Metadata
 .DS_Store
 .idea
+.vscode
 
 # Build artifacts
 *.exe
@@ -8,3 +9,4 @@ cradletest
 
 # Development Test Files
 *.xml
+!sample.xml

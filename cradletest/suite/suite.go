@@ -4,9 +4,11 @@ package suite
 
 import (
 	"bytes"
+	"cradletest/cli"
 	"encoding/xml"
 	"io"
 	"io/ioutil"
+	"net/http"
 )
 
 // TestSuite holds the top-level test data unmarshalled from an XML file.
@@ -27,6 +29,39 @@ type Request struct {
 	Method string `xml:"method,attr"`
 	URI    string `xml:"uri,attr"`
 	Body   []byte `xml:",chardata"`
+}
+
+// BodyReader returns a new io.Reader for a request's body.
+//
+// Returns nil if the request's body is empty.
+func (r Request) BodyReader() io.Reader {
+	if len(r.Body) == 0 {
+		return nil
+	}
+	return bytes.NewReader(r.Body)
+}
+
+// PrepRequest generates a function which, when called, will send the request
+// as outlined in this object to the host configured via the command line
+// interface.
+//
+// It is important to note that this function does not send the request itself,
+// but instead generates a go function which can be called later to generate
+// the request.
+func (r Request) PrepRequest() func() (*http.Response, error) {
+	url := cli.URL() + r.URI
+	switch r.Method {
+	case "GET":
+		return func() (*http.Response, error) {
+			return http.Get(url)
+		}
+	case "POST":
+		return func() (*http.Response, error) {
+			return http.Post(url, "application/json", r.BodyReader())
+		}
+	default:
+		panic("unsupported HTTP method: " + r.Method)
+	}
 }
 
 // Response holds data for the Response XML tag.
