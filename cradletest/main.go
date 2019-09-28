@@ -20,8 +20,7 @@ func configuredRuntime() runtime.Runtime {
 
 func main() {
 	cli.Parse()
-	// TODO: get path via cli
-	path := "sample.xml"
+	path := cli.InputFilePath()
 
 	ts, err := suite.FromFile(path)
 	if err != nil {
