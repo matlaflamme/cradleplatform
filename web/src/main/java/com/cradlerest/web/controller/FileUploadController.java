@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-import com.cradlerest.web.service.utilities.Zipper;
+import com.cradlerest.web.util.Zipper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import com.cradlerest.web.service.storage.StorageFileNotFoundException;
 import com.cradlerest.web.service.storage.StorageService;
 
-import com.cradlerest.web.service.utilities.HybridFileDecrypter;
+import com.cradlerest.web.util.HybridFileDecrypter;
 
 
 @Controller

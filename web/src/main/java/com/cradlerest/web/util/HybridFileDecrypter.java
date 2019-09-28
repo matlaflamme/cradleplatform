@@ -1,4 +1,4 @@
-package com.cradlerest.web.service.utilities;
+package com.cradlerest.web.util;
 
 import org.springframework.web.multipart.MultipartFile;
 
