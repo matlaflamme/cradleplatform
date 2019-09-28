@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.util.Zipper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,6 +28,8 @@ import org.json.JSONObject;
 
 import com.cradlerest.web.service.storage.StorageFileNotFoundException;
 import com.cradlerest.web.service.storage.StorageService;
+import com.cradlerest.web.service.PatientManagerService;
+
 
 import com.cradlerest.web.util.HybridFileDecrypter;
 
@@ -35,10 +38,14 @@ import com.cradlerest.web.util.HybridFileDecrypter;
 public class FileUploadController {
 
 	private final StorageService storageService;
+	private final PatientManagerService patientManagerService;
+
 
 	@Autowired
-	public FileUploadController(StorageService storageService) {
+	public FileUploadController(StorageService storageService, PatientManagerService patientManagerService) {
 		this.storageService = storageService;
+		this.patientManagerService = patientManagerService;
+
 	}
 
 	@GetMapping("/upload")
@@ -76,10 +83,11 @@ public class FileUploadController {
 
 	@PostMapping(value = "/upload_reading", consumes = "multipart/form-data")
 	public String handleReadingUpload(@RequestParam("userDataFile") MultipartFile file,
-									  RedirectAttributes redirectAttributes) {
+									  RedirectAttributes redirectAttributes) throws Exception {
 
-
+		storageService.store(file);
 		saveEncryptedFile(file);
+		patientManagerService.constructReadingFromEncrypted(file);
 
 		redirectAttributes.addFlashAttribute("message",
 				"You successfully uploaded " + file.getOriginalFilename() + "!");
@@ -95,21 +103,19 @@ public class FileUploadController {
 
 			// Decrypt unzipped files
 			ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
-
 			// Unzip the decrypted data
-			HashMap<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip);
 
 
-			for (HashMap.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
-				System.out.println(readingFile.getKey());
 
-				JSONObject reading = new JSONObject(new String(readingFile.getValue()));
 
-				System.out.println(reading.toString());
+//				System.out.println(readingFile.getKey());
 
-				ByteArrayInputStream newFile = new ByteArrayInputStream(readingFile.getValue());
-				storageService.storeBytes(newFile, readingFile.getKey());
-			}
+//			JSONObject reading = new JSONObject(new String(decryptedZip.readAllBytes()));
+//				System.out.println(reading.toString());
+
+//			ByteArrayInputStream newFile = new ByteArrayInputStream(decryptedZip.readAllBytes());
+			storageService.storeBytes(decryptedZip, "reading.json");
+
 
 		} catch (Exception e) {
 			System.out.println(e);
