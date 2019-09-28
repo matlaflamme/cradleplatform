@@ -10,8 +10,8 @@ import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
-import com.cradlerest.web.service.utilities.HybridFileDecrypter;
-import com.cradlerest.web.service.utilities.Zipper;
+import com.cradlerest.web.util.HybridFileDecrypter;
+import com.cradlerest.web.util.Zipper;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -155,73 +157,65 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	}
 
 	@Override
-	public Reading constructReadingFromEncrypted(MultipartFile file) throws Exception {
+	public Reading constructReadingFromEncrypted(MultipartFile file) throws IOException, GeneralSecurityException {
+		JSONObject reading = decryptUpload(file);
+
+		// TODO : format JSON so android matches Database
+		String id = reading.getString("patientId");
+		String villageNumber = reading.getString("villageNumber");
+		String patientName = reading.getString("patientName");
+		String gender = reading.getString("patientSex");
+		String symptoms = reading.getJSONArray("symptoms").toString();
+		String readingColour = reading.getString("readingColour");
+
+		boolean pregnant = reading.getBoolean("pregnant");
+
+		int ageYears = reading.getInt("ageYears");
+		int diastolic = reading.getInt("bpDiastolic");
+		int systolic = reading.getInt("bpSystolic");
+		int heartRate = reading.getInt("heartRateBPM");
+		int gestationalAge = reading.getInt("gestationalAgeInWeeks");
+
+		String dateCreated = reading.getString("dateTimeTaken");
+		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
+		Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
+
+		// Create or update patient
+		Patient readingPatient = new PatientBuilder()
+				.id(id)
+				.villageNumber(villageNumber)
+				.name(patientName)
+				.dateOfBirth(zonedDateTime.getYear() - ageYears, 1, 1)
+				.sex(Sex.valueOf(gender))
+				.pregnant(pregnant)
+				.gestationalAgeWeeks(gestationalAge)
+				.otherSymptoms(symptoms)
+				.build();
+		patientRepository.save(readingPatient);
+
+		// Create new reading
+		Reading newReading = new ReadingBuilder()
+				.pid(readingPatient.getId())
+				.colour(ReadingColour.valueOf(readingColour))
+				.diastolic(diastolic)
+				.systolic(systolic)
+				.heartRate(heartRate)
+				.timestamp(timestamp)
+				.build();
+		readingRepository.save(newReading);
+
+		return newReading;
+	}
+
+	private JSONObject decryptUpload(MultipartFile file) throws IOException, GeneralSecurityException {
 		// Unzip uploaded file
 		Map<String, byte[]> encryptedFiles = Zipper.unZip(file.getInputStream());
 
 		// Decrypt unzipped files
 		ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
 
-		// Unzip the decrypted data
-		Map<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip);
-
-
-		// TODO : format JSON so android matches Database
-		for (Map.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
-
-			JSONObject reading = new JSONObject(new String(readingFile.getValue()));
-
-			// Parse Uploaded JSON values
-			String id = reading.getString("patientId");
-			String villageNumber = reading.getString("villageNumber");
-			String initials = reading.getString("patientName");
-			int ageYears = reading.getInt("ageYears");
-			String gender = reading.getString("patientSex");
-			List<Object> symptoms = reading.getJSONArray("symptoms").toList();
-			String gestationalAge = reading.getString("gestationalAgeValue");
-
-			int diastolic = reading.getInt("bpDiastolic");
-			int systolic = reading.getInt("bpSystolic");
-			int heartRate = reading.getInt("heartRateBPM");
-
-			String dateCreated = reading.getString("dateTimeTaken");
-			ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
-			Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
-
-
-			Patient readingPatient;
-			Optional<Patient> optionalPatient = patientRepository.findById(id);
-			if (optionalPatient.isEmpty()) {
-				// patient id is not found, create new patient?
-				readingPatient = new PatientBuilder()
-						.id(id)
-						.villageNumber(villageNumber)
-						.name(initials)
-						.dateOfBirth(2000, 1, 1)
-						.sex(Sex.UNKNOWN)
-						.gestationalAgeMonths(0)
-						.pregnant(!gestationalAge.equals("N/A") && !gestationalAge.equals("0"))
-						.build();
-				patientRepository.save(readingPatient);
-			}
-			else {
-				readingPatient = optionalPatient.get();
-			}
-
-			// Create new reading
-			Reading newReading = new ReadingBuilder()
-					.pid(readingPatient.getId())
-					.colour(ReadingColour.RED)
-					.diastolic(diastolic)
-					.systolic(systolic)
-					.heartRate(heartRate)
-					.timestamp(timestamp)
-					.build();
-			readingRepository.save(newReading);
-
-		}
-
-		return null;
+		JSONObject uploadedJSON = new JSONObject(new String(decryptedZip.readAllBytes()));
+		return uploadedJSON;
 	}
 
 	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {
