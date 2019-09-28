@@ -38,6 +38,26 @@ If you are working as a pair (or more), you can add your names in square bracket
 
 
 
+## Commit Messages
+
+When committing your work, it can be tedious when looking through all of our files. It is imperative that we keep a standard convention/style for our messages. Below are some of the guidelines that you are expected to follow beginning **09/29/19**:
+
+| **Message** | **Description**                                    | **Example**                        |
+| ----------- | -------------------------------------------------- | ---------------------------------- |
+| `[FIX]`     | You have fixed errors/bugs within a file (or more) | `[FIX]: Directory Path Correction` |
+| `[ADD]`     | You added a new file (or more) or feature(s)       | `[ADD]: Added loginPage.html`      |
+| `[DEL]`     | You have deleted a file (or more) or feature(s)    | `[DEL]: Removed errorFile.java`    |
+
+If you are working as a pair (or more), you can add your names in square brackets (lower-case) and separated by commas prefixing the above requirement:
+
+| **Example**                                                  |
+| ------------------------------------------------------------ |
+| `[parmis,mathieu][ADD]: allPatientView.html, js, css`        |
+| **Description**                                              |
+| Parmis and Mathieu both worked to add the new files: `allPatientView.html`, `.js`, and `.css` |
+
+
+
 ## Java
 
 ### Naming
