@@ -106,7 +106,7 @@ def docker_run():
     # build jar
     exec_cmd(["./mvnw", "package", "-DskipTests"])
     # deploy to docker
-    exec_cmd(["docker-compose", "up", "--build"])
+    exec_cmd(["docker-compose", "up", "--build", "-d"])
     print("It may take a minute for the server to start up")
 
 
