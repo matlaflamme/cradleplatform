@@ -162,66 +162,61 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		// Decrypt unzipped files
 		ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
 
-		// Unzip the decrypted data
-		Map<String, byte[]> decryptedFiles = Zipper.unZip(decryptedZip);
-
 
 		// TODO : format JSON so android matches Database
-		for (Map.Entry<String, byte[]> readingFile : decryptedFiles.entrySet()) {
 
-			JSONObject reading = new JSONObject(new String(readingFile.getValue()));
+		JSONObject reading = new JSONObject(new String(decryptedZip.readAllBytes()));
 
-			// Parse Uploaded JSON values
-			String id = reading.getString("patientId");
-			String villageNumber = reading.getString("villageNumber");
-			String initials = reading.getString("patientName");
-			int ageYears = reading.getInt("ageYears");
-			String gender = reading.getString("patientSex");
-			List<Object> symptoms = reading.getJSONArray("symptoms").toList();
-			String gestationalAge = reading.getString("gestationalAgeValue");
+		String id = reading.getString("patientId");
+		String villageNumber = reading.getString("villageNumber");
+		String patientName = reading.getString("patientName");
+		String gender = reading.getString("patientSex");
+		String symptoms = reading.getJSONArray("symptoms").toString();
+		String gestationalAge = reading.getString("gestationalAgeValue");
+		String readingColour = reading.getString("readingColour");
 
-			int diastolic = reading.getInt("bpDiastolic");
-			int systolic = reading.getInt("bpSystolic");
-			int heartRate = reading.getInt("heartRateBPM");
+		int ageYears = reading.getInt("ageYears");
+		int diastolic = reading.getInt("bpDiastolic");
+		int systolic = reading.getInt("bpSystolic");
+		int heartRate = reading.getInt("heartRateBPM");
 
-			String dateCreated = reading.getString("dateTimeTaken");
-			ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
-			Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
+		String dateCreated = reading.getString("dateTimeTaken");
+		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
+		Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
 
 
-			Patient readingPatient;
-			Optional<Patient> optionalPatient = patientRepository.findById(id);
-			if (optionalPatient.isEmpty()) {
-				// patient id is not found, create new patient?
-				readingPatient = new PatientBuilder()
-						.id(id)
-						.villageNumber(villageNumber)
-						.name(initials)
-						.dateOfBirth(2000, 1, 1)
-						.sex(Sex.UNKNOWN)
-						.gestationalAgeMonths(0)
-						.pregnant(!gestationalAge.equals("N/A") && !gestationalAge.equals("0"))
-						.build();
-				patientRepository.save(readingPatient);
-			}
-			else {
-				readingPatient = optionalPatient.get();
-			}
-
-			// Create new reading
-			Reading newReading = new ReadingBuilder()
-					.pid(readingPatient.getId())
-					.colour(ReadingColour.RED_DOWN)
-					.diastolic(diastolic)
-					.systolic(systolic)
-					.heartRate(heartRate)
-					.timestamp(timestamp)
+		Patient readingPatient;
+		Optional<Patient> optionalPatient = patientRepository.findById(id);
+		if (optionalPatient.isEmpty()) {
+			// patient id is not found, create new patient?
+			readingPatient = new PatientBuilder()
+					.id(id)
+					.villageNumber(villageNumber)
+					.name(patientName)
+					.dateOfBirth(zonedDateTime.getYear() - ageYears, 1, 1)
+					.sex(Sex.valueOf(gender))
+					.pregnant(!gestationalAge.equals("N/A") && !gestationalAge.equals("0"))
+					.otherSymptoms(symptoms)
 					.build();
-			readingRepository.save(newReading);
-
+			patientRepository.save(readingPatient);
+		}
+		else {
+			readingPatient = optionalPatient.get();
 		}
 
-		return null;
+		// Create new reading
+		Reading newReading = new ReadingBuilder()
+				.pid(readingPatient.getId())
+				.colour(ReadingColour.valueOf(readingColour))
+				.diastolic(diastolic)
+				.systolic(systolic)
+				.heartRate(heartRate)
+				.timestamp(timestamp)
+				.build();
+		readingRepository.save(newReading);
+
+
+		return newReading;
 	}
 
 	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {
