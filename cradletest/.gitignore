@@ -1,0 +1,7 @@
+# Metadata
+.DS_Store
+.idea
+
+# Build artifacts
+*.exe
+cradletest
