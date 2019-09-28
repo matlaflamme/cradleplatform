@@ -47,13 +47,21 @@ CREATE TABLE reading (
 
 -- Dummy Data
 
-INSERT INTO user VALUES ('admin', 'admin', 'ROLE_ADMIN,ROLE_VHT,ROLE_HEALTHWORKER');
-INSERT INTO user VALUES ('health', 'health', 'ROLE_HEALTHWORKER');
-INSERT INTO user VALUES ('vht', 'vht', 'ROLE_VHT');
-INSERT INTO user VALUES ('test', 'test', 'ROLE_ADMIN');
-INSERT INTO user VALUES ('adminvht', 'adminvht', 'ROLE_VHT,ROLE_ADMIN');
-INSERT INTO user VALUES ('vhthealth', 'vhthealth', 'ROLE_VHT,ROLE_HEALTH');
-INSERT INTO user VALUES ('adminhealth', 'adminhealth', 'ROLE_ADMIN,ROLE_HEALTH');
+INSERT INTO user (username, password, role)
+VALUES ('admin', 'admin', 'ROLE_ADMIN,ROLE_VHT,ROLE_HEALTHWORKER');
+INSERT INTO user  (username, password, role)
+VALUES ('health', 'health', 'ROLE_HEALTHWORKER');
+INSERT INTO user  (username, password, role)
+VALUES ('vht', 'vht', 'ROLE_VHT');
+INSERT INTO user  (username, password, role)
+VALUES ('test', 'test', 'ROLE_ADMIN');
+INSERT INTO user  (username, password, role)
+VALUES ('adminvht', 'adminvht', 'ROLE_VHT,ROLE_ADMIN');
+INSERT INTO user  (username, password, role)
+VALUES ('vhthealth', 'vhthealth', 'ROLE_VHT,ROLE_HEALTH');
+INSERT INTO user  (username, password, role)
+VALUES ('adminhealth', 'adminhealth', 'ROLE_ADMIN,ROLE_HEALTH');
+
 
 INSERT INTO patient
 VALUES ('001',          -- id
