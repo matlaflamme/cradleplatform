@@ -1,9 +1,7 @@
 Vue.component('patient-table', {
     data: function() {
-        console.log("helooooo");
-        return { rows: //Request data from the server from this function. Get a JSON file as a response?
-                [{ patientID: 5003, name: 'Matt', referralDate: 'Sept 22, 2019', bloodPressure: '120/80', heartRate: '72'},
-                { patientID: 500, name: 'Laf', referralDate: 'Sept 24, 2019', bloodPressure: '160/100', heartRate: '86'}]
+        return {
+            rows: null //initially null, gets changed from http request down below
         }
     },
     template: '<table class="table table-striped table-hover">\n' +
@@ -18,29 +16,28 @@ Vue.component('patient-table', {
         '</thead>' +
         '<tbody>' +
         '<tr v-for="row in rows">' +
-        '<th>{{row.patientID}}</th>' +
+        '<th>{{row.id}}</th>' +
         '<td>{{row.name}}</td>' +
-        '<td>{{row.referralDate}}</td>' +
-        '<td>{{row.bloodPressure}}</td>' +
-        '<td>{{row.heartRate}}</td>' +
-        '<td><button v-on:click="viewPatientData(row.patientID)" class="btn btn-primary">View Patient Data</button></td>' +
-        '<td><button v-on:click="addNewReading(row.patientID)" class="btn btn-secondary">Add a new Reading</button></td>' +
+        //'<td>{{row.referralDate}}</td>' +                 //will be added on future release
+        //'<td>{{row.bloodPressure}}</td>' +
+        //'<td>{{row.heartRate}}</td>' +
+        '<td><button v-on:click="viewPatientData(row.id)" class="btn btn-primary">View Patient Data</button></td>' +
+        '<td><button v-on:click="addNewReading(row.id)" class="btn btn-secondary">Add a new Reading</button></td>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
     methods: {
-        viewPatientData: function (id) {
+        viewPatientData: function (id) {                            //Gets called when View button is pressed
             console.log("View patient:"+id+" details");
             // let Url = "http://localhost:8080/mock-api/user/all";
             window.open("http://localhost:8080/patientSummary");
-
-            // fetch(Url)
-            //     .then(data=>{return data.json()})
-            //     .then(res=>{console.log(res)})
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
         }
+    },
+    mounted() { //sends request to server. Puts response into the rows variable
+        axios.get('http://localhost:8080/api/patient/all').then(response => (this.rows = response.data))
     }
 });
 
@@ -48,11 +45,13 @@ new Vue({
     el: '#newReferralTable',
     methods: {
         viewPatientData: function() {
-            console.log("ot wprls");
+            console.log("reached");
         },
         addNewReading: function(patientID) {
             console.log(patientID);
         }
+    },
+    mounted() {
     }
 
 });
