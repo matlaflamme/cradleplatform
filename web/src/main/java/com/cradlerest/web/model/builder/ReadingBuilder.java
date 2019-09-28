@@ -2,7 +2,7 @@ package com.cradlerest.web.model.builder;
 
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
-import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.util.DateParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -37,13 +37,13 @@ public class ReadingBuilder {
 		return reading;
 	}
 
-//	public ReadingBuilder id(@NotNull int id) {
-//		reading.setId(id);
-//		return this;
-//	}
+	public ReadingBuilder id(int id) {
+		reading.setId(id);
+		return this;
+	}
 
-	public ReadingBuilder pid(@NotNull Patient pid) {
-		reading.setPatient(pid);
+	public ReadingBuilder pid(@NotNull String pid) {
+		reading.setPatientId(pid);
 		return this;
 	}
 
@@ -73,6 +73,11 @@ public class ReadingBuilder {
 		return this;
 	}
 
+	public ReadingBuilder timestamp(@NotNull String timestampText) {
+		reading.setTimestamp(DateParser.parseDateTime(timestampText));
+		return this;
+	}
+
 	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
 		if (object == null) {
 			throw new InstantiationError(String.format("field '%s' is null", fieldName));
@@ -80,8 +85,7 @@ public class ReadingBuilder {
 	}
 
 	private void validate() throws InstantiationError {
-//		assertNotNull(reading.getId(), "id");
-		assertNotNull(reading.getPatient(), "pid");
+		assertNotNull(reading.getPatientId(), "pid");
 		assertNotNull(reading.getColour(), "colour");
 		assertNotNull(reading.getHeartRate(), "heartRate");
 		assertNotNull(reading.getSystolic(), "systolic");

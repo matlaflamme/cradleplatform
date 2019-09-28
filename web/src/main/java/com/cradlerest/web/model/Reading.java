@@ -2,9 +2,9 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
-import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,21 +19,19 @@ public class Reading {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pid")
-	@JsonIgnore
-	private Patient patient;
+	@Column(name = "pid")
+	private String patientId;
 
 	@Column(name = "systolic")
-	private int systolic;
+	private Integer systolic;
 
 	@Column(name = "diastolic")
-	private int diastolic;
+	private Integer diastolic;
 
 	@Column(name = "heart_rate")
-	private int heartRate;
+	private Integer heartRate;
 
 	@Column(name = "colour")
 	@Enumerated(EnumType.ORDINAL)
@@ -45,14 +43,14 @@ public class Reading {
 	public Reading() {}
 
 	public Reading(
-			Patient patient,
+			@NotNull String patientId,
 			int systolic,
 			int diastolic,
 			int heartRate,
-			ReadingColour colour,
-			Date timestamp
+			@NotNull ReadingColour colour,
+			@NotNull Date timestamp
 	) {
-		this.patient = patient;
+		this.patientId = patientId;
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
@@ -62,15 +60,15 @@ public class Reading {
 
 	public Reading(
 			int id,
-			Patient patient,
+			@NotNull String patientId,
 			int systolic,
 			int diastolic,
 			int heartRate,
-			ReadingColour colour,
-			Date timestamp
+			@NotNull ReadingColour colour,
+			@NotNull Date timestamp
 	) {
 		this.id = id;
-		this.patient = patient;
+		this.patientId = patientId;
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
@@ -78,7 +76,7 @@ public class Reading {
 		this.timestamp = timestamp;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -86,15 +84,15 @@ public class Reading {
 		this.id = id;
 	}
 
-	public Patient getPatient() {
-		return patient;
+	public String getPatientId() {
+		return patientId;
 	}
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setPatientId(@NotNull String patientId) {
+		this.patientId = patientId;
 	}
 
-	public int getSystolic() {
+	public Integer getSystolic() {
 		return systolic;
 	}
 
@@ -102,7 +100,7 @@ public class Reading {
 		this.systolic = systolic;
 	}
 
-	public int getDiastolic() {
+	public Integer getDiastolic() {
 		return diastolic;
 	}
 
@@ -110,7 +108,7 @@ public class Reading {
 		this.diastolic = diastolic;
 	}
 
-	public int getHeartRate() {
+	public Integer getHeartRate() {
 		return heartRate;
 	}
 

@@ -3,10 +3,10 @@ package com.cradlerest.web.service;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface for services dealing with patient management.
@@ -27,15 +27,58 @@ public interface PatientManagerService {
 	 */
 	Object getFullPatientProfile(@NotNull String id) throws Exception;
 
+	/**
+	 * Returns the {@code Patient} object with a given {@param id}.
+	 * @param id Unique identifier for the requested patient.
+	 * @return The patient with {@param id}.
+	 * @throws Exception If no such patient exists or an error occurred.
+	 */
 	Patient getPatientWithId(@NotNull String id) throws Exception;
 
+	/**
+	 * Returns the list of all patients in the database.
+	 * @return All patients.
+	 */
 	List<Patient> getAllPatients();
 
+	/**
+	 * Returns the list of readings associated with the patient with a given
+	 * {@param id}.
+	 * @param id Unique identifier for a patient.
+	 * @return A list of readings, or, in the case of no such patient with the
+	 * 	requested id, an empty list.
+	 */
 	List<Reading> getReadingsForPatientWithId(@NotNull String id);
 
-	Patient constructPatient(Map<String, String> body) throws Exception;
+	/**
+	 * Creates a new, or updates an existing, patient in the system. If a patient
+	 * with the same id as {@param patient} exists, then that patient's profile
+	 * will be overwritten with the contents of {@param patient}. If no such
+	 * patient already exists, then a new one is created.
+	 *
+	 * @implNote The returned patient is not guarantied to be the same object
+	 * 	as {@param patient}.
+	 *
+	 * @param patient The patient to persist.
+	 * @return The saved patient.
+	 * @throws Exception If an error occurred.
+	 */
+	Patient savePatient(@Nullable Patient patient) throws Exception;
 
-	Reading constructReading(Map<String, String> body) throws Exception;
+	/**
+	 * Creates a new, or updates an existing, reading in the system. If a reading
+	 * with the same id as {@param reading} exists, then that reading is
+	 * overwritten with the contents of {@param reading}. If no such reading
+	 * already exists, then a new one is created.
+	 *
+	 * @implNote The returned reading is not guarantied to be the same object
+	 * 	as {@param reading}.
+	 *
+	 * @param reading The reading to persist.
+	 * @return The saved reading.
+	 * @throws Exception If an error occurred.
+	 */
+	Reading saveReading(@Nullable Reading reading) throws Exception;
 
 	Reading constructReadingFromEncrypted(MultipartFile file) throws Exception;
 }
