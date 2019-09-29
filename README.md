@@ -20,6 +20,7 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
 
 ## Directory Structure
 
+.
 ├── docs
 │   ├── api
 │   └── nametag
