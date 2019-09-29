@@ -20,6 +20,79 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
 
 ## Directory Structure
 
+```
+├── docs
+│   ├── api
+│   └── nametag
+│       └── Meeting\ notes
+├── web
+│   ├── res
+│   ├── scripts
+│   │   └── db-initializer-scripts
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── com
+│   │   │   │       └── cradlerest
+│   │   │   │           └── web
+│   │   │   │               ├── controller
+│   │   │   │               │   └── error
+│   │   │   │               ├── model
+│   │   │   │               │   └── builder
+│   │   │   │               ├── service
+│   │   │   │               │   ├── config
+│   │   │   │               │   ├── repository
+│   │   │   │               │   └── storage
+│   │   │   │               └── util
+│   │   │   └── resources
+│   │   │       ├── static
+│   │   │       │   └── img
+│   │   │       └── templates
+│   │   └── test
+│   │       ├── java
+│   │       │   └── com
+│   │       │       └── cradlerest
+│   │       │           └── web
+│   │       └── resources
+│   ├── target
+│   │   ├── classes
+│   │   │   ├── META-INF
+│   │   │   ├── com
+│   │   │   │   └── cradlerest
+│   │   │   │       └── web
+│   │   │   │           ├── controller
+│   │   │   │           │   └── error
+│   │   │   │           ├── model
+│   │   │   │           │   └── builder
+│   │   │   │           ├── service
+│   │   │   │           │   ├── config
+│   │   │   │           │   ├── repository
+│   │   │   │           │   └── storage
+│   │   │   │           └── util
+│   │   │   ├── static
+│   │   │   │   └── img
+│   │   │   └── templates
+│   │   ├── generated-sources
+│   │   │   └── annotations
+│   │   ├── generated-test-sources
+│   │   │   └── test-annotations
+│   │   └── test-classes
+│   │       └── com
+│   │           └── cradlerest
+│   │               └── web
+│   └── upload-dir
+└── webapp
+    ├── css
+    ├── img
+    └── js
+```
+
+Please update directory structure if you change it.<br>
+Using tree command in bash:
+`tree -d`
+
+
+
 ## Build Directions
 
 > **Important**: When opening the project in IntelliJ, open the `cradlerest/web` directory and not the `cradlerest` root directory itself.
