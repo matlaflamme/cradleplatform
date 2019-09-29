@@ -22,7 +22,7 @@ Vue.component('patient-table', {
         //'<td>{{row.bloodPressure}}</td>' +
         //'<td>{{row.heartRate}}</td>' +
         '<td><button v-on:click="viewPatientData(row.id)" class="btn btn-primary">View Patient Data</button></td>' +
-        '<td><button v-on:click="addNewReading(row.id)" class="btn btn-secondary">Add a new Reading</button></td>' +
+        '<td><button v-on:click="addNewReading(row.id)" class="btn btn-secondary">Add New Reading</button></td>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
@@ -33,6 +33,7 @@ Vue.component('patient-table', {
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
+            window.location.replace("/createNewReading?id=" + id);
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
