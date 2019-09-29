@@ -9,9 +9,9 @@ Vue.component('patient-table', {
         '<tr>' +
         '<th>Patient ID</th>' +
         '<th>Name</th>' +
-        '<th>Referral Date</th>' +
-        '<th>Blood Pressure</th>' +
-        '<th>Heart Rate</th>' +
+        //'<th>Referral Date</th>' +
+        //'<th>Blood Pressure</th>' +
+        //'<th>Heart Rate</th>' +
         '</tr>' +
         '</thead>' +
         '<tbody>' +
@@ -29,7 +29,7 @@ Vue.component('patient-table', {
     methods: {
         viewPatientData: function (id) {                            //Gets called when View button is pressed
             console.log("View patient:"+id+" details");
-            window.location.replace("/patientSummary?" + id);
+            window.location.replace("/patientSummary?id=" + id);
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
