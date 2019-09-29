@@ -64,7 +64,7 @@ h2 {
 
 }
 
-ul{
+.container ul{
     list-style-type:none;
     border-style: solid;
     border-width: 1px;
@@ -74,7 +74,7 @@ ul{
     padding: 8px 8px;
 }
 
-li{
+.container li{
     text-align: left;
     margin-left: 1%;
     font-size: 14px;
@@ -84,5 +84,18 @@ li{
     top: 66px;
     position: absolute;
     left: 27%;
+}
+
+.navbar-dark {
+    background-color: #0c9090;
+    color: white;
+}
+
+.navbar-brand a {
+    color: white;
+}
+
+ul.nav a:hover {
+    background-color: #0b6c6d !important; /*Overrides bootstrap changes nav-bar links hover colour */
 }
 

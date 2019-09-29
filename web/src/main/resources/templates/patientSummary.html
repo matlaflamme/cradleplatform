@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,10 +26,37 @@
     <script src="https://unpkg.com/vue"></script>
     <link rel="stylesheet" href="/patientSummary.css">
 
+    <style> body { padding-top: 70px; }</style> <!-- Padding so nav-bar doesn't cover content -->
 </head>
 <body>
+<!-- Navbar stuff -->
+<nav class="navbar navbar-dark navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display-->
+        <div class="navbar-header">
+            <a class="navbar-brand" style="color: #ffffff" href="#">Cradle Web Platform</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="mainNavBar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#" style="color: #ffffff">New Referrals <span class="sr-only">(current)</span></a></li>
+                <li><a href="#" style="color: #ffffff">Past Referrals</a></li>
+                <li><a href="#" style="color: #ffffff">All Referrals</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" value="Logout" class="btn btn-default navbar-btn">Sign out</button>
+                    </form>
+                </li>
+                <li><a href="#" style="color: #ffffff">Signed in as [[${#httpServletRequest.remoteUser}]]</a></li>
+            </ul>
+        </div>
+    </div> <!-- container -->
+</nav>
+
     <h2>Patient Information</h2>
-    <div class="container">
+    <div class="container" style="top: 150px">
     <div class="patientInfo">
         <h6>Patient Name:</h6>
         <p class="patientName">Parmis Naddaf <br> </p>
@@ -63,11 +90,11 @@
         </ul>
     </div>
 
-    <div id="patientReadings" class="container">
+    <div id="patientReadings" style="top: 150px" class="container">
         <h2>Past Readings</h2>
             <patient_info></patient_info>
     </div>
-    <div style="top: 66px; right: 10%;  position: absolute;" class="container">
+    <div style="top: 150px; right: 10%;  position: absolute;" class="container">
         <h2>Past Medications</h2>
         <ul v-model="pastMedication" id="pastMedication">
             <li >item 1 </li>

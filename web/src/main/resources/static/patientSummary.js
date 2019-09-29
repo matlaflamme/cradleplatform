@@ -11,7 +11,7 @@ Vue.component('patient_info', {
         '<th>Date</th>' +
         '<th>Systolic</th>' +
         '<th>Diastolic</th>' +
-        '<th>heart Rate</th>' +
+        '<th>Heart Rate</th>' +
         '<th>Light</th>' +
         '</tr>' +
         '</thead>' +
