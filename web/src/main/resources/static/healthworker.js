@@ -29,11 +29,11 @@ Vue.component('patient-table', {
     methods: {
         viewPatientData: function (id) {                            //Gets called when View button is pressed
             console.log("View patient:"+id+" details");
-            window.location.replace("/patientSummary?id=" + id);
+            window.location.assign("/patientSummary?id=" + id);
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
-            window.location.replace("/createNewReading?id=" + id);
+            window.location.assign("/createNewReading?id=" + id);
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
