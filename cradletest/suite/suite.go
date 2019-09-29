@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"cradletest/cli"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -20,15 +21,15 @@ type TestSuite struct {
 
 // TestCase holds data for a single test case.
 type TestCase struct {
-	Request  Request
-	Response Response
+	Request  *Request
+	Response *Response
 }
 
 // Request holds data for the Request XML tag.
 type Request struct {
-	Method string `xml:"method,attr"`
-	URI    string `xml:"uri,attr"`
-	Body   []byte `xml:",chardata"`
+	Method *string `xml:"method,attr"`
+	URI    *string `xml:"uri,attr"`
+	Body   []byte  `xml:",chardata"`
 }
 
 // BodyReader returns a new io.Reader for a request's body.
@@ -49,8 +50,8 @@ func (r Request) BodyReader() io.Reader {
 // but instead generates a go function which can be called later to generate
 // the request.
 func (r Request) PrepRequest() func() (*http.Response, error) {
-	url := cli.URL() + r.URI
-	switch r.Method {
+	url := cli.URL() + *r.URI
+	switch *r.Method {
 	case "GET":
 		return func() (*http.Response, error) {
 			return http.Get(url)
@@ -60,7 +61,7 @@ func (r Request) PrepRequest() func() (*http.Response, error) {
 			return http.Post(url, "application/json", r.BodyReader())
 		}
 	default:
-		panic("unsupported HTTP method: " + r.Method)
+		panic("unsupported HTTP method: " + *r.Method)
 	}
 }
 
@@ -99,4 +100,35 @@ func FromFile(path string) (*TestSuite, error) {
 		return nil, err
 	}
 	return &suite, err
+}
+
+// Validate checks the integrity of a TestSuite returning true if the suite is
+// valid and false if not. If if the suite fails validation, error messages are
+// written with the given writer.
+func Validate(ts *TestSuite, out io.Writer) bool {
+	for _, tc := range ts.TestCases {
+		if !validateTestCase(&tc, out) {
+			return false
+		}
+	}
+	for _, batch := range ts.Batches {
+		for _, tc := range batch.TestCases {
+			if !validateTestCase(&tc, out) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func validateTestCase(tc *TestCase, out io.Writer) bool {
+	if tc.Request == nil {
+		fmt.Fprintln(out, "TestCase: missing Request element")
+		return false
+	}
+	if tc.Response == nil {
+		fmt.Fprintln(out, "TestCase: missing Response element")
+		return false
+	}
+	return true
 }

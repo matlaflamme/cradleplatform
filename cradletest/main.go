@@ -26,6 +26,9 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	if !suite.Validate(ts, os.Stdout) {
+		os.Exit(1)
+	}
 
 	env := configuredRuntime()
 	results, err := env.Run(*ts)
