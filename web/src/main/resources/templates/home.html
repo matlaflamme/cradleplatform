@@ -3,14 +3,18 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Welcome Page</title>
+	<link type="text/css" rel="stylesheet" href="/home.css">
 </head>
 <body>
-<h1>Welcome!</h1>
-<a style="color: blue" th:href="@{/admin}">admin Page</a>
-<br />
-<a style="color: blue" th:href="@{/vht}">vht Page</a>
-<br />
-<a style="color: blue" th:href="@{/healthworker}">healthworker Page</a>
+<h2>Welcome!</h2>
+<p>Please select your position to login</p>
+<di class="positions">
+	<button onclick = 'window.location.assign("/admin")'>admin Page</button>
+	<button onclick = 'window.location.assign("/vht")'>vht Page</button>
+	<button onclick = 'window.location.assign("/healthworker")'>healthworker Page</button>
+</di>
+
+
 <!--	<div>-->
 <!--		<form th:action="@{/login}" method="get">-->
 <!--			<input type="submit" value="Login"/>-->
