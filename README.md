@@ -86,6 +86,13 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
     ├── img
     └── js
 ```
+
+Please update directory structure if you change it.
+Using tree command in bash
+``` tree -d ```
+
+
+
 ## Build Directions
 
 > **Important**: When opening the project in IntelliJ, open the `cradlerest/web` directory and not the `cradlerest` root directory itself.
