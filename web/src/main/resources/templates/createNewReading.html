@@ -14,7 +14,7 @@
     <!-- Add this to <head> -->
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
-    <link type="text/css" rel="stylesheet" href="/login.css">
+
 
     <!-- Load polyfills to support older browsers -->
     <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
@@ -25,10 +25,39 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script src="/createNewReading.js" type="module"></script>
+    <link type="text/css" rel="stylesheet" href="/createNewReading.css">
+
+    <style> body { padding-top: 70px; }</style> <!-- Padding so nav-bar doesn't cover content -->
 
 </head>
 <body>
-<div id="container">
+<!-- Navbar stuff -->
+<nav class="navbar navbar-dark navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display-->
+        <div class="navbar-header">
+            <a class="navbar-brand" style="color: #ffffff" href="#">Cradle Web Platform</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="mainNavBar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#" style="color: #ffffff">New Referrals <span class="sr-only">(current)</span></a></li>
+                <li><a href="#" style="color: #ffffff">Past Referrals</a></li>
+                <li><a href="patientSummary.html" style="color: #ffffff">All Referrals</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" value="Logout" class="btn btn-default navbar-btn">Sign out</button>
+                    </form>
+                </li>
+                <li><a href="#" style="color: #ffffff">Signed in as [[${#httpServletRequest.remoteUser}]]</a></li>
+            </ul>
+        </div>
+    </div> <!-- container -->
+</nav>
+
+<div class="container">
 
     <h2>Add New Reading</h2>
     <form id="readingInput" @submit.prevent="submit">

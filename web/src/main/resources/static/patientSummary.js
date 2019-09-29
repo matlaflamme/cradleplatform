@@ -42,3 +42,15 @@ new Vue({
     }
 
 });
+
+let newReadingRedirect = new Vue({
+    el: '#newReading',
+    methods: {
+        goToNewReading: function() {
+            let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
+            let id = urlQuery.get('id'); //search for 'id=' in query and return the value
+            window.location.assign("/createNewReading?id=" + id);
+        }
+    }
+});
+
