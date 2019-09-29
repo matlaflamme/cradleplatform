@@ -52,7 +52,7 @@ h2 {
     display: inline-block;
 }
 
-#symptoms {
+.info {
     word-wrap: break-word;
     width: 200px;
     padding: 8px 8px;
@@ -78,5 +78,11 @@ li{
     text-align: left;
     margin-left: 1%;
     font-size: 14px;
+}
+
+#patientReadings{
+    top: 66px;
+    position: absolute;
+    left: 27%;
 }
 
