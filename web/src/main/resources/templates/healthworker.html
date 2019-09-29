@@ -43,7 +43,11 @@
                 <li><a href="patientSummary.html" style="color: #ffffff">All Referrals</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <button type="button" class="btn btn-default navbar-btn">Sign out</button>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" value="Logout" class="btn btn-default navbar-btn">Sign out</button>
+                    </form>
+                </li>
                 <li><a href="#" style="color: #ffffff">Signed in as [[${#httpServletRequest.remoteUser}]]</a></li>
             </ul>
         </div>
@@ -59,9 +63,11 @@
 </div>
 
 
+<!-- OLD -- Logout button
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Logout"/>
 </form>
+-->
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
