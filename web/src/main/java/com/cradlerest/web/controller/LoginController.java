@@ -70,7 +70,6 @@ public class LoginController {
 		}
 		return "healthworker";
 	}
-<<<<<<< web/src/main/java/com/cradlerest/web/controller/LoginController.java
 // TODO: Login post handler
 //    @RequestMapping(value = "/login", method = RequestMethod.POST)
 //	public String login(Model mode, String error, String logout) {
@@ -78,7 +77,5 @@ public class LoginController {
 //    		model.addAttribute("error", "Your username and password is invalid");
 //		}
 //	}
-=======
->>>>>>> web/src/main/java/com/cradlerest/web/controller/LoginController.java
 
 }
