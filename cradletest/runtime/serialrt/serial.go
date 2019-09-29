@@ -65,7 +65,7 @@ func runTest(t suite.TestCase) (result *runtime.Result, err error) {
 	}
 
 	result = &runtime.Result{}
-	result.Name = fmt.Sprintf("%s: %s", t.Request.Method, t.Request.URI)
+	result.Name = fmt.Sprintf("%s: %s", *t.Request.Method, *t.Request.URI)
 	result.Passed = false
 
 	// check response status code
