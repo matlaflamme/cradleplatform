@@ -29,8 +29,7 @@ Vue.component('patient-table', {
     methods: {
         viewPatientData: function (id) {                            //Gets called when View button is pressed
             console.log("View patient:"+id+" details");
-            // let Url = "http://localhost:8080/mock-api/user/all";
-            window.open("http://localhost:8080/patientSummary");
+            window.location.replace("/patientSummary?001");
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
