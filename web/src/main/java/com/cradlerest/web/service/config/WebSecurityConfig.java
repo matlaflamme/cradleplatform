@@ -65,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Disable security on all "/api" routes (for testing)
 				.antMatchers("/api/**").permitAll()
 				.antMatchers("/login*").permitAll()
+				.antMatchers("/home*").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
