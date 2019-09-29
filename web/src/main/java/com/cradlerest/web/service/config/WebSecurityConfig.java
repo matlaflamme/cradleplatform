@@ -19,21 +19,14 @@ import org.springframework.stereotype.Component;
 
 
 /*
- * Defines the conditions for Java Spring Security
+ * Defines the conditions for securing our application/service
  *
-<<<<<<< HEAD
  * To secure a URI:
  * .permitAll() : permitAll
  * .anyRequest().authenticated() : any logged in user
  * .hasRole() : e.g. .hasRole("ADMIN")
  * .hasAnyRole : e.g. .hasAnyRole("ADMIN", "VHT").
  * NOTE: Order matters.
-=======
- * use .antMatchers(Uri).hasRole(Role) to secure a uri
- *
- * use .antMatchers(Uri).hasAnyRole(Role,Role,Role) to secure a Uri for multiple users
- * Equivalent to user having multiple roles in database "Role" column.
->>>>>>> 872413e7d8354ad14b9dff598cf9d57c39efc421
  */
 @Configuration
 @EnableWebSecurity
@@ -74,6 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.hasRole("VHT")
 				.antMatchers("/api/**", "/upload_reading", "/upload").permitAll()
 				.antMatchers("/").permitAll()
+				// Disable security on all "/api" routes (for testing)
+				.antMatchers("/login*").permitAll()
+				.antMatchers("/files/**").permitAll()
+				.anyRequest().authenticated()
 				.and()
 				.formLogin()
 					.loginPage("/login")

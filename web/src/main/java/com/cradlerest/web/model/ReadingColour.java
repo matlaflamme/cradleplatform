@@ -7,5 +7,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @JsonFormat(shape = JsonFormat.Shape.NUMBER)
 public enum ReadingColour {
-	GREEN, YELLOW, RED
+	GREEN,
+	YELLOW_DOWN,
+	YELLOW_UP,
+	RED_DOWN,
+	RED_UP
 }

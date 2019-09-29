@@ -6,6 +6,7 @@
 - [Directory Structure](#directory-structure)
 - [Build Directions](#build-directions)
 - [Run Instructions](#run-instructions)
+- [Deployment Instructions](#deployment-instructions)
 - [Teams](#teams)
   - [Server](#server)
   - [Android Application](#android-application)
@@ -108,6 +109,103 @@ docker exec -it web_db_1 mysql -u admin -psuper-strong-password
 ```
 
 If the server was started without docker-compose, use `local_web_db_1` for the container name.
+
+## Deployment Instructions
+
+The live production web application can be accessed at:
+
+```
+http://cmpt373.csil.sfu.ca:8087
+```
+
+Administrative access to our VM is available via SSH using your sfu computing id:
+
+```
+$ ssh -p 1007 <sfu computing id>@cmpt373.csil.sfu.ca
+```
+
+The production clone of our repository is located under the system root at:
+
+```
+/prod/cradleplatform
+```
+
+The project folder and its contents are owned by `root` but should be fully 
+accessible (read/write/execute) by everyone.
+
+If attempting to build the application for the first time on the VM you may need 
+to create yourself a home directory as there aren't any for our users. Maven 
+requires a home directory to place cache files an such. So, if you're logging in 
+for the first time, run the following to create a home directory for yourself:
+
+```
+$ sudo mkdir /home/$USER
+$ sudo chown $USER:users /home/$USER
+```
+
+Once you have a home directory, you can use our build script to compile and run 
+the application with Docker just like on your local machine:
+
+```
+# From /prod/cradleplatform/web
+$ ./cradle-web.py docker run
+```
+
+I'm not sure how the system will respond if multiple users try and run the web 
+application at the same time (it probably won't work). So please ensure that the 
+server is not already running before starting it up.
+
+### Deployment Setup History
+
+In case something goes horribly wrong and the server is rebuilt from scratch, 
+the following are a list of commands which were used to get the server up and 
+running.
+
+``` bash
+#
+# The following are the commands needed to setup the VM to run the webserver
+# They only need to be run once when initializing a fresh OS install
+#
+
+# Clone repository
+sudo mkdir /prod
+sudo chmod a+wrx /prod
+cd /prod
+git clone https://csil-git1.cs.surrey.sfu.ca/373-20197-Uranus/cradleplatform.git
+cd /prod/cradleplatform
+sudo chown -R root:users  .
+sudo chmod -R -g+wrx .
+
+# Add user to docker group (I've done this for all of us)
+sudo usermod -aG docker $UESR
+
+# Install Java and Maven
+sudo apt install openjdk-11-jdk
+sudo apt install maven
+
+# Docker was already installed, but just in case
+sudo apt install docker
+
+# Install Docker Compose
+sudo apt install docker-compose
+
+# Create Home Directory 
+sudo mkdir /home/$USER
+sudo chown $USER:users /home/$USER
+
+# Test compile
+cd /prod/cradleplatform/web
+./mvnw package
+
+# Ensure other users can access the build artifact directory
+cd /prod/cradleplatform
+sudo chown -R root:users .
+sudo chmod -R -g+wrx .
+
+# Run web application
+cd /prod/cradleplatform/web
+./cradlerest docker run
+```
 
 ## Teams
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+    <title>Patient Summary</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="/patientSummary.css">
+
+</head>
+<body>
+    <h2>Patient Information</h2>
+    <div class="container">
+    <div class="patientInfo">
+        <h6>Patient Name:</h6>
+        <p class="patientName">Parmis Naddaf <br> </p>
+        <h6>ID:</h6>
+        <p class="patientId"> 62387608726 <br> </p>
+        <h6>Date Of Birth:</h6>
+        <p class="DOB"> 09/19/1995 <br> </p>
+
+    </div>
+        <h2>Latest Reading</h2>
+        <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">
+        <p id="heart_beat">67</p>
+        <span id="statusColor" class="dot"></span>
+        <br>
+        <h6 style="display:inline-block;">Blood Pressure:</h6>
+        <p id="BP" style="display: inline-block">180/20</p>
+        <br>
+        <h6 style="display:inline-block;">Gestational Age:</h6>
+        <p class="GestationalAge">21</p>
+        <p> Weeks</p>
+        <h2>Symptoms</h2>
+        <div id="symptoms">Received overcame oh sensible so at an.
+            Formed do change merely to county it. Am separate contempt
+            domestic to to oh. On relation my so addition branched.</div>
+        <h2>Current Medications</h2>
+        <ul id="currentMedication">
+            <li >item 1 </li>
+            <li >item 2</li>
+            <li >item 3</li>
+            <li >item 4</li>
+        </ul>
+    </div>
+
+    <div style="top: 66px; position: absolute;" class="container">
+        <h2>Past Readings</h2>
+        <table class="table table-bordered" id="pastReadingList">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Blood Pressure</th>
+                <th>heart Rate</th>
+                <th>Light</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>9/12/2019</td>
+                <td>9:12 PM</td>
+                <td>120/80</td>
+                <td>80</td>
+                <td>Green</td>
+            </tr>
+            <tr>
+                <td>9/12/2019</td>
+                <td>9:10 PM</td>
+                <td>110/90</td>
+                <td>76</td>
+                <td>Yellow</td>
+            </tr>
+            <tr>
+                <td>9/12/2019</td>
+                <td>1:12 AM</td>
+                <td>115/100</td>
+                <td>88</td>
+                <td>Red</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="top: 66px; right: 20%;  position: absolute;" class="container">
+        <h2>Past Medications</h2>
+        <ul v-model="pastMedication" id="pastMedication">
+            <li >item 1 </li>
+            <li >item 2</li>
+            <li >item 3</li>
+            <li >item 4</li>
+        </ul>
+        <h2>Past Symptoms</h2>
+        <ul v-model="pastSymptoms" id="pastSymptoms">
+            <li >item 1 </li>
+            <li >item 2</li>
+            <li >item 3</li>
+            <li >item 4</li>
+        </ul>
+    </div>
+
+
+    <script src="/patientSummary.js"></script>
+</body>
+</html>
+
+
+<!--<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>-->

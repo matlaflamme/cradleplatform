@@ -57,8 +57,8 @@ public class PatientController {
 	}
 
 	@PostMapping("")
-	public Patient createPatient(@RequestBody Map<String, String> body) throws Exception {
-		return patientManagerService.constructPatient(body);
+	public Patient createPatient(@RequestBody Patient patient) throws Exception {
+		return patientManagerService.savePatient(patient);
 	}
 
 	@PostMapping("/encrypted_reading")
@@ -67,7 +67,7 @@ public class PatientController {
 	}
 
 	@PostMapping("/reading")
-	public Reading createReading(@RequestBody Map<String, String> body) throws Exception {
-		return patientManagerService.constructReading(body);
+	public Reading createReading(@RequestBody Reading reading) throws Exception {
+		return patientManagerService.saveReading(reading);
 	}
 }

@@ -18,7 +18,9 @@ import java.util.Optional;
 
 /**
  * Controller for Login to handle routes to all the users (atm)
- *
+ * Most of these handlers are for testing purposes. 
+ * TODO: Handle post/get requests from client/frontend
+ * 
  * @see User
  */
 @Controller
@@ -68,12 +70,15 @@ public class LoginController {
 		}
 		return "healthworker";
 	}
-
+<<<<<<< web/src/main/java/com/cradlerest/web/controller/LoginController.java
+// TODO: Login post handler
 //    @RequestMapping(value = "/login", method = RequestMethod.POST)
 //	public String login(Model mode, String error, String logout) {
 //    	if (error) {
 //    		model.addAttribute("error", "Your username and password is invalid");
 //		}
 //	}
+=======
+>>>>>>> web/src/main/java/com/cradlerest/web/controller/LoginController.java
 
 }

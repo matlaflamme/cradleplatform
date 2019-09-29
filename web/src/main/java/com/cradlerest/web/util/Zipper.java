@@ -1,4 +1,4 @@
-package com.cradlerest.web.service.utilities;
+package com.cradlerest.web.util;
 
 
 import java.io.*;
