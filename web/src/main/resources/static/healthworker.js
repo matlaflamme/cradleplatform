@@ -33,7 +33,7 @@ Vue.component('patient-table', {
         },
         addNewReading: function(id) {
             console.log("Add a new reading for patient:"+id)
-            window.location.replace("/createNewReading?" + id);
+            window.location.replace("/createNewReading?id=" + id);
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
