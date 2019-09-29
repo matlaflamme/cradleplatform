@@ -20,7 +20,7 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
 
 ## Directory Structure
 
-.
+```
 ├── docs
 │   ├── api
 │   └── nametag
@@ -85,7 +85,7 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
     ├── css
     ├── img
     └── js
-    
+```
 ## Build Directions
 
 > **Important**: When opening the project in IntelliJ, open the `cradlerest/web` directory and not the `cradlerest` root directory itself.
