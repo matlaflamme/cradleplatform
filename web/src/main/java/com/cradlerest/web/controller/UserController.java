@@ -4,6 +4,10 @@ import com.cradlerest.web.controller.error.DatabaseException;
 import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.User;
 import com.cradlerest.web.service.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,20 +22,23 @@ import java.util.Optional;
  *
  * Provides the following endpoints:
  *
- * - {@code GET:/mock-api/user/all}: return all users in the database
- * - {@code GET:/mock-api/user/{id}}: return the user with a given {@code id}
- * - {@code POST:/mock-api/user/add}: create a new user
- * - {@code DELETE:/mock-api/user/{id}}: delete the user with a given {@code id}
+ * - {@code GET:/api/user/all}: return all users in the database
+ * - {@code GET:/api/user/{id}}: return the user with a given {@code id}
+ * - {@code POST:/api/user/add}: create a new user
+ * - {@code DELETE:/api/user/{id}}: delete the user with a given {@code id}
  *
  * @see User
  */
 @RestController
-@RequestMapping("/mock-api/user")
-public class MockUserController {
+@RequestMapping("/api/user")
+public class UserController {
 
 	private UserRepository userRepository;
 
-	public MockUserController(UserRepository userRepository) {
+	@Autowired
+	private PasswordEncoder  passwordEncoder;
+
+	public UserController(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
@@ -43,6 +50,7 @@ public class MockUserController {
 	@GetMapping("/{id}")
 	public @ResponseBody User get(@PathVariable("id") int id) throws DatabaseException {
 		Optional<User> optUser = userRepository.findById(id);
+
 		if (!optUser.isPresent()) {
 			throw new EntityNotFoundException(id);
 		}
@@ -51,9 +59,10 @@ public class MockUserController {
 
 	@PostMapping("/add")
 	public User create(@RequestBody Map<String, String> body) {
-		String userId = body.get("userId");
-		String password = body.get("password");
-		return userRepository.save(new User(userId, password));
+		String username = body.get("username");
+		String password = passwordEncoder.encode(body.get("password"));
+		String roles = body.get("roles");
+		return userRepository.save(new User(username, password, roles));
 	}
 
 	@DeleteMapping("/{id}")

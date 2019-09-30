@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 /*
-UserDetails handler between database
-Relies on class: UserDetailsImpl
+ * UserDetails handler between database
+ * Relies on class: UserDetailsImpl
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
