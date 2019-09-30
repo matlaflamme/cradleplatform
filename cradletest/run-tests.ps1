@@ -24,4 +24,10 @@ Pop-Location
 
 
 # Run integration tests within docker.
-return docker-compose.exe up --build --abort-on-container-exit --exit-code-from tester
+docker-compose.exe up --build --abort-on-container-exit --exit-code-from tester
+$Result = $LastExitCode
+
+# Cleanup containers to have a fresh start the next time tests are run.
+docker-compose.exe rm -f
+
+exit $Result
