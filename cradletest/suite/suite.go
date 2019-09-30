@@ -21,6 +21,7 @@ type TestSuite struct {
 
 // TestCase holds data for a single test case.
 type TestCase struct {
+	Name     *string `xml:"name,attr"`
 	Request  *Request
 	Response *Response
 }

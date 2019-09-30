@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestSuite>
-  <TestCase>
-    <!-- All Patients API Method -->
+  <TestCase name="Get All Patients">
     <Request method="GET" uri="/api/patient/all"/>
     <Response status="200"/>
     <!-- 
@@ -11,8 +10,7 @@
     -->
   </TestCase>
 
-  <TestCase>
-    <!-- Request Existing Patient Info -->
+  <TestCase name="Valid Get Patient Info">
     <Request method="GET" uri="/api/patient/001/info"/>
     <Response status="200">
       <![CDATA[
@@ -32,8 +30,7 @@
     </Response>
   </TestCase>
 
-  <TestCase>
-    <!-- Request Non-existant Patient Info -->
+  <TestCase name="Request For Non-existant Patient">
     <Request method="GET" uri="/api/patient/X/info"/>
     <Response status="404">
       <![CDATA[
@@ -46,8 +43,7 @@
     </Response>
   </TestCase>
 
-  <TestCase>
-    <!-- Add New Male Patient -->
+  <TestCase name="Add Male Patient">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
@@ -62,8 +58,7 @@
     <Response status="200"/>
   </TestCase>
 
-  <TestCase>
-    <!-- Add Female Patient Field -->
+  <TestCase name="Add Female Patient">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
@@ -80,8 +75,7 @@
     <Response status="200"/>
   </TestCase>
 
-  <TestCase>
-    <!-- Add Female Patient With Missing "pregnant" Field -->
+  <TestCase name="Malformed Add Female Patient: Missing Pregnant Field">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
@@ -104,8 +98,7 @@
     </Response>
   </TestCase>
 
-  <TestCase>
-    <!-- Add Female Patient With Missing "gestationalAge" Field -->
+  <TestCase name="Malformed Add Female Patient: Missing Gestational Age Field">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
@@ -129,8 +122,7 @@
     </Response>
   </TestCase>
 
-  <TestCase>
-    <!-- Add Unknown Sex Patient With Missing "pregnant" Field -->
+  <TestCase name="Malformed Add Patient With Unkown Sex: Missing Pregnant Field">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
@@ -153,8 +145,7 @@
     </Response>
   </TestCase>
 
-  <TestCase>
-    <!-- Add Unkown Sex Patient With Missing "gestationalAge" Field -->
+  <TestCase name="Malformed Add Patient With Unkown Sex: Missing Gestational Age Field">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
