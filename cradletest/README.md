@@ -8,13 +8,13 @@ command run from the `/cradleplatform/cradletest` directory.
 On Unix:
 
 ```
-./run_tests.sh
+./run-tests.sh
 ```
 
 On Windows (with PowerShell):
 
 ```
-.\run_tests.ps1
+.\run-tests.ps1
 ```
 
 You can also run the script with `--verbose` on Unix or `-Verbose` on Windows
