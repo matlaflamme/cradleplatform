@@ -6,11 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+
 
 /**
  * Simplifies the process of constructing {@code Patient} objects.
@@ -71,10 +67,7 @@ public class PatientBuilder {
 	 * @return The builder
 	 */
 	public PatientBuilder dateOfBirth(int year, int month, int day) {
-
-		LocalDate localDate = LocalDate.of(year, month, day);
-		System.out.println(localDate.toString());
-		return dateOfBirth(localDate);
+		return dateOfBirth(LocalDate.of(year, month, day));
 	}
 
 	/**
