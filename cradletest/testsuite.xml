@@ -45,4 +45,20 @@
       ]]>
     </Response>
   </TestCase>
+
+  <TestCase>
+    <!-- Add New Patient -->
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"X",
+        "name":"Test",
+        "villageNumber":"32",
+        "dateOfBirth":"1990-01-01",
+        "sex":0
+      }
+      ]]>
+    </Request>
+    <Response status="200"/>
+  </TestCase>
 </TestSuite>
