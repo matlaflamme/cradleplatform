@@ -1,8 +1,52 @@
-.navbar-dark {
-    background-color: #0c9090;
-    color: white;
+h2 {
+    color: #0c9090; /* Green */
+    text-align: center;
+    margin-top: 20px;
 }
 
-.navbar-brand a {
-    color: white;
+.positions{
+    background-color: #ffffff;
+    text-align:center;
 }
+
+/*TODO: center the buttons*/
+.positions button {
+    background-color: #0c9090; /* Green */
+    text-align: center;
+    border: #0dcdcd; /* Green */
+    display: inline-block;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 18px;
+    padding: 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 4px;
+    justify-content: center;
+    margin-left:40px;
+    margin-right:5px;
+
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background: linear-gradient(white 30%, #0c9090 30%);
+}
+
+p{
+    padding:5px;
+    color:#0c9090;
+    font-size: 18px;
+    margin: 10px;
+}
+
+
+
