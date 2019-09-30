@@ -1,15 +1,13 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.controller.error.AlreadyExistsException;
 import com.cradlerest.web.controller.error.DatabaseException;
 import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.User;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,10 +56,14 @@ public class UserController {
 	}
 
 	@PostMapping("/add")
-	public User create(@RequestBody Map<String, String> body) {
+	public User create(@RequestBody Map<String, String> body) throws AlreadyExistsException {
 		String username = body.get("username");
 		String password = passwordEncoder.encode(body.get("password"));
 		String roles = body.get("roles");
+		if (userRepository.findByUsername(username).isPresent()) {
+			throw new AlreadyExistsException(username);
+		}
+		System.out.println("Created user: " + username);
 		return userRepository.save(new User(username, password, roles));
 	}
 

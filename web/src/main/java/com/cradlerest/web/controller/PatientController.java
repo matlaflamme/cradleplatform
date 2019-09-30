@@ -23,6 +23,9 @@ import java.util.Map;
  * - {@code GET:/api/patient/{id}/readings}: Returns the readings associated
  * 	with the patient with a given {@code id}.
  *
+ * - {@code POST:/api/patient}: Creates a new patient
+ *
+ *
  * @see Patient
  * @see PatientManagerService
  */
