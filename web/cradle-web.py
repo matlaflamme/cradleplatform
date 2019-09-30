@@ -106,9 +106,14 @@ def docker_run():
     # build jar
     exec_cmd(["./mvnw", "package", "-DskipTests"])
     # deploy to docker
-    exec_cmd(["docker-compose", "up", "--build"])
+    exec_cmd(["docker-compose", "up", "--build", "-d"])
     print("It may take a minute for the server to start up")
 
+def docker_debug():
+    # build jar
+    exec_cmd(["./mvnw", "package", "-DskipTests"])
+    # deploy to docker
+    exec_cmd(["docker-compose", "up", "--build"])
 
 def cmd_docker(argv):
     exit_if_empty(argv, docker_usage)
@@ -121,7 +126,8 @@ def cmd_docker(argv):
         "start": docker_start,
         "stop": docker_stop,
         "restart": docker_restart,
-        "run": docker_run
+        "run": docker_run,
+        "debug":docker_debug
     }
     cmd = commands.get(argv[0])
     if cmd == None:
