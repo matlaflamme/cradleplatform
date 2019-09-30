@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    image: "mysql/mysql-server"
+    volumes:
+      - "../web/scripts/db-initializer-scripts:/docker-entrypoint-initdb.d"
+    ports:
+      - "3306"
+  web:
+    build: ../web
+    depends_on:
+      - db
+    ports:
+      - "8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=admin
+      - DB_PASSWORD=super-strong-password
+  tester:
+    build:
+      context: ..
+      dockerfile: ./cradletest/Dockerfile
+    depends_on:
+      - db
+      - web

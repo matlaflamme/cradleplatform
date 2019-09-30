@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite>
+  <TestCase name="Get All Patients">
+    <Request method="GET" uri="/api/patient/all"/>
+    <Response status="200"/>
+    <!-- 
+      TODO: Find a way to ensure the state of the database so that the body of
+        responses can be tested or implement more generic assertions instead of
+        just JSON equivalence.
+    -->
+  </TestCase>
+
+  <TestCase name="Valid Get Patient Info">
+    <Request method="GET" uri="/api/patient/001/info"/>
+    <Response status="200">
+      <![CDATA[
+      {
+        "id":"001",
+        "name":"Harumi Youko",
+        "villageNumber":"1",
+        "dateOfBirth":"1995-12-25",
+        "sex":1,
+        "gestationalAge":16,
+        "medicalHistory":null,
+        "drugHistory":null,
+        "otherSymptoms":null,
+        "pregnant":true
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
+  <TestCase name="Request For Non-existant Patient">
+    <Request method="GET" uri="/api/patient/X/info"/>
+    <Response status="404">
+      <![CDATA[
+      {
+        "code":404,
+        "error":"Not Found",
+        "message":"entity with id 'X' not found"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
+  <TestCase name="Add Male Patient">
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"X",
+        "name":"Test",
+        "villageNumber":"32",
+        "dateOfBirth":"1990-01-01",
+        "sex":0
+      }
+      ]]>
+    </Request>
+    <Response status="200"/>
+  </TestCase>
+
+  <TestCase name="Add Female Patient">
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"1000",
+        "name":"Not Important To This Test",
+        "villageNumber":"0",
+        "dateOfBirth":"2000-01-01",
+        "sex":1,
+        "pregnant":true,
+        "gestationalAge":16
+      }
+      ]]>
+    </Request>
+    <Response status="200"/>
+  </TestCase>
+
+  <TestCase name="Malformed Add Female Patient: Missing Pregnant Field">
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"1001",
+        "name":"Not Important To This Test",
+        "villageNumber":"0",
+        "dateOfBirth":"2000-01-01",
+        "sex":1
+      }
+      ]]>
+    </Request>
+    <Response status="400">
+      <![CDATA[
+      {
+        "code":400,
+        "error":"Bad Request",
+        "message":"missing field: 'pregnant'"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
+  <TestCase name="Malformed Add Female Patient: Missing Gestational Age Field">
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"1002",
+        "name":"Not Important To This Test",
+        "villageNumber":"0",
+        "dateOfBirth":"2000-01-01",
+        "sex":1,
+        "pregnant":true
+      }
+      ]]>
+    </Request>
+    <Response status="400">
+      <![CDATA[
+      {
+        "code":400,
+        "error":"Bad Request",
+        "message":"missing field: 'gestationalAge'"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
+  <TestCase name="Malformed Add Patient With Unkown Sex: Missing Pregnant Field">
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"1003",
+        "name":"Not Important To This Test",
+        "villageNumber":"0",
+        "dateOfBirth":"2000-01-01",
+        "sex":2
+      }
+      ]]>
+    </Request>
+    <Response status="400">
+      <![CDATA[
+      {
+        "code":400,
+        "error":"Bad Request",
+        "message":"missing field: 'pregnant'"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
+  <TestCase name="Malformed Add Patient With Unkown Sex: Missing Gestational Age Field">
+    <Request method="POST" uri="/api/patient">
+      <![CDATA[
+      {
+        "id":"1004",
+        "name":"Not Important To This Test",
+        "villageNumber":"0",
+        "dateOfBirth":"2000-01-01",
+        "sex":2,
+        "pregnant":true
+      }
+      ]]>
+    </Request>
+    <Response status="400">
+      <![CDATA[
+      {
+        "code":400,
+        "error":"Bad Request",
+        "message":"missing field: 'gestationalAge'"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+</TestSuite>
