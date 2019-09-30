@@ -65,9 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.hasRole("HEALTHWORKER")
 				.antMatchers("/vht")
 					.hasRole("VHT")
-//				.antMatchers("/api/**", "/upload_reading", "/upload").permitAll()
-				.antMatchers("/").permitAll()
-				// Disable security on all "/api" routes (for testing)
+//				// Disabling security on the following...
+				.antMatchers("/api/**").permitAll()
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/files/**").permitAll()
 				.antMatchers("/home*").permitAll()
