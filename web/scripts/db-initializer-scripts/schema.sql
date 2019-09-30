@@ -7,7 +7,7 @@ CREATE DATABASE cradlerest;
 
 USE cradlerest;
 
-
+SET GLOBAL time_zone = '+02:00';
 -- Schema
 
 -- For mock api testing: NOT FOR PRODUCTION USE!!!

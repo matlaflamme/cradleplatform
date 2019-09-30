@@ -68,10 +68,11 @@ public class FileUploadController {
 
 	@PostMapping("/upload")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file,
-								   RedirectAttributes redirectAttributes) {
+								   RedirectAttributes redirectAttributes) throws Exception {
 
 //		storageService.store(file);
 		saveEncryptedFile(file);
+		patientManagerService.constructReadingFromEncrypted(file);
 
 		redirectAttributes.addFlashAttribute("message",
 				"You successfully uploaded " + file.getOriginalFilename() + "!");

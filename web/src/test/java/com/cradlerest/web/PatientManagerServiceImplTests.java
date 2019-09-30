@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -53,12 +54,14 @@ public class PatientManagerServiceImplTests {
 		// setup responses for repository queries
 		// 	https://www.baeldung.com/spring-boot-testing
 
-		Date dateOfBirth = new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime();
+//		Date dateOfBirth = new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime();
+		LocalDate localDate = LocalDate.of(1998, 11, 13);
+
 		Patient patient = new PatientBuilder()
 				.id("001")
 				.name("Taki Tachibana")
 				.villageNumber("1")
-				.dateOfBirth(dateOfBirth)
+				.dateOfBirth(localDate)
 				.sex(Sex.MALE)
 				.build();
 
@@ -80,7 +83,7 @@ public class PatientManagerServiceImplTests {
 		assertThat(result.getName())
 				.isEqualTo("Taki Tachibana");
 		assertThat(result.getDateOfBirth())
-				.isEqualTo(new GregorianCalendar(1998, Calendar.NOVEMBER, 13).getTime());
+				.isEqualTo(LocalDate.of(1998, 11, 13));
 		assertThat(result.isPregnant())
 				.isEqualTo(false);
 	}

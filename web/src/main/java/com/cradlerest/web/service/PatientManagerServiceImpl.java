@@ -170,10 +170,12 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		String gender = reading.getString("patientSex");
 		String symptoms = reading.getJSONArray("symptoms").toString();
 		String readingColour = reading.getString("readingColour");
+		String medicalHistory = reading.getString("medicalHistory");
+		String drugHistory = reading.getString("drugHistory");
+		JSONObject dateOfBirth = reading.getJSONObject("dateOfBirth");
 
 		boolean pregnant = reading.getBoolean("pregnant");
 
-		int ageYears = reading.getInt("ageYears");
 		int diastolic = reading.getInt("bpDiastolic");
 		int systolic = reading.getInt("bpSystolic");
 		int heartRate = reading.getInt("heartRateBPM");
@@ -188,10 +190,14 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.id(id)
 				.villageNumber(villageNumber)
 				.name(patientName)
-				.dateOfBirth(zonedDateTime.getYear() - ageYears, 1, 1)
+				.dateOfBirth(	dateOfBirth.getInt("year"),
+								dateOfBirth.getInt( "month" ),
+								dateOfBirth.getInt( "day" ))
 				.sex(Sex.valueOf(gender))
 				.pregnant(pregnant)
 				.gestationalAgeWeeks(gestationalAge)
+				.medicalHistory(medicalHistory)
+				.drugHistory(drugHistory)
 				.otherSymptoms(symptoms)
 				.build();
 		patientRepository.save(readingPatient);
@@ -235,6 +241,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getSex(), "sex");
 		if (patient.getSex() != Sex.MALE) {
 			assertNotNull(patient.isPregnant(), "pregnant");
+		} else if (patient.isPregnant() == null) {
+			// set patient's isPregnant field to false if they are a MALE
+			// and don't have the field already set
+			patient.setPregnant(false);
 		}
 		if (patient.isPregnant()) {
 			// gestational age is only required for patients that are pregnant
