@@ -37,7 +37,7 @@ Vue.component('patient-table', {
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
-        axios.get('http://localhost:8080/api/patient/all').then(response => (this.rows = response.data))
+        axios.get('/api/patient/all').then(response => (this.rows = response.data))
     }
 });
 

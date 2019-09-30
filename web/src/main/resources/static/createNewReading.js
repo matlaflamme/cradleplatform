@@ -17,7 +17,7 @@ var readingInput = new Vue ({
     methods: {
         submit: function() {
             console.log("Start");
-            axios.post('http://localhost:8080/api/patient/reading',
+            axios.post('/api/patient/reading',
                 {
                     patientId: this.patientID,
                     heartRate: this.heartRate,
@@ -34,7 +34,7 @@ var readingInput = new Vue ({
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-        axios.get('http://localhost:8080/api/patient/'+ id).then(response => {this.patientID = id})
+        axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
     }
 });
 
