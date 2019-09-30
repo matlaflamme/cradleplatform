@@ -13,6 +13,7 @@ param ()
 
 if ((Split-Path -Leaf -Path $PWD) -ne "cradletest") {
     Write-Error "Script must be run from 'cradletest' directory"
+    exit 1
 }
 
 # Compile web server to ensure we are testing the latest version.
