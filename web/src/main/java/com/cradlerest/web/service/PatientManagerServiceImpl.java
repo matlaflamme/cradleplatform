@@ -232,6 +232,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getSex(), "sex");
 		if (patient.getSex() != Sex.MALE) {
 			assertNotNull(patient.isPregnant(), "pregnant");
+		} else if (patient.isPregnant() == null) {
+			// set patient's isPregnant field to false if they are a MALE
+			// and don't have the field already set
+			patient.setPregnant(false);
 		}
 		if (patient.isPregnant()) {
 			// gestational age is only required for patients that are pregnant
