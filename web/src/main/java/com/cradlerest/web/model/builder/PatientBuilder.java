@@ -5,8 +5,12 @@ import com.cradlerest.web.model.Sex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Simplifies the process of constructing {@code Patient} objects.
@@ -53,7 +57,7 @@ public class PatientBuilder {
 	}
 
 
-	public PatientBuilder dateOfBirth(@NotNull Date date) {
+	public PatientBuilder dateOfBirth(@NotNull LocalDate date) {
 		patient.setDateOfBirth(date);
 		return this;
 	}
@@ -67,7 +71,10 @@ public class PatientBuilder {
 	 * @return The builder
 	 */
 	public PatientBuilder dateOfBirth(int year, int month, int day) {
-		return dateOfBirth(new GregorianCalendar(year, month, day).getTime());
+
+		LocalDate localDate = LocalDate.of(year, month, day);
+		System.out.println(localDate.toString());
+		return dateOfBirth(localDate);
 	}
 
 	/**
