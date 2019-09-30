@@ -4,14 +4,10 @@ services:
     image: "mysql/mysql-server"
     volumes:
       - "../web/scripts/db-initializer-scripts:/docker-entrypoint-initdb.d"
-    logging:
-      driver: "none"
     ports:
       - "3306"
   web:
     build: ../web
-    logging:
-      driver: "none"
     depends_on:
       - db
     ports:

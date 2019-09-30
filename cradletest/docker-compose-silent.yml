@@ -1,0 +1,15 @@
+#
+# This file combined with the regular compose file to conditionally silence the
+# logs from the db and web services if not running the 'run-tests' command in
+# verbose mode.
+#
+
+version: "3"
+services:
+  db:
+    logging:
+      driver: "none"
+  web:
+    logging:
+      driver: "none"
+  tester:
