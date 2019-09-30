@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Database entity model for a patient.
@@ -27,7 +27,7 @@ public class Patient {
 
 	@Column(name = "dob")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 
 	@Column(name = "sex")
 	@Enumerated(EnumType.ORDINAL)
@@ -54,7 +54,7 @@ public class Patient {
 			String id,
 			String villageNumber,
 			String name,
-			Date dateOfBirth,
+			LocalDate dateOfBirth,
 			Sex sex,
 			boolean isPregnant,
 			Integer gestationalAge,
@@ -98,11 +98,11 @@ public class Patient {
 		this.name = name;
 	}
 
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
