@@ -39,7 +39,7 @@ func ProcessResults(results []Result, w io.Writer) bool {
 	failCount := 0
 
 	for _, r := range results {
-		fmt.Fprintf(w, "test %s... ", r.Name)
+		fmt.Fprintf(w, "Test %s... ", r.Name)
 		if r.Passed {
 			fmt.Fprintln(w, "passed")
 		} else {
@@ -51,10 +51,10 @@ func ProcessResults(results []Result, w io.Writer) bool {
 	}
 
 	if failCount != 0 {
-		fmt.Fprintf(w, "Result: FAILED %d/%d tests\n", failCount, resultCount)
+		fmt.Fprintf(w, "FAILED %d/%d tests\n", failCount, resultCount)
 		return false
 	}
 
-	fmt.Fprintln(w, "Result: Passed all tests")
+	fmt.Fprintln(w, "Passed all tests")
 	return true
 }
