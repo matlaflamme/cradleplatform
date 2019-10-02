@@ -18,7 +18,7 @@
         "id":"001",
         "name":"Harumi Youko",
         "villageNumber":"1",
-        "dateOfBirth":"1995-12-25",
+        "birthYear":1995,
         "sex":1,
         "gestationalAge":16,
         "medicalHistory":null,
@@ -50,7 +50,7 @@
         "id":"X",
         "name":"Test",
         "villageNumber":"32",
-        "dateOfBirth":"1990-01-01",
+        "birthYear":1990,
         "sex":0
       }
       ]]>
@@ -65,7 +65,7 @@
         "id":"1000",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "dateOfBirth":"2000-01-01",
+        "birthYear":2000,
         "sex":1,
         "pregnant":true,
         "gestationalAge":16
@@ -82,7 +82,7 @@
         "id":"1001",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "dateOfBirth":"2000-01-01",
+        "birthYear":2000,
         "sex":1
       }
       ]]>
@@ -105,7 +105,7 @@
         "id":"1002",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "dateOfBirth":"2000-01-01",
+        "birthYear":2000,
         "sex":1,
         "pregnant":true
       }
@@ -129,7 +129,7 @@
         "id":"1003",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "dateOfBirth":"2000-01-01",
+        "birthYear":2000,
         "sex":2
       }
       ]]>
@@ -152,7 +152,7 @@
         "id":"1004",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "dateOfBirth":"2000-01-01",
+        "birthYear":2000,
         "sex":2,
         "pregnant":true
       }

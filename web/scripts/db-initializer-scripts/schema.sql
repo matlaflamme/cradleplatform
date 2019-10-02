@@ -22,7 +22,7 @@ CREATE TABLE patient (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     village VARCHAR(255) NOT NULL,
-    dob DATE NOT NULL,
+    birth_year INT NOT NULL,
     sex INT NOT NULL,                   -- enumerated {male, female, unknown}
     is_pregnant BOOLEAN NOT NULL,
     gestational_age INT,                -- in weeks
@@ -67,8 +67,8 @@ VALUES ('adminhealth', '{bcrypt}$2a$10$Ytx8e2oCF7oidLZA.Bmi0.dtTZorDpijhmYV69sMy
 INSERT INTO patient
 VALUES ('001',          -- id
         'Harumi Youko', -- name
-        '1',              -- village number
-        '1995-12-25',   -- date of birth
+        '1',            -- village number
+        1995,           -- date of birth
         1,              -- sex
         TRUE,           -- is pregnant?
         16,             -- gestational age: weeks
@@ -80,7 +80,7 @@ INSERT INTO patient
 VALUES ('002',          -- id
         'Lloyd Xavier Mann', -- name
         '3',              -- village number
-        '1984-04-07',   -- date of birth
+        1984,           -- date of birth
         0,              -- sex
         FALSE,          -- is pregnant?
         NULL,           -- gestational age: weeks

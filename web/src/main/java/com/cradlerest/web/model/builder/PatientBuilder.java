@@ -17,7 +17,7 @@ import java.time.LocalDate;
  *             .id("001")
  *             .villageNumber(10)
  *             .name("Taki")
- *             .dateOfBirth(2000, 1, 1)
+ *             .birthYear(2000)
  *             .sex(Sex.Female)
  *             .pregnant(false)
  *             .build();
@@ -47,27 +47,15 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder villageNumber(String number) {
+	public PatientBuilder villageNumber(@NotNull String number) {
 		patient.setVillageNumber(number);
 		return this;
 	}
 
 
-	public PatientBuilder dateOfBirth(@NotNull LocalDate date) {
-		patient.setDateOfBirth(date);
+	public PatientBuilder birthYear(int year) {
+		patient.setBirthYear(year);
 		return this;
-	}
-
-	/**
-	 * Sets the patient's date of birth to a given {@param year}, {@param month}
-	 * and {@param day} using the {@code GregorianCalendar}.
-	 * @param year Birth year
-	 * @param month Birth month
-	 * @param day Birth day
-	 * @return The builder
-	 */
-	public PatientBuilder dateOfBirth(int year, int month, int day) {
-		return dateOfBirth(LocalDate.of(year, month, day));
 	}
 
 	/**
@@ -91,14 +79,18 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder gestationalAgeMonths(int months) {
+	public PatientBuilder gestationalAgeMonths(@Nullable Integer months) {
+		if (months == null) {
+			patient.setGestationalAge(null);
+			return this;
+		}
 		// TODO: this rounding assumption may cause an issue
 		final int WEEKS_PER_MONTH = 4;
-		patient.setGestationalAge(months & WEEKS_PER_MONTH);
+		patient.setGestationalAge(months * WEEKS_PER_MONTH);
 		return this;
 	}
 
-	public PatientBuilder gestationalAgeWeeks(int weeks) {
+	public PatientBuilder gestationalAgeWeeks(@Nullable Integer weeks) {
 		patient.setGestationalAge(weeks);
 		return this;
 	}
@@ -128,7 +120,7 @@ public class PatientBuilder {
 		assertNotNull(patient.getId(), "id");
 		assertNotNull(patient.getName(), "name");
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
-		assertNotNull(patient.getDateOfBirth(), "dateOfBirth");
+		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.isPregnant(), "isPregnant");
 		if (patient.isPregnant() && patient.getGestationalAge() == null) {
