@@ -48,10 +48,11 @@ entity, and, as such, must be separate entities.
 | Field | Type | Nullable | Description |
 |:-:|:-:|:-:|:-|
 | `id` | `string` | `false` | Unique identifier for the patient |
-| `villageNumber` | `number` | `false` | Numerical identifier for the village in which the patient lives
-| `name` | `string` | `false` | Patient's name |
-| `dateOfBirth` | `string` | `false` | Patient's date of birth formatted as "yyyy-MM-dd"
-| `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}`
+| `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
+| `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
+| `initials` | `string` | `false` | Patient's initials |
+| `age` | `number` | `false` | Patient's age in years |
+| `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
 | `pregnant` | `boolean` | `false` | Is the patient pregnant? |
 | `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
@@ -63,9 +64,10 @@ entity, and, as such, must be separate entities.
 ```json
 {
     "id": "001",
-    "villageNumber": 1,
-    "initials": "Alpha Beta",
-    "dateOfBirth": "1995-12-25",
+    "villageNumber": "1",
+    "zoneNumber": "5",
+    "initials": "AB",
+    "age": 30,
     "sex": 1,
     "gestationalAge": 16,
     "medicalHistory": null,
@@ -92,10 +94,11 @@ the most recent reading will be the first item in the array.
 | Field | Type | Nullable | Description |
 |:-:|:-:|:-:|:-|
 | `id` | `string` | `false` | Unique identifier for the patient |
-| `villageNumber` | `number` | `false` | Numerical identifier for the village in which the patient lives
-| `name` | `string` | `false` | Patient's name |
-| `dateOfBirth` | `string` | `false` | Patient's date of birth formatted as "yyyy-MM-dd"
-| `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}`
+| `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
+| `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
+| `initials` | `string` | `false` | Patient's initials |
+| `age` | `number` | `false` | Patient's age in years |
+| `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
 | `pregnant` | `boolean` | `false` | Is the patient pregnant? |
 | `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
@@ -109,9 +112,10 @@ the most recent reading will be the first item in the array.
 ```json
 {
     "id": "001",
-    "villageNumber": 1,
-    "name": "Alpha Beta",
-    "dateOfBirth": "1995-12-25",
+    "villageNumber": "1",
+    "zoneNumber": "5",
+    "initials": "AB",
+    "age": 30,
     "sex": 1,
     "gestationalAge": 16,
     "medicalHistory": null,
@@ -162,6 +166,7 @@ Holds information about a single CRADLE reading.
 | `heartRate` | `number` | `false` | Heart rate reading |
 | `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW, 2=RED}` |
 | `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+| `miscellaneousDetails` | `string` | `true` | Other details that a VHT may consider relevant during a reading |
 
 ### Example
 
@@ -172,6 +177,7 @@ Holds information about a single CRADLE reading.
     "diastolic": 80,
     "heartRate": 74,
     "colour": 0,
-    "timestamp": "2019-09-20 20:12:32"
+    "timestamp": "2019-09-20 20:12:32",
+    "miscellaneousDetails": null
 }
 ```
