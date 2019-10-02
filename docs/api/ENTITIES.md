@@ -51,7 +51,7 @@ entity, and, as such, must be separate entities.
 | `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
 | `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
 | `initials` | `string` | `false` | Patient's initials |
-| `age` | `number` | `false` | Patient's age in years |
+| `birthYear` | `number` | `false` | Patient's birth year |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
 | `pregnant` | `boolean` | `false` | Is the patient pregnant? |
 | `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
@@ -67,7 +67,7 @@ entity, and, as such, must be separate entities.
     "villageNumber": "1",
     "zoneNumber": "5",
     "initials": "AB",
-    "age": 30,
+    "age": 1990,
     "sex": 1,
     "gestationalAge": 16,
     "medicalHistory": null,
@@ -97,7 +97,7 @@ the most recent reading will be the first item in the array.
 | `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
 | `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
 | `initials` | `string` | `false` | Patient's initials |
-| `age` | `number` | `false` | Patient's age in years |
+| `birthYear` | `number` | `false` | Patient's birth year |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
 | `pregnant` | `boolean` | `false` | Is the patient pregnant? |
 | `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
@@ -115,7 +115,7 @@ the most recent reading will be the first item in the array.
     "villageNumber": "1",
     "zoneNumber": "5",
     "initials": "AB",
-    "age": 30,
+    "birthYear": 1990,
     "sex": 1,
     "gestationalAge": 16,
     "medicalHistory": null,

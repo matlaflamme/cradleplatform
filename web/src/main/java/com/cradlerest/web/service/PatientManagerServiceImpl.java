@@ -169,7 +169,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		String readingColour = reading.getString("readingColour");
 		String medicalHistory = reading.getString("medicalHistory");
 		String drugHistory = reading.getString("drugHistory");
-		JSONObject dateOfBirth = reading.getJSONObject("dateOfBirth");
+		int birthYear = reading.getInt("birthYear");
 
 		boolean pregnant = reading.getBoolean("pregnant");
 
@@ -187,9 +187,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.id(id)
 				.villageNumber(villageNumber)
 				.name(patientName)
-				.dateOfBirth(	dateOfBirth.getInt("year"),
-								dateOfBirth.getInt( "month" ),
-								dateOfBirth.getInt( "day" ))
+				.birthYear(birthYear)
 				.sex(Sex.valueOf(gender))
 				.pregnant(pregnant)
 				.gestationalAgeWeeks(gestationalAge)
@@ -234,7 +232,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getId(), "id");
 		assertNotNull(patient.getName(), "name");
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
-		assertNotNull(patient.getDateOfBirth(), "dateOfBirth");
+		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		if (patient.getSex() != Sex.MALE) {
 			assertNotNull(patient.isPregnant(), "pregnant");

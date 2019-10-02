@@ -25,9 +25,8 @@ public class Patient {
 	@Column(name = "village")
 	private String villageNumber;
 
-	@Column(name = "dob")
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate dateOfBirth;
+	@Column(name = "birth_year")
+	private Integer birthYear;
 
 	@Column(name = "sex")
 	@Enumerated(EnumType.ORDINAL)
@@ -54,7 +53,7 @@ public class Patient {
 			String id,
 			String villageNumber,
 			String name,
-			LocalDate dateOfBirth,
+			Integer birthYear,
 			Sex sex,
 			boolean isPregnant,
 			Integer gestationalAge,
@@ -65,7 +64,7 @@ public class Patient {
 		this.id = id;
 		this.name = name;
 		this.villageNumber = villageNumber;
-		this.dateOfBirth = dateOfBirth;
+		this.birthYear = birthYear;
 		this.sex = sex;
 		this.isPregnant = isPregnant;
 		this.gestationalAge = gestationalAge;
@@ -98,12 +97,12 @@ public class Patient {
 		this.name = name;
 	}
 
-	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
+	public Integer getBirthYear() {
+		return birthYear;
 	}
 
-	public void setDateOfBirth(LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setBirthYear(Integer birthYear) {
+		this.birthYear = birthYear;
 	}
 
 	public Sex getSex() {
