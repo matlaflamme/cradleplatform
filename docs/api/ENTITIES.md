@@ -48,8 +48,8 @@ entity, and, as such, must be separate entities.
 | Field | Type | Nullable | Description |
 |:-:|:-:|:-:|:-|
 | `id` | `string` | `false` | Unique identifier for the patient |
-| `villageNumber` | `number` | `false` | Numerical identifier for the village in which the patient lives |
-| `zoneNumber` | `number` | `false` | Numerical identifier for the zone in which the patient lives |
+| `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
+| `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
 | `initials` | `string` | `false` | Patient's initials |
 | `age` | `number` | `false` | Patient's age in years |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
@@ -64,7 +64,8 @@ entity, and, as such, must be separate entities.
 ```json
 {
     "id": "001",
-    "villageNumber": 1,
+    "villageNumber": "1",
+    "zoneNumber": "5",
     "initials": "AB",
     "age": 30,
     "sex": 1,
@@ -93,8 +94,8 @@ the most recent reading will be the first item in the array.
 | Field | Type | Nullable | Description |
 |:-:|:-:|:-:|:-|
 | `id` | `string` | `false` | Unique identifier for the patient |
-| `villageNumber` | `number` | `false` | Numerical identifier for the village in which the patient lives |
-| `zoneNumber` | `number` | `false` | Numerical identifier for the zone in which the patient lives |
+| `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
+| `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
 | `initials` | `string` | `false` | Patient's initials |
 | `age` | `number` | `false` | Patient's age in years |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
@@ -111,10 +112,10 @@ the most recent reading will be the first item in the array.
 ```json
 {
     "id": "001",
-    "villageNumber": 1,
-    "zoneNumber": 5,
+    "villageNumber": "1",
+    "zoneNumber": "5",
     "initials": "AB",
-    "age": 25,
+    "age": 30,
     "sex": 1,
     "gestationalAge": 16,
     "medicalHistory": null,
