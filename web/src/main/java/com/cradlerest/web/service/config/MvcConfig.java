@@ -5,7 +5,8 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /*
- * Implements
+ * Initializes url paths to resources (html pages)
+ * WebMvcConfigurer:
  * https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html
  */
 @Configuration
