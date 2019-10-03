@@ -30,7 +30,6 @@ import org.springframework.stereotype.Component;
  */
 @Configuration
 @EnableWebSecurity
-@Component
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -51,27 +50,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService)
 				.passwordEncoder(getPasswordEncoder());
 	}
-
+	/*
+	The order of the antMatchers is important
+	E.g. if you permitAll "/", all consecutive URIs will be permitAll :)
+	*/
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				/*
-				The order of the antMatchers is important
-				E.g. if you permitAll "/", all consecutive URIs will be permitAll :)
-				 */
+		http.httpBasic()
+				.and()
+				.authorizeRequests()
 				.antMatchers("/admin")
 					.hasRole("ADMIN")
 				.antMatchers("/healthworker")
 					.hasRole("HEALTHWORKER")
 				.antMatchers("/vht")
 					.hasRole("VHT")
-				.antMatchers("/api/**", "/upload_reading", "/upload").permitAll()
-				.antMatchers("/").permitAll()
-				// Disable security on all "/api" routes (for testing)
+//				// Disabling security on the following...
+				.antMatchers("/api/**").permitAll()
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/files/**").permitAll()
 				.antMatchers("/home*").permitAll()
-				.anyRequest().authenticated()
 				.and()
 				.formLogin()
 					.loginPage("/login")
@@ -83,9 +81,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.logoutSuccessUrl("/")
 					.permitAll()
 				.and()
+//				.authenticationEntryPoint(authEntryPoint)
 				.exceptionHandling().accessDeniedPage("/accessDenied")
 				// Enable POST and DELETE methods
-				.and().httpBasic()
 				.and().csrf().disable();
 	}
 
@@ -111,5 +109,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder getPasswordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
+
+
 
 }

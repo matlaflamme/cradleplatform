@@ -1,20 +1,10 @@
 package com.cradlerest.web.controller;
-import com.cradlerest.web.controller.error.DatabaseException;
-import com.cradlerest.web.controller.error.EntityNotFoundException;
 import com.cradlerest.web.model.User;
-import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Controller for Login to handle routes to all the users (atm)
@@ -70,6 +60,7 @@ public class LoginController {
 		}
 		return "healthworker";
 	}
+
 // TODO: Login post handler
 //    @RequestMapping(value = "/login", method = RequestMethod.POST)
 //	public String login(Model mode, String error, String logout) {
