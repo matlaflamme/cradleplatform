@@ -35,10 +35,10 @@ public class Reading {
 
 	@Column(name = "colour")
 	@Enumerated(EnumType.ORDINAL)
-	private ReadingColour colour;
+	private ReadingColour colour; // Use *INTEGER* values {0..3}
 
 	@Column(name = "timestamp")
-	private Date timestamp;
+	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	public Reading() {}
 
