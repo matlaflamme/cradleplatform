@@ -7,6 +7,9 @@ import com.cradlerest.web.service.repository.ReadingRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/*
+ * Comments here please
+ */
 @Configuration
 public class PatientManagerServiceConfig {
 
