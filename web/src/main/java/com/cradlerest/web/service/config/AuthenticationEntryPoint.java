@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import org.springframework.stereotype.Component;
 
 /*
- *
+ * If initial basic authentication fails, this is utilized to handle that failure
  */
 @Component
 public class AuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
