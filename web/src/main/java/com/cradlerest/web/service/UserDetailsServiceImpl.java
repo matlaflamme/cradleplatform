@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /*
- * UserDetails handler between database
+ * UserDetailsService handler between database to retrieve authenticated user
  * Relies on class: UserDetailsImpl
  */
 @Service

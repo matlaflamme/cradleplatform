@@ -21,14 +21,9 @@ public class LoginController {
 		this.userRepository = userRepository;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String root(Model model, Principal user) {
-		if (user != null) {
-			model.addAttribute("accountName", "User: " + user.getName());
-		} else {
-			model.addAttribute("accountName", "Please login");
-		}
-		return "home";
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginForm(Model model) {
+		return "login";
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
