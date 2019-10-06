@@ -3,11 +3,13 @@ package com.cradlerest.web.model;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Class {@code User} is a database entity holding data for users of the web
  * system (admin, health workers, VHTs).
  *
+ * NotEmpty: not null + length > 0
  */
 @Entity
 @Table(name = "user")
@@ -17,12 +19,15 @@ public class User {
 	@Column(name = "id")
 	private Integer id;
 
+	@NotEmpty(message = "Username required")
 	@Column(name = "username")
 	private String username;
 
+	@NotEmpty(message = "Password required") // Bcrypt will encode an empty string so this might be redundant
 	@Column(name = "password")
 	private String password;
 
+	@NotEmpty(message = "Role required")
 	@Column(name = "role")
 	private String roles; // ADMIN,VHT,HEALTHWORKER
 

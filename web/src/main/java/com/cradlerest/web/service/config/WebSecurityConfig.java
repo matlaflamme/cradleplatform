@@ -99,19 +99,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
-	/*
-	 * Allows outside domains to access specified resources
-	 */
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*")
-						.allowedHeaders("*");
-			}
-		};
-	}
-
-
 }

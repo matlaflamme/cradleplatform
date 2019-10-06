@@ -40,6 +40,7 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
+	@CrossOrigin(origins="http://localhost:8082")
 	@GetMapping("/all")
 	public @ResponseBody List<User> all() {
 		return userRepository.findAll();
