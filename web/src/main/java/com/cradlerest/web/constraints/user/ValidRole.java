@@ -21,7 +21,7 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 public @interface ValidRole {
 
-	String message() default "Invalid Set of Roles"; // error message if bad request
+	String message() default "Invalid User Role Format"; // error message if bad request
 
 	Class<?>[] groups() default {};
 

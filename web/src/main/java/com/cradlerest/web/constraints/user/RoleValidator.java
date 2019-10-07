@@ -1,7 +1,4 @@
 package com.cradlerest.web.constraints.user;
-
-import com.cradlerest.web.dto.UserDto;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
@@ -23,17 +20,20 @@ public class RoleValidator implements ConstraintValidator<ValidRole, String> {
 
    @Override
    public boolean isValid(String roles, ConstraintValidatorContext context) {
-      if (roles.isEmpty()) {
-         return false;
-      }
-      String[] splitRoles = roles.split(",");
-      for (String role : splitRoles) {
-         if (!validRoles.contains(role)) {
-            System.out.println("derpa");
-            return false;
-         }
-      }
+       return validateRoles(roles);
+   }
 
-      return true;
+   private boolean validateRoles(String roles) {
+       if (roles.isEmpty()) {
+           return false;
+       }
+       String[] splitRoles = roles.split(",");
+       for (String role : splitRoles) {
+           if (!validRoles.contains(role)) {
+               System.out.println("derpa");
+               return false;
+           }
+       }
+       return true;
    }
 }
