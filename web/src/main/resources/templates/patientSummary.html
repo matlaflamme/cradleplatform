@@ -57,44 +57,18 @@
 </nav>
 
     <h2>Patient Information</h2>
-    <div class="container" style="top: 150px; position: absolute; left: 5%">
-    <div class="patientInfo">
-        <h6>Patient Name:</h6>
-        <p class="patientName">Parmis Naddaf <br> </p>
-        <h6>ID:</h6>
-        <p class="patientId"> 62387608726 <br> </p>
-        <h6>Date Of Birth:</h6>
-        <p class="DOB"> 09/19/1995 <br> </p>
-
-    </div>
-        <h2>Latest Reading</h2>
-        <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">
-        <p id="heart_beat">67</p>
-        <span id="statusColor" class="dot"></span>
-        <br>
-        <h6 style="display:inline-block;">Blood Pressure:</h6>
-        <p id="BP" style="display: inline-block">180/20</p>
-        <br>
-        <h6 style="display:inline-block;">Gestational Age:</h6>
-        <p class="GestationalAge">21</p>
-        <p> Weeks</p>
-        <h2>Symptoms</h2>
-        <div class= "info" id="symptoms">Received overcame oh sensible so at an.
-            Formed do change merely to county it. Am separate contempt
-            domestic to to oh. On relation my so addition branched.</div>
-        <h2>Current Medications</h2>
-        <ul id="currentMedication">
-            <li >item 1 </li>
-            <li >item 2</li>
-            <li >item 3</li>
-            <li >item 4</li>
-        </ul>
+<!--Left most column-->
+    <div id="basicInfo" class="container" style="top: 150px; position: absolute; left: 5%">
+        <basic_info></basic_info>
     </div>
 
+<!--Center Column-->
     <div id="patientReadings" style="top: 150px" class="container">
         <h2>Past Readings</h2>
-            <patient_info></patient_info>
+            <patient_readings></patient_readings>
     </div>
+
+<!--Right Column-->
     <div style="top: 150px; right: 10%;  position: absolute;" class="container">
         <h2>Past Medications</h2>
         <ul v-model="pastMedication" id="pastMedication">
