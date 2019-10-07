@@ -27,11 +27,7 @@ CREATE TABLE patient (
     is_pregnant BOOLEAN NOT NULL,
     gestational_age INT,                -- in weeks
     medical_history VARCHAR(255) DEFAULT '',
-    drug_history VARCHAR(255) DEFAULT '',
-    other_symptoms VARCHAR(255)         -- notes:
-                                            -- for symptoms not defined in TABLE symptoms
-                                            -- join on TABLE symptoms for enumerated symptoms
-                                            -- NULL for none
+    drug_history VARCHAR(255) DEFAULT ''
 );
 
 CREATE TABLE reading (
@@ -42,9 +38,24 @@ CREATE TABLE reading (
     heart_rate INT NOT NULL,
     colour INT NOT NULL,                -- enumerated {green, yellow, red}
     timestamp DATETIME NOT NULL,
+    other_symptoms TEXT,
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
 
+CREATE TABLE symptom (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    rid INT NOT NULL,
+    text VARCHAR(255),
+    FOREIGN KEY (rid) REFERENCES reading (id)
+);
+
+CREATE TABLE symptom_reading_relation (
+    sid INT NOT NULL,
+    rid INT NOT NULL,
+    PRIMARY KEY (sid, rid),
+    FOREIGN KEY (sid) REFERENCES symptom (id),
+    FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
+);
 
 
 -- Dummy Data
@@ -109,8 +120,8 @@ VALUES ('001',          -- id
         TRUE,           -- is pregnant?
         16,             -- gestational age: weeks
         NULL,           -- medical history
-        NULL,           -- drug history
-        NULL);          -- other symptoms
+        NULL            -- drug history
+);
 
 INSERT INTO patient
 VALUES ('002',          -- id
@@ -121,8 +132,8 @@ VALUES ('002',          -- id
         FALSE,          -- is pregnant?
         NULL,           -- gestational age: weeks
         'hospitalized for X, taking medication for Y', -- medical history
-        'there is some history with some drugs', -- drug history
-        NULL);          -- other symptoms
+        'there is some history with some drugs' -- drug history
+);
 
 
 INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
