@@ -44,9 +44,7 @@ CREATE TABLE reading (
 
 CREATE TABLE symptom (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    rid INT NOT NULL,
-    text VARCHAR(255),
-    FOREIGN KEY (rid) REFERENCES reading (id)
+    text VARCHAR(255)
 );
 
 CREATE TABLE symptom_reading_relation (
