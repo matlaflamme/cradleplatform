@@ -1,6 +1,6 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.controller.error.EntityNotFoundException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Symptom;
 import com.cradlerest.web.service.repository.SymptomRepository;
 import org.jetbrains.annotations.NotNull;
