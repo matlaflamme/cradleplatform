@@ -98,7 +98,7 @@ func runTest(t suite.TestCase) (result *runtime.Result, err error) {
 				return nil, e
 			}
 			result.Message = fmt.Sprintf(
-				"body mismatch\n--- expected ---\n%s\n\n--- actual ---\n%s\n",
+				"body mismatch\n--- actual ---\n%s\n\n--- expected ---\n%s\n",
 				string(actualBytes),
 				string(expectedBytes),
 			)
