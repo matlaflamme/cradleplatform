@@ -43,8 +43,8 @@ CREATE TABLE reading (
 );
 
 CREATE TABLE symptom (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    text VARCHAR(255)
+    id INT PRIMARY KEY,
+    text VARCHAR(255) UNIQUE
 );
 
 CREATE TABLE symptom_reading_relation (
@@ -54,6 +54,15 @@ CREATE TABLE symptom_reading_relation (
     FOREIGN KEY (sid) REFERENCES symptom (id),
     FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
 );
+
+
+-- Statically Defined Data (Not Dummy Data)
+INSERT INTO symptom VALUES (0, 'Headache');
+INSERT INTO symptom VALUES (1, 'Blurred Vision');
+INSERT INTO symptom VALUES (2, 'Abdominal Pain');
+INSERT INTO symptom VALUES (3, 'Bleeding');
+INSERT INTO symptom VALUES (4, 'Feverish');
+INSERT INTO symptom VALUES (5, 'Unwell');
 
 
 -- Dummy Data
