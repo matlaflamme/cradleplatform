@@ -71,14 +71,13 @@ public class UserController {
 	 */
 	@PostMapping("/add")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Object create(@Valid @RequestBody User user) throws AlreadyExistsException {
+	public User create(@Valid @RequestBody User user) throws AlreadyExistsException {
 		String username = user.getUsername();
 		String password = passwordEncoder.encode(user.getPassword());
 		String roles = user.getRoles();
 		if (userRepository.findByUsername(username).isPresent()) {
 			throw new AlreadyExistsException(username);
 		}
-
 		System.out.println("Created user: " + username);
 		return userRepository.save(new User(username, password, roles));
 	}

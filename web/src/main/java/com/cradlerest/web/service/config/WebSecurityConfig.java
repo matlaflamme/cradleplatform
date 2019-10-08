@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin")
 					.hasRole("ADMIN")
 				.antMatchers("/healthworker")
-					.hasRole("HEALTHWORKER")
+					.hasAnyRole("ADMIN", "HEALTHWORKER")
 				.antMatchers("/vht")
 					.hasRole("VHT")
 //				// Disabling security on the following...
