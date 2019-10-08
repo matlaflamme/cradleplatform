@@ -44,9 +44,6 @@ public class Patient {
 	@Column(name = "drug_history")
 	private String drugHistory;
 
-	@Column(name = "other_symptoms")
-	private String otherSymptoms;
-
 	public Patient() {}
 
 	public Patient(
@@ -58,8 +55,7 @@ public class Patient {
 			boolean isPregnant,
 			Integer gestationalAge,
 			String medicalHistory,
-			String drugHistory,
-			String otherSymptoms
+			String drugHistory
 	) {
 		this.id = id;
 		this.name = name;
@@ -70,7 +66,6 @@ public class Patient {
 		this.gestationalAge = gestationalAge;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
-		this.otherSymptoms = otherSymptoms;
 	}
 
 	public String getId() {
@@ -143,13 +138,5 @@ public class Patient {
 
 	public void setDrugHistory(String drugHistory) {
 		this.drugHistory = drugHistory;
-	}
-
-	public String getOtherSymptoms() {
-		return otherSymptoms;
-	}
-
-	public void setOtherSymptoms(String otherSymptoms) {
-		this.otherSymptoms = otherSymptoms;
 	}
 }

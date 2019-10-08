@@ -168,7 +168,6 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		String villageNumber = reading.getString("villageNumber");
 		String patientName = reading.getString("patientName");
 		String gender = reading.getString("patientSex");
-		String symptoms = reading.getJSONArray("symptoms").toString();
 		String readingColour = reading.getString("readingColour");
 		String medicalHistory = reading.getString("medicalHistory");
 		String drugHistory = reading.getString("drugHistory");
@@ -196,7 +195,6 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.gestationalAgeWeeks(gestationalAge)
 				.medicalHistory(medicalHistory)
 				.drugHistory(drugHistory)
-				.otherSymptoms(symptoms)
 				.build();
 		patientRepository.save(readingPatient);
 

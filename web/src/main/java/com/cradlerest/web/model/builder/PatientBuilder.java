@@ -105,11 +105,6 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder otherSymptoms(@Nullable String text) {
-		patient.setOtherSymptoms(text);
-		return this;
-	}
-
 	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
 		if (object == null) {
 			throw new InstantiationError(String.format("field '%s' is null", fieldName));
