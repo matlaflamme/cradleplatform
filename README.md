@@ -21,70 +21,78 @@ We are developing a software system to be deployed alongside the [CRADLE VSA](ht
 ## Directory Structure
 
 ```
+.
+├── cradletest
+│   ├── cli
+│   ├── jsonutil
+│   ├── runtime
+│   │   └── serialrt
+│   └── suite
 ├── docs
+│   ├── UI\ mockups
 │   ├── api
 │   └── nametag
 │       └── Meeting\ notes
-├── web
-│   ├── res
-│   ├── scripts
-│   │   └── db-initializer-scripts
-│   ├── src
-│   │   ├── main
-│   │   │   ├── java
-│   │   │   │   └── com
-│   │   │   │       └── cradlerest
-│   │   │   │           └── web
-│   │   │   │               ├── controller
-│   │   │   │               │   └── error
-│   │   │   │               ├── model
-│   │   │   │               │   └── builder
-│   │   │   │               ├── service
-│   │   │   │               │   ├── config
-│   │   │   │               │   ├── repository
-│   │   │   │               │   └── storage
-│   │   │   │               └── util
-│   │   │   └── resources
-│   │   │       ├── static
-│   │   │       │   └── img
-│   │   │       └── templates
-│   │   └── test
-│   │       ├── java
-│   │       │   └── com
-│   │       │       └── cradlerest
-│   │       │           └── web
-│   │       └── resources
-│   ├── target
-│   │   ├── classes
-│   │   │   ├── META-INF
-│   │   │   ├── com
-│   │   │   │   └── cradlerest
-│   │   │   │       └── web
-│   │   │   │           ├── controller
-│   │   │   │           │   └── error
-│   │   │   │           ├── model
-│   │   │   │           │   └── builder
-│   │   │   │           ├── service
-│   │   │   │           │   ├── config
-│   │   │   │           │   ├── repository
-│   │   │   │           │   └── storage
-│   │   │   │           └── util
-│   │   │   ├── static
-│   │   │   │   └── img
-│   │   │   └── templates
-│   │   ├── generated-sources
-│   │   │   └── annotations
-│   │   ├── generated-test-sources
-│   │   │   └── test-annotations
-│   │   └── test-classes
-│   │       └── com
-│   │           └── cradlerest
-│   │               └── web
-│   └── upload-dir
-└── webapp
-    ├── css
-    ├── img
-    └── js
+└── web
+    ├── res
+    ├── scripts
+    │   └── db-initializer-scripts
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   │   └── com
+    │   │   │       └── cradlerest
+    │   │   │           └── web
+    │   │   │               ├── controller
+    │   │   │               │   └── exceptions
+    │   │   │               ├── model
+    │   │   │               │   └── builder
+    │   │   │               ├── service
+    │   │   │               │   ├── config
+    │   │   │               │   ├── repository
+    │   │   │               │   └── storage
+    │   │   │               └── util
+    │   │   └── resources
+    │   │       ├── static
+    │   │       │   ├── css
+    │   │       │   ├── img
+    │   │       │   └── javascripts
+    │   │       └── templates
+    │   └── test
+    │       ├── java
+    │       │   └── com
+    │       │       └── cradlerest
+    │       │           └── web
+    │       └── resources
+    ├── target
+    │   ├── classes
+    │   │   ├── META-INF
+    │   │   ├── com
+    │   │   │   └── cradlerest
+    │   │   │       └── web
+    │   │   │           ├── controller
+    │   │   │           │   └── exceptions
+    │   │   │           ├── model
+    │   │   │           │   └── builder
+    │   │   │           ├── service
+    │   │   │           │   ├── config
+    │   │   │           │   ├── repository
+    │   │   │           │   └── storage
+    │   │   │           └── util
+    │   │   ├── static
+    │   │   │   ├── css
+    │   │   │   ├── img
+    │   │   │   └── javascripts
+    │   │   └── templates
+    │   ├── generated-sources
+    │   │   └── annotations
+    │   ├── generated-test-sources
+    │   │   └── test-annotations
+    │   └── test-classes
+    │       └── com
+    │           └── cradlerest
+    │               └── web
+    └── upload-dir
 ```
 
 Please update directory structure if you change it.<br>
