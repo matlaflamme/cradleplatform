@@ -10,7 +10,7 @@ import (
 	"cradletest/runtime"
 	"cradletest/suite"
 	"fmt"
-	"io/ioutil"
+	"strings"
 )
 
 // New constructs a new serial runtime environment.
@@ -82,25 +82,33 @@ func runTest(t suite.TestCase) (result *runtime.Result, err error) {
 	// check response body - if response tag in test suite has a body
 	if len(t.Response.Body) != 0 {
 		body := resp.Body
+
+		// `body` is a ReadCloser meaning that is can only be read once. Since
+		// we also want to display the body if there is an error we must first
+		// store its contents in a buffer as passing the ReadCloser to
+		// jsonutil.Equal will close the reader.
+		var bodyContents *string
+		bodyContents, err = jsonutil.PrettyFormat(body)
+		if err != nil {
+			result.Message = fmt.Sprintf("Unable to read body: %v", err)
+			return
+		}
+
 		var rt bool
-		rt, err = jsonutil.Equal(body, t.Response.BodyReader())
+		rt, err = jsonutil.Equal(strings.NewReader(*bodyContents), t.Response.BodyReader())
 		if err != nil {
 			result.Message = fmt.Sprintf("JSON format error: %v", err)
 			return
 		}
 		if !rt {
-			actualBytes, e := ioutil.ReadAll(body)
-			if e != nil {
-				return nil, e
-			}
-			expectedBytes, e := ioutil.ReadAll(t.Response.BodyReader())
+			expectedBytes, e := jsonutil.PrettyFormat(t.Response.BodyReader())
 			if e != nil {
 				return nil, e
 			}
 			result.Message = fmt.Sprintf(
 				"body mismatch\n--- actual ---\n%s\n\n--- expected ---\n%s\n",
-				string(actualBytes),
-				string(expectedBytes),
+				*bodyContents,
+				*expectedBytes,
 			)
 			return
 		}
