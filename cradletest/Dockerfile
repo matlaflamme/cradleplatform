@@ -18,5 +18,5 @@ RUN go build -o cradletest .
 COPY ./web/scripts/wait-for-it.sh .
 
 # Run testsuite.xml
-CMD ["./wait-for-it.sh", "-t", "30", "-q", "web:8080", "--", \
-    "./cradletest", "-host", "web", "testsuite.xml"]
+CMD ["./wait-for-it.sh", "-t", "30", "-q", "web:9000", "--", \
+    "./cradletest", "-protocol", "https", "-host", "web", "-port", "9000", "testsuite.xml"]
