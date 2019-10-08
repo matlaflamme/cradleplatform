@@ -25,6 +25,9 @@ public class Patient {
 	@Column(name = "village")
 	private String villageNumber;
 
+	@Column(name = "zone")
+	private String zoneNumber;
+
 	@Column(name = "birth_year")
 	private Integer birthYear;
 
@@ -52,6 +55,7 @@ public class Patient {
 	public Patient(
 			String id,
 			String villageNumber,
+			String zoneNumber,
 			String name,
 			Integer birthYear,
 			Sex sex,
@@ -64,6 +68,7 @@ public class Patient {
 		this.id = id;
 		this.name = name;
 		this.villageNumber = villageNumber;
+		this.zoneNumber = zoneNumber;
 		this.birthYear = birthYear;
 		this.sex = sex;
 		this.isPregnant = isPregnant;
@@ -87,6 +92,14 @@ public class Patient {
 
 	public void setVillageNumber(String villageNumber) {
 		this.villageNumber = villageNumber;
+	}
+
+	public String getZoneNumber() {
+		return zoneNumber;
+	}
+
+	public void setZoneNumber(String zoneNumber) {
+		this.zoneNumber = zoneNumber;
 	}
 
 	public String getName() {
