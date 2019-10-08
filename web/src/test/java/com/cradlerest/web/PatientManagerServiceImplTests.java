@@ -1,6 +1,6 @@
 package com.cradlerest.web;
 
-import com.cradlerest.web.controller.error.EntityNotFoundException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Sex;
 import com.cradlerest.web.model.builder.PatientBuilder;

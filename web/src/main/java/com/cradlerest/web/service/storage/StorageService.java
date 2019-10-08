@@ -10,6 +10,9 @@ import java.io.ByteArrayInputStream;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+/*
+ * Comments here pls
+ */
 public interface StorageService {
 
 	void init();

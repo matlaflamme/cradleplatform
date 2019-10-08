@@ -1,6 +1,6 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.controller.error.RestException;
+import com.cradlerest.web.controller.exceptions.RestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

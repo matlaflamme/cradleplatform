@@ -1,8 +1,8 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.controller.error.AlreadyExistsException;
-import com.cradlerest.web.controller.error.BadRequestException;
-import com.cradlerest.web.controller.error.EntityNotFoundException;
+import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
+import com.cradlerest.web.controller.exceptions.BadRequestException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
