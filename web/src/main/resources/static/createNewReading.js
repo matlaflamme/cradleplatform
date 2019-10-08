@@ -1,3 +1,4 @@
+
 Vue.prototype.$http = axios;
 var readingInput = new Vue ({
     el: '#readingInput',
@@ -23,11 +24,11 @@ var readingInput = new Vue ({
                     heartRate: this.heartRate,
                     systolic: this.systolic,
                     diastolic: this.diastolic,
-                    colour: this.colour,
+                    colour: new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour(),
                     timestamp: getCurrentDate()
                 }
             ).then(response => {console.log(response)});
-            console.log("End")
+            console.log("End");
             window.location.assign("/patientSummary?id=" + this.patientID);
         }
     },
