@@ -71,8 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/vht")
 					.hasRole("VHT")
 //				// Disabling security on the following...
-				.antMatchers("/api/**")
-					.hasRole("ADMIN")
+				.antMatchers("/api/**").permitAll()
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/files/**").permitAll()
 				.antMatchers("/home*").permitAll()
@@ -87,11 +86,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.logoutSuccessUrl("/")
 					.permitAll()
 				.and().httpBasic()
-				.authenticationEntryPoint(authEntryPoint)
 				.and()
-				.exceptionHandling().accessDeniedPage("/accessDenied")
-				// Enable POST and DELETE methods
-				.and().csrf().disable();
+				.exceptionHandling().authenticationEntryPoint(authEntryPoint);
 	}
 
 	@Bean
