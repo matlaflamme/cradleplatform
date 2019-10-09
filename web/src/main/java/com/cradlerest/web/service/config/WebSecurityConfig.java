@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 
@@ -66,7 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/vht")
 					.hasRole("VHT")
 //				// Disabling security on the following...
-				.antMatchers("/api/**").permitAll()
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/files/**").permitAll()
 				.antMatchers("/home*").permitAll()
@@ -75,14 +75,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.loginPage("/login")
 					.defaultSuccessUrl("/")
 					.failureUrl("/login?error")
+					.successHandler(customAuthenticationSuccessHandler())
 					.permitAll()
 				.and()
 				.logout()
 					.logoutSuccessUrl("/")
 					.permitAll()
 				.and()
-//				.authenticationEntryPoint(authEntryPoint)
-				.exceptionHandling().accessDeniedPage("/accessDenied")
+				.exceptionHandling()
+					.accessDeniedPage("/error")
 				// Enable POST and DELETE methods
 				.and().csrf().disable();
 	}
@@ -90,6 +91,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+
+	@Bean
+
+	public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+		return new CustomAuthenticationSuccessHandler();
 	}
 
 
