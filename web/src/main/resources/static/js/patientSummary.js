@@ -111,6 +111,7 @@ Vue.component('basic_info', {
             this.patientData = response.data;
             this.setLight(response.data) //update light colour based on response from get request
         });
+
     },
     methods: {
         getPatientSex: function(sexVal) {
