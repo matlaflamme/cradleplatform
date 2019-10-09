@@ -109,7 +109,6 @@ Vue.component('basic_info', {
         let urlQuery = new URLSearchParams(location.search);
         let id = urlQuery.get('id');
         axios.get('/api/patient/' + id).then(response => (this.patientData = response.data));
-        this.light();
     },
     methods: {
         getPatientSex: function(sexVal) {
