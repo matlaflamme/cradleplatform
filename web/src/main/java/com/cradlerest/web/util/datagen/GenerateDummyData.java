@@ -1,9 +1,14 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
 import com.github.maumay.jflow.vec.Vec;
+import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
+
+import java.util.Arrays;
 
 /**
  * Application entry point for the dummy data generation tool.
@@ -17,7 +22,7 @@ public class GenerateDummyData {
 
 	public static void main(String[] args) {
 		try {
-			var entities = getAllEntityTypes();
+			var entities = linearize(getAllEntityTypes());
 			for (var entity : entities) {
 				System.out.println(entity.getName());
 			}
@@ -48,5 +53,61 @@ public class GenerateDummyData {
 		}
 
 		return entities;
+	}
+
+	/**
+	 * Returns the list of classes that {@code type} references via {@code ForeignKey}
+	 * annotations. The result is not ordered in any particular way.
+	 *
+	 * @param type The class to find foreign references for.
+	 * @return A set of classes that {@code type} references.
+	 */
+	private static Vec<Class<?>> referencesOf(@NotNull Class<?> type) {
+		return Vec.copy(Arrays.asList(type.getDeclaredFields()))
+				.filter(field -> field.isAnnotationPresent(ForeignKey.class))
+				.map(field -> field.getAnnotation(ForeignKey.class))
+				.map(ForeignKey::value);
+	}
+
+	/**
+	 * Orders a collection of classes in such a way that any given class appears
+	 * after all of the classes it references as foreign keys.
+	 *
+	 * For example, given three classes, A, B, C where A references both B and C
+	 * via foreign keys and C references B via a foreign key, the only possible
+	 * ordering is: [C, B, A].
+	 *
+	 * Throws a {@code DeadlockException} if a circular reference is found. For
+	 * example, if B also referenced A via a foreign key in the above example.
+	 *
+	 * @param types The collection of types to linearize.
+	 * @return A new collection consisting of the same items as {@code types} but
+	 * 	in a linearized order.
+	 * @throws DeadlockException If a circular reference is found.
+	 */
+	private static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types) throws DeadlockException {
+		var partitioned = types.partition(type -> referencesOf(type).isEmpty());
+		var ordered = partitioned._1;
+		var unordered = partitioned._2;
+
+		if (ordered.isEmpty()) {
+			throw new DeadlockException("unable to find a class with no foreign keys");
+		}
+
+		while (!unordered.isEmpty()) {
+			final var finalOrdered = ordered;
+			partitioned = unordered.partition(type -> referencesOf(type).all(finalOrdered::contains));
+
+			// if we can't order any classes this round, we have a circular
+			// reference an it is impossible to linearize them
+			if (partitioned._1.isEmpty()) {
+				throw new DeadlockException("circular reference detected");
+			}
+
+			ordered = ordered.append(partitioned._1);
+			unordered = partitioned._2;
+		}
+
+		return ordered;
 	}
 }
