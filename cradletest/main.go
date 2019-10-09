@@ -5,7 +5,9 @@ import (
 	"cradletest/runtime"
 	"cradletest/runtime/serialrt"
 	"cradletest/suite"
+	"crypto/tls"
 	"fmt"
+	"net/http"
 	"os"
 )
 
@@ -19,6 +21,12 @@ func configuredRuntime() runtime.Runtime {
 }
 
 func main() {
+	// Disable SLL certificate validation globally.
+	// 	ref: https://stackoverflow.com/a/12122718
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{
+		InsecureSkipVerify: true,
+	}
+
 	cli.Parse()
 	path := cli.InputFilePath()
 

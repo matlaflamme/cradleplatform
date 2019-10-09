@@ -1,4 +1,4 @@
-package com.cradlerest.web.controller.error;
+package com.cradlerest.web.controller.exceptions;
 
 import org.springframework.http.HttpStatus;
 
