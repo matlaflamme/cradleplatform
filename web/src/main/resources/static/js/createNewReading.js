@@ -3,6 +3,7 @@ Vue.prototype.$http = axios;
 var readingInput = new Vue ({
     el: '#readingInput',
     data: {
+        errors: [], //array to hold possible invalid input errors
         patientID: '',
         heartRate: '',
         systolic: '',
@@ -17,8 +18,18 @@ var readingInput = new Vue ({
     },
     methods: {
         submit: function() {
-            console.log("Start");
-            axios.post('/api/patient/reading',
+            console.log(new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour());
+            //these are used to validate inputs
+            let MAX_SYSTOLIC = 300;
+            let MIN_SYSTOLIC = 10;
+            let MAX_DIASTOLIC = 300;
+            let MIN_DIASTOLIC = 10;
+            let MAX_HEART_RATE = 200;
+            let MIN_HEART_RATE = 40;
+            //do input validation in a different function
+
+            //do this if input validation passes
+            /*axios.post('/api/patient/reading',
                 {
                     patientId: this.patientID,
                     heartRate: this.heartRate,
@@ -27,9 +38,9 @@ var readingInput = new Vue ({
                     colour: new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour(),
                     timestamp: getCurrentDate()
                 }
-            ).then(response => {console.log(response)});
-            console.log("End");
-            window.location.assign("/patientSummary?id=" + this.patientID);
+            ).then(response => {console.log(response)});*/
+            //console.log("End");
+            //window.location.assign("/patientSummary?id=" + this.patientID);
         }
     },
     mounted() {

@@ -9,15 +9,6 @@ class trafficLightCalc {
     #SHOCK_HIGH = 1.7;
     #SHOCK_MEDIUM = 0.9;
 
-    //these can be used to validate inputs
-    #MAX_SYSTOLIC = 300;
-    #MIN_SYSTOLIC = 10;
-    #MAX_DIASTOLIC = 300;
-    #MIN_DIASTOLIC = 10;
-    #MAX_HEART_RATE = 200;
-    #MIN_HEART_RATE = 40;
-
-
     shockIndex;
     currSystolic;
     currDiastolic;
