@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.Omit;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
  * UserDetails interface provided by Spring Security
  * https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetails.html
  */
+@Omit
 public class UserDetailsImpl extends User implements UserDetails {
     // Creates a new authorized user
     // You can reference this user through 'super' e.g. super.getUserId() etc..

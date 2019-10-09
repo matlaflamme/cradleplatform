@@ -1,9 +1,9 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
+import com.github.maumay.jflow.vec.Vec;
 import org.reflections.Reflections;
-
-import java.util.Set;
 
 /**
  * Application entry point for the dummy data generation tool.
@@ -34,10 +34,13 @@ public class GenerateDummyData {
 	 *
 	 * @return A set of entity classes.
 	 */
-	private static Set<Class<?>> getAllEntityTypes() throws MissingAnnotationException {
+	private static Vec<Class<?>> getAllEntityTypes() throws MissingAnnotationException {
 		Reflections.log = null;
 		var reflections = new Reflections(SEARCH_PACKAGE);
-		var entities = reflections.getTypesAnnotatedWith(javax.persistence.Entity.class);
+		var entities = Vec.copy(reflections.getTypesAnnotatedWith(javax.persistence.Entity.class))
+				.filter(e -> !e.isAnnotationPresent(Omit.class));
+
+		// ensure that classes have the @Table annotation
 		for (var entity : entities) {
 			if (!entity.isAnnotationPresent(javax.persistence.Table.class)) {
 				throw MissingAnnotationException.type(entity, javax.persistence.Table.class);
