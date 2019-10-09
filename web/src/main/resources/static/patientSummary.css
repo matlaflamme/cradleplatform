@@ -84,15 +84,13 @@ h2 {
 }
 
 .bg-light {
-    background-color: #0b908f!important;
-}
-.navbar-brand a {
-    color: white;
+    background-color: #0b908f!important; /* NavBar background */
 }
 
-ul.nav a:hover {
-    background-color: #0b6c6d !important; /*Overrides bootstrap changes nav-bar links hover colour */
+.nav-link:hover {
+    color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
 }
+
 
 .row{
     margin-left: 7%;
