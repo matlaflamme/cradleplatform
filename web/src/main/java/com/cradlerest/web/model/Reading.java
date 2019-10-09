@@ -2,6 +2,7 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
+import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -29,12 +30,15 @@ public class Reading {
 	private String patientId;
 
 	@Column(name = "systolic")
+	@DataGenRange(min = 80, max = 150)
 	private Integer systolic;
 
 	@Column(name = "diastolic")
+	@DataGenRange(min = 60, max = 100)
 	private Integer diastolic;
 
 	@Column(name = "heart_rate")
+	@DataGenRange(min = 40, max = 110)
 	private Integer heartRate;
 
 	@Column(name = "colour")

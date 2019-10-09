@@ -1,10 +1,9 @@
 package com.cradlerest.web.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 /**
  * Database entity model for a patient.
@@ -26,6 +25,7 @@ public class Patient {
 	private String villageNumber;
 
 	@Column(name = "birth_year")
+	@DataGenRange(min = 1950, max = 2010)
 	private Integer birthYear;
 
 	@Column(name = "sex")
@@ -36,6 +36,7 @@ public class Patient {
 	private Boolean isPregnant;
 
 	@Column(name = "gestational_age")
+	@DataGenRange(min = 0, max = 270)
 	private Integer gestationalAge;
 
 	@Column(name = "medical_history")

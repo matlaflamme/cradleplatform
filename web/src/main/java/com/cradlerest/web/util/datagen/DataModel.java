@@ -1,6 +1,5 @@
 package com.cradlerest.web.util.datagen;
 
-import com.github.maumay.jflow.utils.Tup;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 
