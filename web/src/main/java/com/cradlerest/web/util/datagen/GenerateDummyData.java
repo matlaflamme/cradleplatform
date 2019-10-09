@@ -6,6 +6,8 @@ import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
+import com.cradlerest.web.util.datagen.impl.IntegerGenerator;
+import com.cradlerest.web.util.datagen.impl.UniformNoise;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
