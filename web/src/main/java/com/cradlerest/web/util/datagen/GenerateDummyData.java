@@ -1,8 +1,5 @@
 package com.cradlerest.web.util.datagen;
 
-import com.cradlerest.web.model.Patient;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Sex;
 import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
@@ -13,9 +10,7 @@ import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * Application entry point for the dummy data generation tool.
