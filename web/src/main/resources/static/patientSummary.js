@@ -8,7 +8,6 @@ Vue.component('patient_readings', {
     template: '<table class="table table-striped table-hover">\n' +
         '<thead>' +
         '<tr>' +
-        '<th>Reading ID</th>' +
         '<th>Date</th>' +
         '<th>Systolic</th>' +
         '<th>Diastolic</th>' +
@@ -18,7 +17,6 @@ Vue.component('patient_readings', {
         '</thead>' +
         '<tbody>' +
         '<tr v-for="row in rows">' +
-        '<th>{{row.id}}</th>' +
         '<th>{{row.timestamp}}</th>' +
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
@@ -83,7 +81,8 @@ Vue.component('basic_info', {
             '    <h2>Latest Reading</h2>\n' +
             '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">\n' +
             '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
-            '    <span id="statusColor" class="dot"></span>\n' +
+            '    <span id="light" ref="light" class="dot"></span>\n' +
+            '    <button v-on:click="light" >light</button>'+
             '    <br>\n' +
             '    <h6 style="display:inline-block;">Systolic:</h6>\n' +
             '    <p id="BP" style="display:inline-block">{{patientData.readings[0].systolic}}</p>\n' +
@@ -110,6 +109,7 @@ Vue.component('basic_info', {
         let urlQuery = new URLSearchParams(location.search);
         let id = urlQuery.get('id');
         axios.get('/api/patient/' + id).then(response => (this.patientData = response.data));
+        this.light();
     },
     methods: {
         getPatientSex: function(sexVal) {
@@ -119,6 +119,24 @@ Vue.component('basic_info', {
             else {
                 return "Male";
             }
+        },
+        light() {
+            let digit = this.patientData.readings[0].colour;
+            let color = 'green'
+            switch (digit) {
+                case 0:
+                    color = 'green';
+                    break;
+                case 1:
+                case 2:
+                    color = 'yellow';
+                    break;
+                case 3:
+                case 4:
+                    color = 'red';
+                    break;
+            }
+           this.$refs.light.setAttribute("style", "background-color:" +  color + ";");
         }
     }
 });
