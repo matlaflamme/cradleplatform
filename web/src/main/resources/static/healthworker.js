@@ -21,8 +21,8 @@ Vue.component('patient-table', {
         //'<td>{{row.referralDate}}</td>' +                 //will be added on future release
         //'<td>{{row.bloodPressure}}</td>' +
         //'<td>{{row.heartRate}}</td>' +
-        '<td><button v-on:click="viewPatientData(row.id)" class="btn btn-primary">View Patient Data</button></td>' +
-        '<td><button v-on:click="addNewReading(row.id)" class="btn btn-secondary">Add New Reading</button></td>' +
+        '<td><button v-on:click="viewPatientData(row.id)" class="btn btn-outline-info">View Patient Data</button></td>' +
+        '<td><button v-on:click="addNewReading(row.id)" class="btn btn-outline-secondary">Add New Reading</button></td>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
