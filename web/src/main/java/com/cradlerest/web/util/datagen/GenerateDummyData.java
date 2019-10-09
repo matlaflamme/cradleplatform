@@ -1,5 +1,10 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.model.Reading;
+import com.cradlerest.web.model.ReadingColour;
+import com.cradlerest.web.model.Sex;
+import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
@@ -8,7 +13,9 @@ import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Application entry point for the dummy data generation tool.
@@ -25,6 +32,24 @@ public class GenerateDummyData {
 			var entities = linearize(getAllEntityTypes());
 			for (var entity : entities) {
 				System.out.println(entity.getName());
+			}
+
+			var reading = new PatientBuilder()
+					.id("001")
+					.birthYear(1998)
+					.name("hello")
+					.sex(Sex.MALE)
+					.pregnant(false)
+					.villageNumber("1")
+					.build();
+			var model = generateModel(reading);
+			System.out.printf("Table: %s\n", model.getTable());
+			for (var fields : model.getFields()) {
+				System.out.printf(
+						"  %s: %s\n",
+						fields.getColumn().name(),
+						fields.getValue() == null ? "null" : fields.getValue().toString()
+				);
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -120,5 +145,57 @@ public class GenerateDummyData {
 		}
 
 		return ordered;
+	}
+
+	/**
+	 * Generates a {@code DataModel} for a given {@code @Entity} instance by
+	 * querying the values of the object's fields.
+	 *
+	 * Fields annotated with {@code @Omit} are ignored from this computation.
+	 *
+	 * @param instance The instance of the object to convert.
+	 * @return A data model containing the values from the instance.
+	 */
+	private static DataModel generateModel(@NotNull final Object instance) throws MissingAnnotationException {
+		var type = instance.getClass();
+		assert type.isAnnotationPresent(javax.persistence.Entity.class);
+		assert type.isAnnotationPresent(javax.persistence.Table.class);
+		assert !type.isAnnotationPresent(Omit.class);
+
+		var tableName = type.getAnnotation(javax.persistence.Table.class).name();
+
+		// find all fields to convert
+		var fields = Vec.copy(Arrays.asList(type.getDeclaredFields()))
+				.filter(field -> !field.isAnnotationPresent(Omit.class));
+
+		// ensure needed annotations are present
+		for (var field : fields) {
+			if (!field.isAnnotationPresent(javax.persistence.Column.class)) {
+				throw MissingAnnotationException.field(field.getName(), javax.persistence.Column.class);
+			}
+		}
+
+		// retrieve values for said fields
+		var values = fields.map(field -> {
+			try {
+				field.setAccessible(true);
+				var value = field.get(instance);
+				return value == null ? DataModel.NULL_VALUE : value;
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
+		// convert fields + values into DataField objects
+		var modelFields = fields.iter().zip(values)
+				.map(tup -> {
+					var field = tup._1;
+					var value = tup._2;
+					var column = field.getAnnotation(javax.persistence.Column.class);
+					var annotations = Vec.copy(Arrays.asList(value.getClass().getAnnotations()));
+					return new DataField(column, value.getClass(), value, annotations);
+				});
+
+		return new DataModel(tableName, modelFields.toVec());
 	}
 }
