@@ -2,6 +2,9 @@ package com.cradlerest.web.service.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/*
+ * Comments here pls
+ */
 @ConfigurationProperties("storage")
 public class StorageProperties {
 

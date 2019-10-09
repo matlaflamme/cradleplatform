@@ -12,9 +12,7 @@ services:
     build: .
     restart: on-failure
     ports:
-      - "8080:8080"
-    expose:
-      - "3306"
+      - "9000:9000"
     environment:
       - DB_HOST=db
       - DB_PORT=3306

@@ -1,8 +1,8 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.error.AlreadyExistsException;
-import com.cradlerest.web.controller.error.DatabaseException;
-import com.cradlerest.web.controller.error.EntityNotFoundException;
+import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
+import com.cradlerest.web.controller.exceptions.DatabaseException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.User;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

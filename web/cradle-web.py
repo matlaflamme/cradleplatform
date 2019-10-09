@@ -29,6 +29,7 @@ Docker Commands:
   stop      Stop services
   restart   Restart paused services
   run       Build and run web application
+  prod      Build and run web application configured for production
 """
 
 
@@ -89,6 +90,7 @@ def docker_clean():
     exec_cmd(["docker", "system", "prune", "-f"])
     exec_cmd(["docker", "volume", "prune", "-f"])
 
+
 def docker_start():
     exec_cmd(["docker-compose", "start"])
     print("It may take a minute for the server to start up")
@@ -109,11 +111,27 @@ def docker_run():
     exec_cmd(["docker-compose", "up", "--build", "-d"])
     print("It may take a minute for the server to start up")
 
+
 def docker_debug():
     # build jar
     exec_cmd(["./mvnw", "package", "-DskipTests"])
     # deploy to docker
     exec_cmd(["docker-compose", "up", "--build"])
+
+
+def docker_prod():
+    # build jar
+    exec_cmd(["./mvnw", "package", "-DskipTests"])
+    # deploy to docker
+    exec_cmd([
+        "docker-compose",
+        "-f", "docker-compose.yml",
+        "-f", "docker-compose-production.yml",
+        "up",
+        "--build",
+        "-d"
+    ])
+
 
 def cmd_docker(argv):
     exit_if_empty(argv, docker_usage)
@@ -127,10 +145,11 @@ def cmd_docker(argv):
         "stop": docker_stop,
         "restart": docker_restart,
         "run": docker_run,
-        "debug":docker_debug
+        "debug": docker_debug,
+        "prod": docker_prod
     }
     cmd = commands.get(argv[0])
-    if cmd == None:
+    if cmd is None:
         msg_and_exit(docker_logs)
     cmd()
 
@@ -145,6 +164,7 @@ def local_run():
 
 
 mysql_container_name = "local_web_db_1"
+
 
 def local_start_db():
     exec_cmd([

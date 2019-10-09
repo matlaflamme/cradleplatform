@@ -31,7 +31,10 @@ import com.cradlerest.web.service.storage.StorageService;
 
 import com.cradlerest.web.util.HybridFileDecrypter;
 
-
+/*
+ * Handles file uploading
+ * ...
+ */
 @Controller
 public class FileUploadController {
 

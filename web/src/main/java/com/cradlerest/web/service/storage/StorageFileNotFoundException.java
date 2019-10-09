@@ -1,5 +1,8 @@
 package com.cradlerest.web.service.storage;
 
+/*
+ * Comments here pls
+ */
 public class StorageFileNotFoundException extends StorageException {
 
 	public StorageFileNotFoundException(String message) {
