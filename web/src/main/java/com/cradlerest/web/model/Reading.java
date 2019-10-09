@@ -2,6 +2,7 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,7 @@ public class Reading {
 	private Integer id;
 
 	@Column(name = "pid")
+	@ForeignKey(Patient.class)
 	private String patientId;
 
 	@Column(name = "systolic")
