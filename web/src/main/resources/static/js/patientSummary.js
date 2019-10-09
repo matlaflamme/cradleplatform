@@ -82,7 +82,6 @@ Vue.component('basic_info', {
             '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">\n' +
             '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
             '    <span id="light" ref="light" class="dot"></span>\n' +
-            '    <button v-on:click="setLight" >light</button>'+
             '    <br>\n' +
             '    <h6 style="display:inline-block;">Systolic:</h6>\n' +
             '    <p id="BP" style="display:inline-block">{{patientData.readings[0].systolic}}</p>\n' +
@@ -108,8 +107,10 @@ Vue.component('basic_info', {
     mounted() {
         let urlQuery = new URLSearchParams(location.search);
         let id = urlQuery.get('id');
-        axios.get('/api/patient/' + id).then(response => (this.patientData = response.data));
-        this.light();
+        axios.get('/api/patient/' + id).then(response => {
+            this.patientData = response.data;
+            this.setLight(response.data) //update light colour based on response from get request
+        });
     },
     methods: {
         getPatientSex: function(sexVal) {
@@ -120,9 +121,9 @@ Vue.component('basic_info', {
                 return "Male";
             }
         },
-        setLight() {
-            let digit = this.patientData.readings[0].colour;
-            let color = 'green'
+        setLight(pData) {
+            let digit = pData.readings[0].colour;
+            let color = 'green';
             switch (digit) {
                 case 0:
                     color = 'green';
