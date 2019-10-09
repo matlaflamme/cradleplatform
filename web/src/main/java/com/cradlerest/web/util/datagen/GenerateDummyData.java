@@ -62,11 +62,21 @@ public class GenerateDummyData {
 	 * @param type The class to find foreign references for.
 	 * @return A set of classes that {@code type} references.
 	 */
-	private static Vec<Class<?>> referencesOf(@NotNull Class<?> type) {
-		return Vec.copy(Arrays.asList(type.getDeclaredFields()))
+	private static Vec<? extends Class<?>> referencesOf(@NotNull Class<?> type) throws MissingAnnotationException {
+		var references = Vec.copy(Arrays.asList(type.getDeclaredFields()))
 				.filter(field -> field.isAnnotationPresent(ForeignKey.class))
 				.map(field -> field.getAnnotation(ForeignKey.class))
-				.map(ForeignKey::value);
+				.map(ForeignKey::value)
+				.filter(dep -> !dep.isAnnotationPresent(Omit.class));
+
+		// assert that each reference is also an @Entity
+		for (var reference : references) {
+			if (!reference.isAnnotationPresent(javax.persistence.Entity.class)) {
+				throw MissingAnnotationException.type(reference, javax.persistence.Entity.class);
+			}
+		}
+
+		return references;
 	}
 
 	/**
@@ -85,7 +95,8 @@ public class GenerateDummyData {
 	 * 	in a linearized order.
 	 * @throws DeadlockException If a circular reference is found.
 	 */
-	private static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types) throws DeadlockException {
+	private static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types)
+			throws DeadlockException, MissingAnnotationException {
 		var partitioned = types.partition(type -> referencesOf(type).isEmpty());
 		var ordered = partitioned._1;
 		var unordered = partitioned._2;

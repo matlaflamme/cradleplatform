@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Exception type thrown when a target is missing a required annotation.
  */
-public class MissingAnnotationException extends Exception {
+public class MissingAnnotationException extends RuntimeException {
 
 	public static MissingAnnotationException type(@NotNull Class<?> type, @NotNull Class<?> annotation) {
 		return new MissingAnnotationException("class", type.getName(), annotation);
