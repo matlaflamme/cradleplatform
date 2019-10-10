@@ -87,24 +87,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().csrf().disable();
 	}
 
-//	/*
-//	 Use this to ignore encoding (comment out the Bean below)
-//	 https://docs.spring.io/spring-security/site/docs/4.2.4.RELEASE/apidocs/org/springframework/security/crypto/password/PasswordEncoder.html
-//	 */
-//	private PasswordEncoder getPasswordEncoder() {
-//		return new PasswordEncoder() {
-//			@Override
-//			public String encode(CharSequence charSequence) {
-//				return charSequence.toString();
-//			}
-//
-//			// Verify the encoded password obtained from storage matches the submitted raw password after it too is encoded.
-//			@Override
-//			public boolean matches(CharSequence charSequence, String s) {
-//				return true;
-//			}
-//		};
-//	}
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
