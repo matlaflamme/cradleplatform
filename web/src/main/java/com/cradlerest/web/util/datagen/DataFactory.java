@@ -2,6 +2,7 @@ package com.cradlerest.web.util.datagen;
 
 import com.cradlerest.web.util.datagen.error.NoDefinedGeneratorException;
 import com.cradlerest.web.util.datagen.impl.BooleanGenerator;
+import com.cradlerest.web.util.datagen.impl.EnumGenerator;
 import com.cradlerest.web.util.datagen.impl.IntegerGenerator;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import com.github.maumay.jflow.utils.Tup;
@@ -13,6 +14,9 @@ import java.util.Map;
 public class DataFactory {
 
 	@NotNull
+	private Noise noise;
+
+	@NotNull
 	private Map<Class<?>, Generator<?>> generatorMap = new HashMap<>();
 
 	public <T> void registerGenerator(Class<T> type, @NotNull Generator<T> generator) {
@@ -20,6 +24,8 @@ public class DataFactory {
 	}
 
 	public DataFactory(@NotNull Noise noise) {
+		this.noise = noise;
+
 		// register default generators
 		registerGenerator(Integer.class, new IntegerGenerator(noise));
 		registerGenerator(String.class, new StringGenerator(noise));
@@ -38,7 +44,13 @@ public class DataFactory {
 
 		var generator = generatorMap.get(fieldType);
 		if (generator == null) {
-			throw NoDefinedGeneratorException.forType(fieldType);
+			if (fieldType.isEnum()) {
+				generator = new EnumGenerator<Enum<?>>(noise).with("type", fieldType);
+				// store the generator so we don't need to re-create it later
+				generatorMap.put(fieldType, generator);
+			} else {
+				throw NoDefinedGeneratorException.forType(fieldType);
+			}
 		}
 
 		var value = generator.generate();

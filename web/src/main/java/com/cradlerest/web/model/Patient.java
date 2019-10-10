@@ -36,7 +36,6 @@ public class Patient {
 
 	@Column(name = "sex", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
-	@Omit // temporary
 	private Sex sex;
 
 	@Column(name = "is_pregnant", nullable = false)
