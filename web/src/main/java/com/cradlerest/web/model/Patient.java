@@ -1,6 +1,9 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
+import com.cradlerest.web.util.datagen.annotations.DataGenStringParams;
+import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
@@ -15,24 +18,28 @@ import javax.persistence.*;
 public class Patient {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", nullable = false, unique = true)
+	@DataGenStringParams(length = 14, charset = StringGenerator.DECIMAL_CHARSET)
 	private String id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
+	@DataGenStringParams(length = 2, charset = StringGenerator.UPPER_ALPHA_CHARSET)
 	private String name;
 
-	@Column(name = "village")
+	@Column(name = "village", nullable = false)
+	@DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
 	private String villageNumber;
 
-	@Column(name = "birth_year")
+	@Column(name = "birth_year", nullable = false)
 	@DataGenRange(min = 1950, max = 2010)
 	private Integer birthYear;
 
-	@Column(name = "sex")
+	@Column(name = "sex", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
+	@Omit // temporary
 	private Sex sex;
 
-	@Column(name = "is_pregnant")
+	@Column(name = "is_pregnant", nullable = false)
 	private Boolean isPregnant;
 
 	@Column(name = "gestational_age")
@@ -40,12 +47,15 @@ public class Patient {
 	private Integer gestationalAge;
 
 	@Column(name = "medical_history")
+	@DataGenStringParams(length = 32, charset = StringGenerator.GIBBERISH_CHARSET)
 	private String medicalHistory;
 
 	@Column(name = "drug_history")
+	@DataGenStringParams(length = 32, charset = StringGenerator.GIBBERISH_CHARSET)
 	private String drugHistory;
 
 	@Column(name = "other_symptoms")
+	@DataGenStringParams(length = 32, charset = StringGenerator.GIBBERISH_CHARSET)
 	private String otherSymptoms;
 
 	public Patient() {}

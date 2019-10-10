@@ -1,11 +1,11 @@
 package com.cradlerest.web.util.datagen;
 
-import com.cradlerest.web.model.Sex;
-import com.cradlerest.web.model.builder.PatientBuilder;
+import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
+import com.cradlerest.web.util.datagen.impl.UniformNoise;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
@@ -24,28 +24,16 @@ public class GenerateDummyData {
 
 	public static void main(String[] args) {
 		try {
-			var entities = linearize(getAllEntityTypes());
-			for (var entity : entities) {
-				System.out.println(entity.getName());
-			}
+//			var entities = linearize(getAllEntityTypes());
+//			for (var entity : entities) {
+//				System.out.println(entity.getName());
+//			}
 
-			var reading = new PatientBuilder()
-					.id("001")
-					.birthYear(1998)
-					.name("hello")
-					.sex(Sex.MALE)
-					.pregnant(false)
-					.villageNumber("1")
-					.build();
-			var model = generateModel(reading);
-			System.out.printf("Table: %s\n", model.getTable());
-			for (var field : model.getFields()) {
-				System.out.printf(
-						"  %s: %s - %s\n",
-						field.getColumn().name(),
-						field.getValue() == null ? "null" : field.getValue().toString(),
-						field.getAnnotations().toString()
-				);
+			var factory = new DataFactory(new UniformNoise());
+			var model = generateModel(Patient.class);
+			var data = factory.generate(model);
+			for (var kv : data.getColumnValueMap().entrySet()) {
+				System.out.printf("%s: %s\n", kv.getKey(), kv.getValue());
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -152,13 +140,11 @@ public class GenerateDummyData {
 	 *
 	 * Fields annotated with {@code @Omit} are ignored from this computation.
 	 *
-	 * @param instance The instance of the object to convert.
 	 * @return A data model containing the values from the instance.
 	 * @throws MissingAnnotationException If a field without the {@code @Omit}
 	 * 	annotation does not contain a {@code @Column} annotation.
 	 */
-	private static DataModel generateModel(@NotNull final Object instance) throws MissingAnnotationException {
-		var type = instance.getClass();
+	private static DataModel generateModel(@NotNull Class<?> type) throws MissingAnnotationException {
 		assert type.isAnnotationPresent(javax.persistence.Entity.class);
 		assert type.isAnnotationPresent(javax.persistence.Table.class);
 		assert !type.isAnnotationPresent(Omit.class);
@@ -176,25 +162,12 @@ public class GenerateDummyData {
 			}
 		}
 
-		// retrieve values for said fields
-		var values = fields.map(field -> {
-			try {
-				field.setAccessible(true);
-				var value = field.get(instance);
-				return value == null ? DataModel.NULL_VALUE : value;
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
-		});
-
 		// convert fields + values into DataField objects
-		var modelFields = fields.iter().zip(values)
-				.map(tup -> {
-					var field = tup._1;
-					var value = tup._2;
+		var modelFields = fields.iter()
+				.map(field -> {
 					var column = field.getAnnotation(javax.persistence.Column.class);
 					var annotations = Vec.copy(Arrays.asList(field.getAnnotations()));
-					return new DataField(column, value.getClass(), value, annotations);
+					return new DataField(column, field.getType(), annotations);
 				});
 
 		return new DataModel(tableName, modelFields.toVec());

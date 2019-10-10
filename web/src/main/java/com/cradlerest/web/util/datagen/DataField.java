@@ -19,20 +19,15 @@ public class DataField {
 	private Class<?> type;
 
 	@NotNull
-	private Object value;
-
-	@NotNull
 	private Vec<Annotation> annotations;
 
 	public DataField(
 			@NotNull Column column,
 			@NotNull Class<?> type,
-			@NotNull Object value,
 			@NotNull Vec<Annotation> annotations)
 	{
 		this.column = column;
 		this.type = type;
-		this.value = value;
 		this.annotations = annotations;
 	}
 
@@ -44,15 +39,6 @@ public class DataField {
 	@NotNull
 	public Class<?> getType() {
 		return type;
-	}
-
-	@Nullable
-	public Object getValue() {
-		if (value == DataModel.NULL_VALUE) {
-			return null;
-		}
-
-		return value;
 	}
 
 	@NotNull
