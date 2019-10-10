@@ -39,11 +39,12 @@ public class GenerateDummyData {
 					.build();
 			var model = generateModel(reading);
 			System.out.printf("Table: %s\n", model.getTable());
-			for (var fields : model.getFields()) {
+			for (var field : model.getFields()) {
 				System.out.printf(
-						"  %s: %s\n",
-						fields.getColumn().name(),
-						fields.getValue() == null ? "null" : fields.getValue().toString()
+						"  %s: %s - %s\n",
+						field.getColumn().name(),
+						field.getValue() == null ? "null" : field.getValue().toString(),
+						field.getAnnotations().toString()
 				);
 			}
 		} catch (Exception e) {
@@ -81,6 +82,8 @@ public class GenerateDummyData {
 	 *
 	 * @param type The class to find foreign references for.
 	 * @return A set of classes that {@code type} references.
+	 * @throws MissingAnnotationException If the a field of {@code type} references
+	 * 	a non-entity class via a foreign key.
 	 */
 	private static Vec<? extends Class<?>> referencesOf(@NotNull Class<?> type) throws MissingAnnotationException {
 		var references = Vec.copy(Arrays.asList(type.getDeclaredFields()))
@@ -114,6 +117,7 @@ public class GenerateDummyData {
 	 * @return A new collection consisting of the same items as {@code types} but
 	 * 	in a linearized order.
 	 * @throws DeadlockException If a circular reference is found.
+	 * @throws MissingAnnotationException Propagates from {@code referencesOf}.
 	 */
 	private static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types)
 			throws DeadlockException, MissingAnnotationException {
@@ -150,6 +154,8 @@ public class GenerateDummyData {
 	 *
 	 * @param instance The instance of the object to convert.
 	 * @return A data model containing the values from the instance.
+	 * @throws MissingAnnotationException If a field without the {@code @Omit}
+	 * 	annotation does not contain a {@code @Column} annotation.
 	 */
 	private static DataModel generateModel(@NotNull final Object instance) throws MissingAnnotationException {
 		var type = instance.getClass();
@@ -187,7 +193,7 @@ public class GenerateDummyData {
 					var field = tup._1;
 					var value = tup._2;
 					var column = field.getAnnotation(javax.persistence.Column.class);
-					var annotations = Vec.copy(Arrays.asList(value.getClass().getAnnotations()));
+					var annotations = Vec.copy(Arrays.asList(field.getAnnotations()));
 					return new DataField(column, value.getClass(), value, annotations);
 				});
 
