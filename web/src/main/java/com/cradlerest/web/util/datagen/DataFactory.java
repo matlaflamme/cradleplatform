@@ -1,29 +1,31 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
 import com.cradlerest.web.util.datagen.error.NoDefinedGeneratorException;
 import com.cradlerest.web.util.datagen.impl.BooleanGenerator;
 import com.cradlerest.web.util.datagen.impl.EnumGenerator;
 import com.cradlerest.web.util.datagen.impl.IntegerGenerator;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
+import com.github.maumay.jflow.iterator.Iter;
+import com.github.maumay.jflow.iterator.RichIterator;
 import com.github.maumay.jflow.utils.Tup;
+import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataFactory {
+class DataFactory {
 
 	@NotNull
 	private Noise noise;
 
 	@NotNull
-	private Map<Class<?>, Generator<?>> generatorMap = new HashMap<>();
+	private Map<Class<?>, Generator<?>> generators = new HashMap<>();
 
-	public <T> void registerGenerator(Class<T> type, @NotNull Generator<T> generator) {
-		generatorMap.put(type, generator);
-	}
-
-	public DataFactory(@NotNull Noise noise) {
+	DataFactory(@NotNull Noise noise) {
 		this.noise = noise;
 
 		// register default generators
@@ -32,22 +34,67 @@ public class DataFactory {
 		registerGenerator(Boolean.class, new BooleanGenerator(noise));
 	}
 
-	public Data generate(@NotNull DataModel model) {
-		var table = model.getTable();
-		var data = model.getFields().map(this::generateDataForField);
-		return new Data(table, data.toMap(tup -> tup._1, tup -> tup._2));
+	/**
+	 * Registers a generator instance for objects of type {@code T} with this
+	 * factory. Fields who's types have registered generators need not use the
+	 * {@code @Generator} annotation to specify the generator type to use for
+	 * the field.
+	 *
+	 * Only one generator per generation type may be registered at a given time.
+	 * Registering a generator for a type which already exists, overwrites the
+	 * existing generator replacing it with a new one. For example, one could
+	 * overwrite the default {@code IntegerGenerator} by passing in a new
+	 * generator which produces new {@code Integer} objects.
+	 *
+	 * @param type The type that the generator generates.
+	 * @param generator An instance of the generator to register.
+	 * @param <T> The type that the generator generates.
+	 */
+	<T> void registerGenerator(Class<T> type, @NotNull Generator<T> generator) {
+		generators.put(type, generator);
 	}
 
+	/**
+	 * Constructs an infinite, lazy iterator which procedurally creates random
+	 * data values for a given {@code @Entity} type.
+	 *
+	 * Example Usage:
+	 * <code>
+	 *     var factory = new DataFactor(new UniformNoise());
+	 *     // objects is a vector of 50 random data objects for the `User` class
+	 *     var objects = factory.prepare(User.class)
+	 *                          .take(50)
+	 *                          .toVec();
+	 * </code>
+	 *
+	 * @param type Class to create data objects for.
+	 * @return An infinite data iterator.
+	 */
+	RichIterator<Data> prepare(@NotNull Class<?> type) {
+		return Iter.call(() -> {
+			var model = generateModel(type);
+			var data = model.getFields().map(this::generateDataForField);
+			return new Data(model.getTable(), data.toMap(tup -> tup._1, tup -> tup._2));
+		});
+	}
+
+	/**
+	 * Generates a data value for a given {@code DataField} returning said
+	 * value along with the column name associated with the value as a pair.
+	 *
+	 * @param field The field to generate data for.
+	 * @return A column, data value pair.
+	 */
 	private Tup<String, Object> generateDataForField(@NotNull DataField field) {
 		final var columnName = field.getColumn().name();
 		final var fieldType = field.getType();
 
-		var generator = generatorMap.get(fieldType);
+		var generator = generators.get(fieldType);
 		if (generator == null) {
 			if (fieldType.isEnum()) {
 				generator = new EnumGenerator<Enum<?>>(noise).with("type", fieldType);
 				// store the generator so we don't need to re-create it later
-				generatorMap.put(fieldType, generator);
+				generators.put(fieldType, generator);
 			} else {
 				throw NoDefinedGeneratorException.forType(fieldType);
 			}
@@ -55,5 +102,45 @@ public class DataFactory {
 
 		var value = generator.generate();
 		return new Tup<>(columnName, value);
+	}
+
+
+	/**
+	 * Generates a {@code DataModel} for a given {@code @Entity} instance by
+	 * querying the values of the object's fields.
+	 *
+	 * Fields annotated with {@code @Omit} are ignored from this computation.
+	 *
+	 * @return A data model containing the values from the instance.
+	 * @throws MissingAnnotationException If a field without the {@code @Omit}
+	 * 	annotation does not contain a {@code @Column} annotation.
+	 */
+	private static DataModel generateModel(@NotNull Class<?> type) throws MissingAnnotationException {
+		assert type.isAnnotationPresent(javax.persistence.Entity.class);
+		assert type.isAnnotationPresent(javax.persistence.Table.class);
+		assert !type.isAnnotationPresent(Omit.class);
+
+		var tableName = type.getAnnotation(javax.persistence.Table.class).name();
+
+		// find all fields to convert
+		var fields = Vec.copy(Arrays.asList(type.getDeclaredFields()))
+				.filter(field -> !field.isAnnotationPresent(Omit.class));
+
+		// ensure needed annotations are present
+		for (var field : fields) {
+			if (!field.isAnnotationPresent(javax.persistence.Column.class)) {
+				throw MissingAnnotationException.field(field.getName(), javax.persistence.Column.class);
+			}
+		}
+
+		// convert fields + values into DataField objects
+		var modelFields = fields.iter()
+				.map(field -> {
+					var column = field.getAnnotation(javax.persistence.Column.class);
+					var annotations = Vec.copy(Arrays.asList(field.getAnnotations()));
+					return new DataField(column, field.getType(), annotations);
+				});
+
+		return new DataModel(tableName, modelFields.toVec());
 	}
 }

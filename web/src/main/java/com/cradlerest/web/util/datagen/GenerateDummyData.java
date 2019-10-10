@@ -1,6 +1,5 @@
 package com.cradlerest.web.util.datagen;
 
-import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
@@ -24,16 +23,18 @@ public class GenerateDummyData {
 
 	public static void main(String[] args) {
 		try {
-//			var entities = linearize(getAllEntityTypes());
-//			for (var entity : entities) {
-//				System.out.println(entity.getName());
-//			}
-
+			var entities = linearize(getAllEntityTypes());
 			var factory = new DataFactory(new UniformNoise());
-			var model = generateModel(Patient.class);
-			var data = factory.generate(model);
-			for (var kv : data.getColumnValueMap().entrySet()) {
-				System.out.printf("%s: %s\n", kv.getKey(), kv.getValue());
+			for (var entityClass : entities) {
+				var dataVec = factory.prepare(entityClass).take(2).toVec();
+				for (var data : dataVec) {
+					System.out.printf("Table: %s\n", data.getTable());
+					for (var kv : data.getColumnValueMap().entrySet()) {
+						var nullCorrectedValue = kv.getValue() == null ? "NULL" : kv.getValue().toString();
+						System.out.printf("  %s: %s\n", kv.getKey(), nullCorrectedValue);
+					}
+					System.out.println();
+				}
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -132,44 +133,5 @@ public class GenerateDummyData {
 		}
 
 		return ordered;
-	}
-
-	/**
-	 * Generates a {@code DataModel} for a given {@code @Entity} instance by
-	 * querying the values of the object's fields.
-	 *
-	 * Fields annotated with {@code @Omit} are ignored from this computation.
-	 *
-	 * @return A data model containing the values from the instance.
-	 * @throws MissingAnnotationException If a field without the {@code @Omit}
-	 * 	annotation does not contain a {@code @Column} annotation.
-	 */
-	private static DataModel generateModel(@NotNull Class<?> type) throws MissingAnnotationException {
-		assert type.isAnnotationPresent(javax.persistence.Entity.class);
-		assert type.isAnnotationPresent(javax.persistence.Table.class);
-		assert !type.isAnnotationPresent(Omit.class);
-
-		var tableName = type.getAnnotation(javax.persistence.Table.class).name();
-
-		// find all fields to convert
-		var fields = Vec.copy(Arrays.asList(type.getDeclaredFields()))
-				.filter(field -> !field.isAnnotationPresent(Omit.class));
-
-		// ensure needed annotations are present
-		for (var field : fields) {
-			if (!field.isAnnotationPresent(javax.persistence.Column.class)) {
-				throw MissingAnnotationException.field(field.getName(), javax.persistence.Column.class);
-			}
-		}
-
-		// convert fields + values into DataField objects
-		var modelFields = fields.iter()
-				.map(field -> {
-					var column = field.getAnnotation(javax.persistence.Column.class);
-					var annotations = Vec.copy(Arrays.asList(field.getAnnotations()));
-					return new DataField(column, field.getType(), annotations);
-				});
-
-		return new DataModel(tableName, modelFields.toVec());
 	}
 }

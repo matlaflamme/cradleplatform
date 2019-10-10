@@ -46,6 +46,7 @@ public class Reading {
 	private ReadingColour colour; // Use *INTEGER* values {0..3}
 
 	@Column(name = "timestamp")
+	@Omit // temporary
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	public Reading() {}
