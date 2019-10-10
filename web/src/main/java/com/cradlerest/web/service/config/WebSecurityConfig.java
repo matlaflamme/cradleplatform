@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/vht")
 					.hasRole("VHT")
 //				// Disabling security on the following...
+                .antMatchers("/api/**").permitAll()
 				.antMatchers("/login*").permitAll()
 				.antMatchers("/files/**").permitAll()
 				.antMatchers("/home*").permitAll()
