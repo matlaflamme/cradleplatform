@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
  * <code>
  *     var intGenerator = new IntegerGenerator();
  *     Integer value = intGenerator
- *     					.with("min", 3)
- *     					.with("max", 10)
- *     					.generate();
+ *                      .with("min", 3)
+ *                      .with("max", 10)
+ *                      .generate();
  * </code>
  *
  * @param <T> Generated object type.

@@ -6,8 +6,6 @@ import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
-import com.cradlerest.web.util.datagen.impl.IntegerGenerator;
-import com.cradlerest.web.util.datagen.impl.UniformNoise;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
@@ -107,7 +105,7 @@ public class GenerateDummyData {
 	 *
 	 * For example, given three classes, A, B, C where A references both B and C
 	 * via foreign keys and C references B via a foreign key, the only possible
-	 * ordering is: [C, B, A].
+	 * ordering is: [B, C, A].
 	 *
 	 * Throws a {@code DeadlockException} if a circular reference is found. For
 	 * example, if B also referenced A via a foreign key in the above example.
