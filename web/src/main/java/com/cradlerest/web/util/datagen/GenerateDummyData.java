@@ -1,5 +1,6 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
@@ -23,21 +24,25 @@ public class GenerateDummyData {
 
 	private static final String SEARCH_PACKAGE = "com.cradlerest.web";
 
+	private static final int DEFAULT_AMOUNT = 20;
+
 	public static void main(String[] args) {
+		var noise = args.length == 1
+				? new UniformNoise(args[0].hashCode())
+				: new UniformNoise();
 		try {
 			var entities = linearize(getAllEntityTypes());
-			var factory = new DataFactory(new UniformNoise());
+			var factory = new DataFactory(noise);
 			for (var entityClass : entities) {
-				var dataVec = factory.prepare(entityClass).take(2).toVec();
-				for (var data : dataVec) {
-					System.out.printf("Table: %s\n", data.getTable());
-					for (var kv : data.getColumnValueMap().entrySet()) {
-						var nullCorrectedValue = kv.getValue() == null ? "NULL" : kv.getValue().toString();
-						System.out.printf("  %s: %s\n", kv.getKey(), nullCorrectedValue);
-					}
-					System.out.println(data.toSqlStatement());
-					System.out.println();
-				}
+				var iter = factory.prepare(entityClass);
+				var amount = entityClass.isAnnotationPresent(DataGenAmount.class)
+						? entityClass.getAnnotation(DataGenAmount.class).value()
+						: DEFAULT_AMOUNT;
+				var sqlStatements = iter
+						.take(amount)
+						.map(Data::toSqlStatement)
+						.fold((accum, x) -> accum + "\n\n" + x);
+				System.out.print(sqlStatements + "\n\n\n");
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

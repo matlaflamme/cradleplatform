@@ -2,10 +2,8 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
-import com.cradlerest.web.util.datagen.annotations.DataGenDateRange;
-import com.cradlerest.web.util.datagen.annotations.DataGenRange;
+import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
-import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "reading")
+@DataGenAmount(200)
 public class Reading {
 
 	@Id

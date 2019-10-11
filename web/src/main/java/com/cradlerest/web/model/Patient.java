@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
 import com.cradlerest.web.util.datagen.annotations.DataGenNullChance;
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.DataGenStringParams;
@@ -15,6 +16,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "patient")
+@DataGenAmount(50)
 public class Patient {
 
 	@Id
