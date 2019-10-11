@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenNullChance;
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.DataGenStringParams;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
@@ -46,14 +47,17 @@ public class Patient {
 
 	@Column(name = "medical_history")
 	@DataGenStringParams(length = 32, charset = StringGenerator.GIBBERISH_CHARSET)
+	@DataGenNullChance(0.5)
 	private String medicalHistory;
 
 	@Column(name = "drug_history")
 	@DataGenStringParams(length = 32, charset = StringGenerator.GIBBERISH_CHARSET)
+	@DataGenNullChance(0.5)
 	private String drugHistory;
 
 	@Column(name = "other_symptoms")
 	@DataGenStringParams(length = 32, charset = StringGenerator.GIBBERISH_CHARSET)
+	@DataGenNullChance(0.7)
 	private String otherSymptoms;
 
 	public Patient() {}

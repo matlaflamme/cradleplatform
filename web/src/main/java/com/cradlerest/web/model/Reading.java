@@ -21,31 +21,31 @@ public class Reading {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", nullable = false, unique = true)
 	@Omit
 	private Integer id;
 
-	@Column(name = "pid")
+	@Column(name = "pid", nullable = false)
 	@ForeignKey(Patient.class)
 	private String patientId;
 
-	@Column(name = "systolic")
+	@Column(name = "systolic", nullable = false)
 	@DataGenRange(min = 80, max = 150)
 	private Integer systolic;
 
-	@Column(name = "diastolic")
+	@Column(name = "diastolic", nullable = false)
 	@DataGenRange(min = 60, max = 100)
 	private Integer diastolic;
 
-	@Column(name = "heart_rate")
+	@Column(name = "heart_rate", nullable = false)
 	@DataGenRange(min = 40, max = 110)
 	private Integer heartRate;
 
-	@Column(name = "colour")
+	@Column(name = "colour", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private ReadingColour colour; // Use *INTEGER* values {0..3}
 
-	@Column(name = "timestamp")
+	@Column(name = "timestamp", nullable = false)
 	@Omit // temporary
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 

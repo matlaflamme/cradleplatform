@@ -1,17 +1,11 @@
 package com.cradlerest.web.util.datagen;
 
-import com.cradlerest.web.util.datagen.annotations.DataGenRange;
-import com.cradlerest.web.util.datagen.annotations.DataGenStringParams;
-import com.cradlerest.web.util.datagen.annotations.ForeignKey;
-import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.error.ForeignKeyException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
 import com.cradlerest.web.util.datagen.error.NoDefinedGeneratorException;
 import com.cradlerest.web.util.datagen.error.OperationNotSupportedException;
-import com.cradlerest.web.util.datagen.impl.BooleanGenerator;
-import com.cradlerest.web.util.datagen.impl.EnumGenerator;
-import com.cradlerest.web.util.datagen.impl.IntegerGenerator;
-import com.cradlerest.web.util.datagen.impl.StringGenerator;
+import com.cradlerest.web.util.datagen.impl.*;
 import com.github.maumay.jflow.iterator.Iter;
 import com.github.maumay.jflow.iterator.RichIterator;
 import com.github.maumay.jflow.utils.Tup;
@@ -98,9 +92,15 @@ class DataFactory {
 	private Tup<String, Object> generateDataForField(@NotNull DataField field) {
 		final var columnName = field.getColumn().name();
 
-		final var value = field.isForeignKeyField()
+		var value = field.isForeignKeyField()
 				? generateForeignKeyValue(field)
 				: generateValueViaGenerator(field);
+
+		// can't store literal `null` in a tuple so use DataModel's NULL_VALUE
+		// constant as a work around
+		if (value == null) {
+			value = DataModel.NULL_VALUE;
+		}
 
 		if (field.isIdField()) {
 			foreignKeyRepository.put(field.getTableType(), columnName, value);
@@ -160,6 +160,11 @@ class DataFactory {
 			}
 		}
 
+		// if field is nullable, wrap generator in a NullableGenerator
+		if (!field.isIdField() && field.isNullable()) {
+			generator = new NullableGenerator<>(noise, generator);
+		}
+
 		// curry parameters to the generator
 		for (var annotation : field.getAnnotations().filter(DataFactory::isCurryAnnotation)) {
 			var values = annotationValues(annotation);
@@ -180,7 +185,8 @@ class DataFactory {
 	 */
 	private static boolean isCurryAnnotation(@NotNull Annotation annotation) {
 		return annotation instanceof DataGenRange ||
-		       annotation instanceof DataGenStringParams;
+		       annotation instanceof DataGenStringParams ||
+		       annotation instanceof DataGenNullChance;
 	}
 
 	/**
@@ -193,7 +199,13 @@ class DataFactory {
 		return Vec.copy(Arrays.asList(annotation.annotationType().getDeclaredMethods()))
 				.map(method -> {
 					try {
-						return Tup.of(method.getName(), method.invoke(annotation));
+						String key;
+						if (method.isAnnotationPresent(MetaDataGenAnnotationName.class)) {
+							key = method.getAnnotation(MetaDataGenAnnotationName.class).value();
+						} else {
+							key = method.getName();
+						}
+						return Tup.of(key, method.invoke(annotation));
 					} catch (InvocationTargetException | IllegalAccessException e) {
 						// since all values in an annotation should be public
 						// it is a programming error if we ever get here

@@ -63,4 +63,8 @@ class DataField {
 	boolean isForeignKeyField() {
 		return annotations.any(a -> a instanceof ForeignKey);
 	}
+
+	boolean isNullable() {
+		return column.nullable();
+	}
 }
