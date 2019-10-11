@@ -3,7 +3,7 @@
   <TestCase name="Get All Patients">
     <Request method="GET" uri="/api/patient/all"/>
     <Response status="200"/>
-    <!-- 
+    <!--
       TODO: Find a way to ensure the state of the database so that the body of
         responses can be tested or implement more generic assertions instead of
         just JSON equivalence.
@@ -24,7 +24,8 @@
         "medicalHistory":null,
         "drugHistory":null,
         "otherSymptoms":null,
-        "pregnant":true
+        "pregnant":true,
+        "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Response>
@@ -51,7 +52,8 @@
         "name":"Test",
         "villageNumber":"32",
         "birthYear":1990,
-        "sex":0
+        "sex":0,
+	"lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
@@ -68,7 +70,8 @@
         "birthYear":2000,
         "sex":1,
         "pregnant":true,
-        "gestationalAge":16
+        "gestationalAge":16,
+	"lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
@@ -83,7 +86,8 @@
         "name":"Not Important To This Test",
         "villageNumber":"0",
         "birthYear":2000,
-        "sex":1
+        "sex":1,
+	"lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
@@ -107,7 +111,8 @@
         "villageNumber":"0",
         "birthYear":2000,
         "sex":1,
-        "pregnant":true
+        "pregnant":true,
+	"lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
@@ -130,7 +135,8 @@
         "name":"Not Important To This Test",
         "villageNumber":"0",
         "birthYear":2000,
-        "sex":2
+        "sex":2,
+	"lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
@@ -154,7 +160,8 @@
         "villageNumber":"0",
         "birthYear":2000,
         "sex":2,
-        "pregnant":true
+        "pregnant":true,
+	"lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
