@@ -2,6 +2,7 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
+import com.cradlerest.web.util.datagen.annotations.DataGenDateRange;
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
@@ -46,7 +47,7 @@ public class Reading {
 	private ReadingColour colour; // Use *INTEGER* values {0..3}
 
 	@Column(name = "timestamp", nullable = false)
-	@Omit // temporary
+	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	public Reading() {}

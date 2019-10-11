@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ class DataFactory {
 		registerGenerator(Integer.class, new IntegerGenerator(noise));
 		registerGenerator(String.class, new StringGenerator(noise));
 		registerGenerator(Boolean.class, new BooleanGenerator(noise));
+		registerGenerator(Date.class, new DateGenerator(noise));
 	}
 
 	/**
@@ -186,7 +188,8 @@ class DataFactory {
 	private static boolean isCurryAnnotation(@NotNull Annotation annotation) {
 		return annotation instanceof DataGenRange ||
 		       annotation instanceof DataGenStringParams ||
-		       annotation instanceof DataGenNullChance;
+		       annotation instanceof DataGenNullChance ||
+		       annotation instanceof DataGenDateRange;
 	}
 
 	/**
