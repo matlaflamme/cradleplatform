@@ -9,7 +9,7 @@ USE cradlerest;
 INSERT INTO user (username, password, role) -- password: admin
 VALUES ('admin',
         '{bcrypt}$2a$10$1aYZ3QtMTK9k930s54ROmumfKskM1xLM1UznBgzjx4Mxn4tseLS4i',
-        'ROLE_ADMIN,ROLE_VHT,ROLE_HEALTHWORKER');
+        'ROLE_ADMIN');
 
 INSERT INTO user  (username, password, role) -- password: health
 VALUES ('health',
