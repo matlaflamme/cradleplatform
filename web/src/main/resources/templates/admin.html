@@ -1,16 +1,68 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Hello Admin</title>
-    <a style="color: blue" th:href="@{/}">Home Page</a>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Logout"/>
-    </form>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
-<p>Admin page. Should only be accessed by admin.</p>
-<span th:text="${accountName}"></span>
+<v-app>
+    <v-navigation-drawer app>
+        <!-- -->
+    </v-navigation-drawer>
+
+    <v-app-bar app>
+        <!-- -->
+    </v-app-bar>
+
+    <!-- Sizes your content based upon application components -->
+    <v-content>
+        <!--Create a component starting from here? Use props to pass arguments? -->
+        <div id="app">
+            <v-app id="inspire">
+                <v-card
+                        class="mx-auto"
+                        max-width="344"
+                        raised
+                >
+                    <v-list-item three-line>
+                        <v-list-item-content>
+                            <div class="overline mb-4">Referrals this week</div>
+                            <v-list-item-title class="headline mb-1">76</v-list-item-title>
+                            <v-list-item-subtitle>173 VHTs across 12 zones</v-list-item-subtitle>
+                        </v-list-item-content>
+
+                        <v-list-item-avatar
+                                tile
+                                size="80"
+                                color="grey"
+                        ></v-list-item-avatar>
+                    </v-list-item>
+
+                    <v-card-actions>
+                        <v-btn text>View more</v-btn>
+                        <v-btn text>Export</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-app>
+        </div>
+        <!-- Provides the application the proper gutter -->
+        <v-container fluid>
+
+            <!-- If using vue-router -->
+            <router-view></router-view>
+        </v-container>
+    </v-content>
+
+</v-app>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+    })
+</script>
 </body>
 </html>
