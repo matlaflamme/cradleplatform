@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -43,9 +44,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.userDetailsService();
 	}
 
-	@Autowired
-	private AuthenticationEntryPoint authEntryPoint;
-
 	// AuthenticationManagerBuilder docs
 	// https://docs.spring.io/spring-security/site/docs/4.2.12.RELEASE/apidocs/org/springframework/security/config/annotation/authentication/builders/AuthenticationManagerBuilder.html
 	@Override
@@ -62,12 +60,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	*/
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+		http.httpBasic()
+				.and()
 				.authorizeRequests()
 				.antMatchers("/admin")
 					.hasRole("ADMIN")
 				.antMatchers("/healthworker")
-					.hasAnyRole("ADMIN", "HEALTHWORKER")
+					.hasRole("HEALTHWORKER")
 				.antMatchers("/vht")
 					.hasRole("VHT")
 //				// Disabling security on the following...
@@ -80,19 +79,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.loginPage("/login")
 					.defaultSuccessUrl("/")
 					.failureUrl("/login?error")
+					.successHandler(customAuthenticationSuccessHandler())
 					.permitAll()
 				.and()
 				.logout()
 					.logoutSuccessUrl("/")
 					.permitAll()
-				.and().httpBasic()
 				.and()
-				.exceptionHandling().authenticationEntryPoint(authEntryPoint);
+				.exceptionHandling()
+					.accessDeniedPage("/error")
+				// Enable POST and DELETE methods
+				.and().csrf().disable();
+
 	}
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
+
+	@Bean
+	public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+		return new CustomAuthenticationSuccessHandler();
+	}
+
 
 }

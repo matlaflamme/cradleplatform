@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
+/**
+ * Defines what happens when a user has been authenticated (logged in)
+ *
+ * Redirects user to path based on role
+ */
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Override
