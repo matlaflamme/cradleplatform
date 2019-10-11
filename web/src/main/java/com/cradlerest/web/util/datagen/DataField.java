@@ -1,8 +1,8 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Column;
 import java.lang.annotation.Annotation;
@@ -10,7 +10,10 @@ import java.lang.annotation.Annotation;
 /**
  * Model class containing information about a single field in a {@code DataModel}.
  */
-public class DataField {
+class DataField {
+
+	@NotNull
+	private Class<?> tableType;
 
 	@NotNull
 	private Column column;
@@ -21,28 +24,43 @@ public class DataField {
 	@NotNull
 	private Vec<Annotation> annotations;
 
-	public DataField(
+	DataField(
+			@NotNull Class<?> tableType,
 			@NotNull Column column,
 			@NotNull Class<?> type,
 			@NotNull Vec<Annotation> annotations)
 	{
+		this.tableType = tableType;
 		this.column = column;
 		this.type = type;
 		this.annotations = annotations;
 	}
 
 	@NotNull
-	public Column getColumn() {
+	Class<?> getTableType() {
+		return tableType;
+	}
+
+	@NotNull
+	Column getColumn() {
 		return column;
 	}
 
 	@NotNull
-	public Class<?> getType() {
+	Class<?> getType() {
 		return type;
 	}
 
 	@NotNull
-	public Vec<Annotation> getAnnotations() {
+	Vec<Annotation> getAnnotations() {
 		return annotations;
+	}
+
+	boolean isIdField() {
+		return annotations.any(a -> a instanceof javax.persistence.Id);
+	}
+
+	boolean isForeignKeyField() {
+		return annotations.any(a -> a instanceof ForeignKey);
 	}
 }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Model class containing the data layout of a {@code @Entity} class.
  */
-public class DataModel {
+class DataModel {
 
 	public static final Object NULL_VALUE = new Object() {
 		@Override
@@ -19,20 +19,29 @@ public class DataModel {
 	private String table;
 
 	@NotNull
+	private Class<?> tableType;
+
+	@NotNull
 	private Vec<DataField> fields;
 
-	public DataModel(@NotNull String table, @NotNull Vec<DataField> fields) {
+	DataModel(@NotNull String table, @NotNull Class<?> tableType, @NotNull Vec<DataField> fields) {
 		this.table = table;
+		this.tableType = tableType;
 		this.fields = fields;
 	}
 
 	@NotNull
-	public String getTable() {
+	String getTable() {
 		return table;
 	}
 
 	@NotNull
-	public Vec<DataField> getFields() {
+	Class<?> getTableType() {
+		return tableType;
+	}
+
+	@NotNull
+	Vec<DataField> getFields() {
 		return fields;
 	}
 }

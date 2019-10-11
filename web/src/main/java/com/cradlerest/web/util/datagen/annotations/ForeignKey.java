@@ -44,5 +44,5 @@ public @interface ForeignKey {
 	 * The system is unable to infer the foreign key if the foreign class has
 	 * a composite primary key.
 	 */
-	String field() default "";
+	String column() default "";
 }

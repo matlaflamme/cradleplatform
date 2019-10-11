@@ -1,6 +1,8 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.cradlerest.web.util.datagen.error.ForeignKeyException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
 import com.cradlerest.web.util.datagen.error.NoDefinedGeneratorException;
 import com.cradlerest.web.util.datagen.impl.BooleanGenerator;
@@ -20,10 +22,13 @@ import java.util.Map;
 class DataFactory {
 
 	@NotNull
-	private Noise noise;
+	private final Noise noise;
 
 	@NotNull
-	private Map<Class<?>, Generator<?>> generators = new HashMap<>();
+	private final Map<Class<?>, Generator<?>> generators = new HashMap<>();
+
+	@NotNull
+	private final ForeignKeyRepository foreignKeyRepository = new ForeignKeyRepository();
 
 	DataFactory(@NotNull Noise noise) {
 		this.noise = noise;
@@ -87,6 +92,50 @@ class DataFactory {
 	 */
 	private Tup<String, Object> generateDataForField(@NotNull DataField field) {
 		final var columnName = field.getColumn().name();
+
+		final var value = field.isForeignKeyField()
+				? generateForeignKeyValue(field)
+				: generateValueViaGenerator(field);
+
+		if (field.isIdField()) {
+			foreignKeyRepository.put(field.getTableType(), columnName, value);
+		}
+
+		return new Tup<>(columnName, value);
+	}
+
+	/**
+	 * Picks a random value for a given foreign key {@code field}.
+	 * @param field The field to generate a value for.
+	 * @return The generated value.
+	 * @throws ForeignKeyException If unable to generate a foreign key value.
+	 */
+	private Object generateForeignKeyValue(@NotNull DataField field) throws ForeignKeyException {
+		assert field.isForeignKeyField();
+
+		final var foreignKeyAnnotation = (ForeignKey) field.getAnnotations()
+				.filter(a -> a instanceof ForeignKey)
+				.head();
+		final var type = foreignKeyAnnotation.value();
+		final var column = foreignKeyAnnotation.column();
+
+		Vec<Object> candidateValues;
+		if (column.isEmpty()) {
+			candidateValues = foreignKeyRepository.get(type);
+		} else {
+			candidateValues = foreignKeyRepository.get(type, column);
+		}
+
+		return noise.pick(candidateValues.toList());
+	}
+
+	/**
+	 * Generates a value for a given {@code field} using one of the registered
+	 * generators.
+	 * @param field The field to generate a value for.
+	 * @return The generated value.
+	 */
+	private Object generateValueViaGenerator(@NotNull DataField field) {
 		final var fieldType = field.getType();
 
 		var generator = generators.get(fieldType);
@@ -100,10 +149,8 @@ class DataFactory {
 			}
 		}
 
-		var value = generator.generate();
-		return new Tup<>(columnName, value);
+		return generator.generate();
 	}
-
 
 	/**
 	 * Generates a {@code DataModel} for a given {@code @Entity} instance by
@@ -120,10 +167,11 @@ class DataFactory {
 		assert type.isAnnotationPresent(javax.persistence.Table.class);
 		assert !type.isAnnotationPresent(Omit.class);
 
-		var tableName = type.getAnnotation(javax.persistence.Table.class).name();
+		final var tableType = type;
+		final var tableName = type.getAnnotation(javax.persistence.Table.class).name();
 
 		// find all fields to convert
-		var fields = Vec.copy(Arrays.asList(type.getDeclaredFields()))
+		final var fields = Vec.copy(Arrays.asList(type.getDeclaredFields()))
 				.filter(field -> !field.isAnnotationPresent(Omit.class));
 
 		// ensure needed annotations are present
@@ -134,13 +182,13 @@ class DataFactory {
 		}
 
 		// convert fields + values into DataField objects
-		var modelFields = fields.iter()
+		final var modelFields = fields.iter()
 				.map(field -> {
 					var column = field.getAnnotation(javax.persistence.Column.class);
 					var annotations = Vec.copy(Arrays.asList(field.getAnnotations()));
-					return new DataField(column, field.getType(), annotations);
+					return new DataField(tableType, column, field.getType(), annotations);
 				});
 
-		return new DataModel(tableName, modelFields.toVec());
+		return new DataModel(tableName, tableType, modelFields.toVec());
 	}
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Container for storing and retrieving foreign key values.
  */
-public class ForeignKeyRepository {
+class ForeignKeyRepository {
 
 	@NotNull
 	private Map<Tup<? extends Class<?>, String>, Vec<Object>> repository = new HashMap<>();
@@ -24,7 +24,7 @@ public class ForeignKeyRepository {
 	 * @param column The column to register this value under.
 	 * @param value The value to register.
 	 */
-	public void put(@NotNull Class<?> type, @NotNull String column, @NotNull Object value) {
+	void put(@NotNull Class<?> type, @NotNull String column, @NotNull Object value) {
 		var tup = Tup.of(type, column);
 		var keys = repository.get(tup);
 		if (keys == null) {
@@ -47,11 +47,31 @@ public class ForeignKeyRepository {
 	 * @throws ForeignKeyException if unable to find any foreign key values for
 	 * 	the given class, column pair.
 	 */
-	public Vec<Object> get(@NotNull Class<?> type, @NotNull String column) {
+	Vec<Object> get(@NotNull Class<?> type, @NotNull String column) {
 		var keys = repository.get(Tup.of(type, column));
 		if (keys == null) {
 			throw new ForeignKeyException(type.getName() + " has not registered any keys for column: " + column);
 		}
 		return keys;
+	}
+
+	/**
+	 * Returns a list of possible valid foreign key values for a particular
+	 * class. The class in question must only have a single primary key field;
+	 * otherwise the system is unable to infer which field the foreign key is
+	 * referencing.
+	 * @param type The class to get foreign key values for.
+	 * @return A list of valid foreign key values.
+	 * @throws ForeignKeyException If {@code type} has more than one primary
+	 * 	key.
+	 */
+	Vec<Object> get(@NotNull Class<?> type) throws ForeignKeyException {
+		var candidateLists = Vec.copy(repository.entrySet())
+				.filter(entry -> entry.getKey()._1.equals(type))
+				.map(Map.Entry::getValue);
+		if (candidateLists.size() != 1) {
+			throw new ForeignKeyException("cannot infer foreign key candidate for " + type.getName());
+		}
+		return candidateLists.head();
 	}
 }
