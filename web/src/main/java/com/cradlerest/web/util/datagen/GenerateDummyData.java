@@ -19,6 +19,8 @@ import java.util.Arrays;
  */
 public class GenerateDummyData {
 
+	// TODO: Add support for UNIQUE constraint
+
 	private static final String SEARCH_PACKAGE = "com.cradlerest.web";
 
 	public static void main(String[] args) {
@@ -33,6 +35,7 @@ public class GenerateDummyData {
 						var nullCorrectedValue = kv.getValue() == null ? "NULL" : kv.getValue().toString();
 						System.out.printf("  %s: %s\n", kv.getKey(), nullCorrectedValue);
 					}
+					System.out.println(data.toSqlStatement());
 					System.out.println();
 				}
 			}
