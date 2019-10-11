@@ -24,7 +24,7 @@ public class BooleanGenerator implements Generator<Boolean> {
 	}
 
 	@Override
-	public Generator<Boolean> with(@NotNull String key, @NotNull Object value) {
+	public Generator<Boolean> with(@NotNull String key, @NotNull Object value) throws OperationNotSupportedException {
 		throw new OperationNotSupportedException(
 				"BooleanGenerator does not support parameterization via the with method");
 	}

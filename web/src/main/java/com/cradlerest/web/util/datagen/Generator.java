@@ -1,5 +1,6 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.error.OperationNotSupportedException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,5 +36,6 @@ public interface Generator<T> {
 	 * @param value Parameter value.
 	 * @return A new generator which should respect parameterized values.
 	 */
-	Generator<T> with(@NotNull String key, @NotNull Object value);
+	Generator<T> with(@NotNull String key, @NotNull Object value)
+			throws IllegalArgumentException, OperationNotSupportedException;
 }

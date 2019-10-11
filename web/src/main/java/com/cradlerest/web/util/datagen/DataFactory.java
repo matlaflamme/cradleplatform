@@ -1,10 +1,13 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenRange;
+import com.cradlerest.web.util.datagen.annotations.DataGenStringParams;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.ForeignKeyException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
 import com.cradlerest.web.util.datagen.error.NoDefinedGeneratorException;
+import com.cradlerest.web.util.datagen.error.OperationNotSupportedException;
 import com.cradlerest.web.util.datagen.impl.BooleanGenerator;
 import com.cradlerest.web.util.datagen.impl.EnumGenerator;
 import com.cradlerest.web.util.datagen.impl.IntegerGenerator;
@@ -15,6 +18,8 @@ import com.github.maumay.jflow.utils.Tup;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,8 +139,14 @@ class DataFactory {
 	 * generators.
 	 * @param field The field to generate a value for.
 	 * @return The generated value.
+	 * @throws IllegalArgumentException If an invalid argument was passed to
+	 * 	the generator. This happens when a field is annotated with a
+	 * 	{@code DataGen} annotation which that field's type does not support.
+	 * @throws OperationNotSupportedException If attempting to pass parameters
+	 * 	to a generator which does not support parameter passing.
 	 */
-	private Object generateValueViaGenerator(@NotNull DataField field) {
+	private Object generateValueViaGenerator(@NotNull DataField field)
+			throws IllegalArgumentException, OperationNotSupportedException {
 		final var fieldType = field.getType();
 
 		var generator = generators.get(fieldType);
@@ -149,7 +160,47 @@ class DataFactory {
 			}
 		}
 
+		// curry parameters to the generator
+		for (var annotation : field.getAnnotations().filter(DataFactory::isCurryAnnotation)) {
+			var values = annotationValues(annotation);
+			for (var tup : values) {
+				generator = generator.with(tup._1, tup._2);
+			}
+		}
+
 		return generator.generate();
+	}
+
+	/**
+	 * Returns {@code true} if a given {@code annotation} contains values which
+	 * should be passed to the generator when constructing a value.
+	 * @param annotation The annotation to check.
+	 * @return {@code true} if the values in the annotation should be passed to
+	 * 	a generator.
+	 */
+	private static boolean isCurryAnnotation(@NotNull Annotation annotation) {
+		return annotation instanceof DataGenRange ||
+		       annotation instanceof DataGenStringParams;
+	}
+
+	/**
+	 * Returns a list of name/value pairs for all fields in a given
+	 * {@code annotation}.
+	 * @param annotation The annotation to get values from.
+	 * @return A list of values in this annotation.
+	 */
+	private static Vec<Tup<String, Object>> annotationValues(@NotNull Annotation annotation) {
+		return Vec.copy(Arrays.asList(annotation.annotationType().getDeclaredMethods()))
+				.map(method -> {
+					try {
+						return Tup.of(method.getName(), method.invoke(annotation));
+					} catch (InvocationTargetException | IllegalAccessException e) {
+						// since all values in an annotation should be public
+						// it is a programming error if we ever get here
+						assert false;
+						throw new RuntimeException(e);
+					}
+				});
 	}
 
 	/**

@@ -40,6 +40,18 @@ public class IntegerGenerator implements Generator<Integer> {
 
 	@Override
 	public Generator<Integer> with(@NotNull String key, @NotNull Object value) {
+		// validate the key/value pair
+		switch (key) {
+			case "max": // fallthrough
+			case "min":
+				if (!(value instanceof Integer) || ((Integer) value) < 0) {
+					throw new IllegalArgumentException("illegal value for key '" + key + "': " + value.toString());
+				}
+				break;
+			default:
+				throw new IllegalArgumentException("illegal key: " + key);
+		}
+
 		var paramClone = new HashMap<>(curriedParameters);
 		paramClone.put(key, value);
 		return new IntegerGenerator(noise, paramClone);

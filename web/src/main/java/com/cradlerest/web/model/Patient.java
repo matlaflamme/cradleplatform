@@ -2,7 +2,6 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.DataGenStringParams;
-import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import org.jetbrains.annotations.NotNull;
 

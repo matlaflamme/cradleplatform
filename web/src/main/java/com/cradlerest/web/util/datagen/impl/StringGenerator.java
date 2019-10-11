@@ -71,7 +71,7 @@ public class StringGenerator implements Generator<String> {
 	}
 
 	@Override
-	public Generator<String> with(@NotNull String key, @NotNull Object value) {
+	public Generator<String> with(@NotNull String key, @NotNull Object value) throws IllegalArgumentException {
 		// validate the key/value pair
 		switch (key) {
 			case "length":

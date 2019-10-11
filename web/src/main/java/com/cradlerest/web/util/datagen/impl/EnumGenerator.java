@@ -41,7 +41,7 @@ public class EnumGenerator<T extends Enum> implements Generator<T> {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Generator<T> with(@NotNull String key, @NotNull Object value) {
+	public Generator<T> with(@NotNull String key, @NotNull Object value) throws IllegalArgumentException {
 		if (!"type".equals(key)) {
 			throw new IllegalArgumentException("illegal key: " + key);
 		}
