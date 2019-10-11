@@ -3,7 +3,7 @@
   <TestCase name="Get All Patients">
     <Request method="GET" uri="/api/patient/all"/>
     <Response status="200"/>
-    <!-- 
+    <!--
       TODO: Find a way to ensure the state of the database so that the body of
         responses can be tested or implement more generic assertions instead of
         just JSON equivalence.
@@ -24,7 +24,8 @@
         "medicalHistory":null,
         "drugHistory":null,
         "otherSymptoms":null,
-        "pregnant":true
+        "pregnant":true,
+        "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Response>

@@ -1,10 +1,14 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.service.DateDeserializer;
+import com.cradlerest.web.service.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * Database entity model for a patient.
@@ -47,6 +51,9 @@ public class Patient {
 	@Column(name = "other_symptoms")
 	private String otherSymptoms;
 
+	@Column(name = "last_updated")
+	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+
 	public Patient() {}
 
 	public Patient(
@@ -59,7 +66,8 @@ public class Patient {
 			Integer gestationalAge,
 			String medicalHistory,
 			String drugHistory,
-			String otherSymptoms
+			String otherSymptoms,
+			@NotNull Date lastUpdated
 	) {
 		this.id = id;
 		this.name = name;
@@ -71,6 +79,7 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.otherSymptoms = otherSymptoms;
+		this.lastUpdated = lastUpdated;
 	}
 
 	public String getId() {
@@ -152,4 +161,10 @@ public class Patient {
 	public void setOtherSymptoms(String otherSymptoms) {
 		this.otherSymptoms = otherSymptoms;
 	}
+
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getLastUpdated() { return lastUpdated; }
+
+	@JsonDeserialize(using = DateDeserializer.class)
+	public void setLastUpdated(Date lastUpdated) { this.lastUpdated = lastUpdated; }
 }
