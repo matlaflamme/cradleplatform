@@ -66,7 +66,8 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String otherSymptoms;
 
-	@Column(name = "last_updated")
+	@Column(name = "last_updated", nullable = false)
+	@DataGenDateRange(min = "2018-01-01", max = "2019-12-31")
 	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	public Patient() {
