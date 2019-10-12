@@ -5,6 +5,7 @@ import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
+import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.UniformNoise;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,10 @@ public class GenerateDummyData {
 				: new UniformNoise();
 		try {
 			var entities = linearize(getAllEntityTypes());
+
 			var factory = new DataFactory(noise);
+			factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
+
 			for (var entityClass : entities) {
 				var iter = factory.prepare(entityClass);
 				var amount = entityClass.isAnnotationPresent(DataGenAmount.class)

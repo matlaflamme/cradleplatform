@@ -28,6 +28,9 @@ class DataFactory {
 	private final Map<Class<?>, Generator<?>> generators = new HashMap<>();
 
 	@NotNull
+	private final Map<Class<?>, Generator<?>> customGenerators = new HashMap<>();
+
+	@NotNull
 	private final ForeignKeyRepository foreignKeyRepository = new ForeignKeyRepository();
 
 	DataFactory(@NotNull Noise noise) {
@@ -58,6 +61,17 @@ class DataFactory {
 	 */
 	<T> void registerGenerator(Class<T> type, @NotNull Generator<T> generator) {
 		generators.put(type, generator);
+	}
+
+	/**
+	 * Registers a custom generator with this factory instance. Custom
+	 * generators are generators which a field can request by using the
+	 * {@code @Generator} annotation.
+	 *
+	 * @param generator Instance of the generator to register.
+	 */
+	void registerCustomGenerator(@NotNull Generator<?> generator) {
+		customGenerators.put(generator.getClass(), generator);
 	}
 
 	/**
@@ -151,7 +165,9 @@ class DataFactory {
 			throws IllegalArgumentException, OperationNotSupportedException {
 		final var fieldType = field.getType();
 
-		var generator = generators.get(fieldType);
+		var generator = field.requiresCustomGenerator()
+				? customGenerators.get(field.requestedGeneratorType())
+				: generators.get(fieldType);
 		if (generator == null) {
 			if (fieldType.isEnum()) {
 				generator = new EnumGenerator<Enum<?>>(noise).with("type", fieldType);

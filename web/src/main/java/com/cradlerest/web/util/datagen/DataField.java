@@ -1,6 +1,7 @@
 package com.cradlerest.web.util.datagen;
 
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.annotations.Generator;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,5 +67,18 @@ class DataField {
 
 	boolean isNullable() {
 		return column.nullable();
+	}
+
+	boolean requiresCustomGenerator() {
+		return annotations.any(a -> a instanceof Generator);
+	}
+
+	Class<?> requestedGeneratorType() {
+		if (!requiresCustomGenerator()) {
+			return null;
+		}
+
+		var annotation = annotations.filter(a -> a instanceof Generator).head();
+		return ((Generator) annotation).value();
 	}
 }

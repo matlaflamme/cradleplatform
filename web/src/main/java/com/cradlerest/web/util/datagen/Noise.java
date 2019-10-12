@@ -41,4 +41,41 @@ public interface Noise {
 		var index = (int) generate(0, list.size());
 		return list.get(index);
 	}
+
+	/**
+	 * Returns a random element from a non-empty array.
+	 * @param array The array to pick from.
+	 * @param <T> List element type.
+	 * @return An element from the list.
+	 */
+	default <T> T pick(@NotNull T[] array) {
+		assert array.length != 0;
+
+		var index = (int) generate(0, array.length);
+		return array[index];
+	}
+
+	/**
+	 * Returns a random element from a non-empty string.
+	 * @param string The string to pick from.
+	 * @return An element from the list.
+	 */
+	default char pick(@NotNull String string) {
+		assert !string.isEmpty();
+
+		var index = (int) generate(0, string.length());
+		return string.charAt(index);
+	}
+
+	/**
+	 * Generates a random boolean with a given chance of being {@code true}.
+	 * @param chance The chance that the boolean will be be {@code true} as
+	 *               a percent ranging from 0 to 1.
+	 * @return A random boolean.
+	 */
+	default boolean	generateBool(double chance) {
+		assert chance >= 0 && chance <= 1;
+
+		return generate() < chance;
+	}
 }
