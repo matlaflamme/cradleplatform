@@ -4,8 +4,14 @@ import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import org.jetbrains.annotations.NotNull;
+import com.cradlerest.web.service.DateDeserializer;
+import com.cradlerest.web.service.DateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
+import java.util.Date;
+
 
 /**
  * Database entity model for a patient.
@@ -60,7 +66,11 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String otherSymptoms;
 
-	public Patient() {}
+	@Column(name = "last_updated")
+	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+
+	public Patient() {
+	}
 
 	public Patient(
 			String id,
@@ -72,7 +82,8 @@ public class Patient {
 			Integer gestationalAge,
 			String medicalHistory,
 			String drugHistory,
-			String otherSymptoms
+			String otherSymptoms,
+			@NotNull Date lastUpdated
 	) {
 		this.id = id;
 		this.name = name;
@@ -84,6 +95,7 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.otherSymptoms = otherSymptoms;
+		this.lastUpdated = lastUpdated;
 	}
 
 	public String getId() {
@@ -164,5 +176,15 @@ public class Patient {
 
 	public void setOtherSymptoms(String otherSymptoms) {
 		this.otherSymptoms = otherSymptoms;
+	}
+
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	@JsonDeserialize(using = DateDeserializer.class)
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 }
