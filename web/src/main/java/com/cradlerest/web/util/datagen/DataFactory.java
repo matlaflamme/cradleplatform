@@ -19,6 +19,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class responsible for constructing random {@code Data} objects from given
+ * {@code @Entity types}.
+ *
+ * Instead of producing the types directly, the factory constructs a closure
+ * which is used as the range for an infinite iterator which is passed back in
+ * place of a concrete list of {@code Data} objects. This gives the caller more
+ * freedom of how it wants to work with the data. For example, the caller could
+ * directly persist the data to disk, using a lazy iterator we save memory by
+ * not having to store a huge chunk for {@code Data} objects in memory.
+ */
 class DataFactory {
 
 	@NotNull
