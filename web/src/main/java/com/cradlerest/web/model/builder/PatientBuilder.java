@@ -5,7 +5,7 @@ import com.cradlerest.web.model.Sex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 
 /**
@@ -79,6 +79,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder lastUpdated(Date lastUpdated) {
+		patient.setLastUpdated(lastUpdated);
+		return this;
+	}
+
 	public PatientBuilder pregnant(boolean isPregnant) {
 		patient.setPregnant(isPregnant);
 		return this;
@@ -128,6 +133,7 @@ public class PatientBuilder {
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.isPregnant(), "isPregnant");
+		assertNotNull(patient.getLastUpdated(), "lastUpdated" );
 		if (patient.isPregnant() && patient.getGestationalAge() == null) {
 			throw new InstantiationError("gestationalAge may not be null when isPregnant is true");
 		}

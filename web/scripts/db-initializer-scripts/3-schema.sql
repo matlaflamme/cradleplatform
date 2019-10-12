@@ -23,7 +23,8 @@ CREATE TABLE patient (
     gestational_age INT,
     medical_history VARCHAR(255) DEFAULT '',
     drug_history VARCHAR(255) DEFAULT '',
-    other_symptoms VARCHAR(255)
+    other_symptoms VARCHAR(255),
+    last_updated DATETIME NOT NULL
 );
 
 
@@ -33,7 +34,7 @@ CREATE TABLE reading (
     systolic INT NOT NULL,
     diastolic INT NOT NULL,
     heart_rate INT NOT NULL,
-    colour INT NOT NULL,                -- enumerated {green, yellow, red}
+    colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
