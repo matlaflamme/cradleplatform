@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 /**
  * Ensures twilio requests are twilio requests
+ * Currenlt applied to /api/twilio/*
+ * @see WebSecurityConfig
  *
  * THIS CLASS WAS COPY AND PASTED FROM:
  * https://www.twilio.com/docs/usage/tutorials/how-to-secure-your-servlet-app-by-validating-incoming-twilio-requests
