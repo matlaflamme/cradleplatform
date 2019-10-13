@@ -6,15 +6,14 @@ import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.DuplicateItemException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
+import com.cradlerest.web.util.datagen.impl.ForeignKeyRepositoryImpl;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.UniformNoise;
-import com.github.maumay.jflow.iterable.RichIterable;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -38,7 +37,7 @@ public class GenerateDummyData {
 		try {
 			var entities = linearize(getAllEntityTypes());
 
-			var factory = new DataFactory(noise);
+			var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
 			factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
 
 			for (var entityClass : entities) {

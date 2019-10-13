@@ -42,10 +42,11 @@ class DataFactory {
 	private final Map<Class<?>, Generator<?>> customGenerators = new HashMap<>();
 
 	@NotNull
-	private final ForeignKeyRepository foreignKeyRepository = new ForeignKeyRepository();
+	private final ForeignKeyRepository foreignKeyRepository;
 
-	DataFactory(@NotNull Noise noise) {
+	DataFactory(@NotNull Noise noise, @NotNull ForeignKeyRepository foreignKeyRepository) {
 		this.noise = noise;
+		this.foreignKeyRepository = foreignKeyRepository;
 
 		// register default generators
 		registerGenerator(Integer.class, new IntegerGenerator(noise));
