@@ -172,9 +172,14 @@ class DataFactory {
 	 * 	{@code DataGen} annotation which that field's type does not support.
 	 * @throws OperationNotSupportedException If attempting to pass parameters
 	 * 	to a generator which does not support parameter passing.
+	 * @throws NoDefinedGeneratorException If unable to determine the generator
+	 * 	to use to construct a specific field value.
 	 */
 	private Object generateValueViaGenerator(@NotNull DataField field)
-			throws IllegalArgumentException, OperationNotSupportedException {
+			throws IllegalArgumentException,
+			       OperationNotSupportedException,
+			       NoDefinedGeneratorException
+	{
 		final var fieldType = field.getType();
 
 		var generator = field.requiresCustomGenerator()

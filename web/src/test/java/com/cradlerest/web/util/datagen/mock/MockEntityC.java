@@ -1,8 +1,6 @@
 package com.cradlerest.web.util.datagen.mock;
 
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
-import com.cradlerest.web.util.datagen.annotations.Generator;
-import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,8 +18,4 @@ public class MockEntityC {
 	@Column(name = "aid", nullable = false)
 	@ForeignKey(MockEntityA.class)
 	private Integer aid;
-
-	@Column(name = "text")
-	@Generator(GibberishSentenceGenerator.class)
-	private String text;
 }

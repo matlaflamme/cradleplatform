@@ -3,7 +3,6 @@ package com.cradlerest.web.util.datagen.mock;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "b")

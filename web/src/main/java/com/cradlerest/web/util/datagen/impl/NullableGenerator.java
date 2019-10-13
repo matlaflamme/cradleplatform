@@ -45,7 +45,7 @@ public class NullableGenerator<T> implements Generator<T> {
 	@Override
 	@Nullable
 	public T generate() {
-		if (noise.generate() < (Double) curriedParameters.getOrDefault(NULL_CHANCE_KEY, DEFAULT_NULL_CHANCE)) {
+		if (noise.generateBool((Double) curriedParameters.getOrDefault(NULL_CHANCE_KEY, DEFAULT_NULL_CHANCE))) {
 			return null;
 		} else {
 			return baseGenerator.generate();
