@@ -4,14 +4,18 @@ import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
+import com.cradlerest.web.util.datagen.error.DuplicateItemException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.UniformNoise;
+import com.github.maumay.jflow.iterable.RichIterable;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Application entry point for the dummy data generation tool.
@@ -86,7 +90,7 @@ public class GenerateDummyData {
 	 * @throws MissingAnnotationException If the a field of {@code type} references
 	 * 	a non-entity class via a foreign key.
 	 */
-	private static Vec<? extends Class<?>> referencesOf(@NotNull Class<?> type) throws MissingAnnotationException {
+	static Vec<? extends Class<?>> referencesOf(@NotNull Class<?> type) throws MissingAnnotationException {
 		var references = Vec.copy(Arrays.asList(type.getDeclaredFields()))
 				.filter(field -> field.isAnnotationPresent(ForeignKey.class))
 				.map(field -> field.getAnnotation(ForeignKey.class))
@@ -120,8 +124,14 @@ public class GenerateDummyData {
 	 * @throws DeadlockException If a circular reference is found.
 	 * @throws MissingAnnotationException Propagates from {@code referencesOf}.
 	 */
-	private static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types)
-			throws DeadlockException, MissingAnnotationException {
+	static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types)
+			throws DeadlockException, MissingAnnotationException, DuplicateItemException {
+
+		if (types.isEmpty()) {
+			return types;
+		}
+		assertNoDuplicates(types);
+
 		var partitioned = types.partition(type -> referencesOf(type).isEmpty());
 		var ordered = partitioned._1;
 		var unordered = partitioned._2;
@@ -145,5 +155,22 @@ public class GenerateDummyData {
 		}
 
 		return ordered;
+	}
+
+	/**
+	 * Throws a {@code DuplicateItemException} in the event that a given
+	 * iterable collection.
+	 * @param iter The iterable collection to check.
+	 * @param <T> The item type. Duplicates are determined via calls to this
+	 *           type's {@code equals} method.
+	 * @throws DuplicateItemException If a duplicate item is found.
+	 */
+	private static <T> void assertNoDuplicates(@NotNull Iterable<T> iter) throws DuplicateItemException {
+		final var items = new HashSet<T>();
+		for (var item : iter) {
+			if (!items.add(item)) {
+				throw new DuplicateItemException(item.toString());
+			}
+		}
 	}
 }
