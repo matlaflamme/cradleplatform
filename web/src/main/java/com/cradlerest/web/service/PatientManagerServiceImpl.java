@@ -127,11 +127,9 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @throws BadRequestException If an error occurred.
 	 */
 	@Override
-	public Patient savePatient(@Nullable Patient patient) throws BadRequestException, AlreadyExistsException {
+	public Patient savePatient(@Nullable Patient patient) throws BadRequestException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
-		} else if (patientRepository.findById(patient.getId()).isPresent()) {
-			throw new AlreadyExistsException(patient.getName());
 		}
 		validatePatient(patient);
 		return patientRepository.save(patient);
