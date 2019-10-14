@@ -52,7 +52,6 @@ VALUES ('001',          -- id
         16,             -- gestational age: weeks
         NULL,           -- medical history
         NULL,           -- drug history
-        NULL,           -- other symptoms
         '2019-09-20 20:12:32'  -- last updated
         );
 
@@ -66,7 +65,6 @@ VALUES ('002',          -- id
         NULL,           -- gestational age: weeks
         'hospitalized for X, taking medication for Y', -- medical history
         'there is some history with some drugs', -- drug history
-        NULL,           -- other symptoms
         '2019-09-20 20:12:32');  -- last updated
 
 

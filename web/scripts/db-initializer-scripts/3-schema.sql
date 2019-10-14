@@ -23,7 +23,6 @@ CREATE TABLE patient (
     gestational_age INT,
     medical_history VARCHAR(255) DEFAULT '',
     drug_history VARCHAR(255) DEFAULT '',
-    other_symptoms VARCHAR(255),
     last_updated DATETIME NOT NULL
 );
 
@@ -36,5 +35,19 @@ CREATE TABLE reading (
     heart_rate INT NOT NULL,
     colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
+    other_symptoms TEXT,
     FOREIGN KEY (pid) REFERENCES patient (id)
+);
+
+CREATE TABLE symptom (
+     id INT PRIMARY KEY,
+     text VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE symptom_reading_relation (
+    sid INT NOT NULL,
+    rid INT NOT NULL,
+    PRIMARY KEY (sid, rid),
+    FOREIGN KEY (sid) REFERENCES symptom (id),
+    FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
 );
