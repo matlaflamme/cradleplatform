@@ -8,6 +8,7 @@ import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.messaging.Message;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,9 +32,9 @@ public class TwilioWebhook {
 	 * @param response
 	 * @throws IOException
 	 */
-	@PostMapping("/uploadsms")
-	public String respondToSmS(@RequestParam Map<String, String> request, HttpServletResponse response) throws IOException {
-		System.out.println("received: " + request.toString());
-		return "You: " + request.get("Body");
+	@PostMapping(path = "/uploadsms", consumes = "application/x-www-form-urlencoded")
+	public String respondToSmS(WebRequest request, HttpServletResponse response) throws IOException {
+		//System.out.println("received: " + request.toString());
+		return "You: " + request.getParameter("Body");
 	}
 }

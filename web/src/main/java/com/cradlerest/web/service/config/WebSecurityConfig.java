@@ -111,7 +111,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //		registration.setFilter(new TwilioRequestValidatorFilter());
 //		registration.addUrlPatterns("/api/twilio/*");
 //		registration.setName("twilioFilter");
-//		registration.setOrder(1);
 //		return registration;
 //	}
 

@@ -1,6 +1,7 @@
 package com.cradlerest.web.service.config;
 
 import com.twilio.security.RequestValidator;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -43,10 +44,12 @@ public class TwilioRequestValidatorFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		boolean isValidRequest = false;
+		boolean isValidRequest = true;
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-
+			System.out.print(IOUtils.toString(request.getReader()));
+			System.out.println("Validating Twilio Requests");
+			LOGGER.info("Validating Twilio Request");
 			// Concatenates the request URL with the query string
 			String pathAndQueryUrl = getRequestUrlAndQueryString(httpRequest);
 			// Extracts only the POST parameters and converts the parameters Map type
@@ -60,8 +63,10 @@ public class TwilioRequestValidatorFilter implements Filter {
 		}
 
 		if(isValidRequest) {
+			System.out.println("isValidRequest = true");
 			chain.doFilter(request, response);
 		} else {
+			System.out.println("isValidRequest = false");
 			((HttpServletResponse)response).sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
 	}
@@ -97,6 +102,7 @@ public class TwilioRequestValidatorFilter implements Filter {
 		if(queryString != null && queryString != "") {
 			return requestUrl + "?" + queryString;
 		}
+		System.out.println("request url and query string: " + requestUrl);
 		return requestUrl;
 	}
 }
