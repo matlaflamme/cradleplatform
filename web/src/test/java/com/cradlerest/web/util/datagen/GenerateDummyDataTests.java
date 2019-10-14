@@ -1,6 +1,7 @@
 package com.cradlerest.web.util.datagen;
 
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.DuplicateItemException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
@@ -10,6 +11,7 @@ import org.junit.Test;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +33,11 @@ public class GenerateDummyDataTests {
 	public void referencesOf_WhenClassReferencesNonEntityClass_ThrowException() {
 		@Entity
 		class MockEntity {
+
+			@Id
+			@Omit
+			private Integer id;
+
 			@Column(name = "x")
 			@ForeignKey(Object.class)
 			private Integer x;
@@ -44,6 +51,11 @@ public class GenerateDummyDataTests {
 	public void referencesOf_WhenClassReferencesItself_ReturnListOfReferences() {
 		@Entity
 		class MockEntity {
+
+			@Id
+			@Omit
+			private Integer id;
+
 			@Column(name = "x")
 			@ForeignKey(MockEntity.class)
 			private Integer x;
@@ -85,6 +97,11 @@ public class GenerateDummyDataTests {
 	public void linearize_WhenAClassReferencesItself_ThrowDeadlockException() {
 		@Entity
 		class MockEntity {
+
+			@Id
+			@Omit
+			private Integer id;
+
 			@Column(name = "x")
 			@ForeignKey(MockEntity.class)
 			private Integer x;
