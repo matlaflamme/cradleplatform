@@ -116,6 +116,7 @@ is valid).
 | `medicalHistory` | `string` | `no` | Patient's medical history |
 | `drugHistory` | `string` | `no` | Patient's drug history |
 | `otherSympotoms` | `string` | `no` | Any other symptoms the patient has |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
 ### `POST /api/reading`
 

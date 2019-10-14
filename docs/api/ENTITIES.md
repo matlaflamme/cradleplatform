@@ -56,6 +56,7 @@ entity, and, as such, must be separate entities.
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `otherSymptoms` | `string` | `true` | Text describing any other symptoms that the patient may have |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
 ### Example
 
@@ -69,7 +70,8 @@ entity, and, as such, must be separate entities.
     "sex": 1,
     "medicalHistory": null,
     "drugHistory": null,
-    "otherSymptoms": null
+    "otherSymptoms": null,
+    "lastUpdated": "2019-09-20 20:12:32"
 }
 ```
 
@@ -98,6 +100,7 @@ the most recent reading will be the first item in the array.
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `otherSymptoms` | `string` | `true` | Text describing any other symptoms that the patient may have |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `readings` | `array` | `false` | An array of [Reading](#reading) entities
 | `symptoms` | `array` | `false` | An array of [Symptom](#symptom) entities (not yet implemented)
 
@@ -114,6 +117,7 @@ the most recent reading will be the first item in the array.
     "medicalHistory": null,
     "drugHistory": null,
     "otherSymptoms": null,
+    "lastUpdated": "2019-09-20 20:12:32",
     "readings": [
         {
             "id": 3,
