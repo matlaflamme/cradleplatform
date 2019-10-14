@@ -4,6 +4,7 @@ import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.util.DateParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
@@ -68,6 +69,37 @@ public class ReadingBuilder {
 		return this;
 	}
 
+	public ReadingBuilder gestationalAgeMonths(@Nullable Integer months) {
+		if (months == null) {
+			reading.setGestationalAge(null);
+			return this;
+		}
+		final int DAYS_PER_MONTH = 30;
+		reading.setGestationalAge(months * DAYS_PER_MONTH);
+		return this;
+	}
+
+	public ReadingBuilder gestationalAgeWeeks(@Nullable Integer weeks) {
+		if (weeks == null) {
+			reading.setGestationalAge(null);
+			return this;
+		}
+		final int DAYS_PER_WEEK = 7;
+		reading.setGestationalAge(weeks * DAYS_PER_WEEK);
+		return this;
+	}
+
+	public ReadingBuilder gestationalAgeDays(@Nullable Integer days) {
+		reading.setGestationalAge(days);
+		return this;
+	}
+
+
+	public ReadingBuilder pregnant(boolean isPregnant) {
+		reading.setPregnant(isPregnant);
+		return this;
+	}
+
 	public ReadingBuilder timestamp(@NotNull Date timestamp) {
 		reading.setTimestamp(timestamp);
 		return this;
@@ -90,6 +122,7 @@ public class ReadingBuilder {
 		assertNotNull(reading.getHeartRate(), "heartRate");
 		assertNotNull(reading.getSystolic(), "systolic");
 		assertNotNull(reading.getDiastolic(), "diastolic");
+		assertNotNull(reading.isPregnant(), "isPregnant");
 		assertNotNull(reading.getTimestamp(), "timestamp");
 	}
 }

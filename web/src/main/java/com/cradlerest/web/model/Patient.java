@@ -44,13 +44,6 @@ public class Patient {
 	@Enumerated(EnumType.ORDINAL)
 	private Sex sex;
 
-	@Column(name = "is_pregnant", nullable = false)
-	private Boolean isPregnant;
-
-	@Column(name = "gestational_age")
-	@DataGenRange(min = 0, max = 270)
-	private Integer gestationalAge;
-
 	@Column(name = "medical_history")
 	@Generator(GibberishSentenceGenerator.class)
 	@DataGenNullChance(0.5)
@@ -79,8 +72,6 @@ public class Patient {
 			String name,
 			Integer birthYear,
 			Sex sex,
-			boolean isPregnant,
-			Integer gestationalAge,
 			String medicalHistory,
 			String drugHistory,
 			String otherSymptoms,
@@ -91,8 +82,6 @@ public class Patient {
 		this.villageNumber = villageNumber;
 		this.birthYear = birthYear;
 		this.sex = sex;
-		this.isPregnant = isPregnant;
-		this.gestationalAge = gestationalAge;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.otherSymptoms = otherSymptoms;
@@ -137,22 +126,6 @@ public class Patient {
 
 	public void setSex(Sex sex) {
 		this.sex = sex;
-	}
-
-	public Boolean isPregnant() {
-		return isPregnant;
-	}
-
-	public void setPregnant(boolean pregnant) {
-		isPregnant = pregnant;
-	}
-
-	public Integer getGestationalAge() {
-		return gestationalAge;
-	}
-
-	public void setGestationalAge(Integer gestationalAge) {
-		this.gestationalAge = gestationalAge;
 	}
 
 	public String getMedicalHistory() {

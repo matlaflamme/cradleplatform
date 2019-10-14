@@ -20,11 +20,9 @@
         "villageNumber":"1",
         "birthYear":1995,
         "sex":1,
-        "gestationalAge":16,
         "medicalHistory":null,
         "drugHistory":null,
         "otherSymptoms":null,
-        "pregnant":true,
         "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
@@ -53,7 +51,7 @@
         "villageNumber":"32",
         "birthYear":1990,
         "sex":0,
-	"lastUpdated":"2019-09-20 20:12:32"
+        "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
@@ -69,110 +67,26 @@
         "villageNumber":"0",
         "birthYear":2000,
         "sex":1,
-        "pregnant":true,
-        "gestationalAge":16,
-	"lastUpdated":"2019-09-20 20:12:32"
+        "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
     <Response status="200"/>
   </TestCase>
 
-  <TestCase name="Malformed Add Female Patient: Missing Pregnant Field">
+  <TestCase name="Add Unkown Gender Patient">
     <Request method="POST" uri="/api/patient">
       <![CDATA[
       {
-        "id":"1001",
-        "name":"Not Important To This Test",
-        "villageNumber":"0",
-        "birthYear":2000,
-        "sex":1,
-	"lastUpdated":"2019-09-20 20:12:32"
-      }
-      ]]>
-    </Request>
-    <Response status="400">
-      <![CDATA[
-      {
-        "code":400,
-        "error":"Bad Request",
-        "message":"missing field: 'pregnant'"
-      }
-      ]]>
-    </Response>
-  </TestCase>
-
-  <TestCase name="Malformed Add Female Patient: Missing Gestational Age Field">
-    <Request method="POST" uri="/api/patient">
-      <![CDATA[
-      {
-        "id":"1002",
-        "name":"Not Important To This Test",
-        "villageNumber":"0",
-        "birthYear":2000,
-        "sex":1,
-        "pregnant":true,
-	"lastUpdated":"2019-09-20 20:12:32"
-      }
-      ]]>
-    </Request>
-    <Response status="400">
-      <![CDATA[
-      {
-        "code":400,
-        "error":"Bad Request",
-        "message":"missing field: 'gestationalAge'"
-      }
-      ]]>
-    </Response>
-  </TestCase>
-
-  <TestCase name="Malformed Add Patient With Unkown Sex: Missing Pregnant Field">
-    <Request method="POST" uri="/api/patient">
-      <![CDATA[
-      {
-        "id":"1003",
+        "id":"1000",
         "name":"Not Important To This Test",
         "villageNumber":"0",
         "birthYear":2000,
         "sex":2,
-	"lastUpdated":"2019-09-20 20:12:32"
+        "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
     </Request>
-    <Response status="400">
-      <![CDATA[
-      {
-        "code":400,
-        "error":"Bad Request",
-        "message":"missing field: 'pregnant'"
-      }
-      ]]>
-    </Response>
-  </TestCase>
-
-  <TestCase name="Malformed Add Patient With Unkown Sex: Missing Gestational Age Field">
-    <Request method="POST" uri="/api/patient">
-      <![CDATA[
-      {
-        "id":"1004",
-        "name":"Not Important To This Test",
-        "villageNumber":"0",
-        "birthYear":2000,
-        "sex":2,
-        "pregnant":true,
-	"lastUpdated":"2019-09-20 20:12:32"
-      }
-      ]]>
-    </Request>
-    <Response status="400">
-      <![CDATA[
-      {
-        "code":400,
-        "error":"Bad Request",
-        "message":"missing field: 'gestationalAge'"
-      }
-      ]]>
-    </Response>
+    <Response status="200"/>
   </TestCase>
 </TestSuite>
