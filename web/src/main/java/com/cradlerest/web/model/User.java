@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.Omit;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user")
+@Omit
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
