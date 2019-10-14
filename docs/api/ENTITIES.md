@@ -67,11 +67,9 @@ entity, and, as such, must be separate entities.
     "name": "AB",
     "age": 1990,
     "sex": 1,
-    "gestationalAge": 16,
     "medicalHistory": null,
     "drugHistory": null,
-    "otherSymptoms": null,
-    "pregnant": true
+    "otherSymptoms": null
 }
 ```
 
