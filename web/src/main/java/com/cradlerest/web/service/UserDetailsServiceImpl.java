@@ -22,7 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRepository userRepository;
 
     // Returns list of all users found in database with 'name'
-    // TODO: Restrict usernames to be unique
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByUsername(username);

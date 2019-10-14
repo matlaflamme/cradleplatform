@@ -1,10 +1,17 @@
 package com.cradlerest.web.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.cradlerest.web.util.datagen.annotations.*;
+import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
+import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import org.jetbrains.annotations.NotNull;
+import com.cradlerest.web.service.DateDeserializer;
+import com.cradlerest.web.service.DateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
+
 
 /**
  * Database entity model for a patient.
@@ -13,38 +20,58 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "patient")
+@DataGenAmount(50)
 public class Patient {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", nullable = false, unique = true)
+	@DataGenStringParams(length = 14, charset = StringGenerator.DECIMAL_CHARSET)
 	private String id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
+	@DataGenStringParams(length = 2, charset = StringGenerator.UPPER_ALPHA_CHARSET)
 	private String name;
 
-	@Column(name = "village")
+	@Column(name = "village", nullable = false)
+	@DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
 	private String villageNumber;
 
-	@Column(name = "birth_year")
+	@Column(name = "birth_year", nullable = false)
+	@DataGenRange(min = 1950, max = 2010)
 	private Integer birthYear;
 
-	@Column(name = "sex")
+	@Column(name = "sex", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private Sex sex;
 
-	@Column(name = "is_pregnant")
+	@Column(name = "is_pregnant", nullable = false)
 	private Boolean isPregnant;
 
 	@Column(name = "gestational_age")
+	@DataGenRange(min = 0, max = 270)
 	private Integer gestationalAge;
 
 	@Column(name = "medical_history")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.5)
 	private String medicalHistory;
 
 	@Column(name = "drug_history")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.5)
 	private String drugHistory;
 
-	public Patient() {}
+	@Column(name = "other_symptoms")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.7)
+	private String otherSymptoms;
+
+	@Column(name = "last_updated", nullable = false)
+	@DataGenDateRange(min = "2018-01-01", max = "2019-12-31")
+	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+
+	public Patient() {
+	}
 
 	public Patient(
 			String id,
@@ -55,7 +82,9 @@ public class Patient {
 			boolean isPregnant,
 			Integer gestationalAge,
 			String medicalHistory,
-			String drugHistory
+			String drugHistory,
+			String otherSymptoms,
+			@NotNull Date lastUpdated
 	) {
 		this.id = id;
 		this.name = name;
@@ -66,6 +95,8 @@ public class Patient {
 		this.gestationalAge = gestationalAge;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
+		this.otherSymptoms = otherSymptoms;
+		this.lastUpdated = lastUpdated;
 	}
 
 	public String getId() {
@@ -138,5 +169,23 @@ public class Patient {
 
 	public void setDrugHistory(String drugHistory) {
 		this.drugHistory = drugHistory;
+	}
+
+	public String getOtherSymptoms() {
+		return otherSymptoms;
+	}
+
+	public void setOtherSymptoms(String otherSymptoms) {
+		this.otherSymptoms = otherSymptoms;
+	}
+
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	@JsonDeserialize(using = DateDeserializer.class)
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 }
