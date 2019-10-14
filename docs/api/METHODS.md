@@ -113,8 +113,6 @@ is valid).
 | `villageNumber` | `string` | `yes` | Village number for the patient |
 | `dateOfBirth` | `string` | `yes` | Patient's birth date, in format "yyyy-MM-dd" |
 | `sex` | `number` | `yes` | Patient's sex, enumerated: {male=0, female=1, unkown=2} |
-| `pregnant` | `boolean` | If `sex` != Male (`0`) | Is the patient pregnant? |
-| `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient |
 | `medicalHistory` | `string` | `no` | Patient's medical history |
 | `drugHistory` | `string` | `no` | Patient's drug history |
 | `otherSympotoms` | `string` | `no` | Any other symptoms the patient has |
@@ -141,5 +139,7 @@ can be added.
 | `systolic` | `number` | `yes` | Systolic reading value |
 | `diastolic` | `number` | `yes` | Diastolic reading value |
 | `heartRate` | `number` | `yes` | Heart rate reading value |
-| `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow=1, red=2} |
+| `pregnant` | `boolean` | If `sex` != Male (`0`) | Is the patient pregnant? |
+| `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient in days|
+| `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow_down=1, yellow_up=2,red_down=3, red_up=4} |
 | `timestamp` | `string` | `yes` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |
