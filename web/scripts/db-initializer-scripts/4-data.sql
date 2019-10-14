@@ -31,7 +31,7 @@ INSERT INTO patient
 VALUES ('001',          -- id
         'Harumi Youko', -- name
         '1',            -- village number
-        'Zone1',            -- village number
+        'Zone1',        -- zone number
         1995,           -- date of birth
         1,              -- sex
         TRUE,           -- is pregnant?
@@ -45,8 +45,8 @@ VALUES ('001',          -- id
 INSERT INTO patient
 VALUES ('002',          -- id
         'Lloyd Xavier Mann', -- name
-        '3',              -- village number
-        'Zone3',            -- village number
+        '3',            -- village number
+        'Zone3',        -- zone number
         1984,           -- date of birth
         0,              -- sex
         FALSE,          -- is pregnant?
