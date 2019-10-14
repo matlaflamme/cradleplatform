@@ -1,4 +1,4 @@
-package com.cradlerest.web.model.builder;
+package com.cradlerest.web.model;
 
 import org.jetbrains.annotations.Nullable;
 

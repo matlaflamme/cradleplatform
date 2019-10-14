@@ -1,6 +1,6 @@
 package com.cradlerest.web.service.repository;
 
-import com.cradlerest.web.model.builder.SymptomReadingRelation;
+import com.cradlerest.web.model.SymptomReadingRelation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
