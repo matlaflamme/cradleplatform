@@ -80,5 +80,4 @@ public interface PatientManagerService {
 	 */
 	Reading saveReading(@Nullable Reading reading) throws Exception;
 
-	Reading constructReadingFromEncrypted(MultipartFile file) throws Exception;
 }

@@ -1,7 +1,7 @@
 package com.cradlerest.web.service.storage;
 
 /*
- * Comments here pls
+ * Generic exception for storage service
  */
 public class StorageException extends RuntimeException {
 

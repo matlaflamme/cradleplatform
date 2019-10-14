@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /*
- * Comments here pls
+ * Generic storage service interface for storing data to files.
  */
 public interface StorageService {
 

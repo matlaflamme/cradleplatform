@@ -1,7 +1,7 @@
 package com.cradlerest.web.service.storage;
 
 /*
- * Comments here pls
+ * File not found exceptions for storage service
  */
 public class StorageFileNotFoundException extends StorageException {
 

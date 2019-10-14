@@ -18,7 +18,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 /*
- * Saves files to disk
+ * Saves data to files on disk that can later be downloaded by user
  */
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -44,8 +44,6 @@ public class FileSystemStorageService implements StorageService {
 						"Cannot store file with relative path outside current directory "
 								+ filename);
 			}
-
-//			HybridFileDecrypter.hybridDecryptFile(file);
 
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, this.rootLocation.resolve(filename),

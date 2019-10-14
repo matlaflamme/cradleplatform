@@ -3,7 +3,7 @@ package com.cradlerest.web.service.storage;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /*
- * Comments here pls
+ * Properties for storage service
  */
 @ConfigurationProperties("storage")
 public class StorageProperties {
@@ -11,7 +11,7 @@ public class StorageProperties {
 	/**
 	 * Folder location for storing files
 	 */
-	private String location = "upload-dir";
+	private String location = "file-dir";
 
 	public String getLocation() {
 		return location;

@@ -64,11 +64,6 @@ public class PatientController {
 		return patientManagerService.savePatient(patient);
 	}
 
-	@PostMapping("/encrypted_reading")
-	public Reading createReadingFromEncrypted(@RequestParam("userDataFile") MultipartFile file) throws Exception {
-		return patientManagerService.constructReadingFromEncrypted(file);
-	}
-
 	@PostMapping("/reading")
 	public Reading createReading(@RequestBody Reading reading) throws Exception {
 		return patientManagerService.saveReading(reading);
