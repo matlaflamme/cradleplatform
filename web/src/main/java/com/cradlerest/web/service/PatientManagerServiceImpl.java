@@ -130,8 +130,16 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	public Patient savePatient(@Nullable Patient patient) throws BadRequestException, AlreadyExistsException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
-		} else if (patientRepository.findById(patient.getId()).isPresent()) {
-			throw new AlreadyExistsException(patient.getName());
+		}
+
+		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
+
+		if (checkPatient.isPresent()) {
+			Patient existingPatient = checkPatient.get();
+			// If current patient is more recently updated than request patient, don't update current patient
+			if (existingPatient.getLastUpdated().compareTo(patient.getLastUpdated()) > 0) {
+				return existingPatient;
+			}
 		}
 		validatePatient(patient);
 		return patientRepository.save(patient);
@@ -237,6 +245,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
+		assertNotNull(patient.getLastUpdated(), "lastUpdated");
 		if (patient.getSex() != Sex.MALE) {
 			assertNotNull(patient.isPregnant(), "pregnant");
 		} else if (patient.isPregnant() == null) {

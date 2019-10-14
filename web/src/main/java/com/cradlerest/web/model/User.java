@@ -1,8 +1,7 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.constraints.user.ValidRole;
-import org.springframework.security.core.GrantedAuthority;
-
+import com.cradlerest.web.util.datagen.annotations.Omit;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -15,6 +14,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "user")
+@Omit
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
