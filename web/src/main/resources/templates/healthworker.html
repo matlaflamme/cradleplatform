@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Home</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <!-- Bootstrap 4 links -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -48,22 +55,49 @@
     </div>
 </nav>
 
-
+<!--Keep in case of issues with new solution -->
 <!--Grid of recent patient readings -->
-<div class="container-fluid">
-    <div id="newReferralTable">
-        <patient-table></patient-table>
-    </div>
-</div>
+<!--<div class="container-fluid">-->
+<!--    <div id="newReferralTable">-->
+<!--        <patient-table></patient-table>-->
+<!--    </div>-->
+<!--</div>-->
 
+<div id="app">
+    <v-app id="inspire">
+        <v-container>
+        <v-data-table
+                :headers="headers"
+                :items="rows"
+                :items-per-page="5"
+                class="elevation-1">
+
+                <template slot="rows" slot-scope="props">
+                    <td>{{props.row.id}}</td>
+                    <td>{{props.row.name}}</td>
+<!--                    <td>{{row.referralDate}}</td>                -->
+<!--                    <td>{{row.bloodPressure}}</td>-->
+<!--                    <td>{{row.heartRate}}</td>-->
+                </template>
+            <template v-slot:item.view="{ item }">
+                <button v-on:click="viewPatientData(item.id)" class="btn btn-outline-info">View Patient Data</button>
+            </template>
+            <template v-slot:item.add="{ item }">
+                <button v-on:click="addNewReading(item.id)" class="btn btn-outline-secondary">Add New Reading</button>
+            </template>
+        </v-data-table>
+        </v-container>
+    </v-app>
+</div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 <script src="/js/healthworker.js" type="module"></script>
-<!-- Load Vue followed by BootstrapVue -->
-<script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
-<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js">alert("inline script")</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
 </body>
 </html>
