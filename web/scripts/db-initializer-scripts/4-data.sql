@@ -31,7 +31,7 @@ INSERT INTO patient
 VALUES ('001',          -- id
         'Harumi Youko', -- name
         '1',            -- village number
-        '1',        -- zone number
+        '1',            -- zone number
         1995,           -- date of birth
         1,              -- sex
         NULL,           -- medical history
@@ -44,7 +44,7 @@ INSERT INTO patient
 VALUES ('002',          -- id
         'Lloyd Xavier Mann', -- name
         '3',            -- village number
-        '3',        -- zone number
+        '3',            -- zone number
         1984,           -- date of birth
         0,              -- sex
         'hospitalized for X, taking medication for Y', -- medical history
