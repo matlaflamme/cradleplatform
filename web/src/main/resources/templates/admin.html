@@ -21,6 +21,8 @@
         <v-navigation-drawer
                 app
                 clipped
+                v-model="drawer"
+
         >
 <!--            items in sidebar. Turn into component and re-use?-->
 <!--            Icons from: https://material.io/resources/icons/?icon=settings_input_antenna&style=baseline-->
@@ -91,8 +93,9 @@
                 app
                 clipped-left
                 color="#0b908f"
-                dense
+                dark
         >
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title class="mr-5 align-center" color=white>
                 <span class="title">Cradle Web Platform</span>
             </v-toolbar-title>

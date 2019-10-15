@@ -31,19 +31,22 @@ Vue.component('info_card', {
 new Vue({
     el: '#app',
     vuetify: new Vuetify(),
-})
+    data: () => ({
+        drawer: null
+    })
+});
 
 new Vue({
     el: '#info_card',
     vuetify: new Vuetify()
-    })
+    });
 
 new Vue({
     el: '#info_card2',
     vuetify: new Vuetify()
-})
+});
 
 new Vue({
     el: '#info_card3',
     vuetify: new Vuetify()
-})
+});
