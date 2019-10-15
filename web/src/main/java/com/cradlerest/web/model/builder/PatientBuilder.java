@@ -52,6 +52,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder zoneNumber(@NotNull String number) {
+		patient.setZoneNumber(number);
+		return this;
+	}
+
 
 	public PatientBuilder birthYear(int year) {
 		patient.setBirthYear(year);

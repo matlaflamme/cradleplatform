@@ -9,7 +9,7 @@ USE cradlerest;
 INSERT INTO user (username, password, role) -- password: admin
 VALUES ('admin',
         '{bcrypt}$2a$10$1aYZ3QtMTK9k930s54ROmumfKskM1xLM1UznBgzjx4Mxn4tseLS4i',
-        'ROLE_ADMIN,ROLE_VHT,ROLE_HEALTHWORKER');
+        'ROLE_ADMIN');
 
 INSERT INTO user  (username, password, role) -- password: health
 VALUES ('health',
@@ -26,26 +26,12 @@ VALUES ('test',
         '{bcrypt}$2a$10$MOX4VmxWhj0rBEeD8JYFaODweciGexZggq0jiqGNBWIoPQZTf6KB2',
         'ROLE_ADMIN');
 
-INSERT INTO user  (username, password, role)
-VALUES ('adminvht',
-        '{bcrypt}$2a$10$cDqOL/UNe5.4zGdR9EkMJOmUEq4RDuROMp.VFUAFBJX.tfGorrc/a',
-        'ROLE_VHT,ROLE_ADMIN');
-
-INSERT INTO user  (username, password, role)
-VALUES ('vhthealth',
-        '{bcrypt}$2a$10$V1w/4w9OAtvKT00Q92rPp.iuxO4s43HOKppp5BPSXT1OnIDFG.KgC',
-        'ROLE_VHT,ROLE_HEALTH');
-
-INSERT INTO user  (username, password, role)
-VALUES ('adminhealth',
-        '{bcrypt}$2a$10$Ytx8e2oCF7oidLZA.Bmi0.dtTZorDpijhmYV69sMyUIRKxfpw1rpy',
-        'ROLE_ADMIN,ROLE_HEALTH');
-
 
 INSERT INTO patient
 VALUES ('001',          -- id
         'Harumi Youko', -- name
         '1',            -- village number
+        '1',            -- zone number
         1995,           -- date of birth
         1,              -- sex
         NULL,           -- medical history
@@ -57,7 +43,8 @@ VALUES ('001',          -- id
 INSERT INTO patient
 VALUES ('002',          -- id
         'Lloyd Xavier Mann', -- name
-        '3',              -- village number
+        '3',            -- village number
+        '3',            -- zone number
         1984,           -- date of birth
         0,              -- sex
         'hospitalized for X, taking medication for Y', -- medical history

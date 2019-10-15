@@ -36,6 +36,10 @@ public class Patient {
 	@DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
 	private String villageNumber;
 
+    @Column(name = "zone", nullable = false)
+    @DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
+    private String zoneNumber;
+
 	@Column(name = "birth_year", nullable = false)
 	@DataGenRange(min = 1950, max = 2010)
 	private Integer birthYear;
@@ -69,6 +73,7 @@ public class Patient {
 	public Patient(
 			String id,
 			String villageNumber,
+			String zoneNumber,
 			String name,
 			Integer birthYear,
 			Sex sex,
@@ -80,6 +85,7 @@ public class Patient {
 		this.id = id;
 		this.name = name;
 		this.villageNumber = villageNumber;
+		this.zoneNumber = zoneNumber;
 		this.birthYear = birthYear;
 		this.sex = sex;
 		this.medicalHistory = medicalHistory;
@@ -102,6 +108,14 @@ public class Patient {
 
 	public void setVillageNumber(String villageNumber) {
 		this.villageNumber = villageNumber;
+	}
+
+	public String getZoneNumber() {
+		return zoneNumber;
+	}
+
+	public void setZoneNumber(String zoneNumber) {
+		this.zoneNumber = zoneNumber;
 	}
 
 	public String getName() {
