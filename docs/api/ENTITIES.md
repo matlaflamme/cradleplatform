@@ -50,14 +50,13 @@ entity, and, as such, must be separate entities.
 | `id` | `string` | `false` | Unique identifier for the patient |
 | `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
 | `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
-| `initials` | `string` | `false` | Patient's initials |
+| `name` | `string` | `false` | Patient's initials |
 | `birthYear` | `number` | `false` | Patient's birth year |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
-| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
-| `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `otherSymptoms` | `string` | `true` | Text describing any other symptoms that the patient may have |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
 ### Example
 
@@ -66,14 +65,13 @@ entity, and, as such, must be separate entities.
     "id": "001",
     "villageNumber": "1",
     "zoneNumber": "5",
-    "initials": "AB",
+    "name": "AB",
     "age": 1990,
     "sex": 1,
-    "gestationalAge": 16,
     "medicalHistory": null,
     "drugHistory": null,
     "otherSymptoms": null,
-    "pregnant": true
+    "lastUpdated": "2019-09-20 20:12:32"
 }
 ```
 
@@ -96,14 +94,13 @@ the most recent reading will be the first item in the array.
 | `id` | `string` | `false` | Unique identifier for the patient |
 | `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
 | `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
-| `initials` | `string` | `false` | Patient's initials |
+| `name` | `string` | `false` | Patient's initials |
 | `birthYear` | `number` | `false` | Patient's birth year |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
-| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
-| `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `otherSymptoms` | `string` | `true` | Text describing any other symptoms that the patient may have |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `readings` | `array` | `false` | An array of [Reading](#reading) entities
 | `symptoms` | `array` | `false` | An array of [Symptom](#symptom) entities (not yet implemented)
 
@@ -114,14 +111,13 @@ the most recent reading will be the first item in the array.
     "id": "001",
     "villageNumber": "1",
     "zoneNumber": "5",
-    "initials": "AB",
+    "name": "AB",
     "birthYear": 1990,
     "sex": 1,
-    "gestationalAge": 16,
     "medicalHistory": null,
     "drugHistory": null,
     "otherSymptoms": null,
-    "pregnant": true,
+    "lastUpdated": "2019-09-20 20:12:32",
     "readings": [
         {
             "id": 3,
@@ -129,6 +125,8 @@ the most recent reading will be the first item in the array.
             "diastolic": 100,
             "heartRate": 80,
             "colour": 2,
+            "pregnant": true,
+            "gestationalAge": 24,
             "timestamp": "2019-09-24 12:31:34"
         },
         {
@@ -136,6 +134,8 @@ the most recent reading will be the first item in the array.
             "systolic": 130,
             "diastolic": 90,
             "heartRate": 80,
+            "pregnant": true,
+            "gestationalAge": 22,
             "colour": 1,
             "timestamp": "2019-09-22 06:37:00"
         },
@@ -144,6 +144,8 @@ the most recent reading will be the first item in the array.
             "systolic": 100,
             "diastolic": 80,
             "heartRate": 74,
+            "pregnant": true,
+            "gestationalAge": 20,
             "colour": 0,
             "timestamp": "2019-09-20 20:12:32"
         }
@@ -164,7 +166,9 @@ Holds information about a single CRADLE reading.
 | `systolic` | `number` | `false` | Systolic (top number) reading |
 | `diastolic` | `number` | `false` | Diastolic (bottom number) reading |
 | `heartRate` | `number` | `false` | Heart rate reading |
-| `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW, 2=RED}` |
+| `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW_DOWN, 2=YELLOW_UP, 3=RED_DOWN,3=RED_UP}` |
+| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
+| `gestationalAge` | `number` | `true` | Gestational age of the patient **in days** |
 | `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `miscellaneousDetails` | `string` | `true` | Other details that a VHT may consider relevant during a reading |
 
@@ -177,6 +181,8 @@ Holds information about a single CRADLE reading.
     "diastolic": 80,
     "heartRate": 74,
     "colour": 0,
+    "pregnant": true,
+    "gestationalAge": 16,
     "timestamp": "2019-09-20 20:12:32",
     "miscellaneousDetails": null
 }

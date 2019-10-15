@@ -2,6 +2,8 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
+import com.cradlerest.web.util.datagen.annotations.*;
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
@@ -14,30 +16,44 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "reading")
+@DataGenAmount(200)
 public class Reading {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", nullable = false, unique = true)
+	@Omit
 	private Integer id;
 
-	@Column(name = "pid")
+	@Column(name = "pid", nullable = false)
+	@ForeignKey(Patient.class)
 	private String patientId;
 
-	@Column(name = "systolic")
+	@Column(name = "systolic", nullable = false)
+	@DataGenRange(min = 80, max = 150)
 	private Integer systolic;
 
-	@Column(name = "diastolic")
+	@Column(name = "diastolic", nullable = false)
+	@DataGenRange(min = 60, max = 100)
 	private Integer diastolic;
 
-	@Column(name = "heart_rate")
+	@Column(name = "heart_rate", nullable = false)
+	@DataGenRange(min = 40, max = 110)
 	private Integer heartRate;
 
-	@Column(name = "colour")
+	@Column(name = "is_pregnant", nullable = false)
+	private Boolean isPregnant;
+
+	@Column(name = "gestational_age")
+	@DataGenRange(min = 0, max = 270)
+	private Integer gestationalAge;
+
+	@Column(name = "colour", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private ReadingColour colour; // Use *INTEGER* values {0..3}
 
-	@Column(name = "timestamp")
+	@Column(name = "timestamp", nullable = false)
+	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	public Reading() {}
@@ -47,6 +63,8 @@ public class Reading {
 			int systolic,
 			int diastolic,
 			int heartRate,
+			boolean isPregnant,
+			Integer gestationalAge,
 			@NotNull ReadingColour colour,
 			@NotNull Date timestamp
 	) {
@@ -54,6 +72,8 @@ public class Reading {
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
 	}
@@ -64,6 +84,8 @@ public class Reading {
 			int systolic,
 			int diastolic,
 			int heartRate,
+			boolean isPregnant,
+			Integer gestationalAge,
 			@NotNull ReadingColour colour,
 			@NotNull Date timestamp
 	) {
@@ -72,6 +94,8 @@ public class Reading {
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
 	}
@@ -106,6 +130,22 @@ public class Reading {
 
 	public void setDiastolic(int diastolic) {
 		this.diastolic = diastolic;
+	}
+
+	public Boolean isPregnant() {
+		return isPregnant;
+	}
+
+	public void setPregnant(boolean pregnant) {
+		isPregnant = pregnant;
+	}
+
+	public Integer getGestationalAge() {
+		return gestationalAge;
+	}
+
+	public void setGestationalAge(Integer gestationalAge) {
+		this.gestationalAge = gestationalAge;
 	}
 
 	public Integer getHeartRate() {

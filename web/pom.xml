@@ -106,6 +106,16 @@
             <version>3.4.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.maumay</groupId>
+            <artifactId>jflow</artifactId>
+            <version>0.7.2</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -19,9 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Optional;
@@ -87,9 +85,7 @@ public class PatientManagerServiceImplTests {
 		assertThat(result.getBirthYear())
 				.isEqualTo(1998);
 		assertThat(result.getZoneNumber())
-				.isEqualTo("1");
-		assertThat(result.isPregnant())
-				.isEqualTo(false);
+                .isEqualTo("1");
 		assertThat(result.getLastUpdated())
 				.isEqualTo(new GregorianCalendar(2014, 10, 11).getTime());
 	}

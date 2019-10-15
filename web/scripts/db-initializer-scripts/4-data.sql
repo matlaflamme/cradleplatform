@@ -34,8 +34,6 @@ VALUES ('001',          -- id
         '1',        -- zone number
         1995,           -- date of birth
         1,              -- sex
-        TRUE,           -- is pregnant?
-        16,             -- gestational age: weeks
         NULL,           -- medical history
         NULL,           -- drug history
         NULL,           -- other symptoms
@@ -49,22 +47,20 @@ VALUES ('002',          -- id
         '3',        -- zone number
         1984,           -- date of birth
         0,              -- sex
-        FALSE,          -- is pregnant?
-        NULL,           -- gestational age: weeks
         'hospitalized for X, taking medication for Y', -- medical history
         'there is some history with some drugs', -- drug history
         NULL,           -- other symptoms
         '2019-09-20 20:12:32');  -- last updated
 
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
-VALUES ('001', 100, 80, 74, 0, '2019-09-20 20:12:32');
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
+VALUES ('001', 100, 80, 74, TRUE, 15, 0, '2019-09-20 20:12:32');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
-VALUES ('001', 130, 90, 80, 1, '2019-09-22 6:37:00');
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
+VALUES ('001', 130, 90, 80, TRUE, 30, 1,' 2019-09-22 6:37:00');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
-VALUES ('001', 130, 100, 80, 2, '2019-09-24 12:31:34');
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, colour, timestamp)
+VALUES ('001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
-VALUES ('002', 140, 80, 93, 2, '2018-06-12 08:54:15')
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
+VALUES ('002', 140, 80, 93, 2, FALSE, 0, '2018-06-12 08:54:15')
