@@ -63,7 +63,7 @@ function Invoke-Local {
 
     $MySQLContainerName = "local_web_db_1"
     switch ($LocalCommand) {
-        "build" { .\mvnw.cmd }
+        "build" { .\mvnw.cmd package }
         "run" {
             .\mvnw.cmd package
             java -jar target\web*.jar

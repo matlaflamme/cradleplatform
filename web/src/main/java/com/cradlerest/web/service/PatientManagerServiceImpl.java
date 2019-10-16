@@ -130,8 +130,16 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	public Patient savePatient(@Nullable Patient patient) throws BadRequestException, AlreadyExistsException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
-		} else if (patientRepository.findById(patient.getId()).isPresent()) {
-			throw new AlreadyExistsException(patient.getName());
+		}
+
+		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
+
+		if (checkPatient.isPresent()) {
+			Patient existingPatient = checkPatient.get();
+			// If current patient is more recently updated than request patient, don't update current patient
+			if (existingPatient.getLastUpdated().compareTo(patient.getLastUpdated()) > 0) {
+				return existingPatient;
+			}
 		}
 		validatePatient(patient);
 		return patientRepository.save(patient);
@@ -192,8 +200,8 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.name(patientName)
 				.birthYear(birthYear)
 				.sex(Sex.valueOf(gender))
-				.pregnant(pregnant)
-				.gestationalAgeWeeks(gestationalAge)
+//				.pregnant(pregnant)
+//				.gestationalAgeWeeks(gestationalAge)
 				.medicalHistory(medicalHistory)
 				.drugHistory(drugHistory)
 				.otherSymptoms(symptoms)
@@ -237,17 +245,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
-		if (patient.getSex() != Sex.MALE) {
-			assertNotNull(patient.isPregnant(), "pregnant");
-		} else if (patient.isPregnant() == null) {
-			// set patient's isPregnant field to false if they are a MALE
-			// and don't have the field already set
-			patient.setPregnant(false);
-		}
-		if (patient.isPregnant()) {
-			// gestational age is only required for patients that are pregnant
-			assertNotNull(patient.getGestationalAge(), "gestationalAge");
-		}
+		assertNotNull(patient.getLastUpdated(), "lastUpdated");
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {
@@ -257,5 +255,23 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(reading.getHeartRate(), "heartRate");
 		assertNotNull(reading.getColour(), "colour");
 		assertNotNull(reading.getTimestamp(), "timestamp");
+
+		// Check patient exists
+		Optional<Patient> patient = patientRepository.findById(reading.getPatientId());
+		assert (patient.isPresent()) : "Patient does not exist";
+
+		if (patient.get().getSex() == Sex.MALE) {
+			// if patient is male, can't be pregnant
+			reading.setPregnant(false);
+		}
+		else if (reading.isPregnant() == null) {
+			// set patient's isPregnant field to false if they
+			// don't have the field already set
+			reading.setPregnant(false);
+		}
+		else if (reading.isPregnant()) {
+			// gestational age is only required for patients that are pregnant
+			assertNotNull(reading.getGestationalAge(), "gestationalAge");
+		}
 	}
 }
