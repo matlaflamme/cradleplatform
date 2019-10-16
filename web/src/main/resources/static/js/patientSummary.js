@@ -81,7 +81,8 @@ Vue.component('basic_info', {
             '    <h2>Latest Reading</h2>\n' +
             '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">\n' +
             '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
-            '    <span id="light" ref="light" class="dot"></span>\n' +
+            '    <span id="light" ref="light" class="dot"></span>' +
+            '    <img id="arrow" ref="arrow" src="/img/arrow_down.png" height="50" width="50" style="margin-bottom: 12px">' +
             '    <br>\n' +
             '    <h6 style="display:inline-block;">Systolic:</h6>\n' +
             '    <p id="BP" style="display:inline-block">{{patientData.readings[0].systolic}}</p>\n' +
@@ -128,14 +129,20 @@ Vue.component('basic_info', {
             switch (digit) {
                 case 0:
                     color = 'green';
+                    this.$refs.arrow.src = '/img/white.png';
                     break;
                 case 1:
+                    this.$refs.arrow.src = '/img/arrow_up.png';
                 case 2:
                     color = 'yellow';
+                    this.$refs.arrow.src = '/img/arrow_down.png';
                     break;
                 case 3:
+                    this.$refs.arrow.src = '/img/arrow_up.png';
                 case 4:
                     color = 'red';
+                    this.$refs.arrow.src = '/img/arrow_down.png';
+
                     break;
             }
            this.$refs.light.setAttribute("style", "background-color:" +  color + ";");
