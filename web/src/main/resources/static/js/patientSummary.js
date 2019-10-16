@@ -50,7 +50,9 @@ let newReadingRedirect = new Vue({
         goToNewReading: function() {
             let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
             let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-            this.router.push("/createNewReading?id=" + id);
+            window.location.assign("/createNewReading?id=" + id);
+
+            //this.router.push("/createNewReading?id=" + id); //not working??
         }
     }
 });
