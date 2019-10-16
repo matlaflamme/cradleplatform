@@ -54,6 +54,12 @@
 
     <h2>Add New Reading</h2>
     <form id="readingInput" @submit.prevent="submit">
+        <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul>
+                <li v-for="error in errors" style="color:#ba0006"> {{ error }}</li>
+            </ul>
+        </p>
         <input type="text" v-model="patientID" value="" readonly>
         <input type="text" v-model="heartRate" placeholder="Heart Rate" required>
         <input type="text" v-model="systolic" placeholder="Systolic" required>

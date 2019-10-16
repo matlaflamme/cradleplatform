@@ -33,7 +33,7 @@ var readingInput = new Vue ({
                     }
                 ).then(response => {console.log(response)});
                 //console.log("End");
-                //window.location.assign("/patientSummary?id=" + this.patientID);
+                window.location.assign("/patientSummary?id=" + this.patientID);
             }
         },
         validateInput: function(systolic, diastolic, heartRate) {
@@ -45,7 +45,23 @@ var readingInput = new Vue ({
             let MAX_HEART_RATE = 200;
             let MIN_HEART_RATE = 40;
 
-            
+            this.errors = []; //clear previous errors
+            let inputOK = true;
+            if (systolic > MAX_SYSTOLIC || systolic < MIN_SYSTOLIC || !parseInt(systolic, 10)) {
+                inputOK = false;
+                this.errors.push("Systolic is invalid");
+            }
+            if (diastolic > MAX_DIASTOLIC || diastolic < MIN_DIASTOLIC || !parseInt(diastolic, 10)) {
+                inputOK = false;
+                console.log("dias err");
+                this.errors.push("Diastolic is invalid");
+            }
+            if (heartRate > MAX_HEART_RATE || heartRate < MIN_HEART_RATE || !parseInt(heartRate, 10)) {
+                inputOK = false;
+                this.errors.push("Heart Rate is invalid")
+            }
+            console.log(this.errors);
+            return inputOK;
         }
     },
     mounted() {
