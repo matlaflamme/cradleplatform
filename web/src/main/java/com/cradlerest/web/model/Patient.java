@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 
 /**
@@ -160,5 +161,26 @@ public class Patient {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Patient patient = (Patient) o;
+		return id.equals(patient.id) &&
+				name.equals(patient.name) &&
+				villageNumber.equals(patient.villageNumber) &&
+				birthYear.equals(patient.birthYear) &&
+				sex == patient.sex &&
+				Objects.equals(medicalHistory, patient.medicalHistory) &&
+				Objects.equals(drugHistory, patient.drugHistory) &&
+				Objects.equals(otherSymptoms, patient.otherSymptoms) &&
+				lastUpdated.equals(patient.lastUpdated);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

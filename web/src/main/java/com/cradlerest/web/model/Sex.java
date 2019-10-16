@@ -9,5 +9,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.NUMBER)
 @DataGenOrdinal
 public enum Sex {
-	MALE, FEMALE, UNKNOWN
+	MALE, FEMALE, UNKNOWN;
+
+	public static Sex valueOf(int ordinal) {
+		return Sex.values()[ordinal];
+	}
 }

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller responsible for managing requests dealing with patients.
@@ -42,6 +41,11 @@ public class PatientController {
 	@GetMapping("/all")
 	public List<Patient> all() {
 		return patientManagerService.getAllPatients();
+	}
+
+	@GetMapping("/all_with_latest_reading")
+	public List<?> allSummary() {
+		return patientManagerService.getAllPatientsWithLastReading();
 	}
 
 	@GetMapping("/{id}")
