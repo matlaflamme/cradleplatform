@@ -1,5 +1,8 @@
-
 Vue.component('info_card', {
+    props: {
+        title: String, //Usage: {{title}} inside of the template is replaced with the prop
+                        //Prop is given a value inside of the component's html tag in the html file where its used
+    },
     template:
     '<v-card\n' +
         'class="mx-auto"\n' +
@@ -9,7 +12,7 @@ Vue.component('info_card', {
         '    <v-list-item three-line>\n' +
         '        <v-list-item-content>\n' +
         '             <div class="overline mb-4">Referrals this week</div>\n' +
-        '                 <v-list-item-title class="headline mb-1">76</v-list-item-title>\n' +
+        '                 <v-list-item-title class="headline mb-1">{{title}}</v-list-item-title>\n' +
         '                 <v-list-item-subtitle>173 VHTs across 12 zones</v-list-item-subtitle>\n' +
         '             </v-list-item-content>\n' +
         '\n' +
