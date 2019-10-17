@@ -3,6 +3,7 @@ package com.cradlerest.web.util.datagen;
 import com.cradlerest.web.util.datagen.annotations.DataGenNullChance;
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.ForeignKeyException;
 import com.cradlerest.web.util.datagen.error.NoDefinedGeneratorException;
 import com.cradlerest.web.util.datagen.impl.ForeignKeyRepositoryImpl;
@@ -50,6 +51,11 @@ public class DataFactoryTests {
 	@Entity
 	@Table(name = "x")
 	private static class ForeignKeyMockEntity {
+
+		@Id
+		@Omit
+		private Integer id;
+
 		@Column(name = "aid", nullable = false)
 		@ForeignKey(MockEntityA.class)
 		private Integer aid;
@@ -58,8 +64,13 @@ public class DataFactoryTests {
 	@Entity
 	@Table(name = "x")
 	private static class NonTrivialFieldMockEntity {
+
+		@Id
+		@Omit
+		private Integer id;
+
 		@Column(name = "obj")
-		private Object obj;
+		private Double obj;
 	}
 
 	@Entity
@@ -69,6 +80,10 @@ public class DataFactoryTests {
 			A, B, C
 		}
 
+		@Id
+		@Omit
+		private Integer id;
+
 		@Column(name = "enum", nullable = false)
 		private MockEnum e;
 	}
@@ -76,6 +91,11 @@ public class DataFactoryTests {
 	@Entity
 	@Table(name = "x")
 	private static class NullableMockEntity {
+
+		@Id
+		@Omit
+		private Integer id;
+
 		@Column(name = "a")
 		@DataGenNullChance(0.5)
 		private Integer a;

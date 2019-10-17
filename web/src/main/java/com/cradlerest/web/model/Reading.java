@@ -43,6 +43,13 @@ public class Reading {
 	@DataGenRange(min = 40, max = 110)
 	private Integer heartRate;
 
+	@Column(name = "is_pregnant", nullable = false)
+	private Boolean isPregnant;
+
+	@Column(name = "gestational_age")
+	@DataGenRange(min = 0, max = 270)
+	private Integer gestationalAge;
+
 	@Column(name = "colour", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private ReadingColour colour; // Use *INTEGER* values {0..3}
@@ -63,6 +70,8 @@ public class Reading {
 			int systolic,
 			int diastolic,
 			int heartRate,
+			boolean isPregnant,
+			Integer gestationalAge,
 			@NotNull ReadingColour colour,
 			@NotNull Date timestamp,
 			@Nullable String otherSymptoms
@@ -71,6 +80,8 @@ public class Reading {
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
 		this.otherSymptoms = otherSymptoms;
@@ -82,6 +93,8 @@ public class Reading {
 			int systolic,
 			int diastolic,
 			int heartRate,
+			boolean isPregnant,
+			Integer gestationalAge,
 			@NotNull ReadingColour colour,
 			@NotNull Date timestamp,
 			@Nullable String otherSymptoms
@@ -91,6 +104,8 @@ public class Reading {
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
 		this.otherSymptoms = otherSymptoms;
@@ -126,6 +141,22 @@ public class Reading {
 
 	public void setDiastolic(int diastolic) {
 		this.diastolic = diastolic;
+	}
+
+	public Boolean isPregnant() {
+		return isPregnant;
+	}
+
+	public void setPregnant(boolean pregnant) {
+		isPregnant = pregnant;
+	}
+
+	public Integer getGestationalAge() {
+		return gestationalAge;
+	}
+
+	public void setGestationalAge(Integer gestationalAge) {
+		this.gestationalAge = gestationalAge;
 	}
 
 	public Integer getHeartRate() {

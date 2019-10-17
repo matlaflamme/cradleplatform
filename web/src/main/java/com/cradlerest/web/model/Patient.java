@@ -36,6 +36,10 @@ public class Patient {
 	@DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
 	private String villageNumber;
 
+    @Column(name = "zone", nullable = false)
+    @DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
+    private String zoneNumber;
+
 	@Column(name = "birth_year", nullable = false)
 	@DataGenRange(min = 1950, max = 2010)
 	private Integer birthYear;
@@ -43,13 +47,6 @@ public class Patient {
 	@Column(name = "sex", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private Sex sex;
-
-	@Column(name = "is_pregnant", nullable = false)
-	private Boolean isPregnant;
-
-	@Column(name = "gestational_age")
-	@DataGenRange(min = 0, max = 270)
-	private Integer gestationalAge;
 
 	@Column(name = "medical_history")
 	@Generator(GibberishSentenceGenerator.class)
@@ -71,11 +68,10 @@ public class Patient {
 	public Patient(
 			String id,
 			String villageNumber,
+			String zoneNumber,
 			String name,
 			Integer birthYear,
 			Sex sex,
-			boolean isPregnant,
-			Integer gestationalAge,
 			String medicalHistory,
 			String drugHistory,
 			@NotNull Date lastUpdated
@@ -83,10 +79,9 @@ public class Patient {
 		this.id = id;
 		this.name = name;
 		this.villageNumber = villageNumber;
+		this.zoneNumber = zoneNumber;
 		this.birthYear = birthYear;
 		this.sex = sex;
-		this.isPregnant = isPregnant;
-		this.gestationalAge = gestationalAge;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.lastUpdated = lastUpdated;
@@ -106,6 +101,14 @@ public class Patient {
 
 	public void setVillageNumber(String villageNumber) {
 		this.villageNumber = villageNumber;
+	}
+
+	public String getZoneNumber() {
+		return zoneNumber;
+	}
+
+	public void setZoneNumber(String zoneNumber) {
+		this.zoneNumber = zoneNumber;
 	}
 
 	public String getName() {
@@ -130,22 +133,6 @@ public class Patient {
 
 	public void setSex(Sex sex) {
 		this.sex = sex;
-	}
-
-	public Boolean isPregnant() {
-		return isPregnant;
-	}
-
-	public void setPregnant(boolean pregnant) {
-		isPregnant = pregnant;
-	}
-
-	public Integer getGestationalAge() {
-		return gestationalAge;
-	}
-
-	public void setGestationalAge(Integer gestationalAge) {
-		this.gestationalAge = gestationalAge;
 	}
 
 	public String getMedicalHistory() {
