@@ -52,6 +52,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder zoneNumber(@NotNull String number) {
+		patient.setZoneNumber(number);
+		return this;
+	}
+
 
 	public PatientBuilder birthYear(int year) {
 		patient.setBirthYear(year);
@@ -68,35 +73,11 @@ public class PatientBuilder {
 	 */
 	public PatientBuilder sex(@NotNull Sex sex) {
 		patient.setSex(sex);
-		if (sex == Sex.MALE && patient.isPregnant() == null) {
-			patient.setPregnant(false);
-		}
 		return this;
 	}
 
 	public PatientBuilder lastUpdated(Date lastUpdated) {
 		patient.setLastUpdated(lastUpdated);
-		return this;
-	}
-
-	public PatientBuilder pregnant(boolean isPregnant) {
-		patient.setPregnant(isPregnant);
-		return this;
-	}
-
-	public PatientBuilder gestationalAgeMonths(@Nullable Integer months) {
-		if (months == null) {
-			patient.setGestationalAge(null);
-			return this;
-		}
-		// TODO: this rounding assumption may cause an issue
-		final int WEEKS_PER_MONTH = 4;
-		patient.setGestationalAge(months * WEEKS_PER_MONTH);
-		return this;
-	}
-
-	public PatientBuilder gestationalAgeWeeks(@Nullable Integer weeks) {
-		patient.setGestationalAge(weeks);
 		return this;
 	}
 
@@ -127,10 +108,6 @@ public class PatientBuilder {
 		assertNotNull(patient.getVillageNumber(), "villageNumber");
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
-		assertNotNull(patient.isPregnant(), "isPregnant");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated" );
-		if (patient.isPregnant() && patient.getGestationalAge() == null) {
-			throw new InstantiationError("gestationalAge may not be null when isPregnant is true");
-		}
 	}
 }

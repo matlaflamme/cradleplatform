@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @see Patient
  */
-public interface PatientRepository extends JpaRepository<Patient, String> {
+public interface PatientRepository extends JpaRepository<Patient, String>, PatientRepositoryCustom {
 }

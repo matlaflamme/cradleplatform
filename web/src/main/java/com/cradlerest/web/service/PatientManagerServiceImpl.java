@@ -3,10 +3,7 @@ package com.cradlerest.web.service;
 import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
-import com.cradlerest.web.model.Patient;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.ReadingColour;
-import com.cradlerest.web.model.Sex;
+import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.service.repository.PatientRepository;
@@ -99,6 +96,17 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	@Override
 	public List<Patient> getAllPatients() {
 		return patientRepository.findAll();
+	}
+
+	/**
+	 * Returns the list of all patients in the the database paired with their
+	 * latest reading. If a patient has no readings, then {@code null} is
+	 * returned in place of one.
+	 * @return A list of patient/reading pairs.
+	 */
+	@Override
+	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading() {
+		return patientRepository.getAllPatientsAndLatestReadings();
 	}
 
 	/**
@@ -200,8 +208,8 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.name(patientName)
 				.birthYear(birthYear)
 				.sex(Sex.valueOf(gender))
-				.pregnant(pregnant)
-				.gestationalAgeWeeks(gestationalAge)
+//				.pregnant(pregnant)
+//				.gestationalAgeWeeks(gestationalAge)
 				.medicalHistory(medicalHistory)
 				.drugHistory(drugHistory)
 				.otherSymptoms(symptoms)
@@ -246,17 +254,6 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated");
-		if (patient.getSex() != Sex.MALE) {
-			assertNotNull(patient.isPregnant(), "pregnant");
-		} else if (patient.isPregnant() == null) {
-			// set patient's isPregnant field to false if they are a MALE
-			// and don't have the field already set
-			patient.setPregnant(false);
-		}
-		if (patient.isPregnant()) {
-			// gestational age is only required for patients that are pregnant
-			assertNotNull(patient.getGestationalAge(), "gestationalAge");
-		}
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {
@@ -266,5 +263,23 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(reading.getHeartRate(), "heartRate");
 		assertNotNull(reading.getColour(), "colour");
 		assertNotNull(reading.getTimestamp(), "timestamp");
+
+		// Check patient exists
+		Optional<Patient> patient = patientRepository.findById(reading.getPatientId());
+		assert (patient.isPresent()) : "Patient does not exist";
+
+		if (patient.get().getSex() == Sex.MALE) {
+			// if patient is male, can't be pregnant
+			reading.setPregnant(false);
+		}
+		else if (reading.isPregnant() == null) {
+			// set patient's isPregnant field to false if they
+			// don't have the field already set
+			reading.setPregnant(false);
+		}
+		else if (reading.isPregnant()) {
+			// gestational age is only required for patients that are pregnant
+			assertNotNull(reading.getGestationalAge(), "gestationalAge");
+		}
 	}
 }

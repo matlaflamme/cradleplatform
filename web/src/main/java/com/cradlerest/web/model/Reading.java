@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Database entity model for a reading.
@@ -41,6 +42,13 @@ public class Reading {
 	@DataGenRange(min = 40, max = 110)
 	private Integer heartRate;
 
+	@Column(name = "is_pregnant", nullable = false)
+	private Boolean isPregnant;
+
+	@Column(name = "gestational_age")
+	@DataGenRange(min = 0, max = 270)
+	private Integer gestationalAge;
+
 	@Column(name = "colour", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private ReadingColour colour; // Use *INTEGER* values {0..3}
@@ -56,6 +64,8 @@ public class Reading {
 			int systolic,
 			int diastolic,
 			int heartRate,
+			boolean isPregnant,
+			Integer gestationalAge,
 			@NotNull ReadingColour colour,
 			@NotNull Date timestamp
 	) {
@@ -63,6 +73,8 @@ public class Reading {
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
 	}
@@ -73,6 +85,8 @@ public class Reading {
 			int systolic,
 			int diastolic,
 			int heartRate,
+			boolean isPregnant,
+			Integer gestationalAge,
 			@NotNull ReadingColour colour,
 			@NotNull Date timestamp
 	) {
@@ -81,6 +95,8 @@ public class Reading {
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 		this.heartRate = heartRate;
+		this.isPregnant = isPregnant;
+		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
 	}
@@ -117,6 +133,22 @@ public class Reading {
 		this.diastolic = diastolic;
 	}
 
+	public Boolean isPregnant() {
+		return isPregnant;
+	}
+
+	public void setPregnant(boolean pregnant) {
+		isPregnant = pregnant;
+	}
+
+	public Integer getGestationalAge() {
+		return gestationalAge;
+	}
+
+	public void setGestationalAge(Integer gestationalAge) {
+		this.gestationalAge = gestationalAge;
+	}
+
 	public Integer getHeartRate() {
 		return heartRate;
 	}
@@ -141,5 +173,26 @@ public class Reading {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Reading reading = (Reading) o;
+		return id.equals(reading.id) &&
+				patientId.equals(reading.patientId) &&
+				systolic.equals(reading.systolic) &&
+				diastolic.equals(reading.diastolic) &&
+				heartRate.equals(reading.heartRate) &&
+				isPregnant.equals(reading.isPregnant) &&
+				Objects.equals(gestationalAge, reading.gestationalAge) &&
+				colour == reading.colour &&
+				timestamp.equals(reading.timestamp);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
