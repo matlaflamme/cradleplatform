@@ -13,15 +13,15 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Defines an annotation for a valid user role
+ * Defines an annotation for a valid username
  */
 @Documented
-@Constraint(validatedBy = RoleValidator.class) // referenced validator class
+@Constraint(validatedBy = UsernameValidator.class) // referenced validator class
 @Target({TYPE, ANNOTATION_TYPE, ElementType.FIELD}) // where (and what) this annotation can be used on
 @Retention(RUNTIME)
-public @interface ValidRole {
+public @interface ValidUsername {
 
-	String message() default "Invalid User Role Format"; // error message if bad request
+	String message() default "Invalid Username Format"; // error message if bad request
 
 	Class<?>[] groups() default {};
 

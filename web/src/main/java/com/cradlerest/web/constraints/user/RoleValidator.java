@@ -20,9 +20,15 @@ public class RoleValidator implements ConstraintValidator<ValidRole, String> {
    public void initialize(ValidRole constraint) {
    }
 
+	/**
+	 *
+	 * @param roles Strings to be validated
+	 * @param context Error message. If none specified, utilizes the default error message (defined in ValidRole interface)
+	 * @return true if roles are valid, otherwise false
+	 */
    @Override
    public boolean isValid(String roles, ConstraintValidatorContext context) {
-       return validateRoles(roles);
+   		return validateRoles(roles);
    }
 
    private boolean validateRoles(String roles) {

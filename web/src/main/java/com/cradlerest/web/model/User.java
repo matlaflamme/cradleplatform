@@ -1,6 +1,8 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.constraints.user.ValidPassword;
 import com.cradlerest.web.constraints.user.ValidRole;
+import com.cradlerest.web.constraints.user.ValidUsername;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -22,14 +24,12 @@ public class User {
 	private Integer id;
 
 	@NotEmpty(message = "username required")
-	@Size(min = 6, message = "Minimum username length is 6")
-	@Size(max = 20, message = "Maximum number of characters for username is 20")
+	@ValidUsername
 	@Column(name = "username")
 	private String username;
 
 	@NotEmpty(message = "Password required") // Bcrypt will encode an empty string so this might be redundant
-	@Size(min = 8, message = "Minimum password length is 8")
-//	@Size(max = 35, message = "Maximum number of characters for password is 35") Currently giving 500 Error
+	@ValidPassword
 	@Column(name = "password")
 	private String password;
 
