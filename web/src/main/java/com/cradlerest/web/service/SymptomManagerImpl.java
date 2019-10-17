@@ -52,6 +52,11 @@ public class SymptomManagerImpl implements SymptomManager {
 		return symptom;
 	}
 
+	@Override
+	public void relateReadingWithSymptom(@NotNull Integer readingId, @NotNull Integer symptomId) {
+		// TODO: implement me
+	}
+
 	/**
 	 * Initialize's the service's symptom cache if it has not yet been initialized.
 	 */
