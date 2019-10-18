@@ -42,6 +42,11 @@ public class PatientController {
 		return patientManagerService.getAllPatients();
 	}
 
+	@GetMapping("/all_with_latest_reading")
+	public List<?> allSummary() {
+		return patientManagerService.getAllPatientsWithLastReading();
+	}
+
 	@GetMapping("/{id}")
 	public Object profile(@PathVariable("id") String id) throws Exception {
 		return patientManagerService.getFullPatientProfile(id);

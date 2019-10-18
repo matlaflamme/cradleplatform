@@ -67,8 +67,71 @@ Returns an array of all patients registered in the system.
 
 #### Returns
 
-Returns a JSON array of [reading](ENTITIES.md#patient) entities. If there are no
+Returns a JSON array of [reading](ENTITIES.md#reading) entities. If there are no
 patients in the system, an empty array is returned.
+
+
+### `GET /api/patient/all_with_latest_reading`
+
+Returns an array of all patients registered in the system paired with their
+latest reading. If a patient has no readings, then the `reading` field for that
+pair will be `null`.
+
+#### Returns
+
+Returns a JSON array of [patient](ENTITIES.md#patient), [reading](ENTITIES.md#reading)
+pairs (see example).
+
+If there are no patients in the system, return an empty JSON array (i.e., `[]`).
+
+#### Errors
+
+None
+
+#### Example
+
+``` json
+[
+    {
+        "patient": {
+            "id": "001",
+            "name": "Harumi Youko",
+            "villageNumber": "1",
+            "birthYear": 1995,
+            "sex": 1,
+            "medicalHistory": null,
+            "drugHistory": null,
+            "otherSymptoms": null,
+            "lastUpdated": "2019-09-20 13:12:32"
+        },
+        "reading": {
+            "id": 3,
+            "patientId": "001",
+            "systolic": 130,
+            "diastolic": 100,
+            "heartRate": 80,
+            "gestationalAge": null,
+            "colour": 2,
+            "timestamp": "2019-09-24 05:31:34",
+            "pregnant": false
+        }
+    },
+    {
+        "patient": {
+            "id": "002",
+            "name": "Hikari Tachibana",
+            "villageNumber": "1",
+            "birthYear": 2002,
+            "sex": 1,
+            "medicalHistory": null,
+            "drugHistory": null,
+            "otherSymptoms": null,
+            "lastUpdated": "2019-09-20 13:12:32"
+        },
+        "reading": null
+    }
+]
+```
 
 
 ### `GET /api/patient/{id}/readings`
@@ -113,11 +176,10 @@ is valid).
 | `villageNumber` | `string` | `yes` | Village number for the patient |
 | `dateOfBirth` | `string` | `yes` | Patient's birth date, in format "yyyy-MM-dd" |
 | `sex` | `number` | `yes` | Patient's sex, enumerated: {male=0, female=1, unkown=2} |
-| `pregnant` | `boolean` | If `sex` != Male (`0`) | Is the patient pregnant? |
-| `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient |
 | `medicalHistory` | `string` | `no` | Patient's medical history |
 | `drugHistory` | `string` | `no` | Patient's drug history |
 | `otherSympotoms` | `string` | `no` | Any other symptoms the patient has |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
 ### `POST /api/reading`
 
@@ -141,5 +203,7 @@ can be added.
 | `systolic` | `number` | `yes` | Systolic reading value |
 | `diastolic` | `number` | `yes` | Diastolic reading value |
 | `heartRate` | `number` | `yes` | Heart rate reading value |
-| `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow=1, red=2} |
+| `pregnant` | `boolean` | If `sex` != Male (`0`) | Is the patient pregnant? |
+| `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient in days|
+| `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow_down=1, yellow_up=2,red_down=3, red_up=4} |
 | `timestamp` | `string` | `yes` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |

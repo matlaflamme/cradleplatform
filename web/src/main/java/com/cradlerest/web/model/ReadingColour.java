@@ -13,5 +13,9 @@ public enum ReadingColour {
 	YELLOW_DOWN,
 	YELLOW_UP,
 	RED_DOWN,
-	RED_UP
+	RED_UP;
+
+	public static ReadingColour valueOf(int ordinal) {
+		return ReadingColour.values()[ordinal];
+	}
 }

@@ -17,10 +17,9 @@ CREATE TABLE patient (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     village VARCHAR(255) NOT NULL,
+    zone VARCHAR(255) NOT NULL,
     birth_year INT NOT NULL,
     sex INT NOT NULL,                   -- enumerated {male, female, unknown}
-    is_pregnant BOOLEAN NOT NULL,
-    gestational_age INT,
     medical_history VARCHAR(255) DEFAULT '',
     drug_history VARCHAR(255) DEFAULT '',
     other_symptoms VARCHAR(255),
@@ -34,6 +33,8 @@ CREATE TABLE reading (
     systolic INT NOT NULL,
     diastolic INT NOT NULL,
     heart_rate INT NOT NULL,
+    is_pregnant BOOLEAN NOT NULL,
+    gestational_age INT,                -- in days
     colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
     FOREIGN KEY (pid) REFERENCES patient (id)
