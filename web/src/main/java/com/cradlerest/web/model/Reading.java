@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Database entity model for a reading.
@@ -191,5 +192,26 @@ public class Reading {
 
 	public void setOtherSymptoms(String otherSymptoms) {
 		this.otherSymptoms = otherSymptoms;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Reading reading = (Reading) o;
+		return id.equals(reading.id) &&
+				patientId.equals(reading.patientId) &&
+				systolic.equals(reading.systolic) &&
+				diastolic.equals(reading.diastolic) &&
+				heartRate.equals(reading.heartRate) &&
+				isPregnant.equals(reading.isPregnant) &&
+				Objects.equals(gestationalAge, reading.gestationalAge) &&
+				colour == reading.colour &&
+				timestamp.equals(reading.timestamp);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

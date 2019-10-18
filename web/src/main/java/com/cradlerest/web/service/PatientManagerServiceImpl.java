@@ -3,10 +3,7 @@ package com.cradlerest.web.service;
 import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
-import com.cradlerest.web.model.Patient;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.ReadingColour;
-import com.cradlerest.web.model.Sex;
+import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.service.repository.PatientRepository;
@@ -99,6 +96,17 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	@Override
 	public List<Patient> getAllPatients() {
 		return patientRepository.findAll();
+	}
+
+	/**
+	 * Returns the list of all patients in the the database paired with their
+	 * latest reading. If a patient has no readings, then {@code null} is
+	 * returned in place of one.
+	 * @return A list of patient/reading pairs.
+	 */
+	@Override
+	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading() {
+		return patientRepository.getAllPatientsAndLatestReadings();
 	}
 
 	/**
