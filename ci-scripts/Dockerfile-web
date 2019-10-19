@@ -13,6 +13,6 @@ ENV DB_PORT=3306
 ENV DB_USER=admin
 ENV DB_PASSWORD=super-strong-password
 EXPOSE 9000
-COPY --from=builder *.jar app.jar
+COPY --from=builder /target/web*.jar app.jar
 COPY web/scripts/wait-for-it.sh .
 CMD ["./wait-for-it.sh", "db:3306", "--", "java","-jar","/app.jar"]
