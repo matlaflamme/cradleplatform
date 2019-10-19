@@ -1,20 +1,18 @@
 # Compile Project
 FROM maven:latest AS builder
-WORKDIR /app
-COPY web/* .
+COPY web/* ./
 RUN mvn compile
 RUN ls
 RUN find . -name 'web*.jar'
 
 # Run Project
 FROM openjdk:11
-WORKDIR /app
 VOLUME /tmp
 ENV DB_HOST=db
 ENV DB_PORT=3306
 ENV DB_USER=admin
 ENV DB_PASSWORD=super-strong-password
 EXPOSE 9000
-COPY --from=builder /app/*.jar app.jar
+COPY --from=builder *.jar app.jar
 COPY web/scripts/wait-for-it.sh .
 CMD ["./wait-for-it.sh", "db:3306", "--", "java","-jar","/app.jar"]
