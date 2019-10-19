@@ -32,10 +32,10 @@ integration-test:
   services:
     - docker:dind
   script:
-    - docker build -f ci-scripts/Dockerfile-db -t 'cradlerest/db:latest'
+    - docker build -f ci-scripts/Dockerfile-db . -t 'cradlerest/db:latest'
     - docker run --privileged --name db -p '3306:3306' -d 'cradlerest/db:latest'
     - cd ci-scripts
-    - docker build -f Dockerfile-web -t 'cradlerest/web:latest'
+    - docker build -f Dockerfile-web . -t 'cradlerest/web:latest'
     - docker run --name web -p '9000:9000' -d 'cradlerest/web:latest'
     - cd ..
     - docker build -f cradletest/Dockerfile . -t 'cradlerest/tester:latest'
