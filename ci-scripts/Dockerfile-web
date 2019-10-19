@@ -2,8 +2,6 @@
 FROM maven:latest
 COPY web/* /
 RUN mvn compile
-RUN ls
-RUN find . -name '*.jar'
 
 # Run Project
 FROM openjdk:11
