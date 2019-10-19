@@ -32,6 +32,8 @@ integration-test:
   services:
     - docker:dind
   script:
+    - pwd
+    - ls
     - docker run --name db -p '3306:3306' --mount "type=bind,src=$CI_PROJECT_DIR/web/scripts/db-initializer-scripts,dst=/docker-entrypoint-initdb.d" -d 'mysql/mysql-server'
     - cd ci-scripts
     - docker build -t cradlerest:latest .
