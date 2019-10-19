@@ -51,6 +51,7 @@ public class PatientRepositoryGetPatientsAndReadingsTests {
 				.medicalHistory("x")
 				.drugHistory("y")
 				.otherSymptoms("z")
+				.zoneNumber("1")
 				// use Timestamp instead of Date because assertj's isEqualTo doesn't
 				// think they're equal even when .equal does
 				.lastUpdated(new Timestamp(new Date().getTime()))
@@ -85,6 +86,7 @@ public class PatientRepositoryGetPatientsAndReadingsTests {
 				// use Timestamp instead of Date because assertj's isEqualTo doesn't
 				// think they're equal even when .equal does
 				.lastUpdated(new Timestamp(new Date().getTime()))
+				.zoneNumber("1")
 				.build();
 
 		var reading1 = new ReadingBuilder()

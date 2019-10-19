@@ -18,7 +18,7 @@
         "id":"001",
         "name":"Harumi Youko",
         "villageNumber":"1",
-        "zone": "1",
+        "zoneNumber":"1",
         "birthYear":1995,
         "sex":1,
         "medicalHistory":null,
@@ -50,7 +50,7 @@
         "id":"X",
         "name":"Test",
         "villageNumber":"32",
-        "zone": "1",
+        "zoneNumber":"1",
         "birthYear":1990,
         "sex":0,
         "lastUpdated":"2019-09-20 20:12:32"
@@ -67,7 +67,7 @@
         "id":"1000",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "zone": "1",
+        "zoneNumber":"1",
         "birthYear":2000,
         "sex":1,
         "lastUpdated":"2019-09-20 20:12:32"
@@ -84,7 +84,7 @@
         "id":"1000",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "zoneNumber":"1"
+        "zoneNumber":"1",
         "birthYear":2000,
         "sex":2,
         "lastUpdated":"2019-09-20 20:12:32"
