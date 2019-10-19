@@ -34,7 +34,11 @@ integration-test:
   before_script:
     - cd cradletest
   script:
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
-    - docker-compose up --build --force-recreate --abort-on-container-exit --exit-code-from tester
+    - docker network create -d bridge ci-network 
+    - docker build -f ci-scripts/Dockerfile-db . -t 'cradlerest/db:latest'
+    - docker run --privileged --name db --network ci-network -d 'cradlerest/db:latest'
+    - docker build -f ci-scripts/Dockerfile-web . -t 'cradlerest/web:latest'
+    - docker run --name web --network ci-network -d 'cradlerest/web:latest'
+    - docker build -f cradletest/Dockerfile . -t 'cradlerest/tester:latest'
+    - docker run --name tester --network ci-network 'cradlerest/tester:latest'
 

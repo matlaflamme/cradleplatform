@@ -6,5 +6,11 @@ RUN mvn compile
 # Run Project
 FROM openjdk:11
 VOLUME /tmp
-COPY --from=0 /target/*.jar .
+ENV DB_HOST=db
+ENV DB_PORT=3306
+ENV DB_USER=admin
+ENV DB_PASSWORD=super-strong-password
+EXPOSE 9000
+COPY --from=0 *.jar app.jar
+COPY web/scripts/wait-for-it.sh .
 CMD ["./wait-for-it.sh", "db:3306", "--", "java","-jar","/app.jar"]
