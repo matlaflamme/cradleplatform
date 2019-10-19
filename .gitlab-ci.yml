@@ -32,6 +32,4 @@ integration-test:
   services:
     - docker:dind
   script:
-    - ls
-    - ls ci-scripts
     - ./ci-scripts/ci-integration-tests.sh

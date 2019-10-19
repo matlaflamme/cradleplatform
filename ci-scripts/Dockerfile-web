@@ -2,8 +2,6 @@
 FROM maven:latest AS builder
 COPY ./web ./
 RUN mvn package -DskipTests
-RUN ls
-RUN find . -name 'web*.jar'
 
 # Run Project
 FROM openjdk:11
