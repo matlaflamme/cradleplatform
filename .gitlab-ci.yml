@@ -25,6 +25,8 @@ unit-test:
     - cd web
   script:
     - mvn test
+  only:
+    - merge_requests
 
 integration-test:
   stage: test
@@ -33,3 +35,5 @@ integration-test:
     - docker:dind
   script:
     - ./ci-scripts/ci-integration-tests.sh
+  only:
+    - merge_requests
