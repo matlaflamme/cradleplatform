@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 docker network rm ci-network 2> /dev/null
 docker network prune -f
