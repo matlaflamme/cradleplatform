@@ -1,7 +1,7 @@
 # Compile Project
 FROM maven:latest AS builder
 COPY ./web ./
-RUN mvn compile
+RUN mvn package -DskipTests
 RUN ls
 RUN find . -name 'web*.jar'
 
