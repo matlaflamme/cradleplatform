@@ -30,9 +30,7 @@ integration-test:
   stage: test
   image: docker
   services:
-    - docker:dind    
-  before_script:
-    - cd cradletest
+    - docker:dind
   script:
     - docker network create -d bridge ci-network 
     - docker build -f ci-scripts/Dockerfile-db . -t 'cradlerest/db:latest'
