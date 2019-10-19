@@ -32,11 +32,4 @@ integration-test:
   services:
     - docker:dind
   script:
-    - docker network create -d bridge ci-network 
-    - docker build -f ci-scripts/Dockerfile-db . -t 'cradlerest/db:latest'
-    - docker run --privileged --name db --network ci-network -d 'cradlerest/db:latest'
-    - docker build -f ci-scripts/Dockerfile-web . -t 'cradlerest/web:latest'
-    - docker run --name web --network ci-network -d 'cradlerest/web:latest'
-    - docker build -f cradletest/Dockerfile . -t 'cradlerest/tester:latest'
-    - docker run --name tester --network ci-network 'cradlerest/tester:latest'
-
+    - sh -c './ci-scripts/ci-integration-tests.sh'
