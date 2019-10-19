@@ -1,11 +1,10 @@
 stages:
   - build
-  - unit-test
-  - integration-test
+  - test
 
 build:
   stage: build
-  image: "maven:latest"
+  image: maven:latest
   cache:
     paths:
       - .m2/repository/
@@ -16,8 +15,8 @@ build:
     - mvn compile
 
 unit-test:
-  stage: unit-test
-  image: "maven:latest"
+  stage: test
+  image: maven:latest
   cache:
     paths:
       - .m2/repository/
@@ -28,13 +27,16 @@ unit-test:
     - mvn test
 
 integration-test:
-  stage: integration-test
+  stage: test
   image: docker
   services:
-    - docker:dind    
+    - docker:dind
   before_script:
-    - cd cradletest
+    - docker run --name db -p '3306:3306' --mount 'type=bind,src=web/scripts/db-initializer-scripts,dst=/docker-entrypoint-initdb.d' -d 'mysql/mysql-server'
+    - cd ci-scripts
+    - docker build -t cradlerest:latest .
+    - docker run --name web -p '9000:9000' -d 'cradlerest:latest'
+    - cd ..
   script:
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
-    - docker-compose up --build --force-recreate --abort-on-container-exit --exit-code-from tester
+    - docker build -f cradletest/Dockerfile . -t 'tester:latest'
+    - docker run --name tester 'tester:latest'
