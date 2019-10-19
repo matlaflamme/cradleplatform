@@ -35,7 +35,7 @@ integration-test:
     - pwd
     - cp -a web/scripts/db-initializer-scripts /builds/sql
     - ls /builds/sql
-    - docker run --name db -p '3306:3306' --mount "type=bind,src=/builds/sql,dst=/docker-entrypoint-initdb.d" -d 'mysql/mysql-server'
+    - docker run --privileged --name db -p '3306:3306' --mount "type=bind,src=/builds/sql,dst=/docker-entrypoint-initdb.d" -d 'mysql/mysql-server'
     - cd ci-scripts
     - docker build -t cradlerest:latest .
     - docker run --name web -p '9000:9000' -d 'cradlerest:latest'
