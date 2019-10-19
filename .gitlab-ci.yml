@@ -1,0 +1,27 @@
+stages:
+  - build
+  - unit-test
+
+build:
+  stage: build
+  image: "maven:latest"
+  cache:
+    paths:
+      - .m2/repository/
+      - web/target/
+  before_script:
+    - cd web
+  script:
+    - mvn compile
+
+unit-test:
+  stage: unit-test
+  image: "maven:latest"
+  cache:
+    paths:
+      - .m2/repository/
+      - web/target/
+  before_script:
+    - cd web
+  script:
+    - mnv test
