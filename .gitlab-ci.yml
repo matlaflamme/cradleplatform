@@ -32,15 +32,11 @@ integration-test:
   services:
     - docker:dind
   script:
-    - pwd
-    - 'export SHARED_PATH="$(dirname ${CI_PROJECT_DIR})/shared"'
-    - mkdir -p ${SHARED_PATH}
-    - cp -a web/scripts/db-initializer-scripts ${SHARED_PATH}
-    - ls ${SHARED_PATH}
-    - docker run --privileged --name db -p '3306:3306' --mount "type=bind,src=${SHARED_PATH},dst=/docker-entrypoint-initdb.d" -d 'mysql/mysql-server'
+    - docker build -f ci-scripts/Dockerfile-db -t cradlerest/db:latest
+    - docker run --privileged --name db -p '3306:3306' -d 'cradlerest/db:latest'
     - cd ci-scripts
-    - docker build -t cradlerest:latest .
-    - docker run --name web -p '9000:9000' -d 'cradlerest:latest'
+    - docker build -f Dockerfile-web -t cradlerest/web:latest
+    - docker run --name web -p '9000:9000' -d 'cradlerest/web:latest'
     - cd ..
-    - docker build -f cradletest/Dockerfile . -t 'tester:latest'
+    - docker build -f cradletest/Dockerfile . -t 'cradlerest/tester:latest'
     - docker run --name tester 'tester:latest'

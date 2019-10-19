@@ -1,0 +1,3 @@
+FROM mysql/mysql-server
+ENV MYSQL_DATABASE cradlerest
+COPY ./web/scripts/db-initializer-scripts/ /docker-entrypoint-initdb.d/
