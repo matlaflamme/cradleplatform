@@ -24,4 +24,4 @@ unit-test:
   before_script:
     - cd web
   script:
-    - mnv test
+    - mvn test
