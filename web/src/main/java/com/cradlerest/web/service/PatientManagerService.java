@@ -5,7 +5,6 @@ import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -89,5 +88,4 @@ public interface PatientManagerService {
 	 */
 	Reading saveReading(@Nullable Reading reading) throws Exception;
 
-	Reading constructReadingFromEncrypted(MultipartFile file) throws Exception;
 }
