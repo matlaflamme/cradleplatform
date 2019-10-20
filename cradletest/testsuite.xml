@@ -115,43 +115,6 @@
     </Response>
   </TestCase>
 
-  <TestCase name="Get Mock Reading Views For Patient">
-    <!-- TODO: update this test once actual ReadingManager is implemented -->
-    <Request method="GET" uri="/api/reading/allForPatient/001"/>
-    <Response status="200">
-      <![CDATA[
-      [
-        {
-          "id":2,
-          "patientId":"001",
-          "systolic":130,
-          "diastolic":90,
-          "heartRate":90,
-          "colour":1,
-          "pregnant":true,
-          "gestationalAge":110,
-          "symptoms":["Headache"],
-          "timestamp":"2019-10-30 09:32:10",
-          "otherSymptoms":null
-        },
-        {
-          "id":1,
-          "patientId":"001",
-          "systolic":110,
-          "diastolic":80,
-          "heartRate":70,
-          "colour":0,
-          "pregnant":true,
-          "gestationalAge":90,
-          "symptoms":["Headache"],
-          "timestamp":"2019-10-24 09:32:10",
-          "otherSymptoms":null
-        }
-      ]
-      ]]>
-    </Response>
-  </TestCase>
-
   <TestCase name="Create New Reading">
     <Request method="POST" uri="/api/reading/save">
       <![CDATA[

@@ -45,16 +45,4 @@ public class ReadingController {
 	public ReadingView get(@PathVariable("id") Integer readingId) throws EntityNotFoundException {
 		return readingManager.getReadingView(readingId);
 	}
-
-	/**
-	 * Returns a list of reading views associated with a given patient.
-	 * @param patientId The id of the patient to get readings for.
-	 * @return A list of reading views.
-	 * @throws EntityNotFoundException If unable to find a patient with the
-	 * 	given identifier.
-	 */
-	@GetMapping("allForPatient/{id}")
-	public List<ReadingView> getAllForPatient(@PathVariable("id") String patientId) throws EntityNotFoundException {
-		return readingManager.getAllReadingViewsForPatient(patientId);
-	}
 }

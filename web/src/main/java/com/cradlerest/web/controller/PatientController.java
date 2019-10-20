@@ -57,7 +57,6 @@ public class PatientController {
 		return patientManagerService.getPatientWithId(id);
 	}
 
-	@Deprecated
 	@GetMapping("/{id}/readings")
 	public List<Reading> readings(@PathVariable("id") String id) {
 		return patientManagerService.getReadingsForPatientWithId(id);
