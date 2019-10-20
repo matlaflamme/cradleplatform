@@ -1,5 +1,8 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.service.PatientManagerService;
+import com.cradlerest.web.service.repository.ReferralRepository;
+import com.cradlerest.web.service.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twilio.example.TwiMLResponseExample;
@@ -20,13 +23,21 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Used to test Twilio webhook
+ * Used to test Twilio webhook / handle SMS referral
  * currently using: /api/twilio/uploadsms
  *
  */
 @RestController
 @RequestMapping("/api/twilio")
 public class TwilioWebhook {
+
+	private UserRepository userRepository;
+	private ReferralRepository referralRepository;
+	private PatientManagerService patientManagerService;
+
+	public TwilioWebhook(PatientManagerService patientManagerService) {
+		this.patientManagerService = patientManagerService;
+	}
 
 	/**
 	 * Returns a string as an SMS reply (this replies to the sender with a text)
@@ -39,9 +50,13 @@ public class TwilioWebhook {
 	@PostMapping(path = "/uploadsms", consumes = "application/x-www-form-urlencoded")
 	public String respondToSmS(WebRequest request, HttpServletResponse response) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
+
+		// Parses request body (body of text send by VHT)
+		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
-		//System.out.println("received: " + request.toString());
+
+		// TODO: timestamp matches Reading entity timestamp
 		System.out.println(requestBody);
-		return "Success";
+		return "Success\n: " + requestBody.toString();
 	}
 }
