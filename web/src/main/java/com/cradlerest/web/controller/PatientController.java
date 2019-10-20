@@ -4,7 +4,6 @@ import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.service.PatientManagerService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -66,11 +65,6 @@ public class PatientController {
 	@PostMapping("")
 	public Patient createPatient(@RequestBody Patient patient) throws Exception {
 		return patientManagerService.savePatient(patient);
-	}
-
-	@PostMapping("/encrypted_reading")
-	public Reading createReadingFromEncrypted(@RequestParam("userDataFile") MultipartFile file) throws Exception {
-		return patientManagerService.constructReadingFromEncrypted(file);
 	}
 
 	@PostMapping("/reading")
