@@ -2,6 +2,8 @@ package com.cradlerest.web.model.builder;
 
 import com.cradlerest.web.model.Reading;
 
+import static com.cradlerest.web.util.Validation.assertFieldNotNull;
+
 /**
  * Simplifies the process of constructing {@code Reading} objects.
  *
@@ -37,19 +39,13 @@ public class ReadingBuilder extends AbstractReadingBuilder<Reading, ReadingBuild
 		return this;
 	}
 
-	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
-		if (object == null) {
-			throw new InstantiationError(String.format("field '%s' is null", fieldName));
-		}
-	}
-
 	private void validate() throws InstantiationError {
-		assertNotNull(value.getPatientId(), "pid");
-		assertNotNull(value.getColour(), "colour");
-		assertNotNull(value.getHeartRate(), "heartRate");
-		assertNotNull(value.getSystolic(), "systolic");
-		assertNotNull(value.getDiastolic(), "diastolic");
-		assertNotNull(value.isPregnant(), "isPregnant");
-		assertNotNull(value.getTimestamp(), "timestamp");
+		assertFieldNotNull(value.getPatientId(), "pid");
+		assertFieldNotNull(value.getColour(), "colour");
+		assertFieldNotNull(value.getHeartRate(), "heartRate");
+		assertFieldNotNull(value.getSystolic(), "systolic");
+		assertFieldNotNull(value.getDiastolic(), "diastolic");
+		assertFieldNotNull(value.isPregnant(), "isPregnant");
+		assertFieldNotNull(value.getTimestamp(), "timestamp");
 	}
 }
