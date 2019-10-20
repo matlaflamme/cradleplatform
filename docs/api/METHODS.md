@@ -16,7 +16,6 @@ information about the entities returned by these methods see
     * [`POST /api/patient`](#post-apipatient)
     * [`POST /api/reading`](#post-apireading)
     * [`GET /api/reading/{id}`](#get-apireadingid)
-    * [`GET /api/reading/allForPatient/{id}`](#get-apireadingallforpatientid)
     * [`POST /api/reading/save`](#post-apireadingsave)
 
 ## Patient Methods
@@ -104,7 +103,6 @@ None
             "sex": 1,
             "medicalHistory": null,
             "drugHistory": null,
-            "otherSymptoms": null,
             "lastUpdated": "2019-09-20 13:12:32"
         },
         "reading": {
@@ -116,7 +114,8 @@ None
             "gestationalAge": null,
             "colour": 2,
             "timestamp": "2019-09-24 05:31:34",
-            "pregnant": false
+            "pregnant": false,
+            "otherSymptoms": null,
         }
     },
     {
@@ -128,7 +127,6 @@ None
             "sex": 1,
             "medicalHistory": null,
             "drugHistory": null,
-            "otherSymptoms": null,
             "lastUpdated": "2019-09-20 13:12:32"
         },
         "reading": null
@@ -138,8 +136,6 @@ None
 
 
 ### `GET /api/patient/{id}/readings`
-
-> **DEPRECIATED**: Use `GET /api/reading/allForPatient/{id}` instead.
 
 Returns only the readings for the patient with a given `id`.
 
@@ -234,27 +230,6 @@ A [reading view](ENTITIES.md#reading-view) entity for the reading with a given i
 #### Errors
 
 Returns a 404-NotFound exception if unable to find a reading with the specified id.
-
-
-### `GET /api/reading/allForPatient/{id}`
-
-> Replaces `GET /api/patient/{id}/readings`.
-
-Returns a list of all readings for a given patient.
-
-#### Path Variables
-
-| Variable | Type | Description |
-|:-:|:-:|:-|
-| `id` | `string` | Patient Identifier |
-
-#### Returns
-
-A JSON array of [reading view](ENTITIES.md#readingview) entities associated with the patient with a given id.
-
-#### Errors
-
-Returns a 404-NotFound exception if unable to find a patient with the specified id.
 
 
 ### `POST /api/reading/save`
