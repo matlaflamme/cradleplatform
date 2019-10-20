@@ -4,9 +4,11 @@ import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -57,6 +59,11 @@ public class Reading {
 	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
+	@Column(name = "other_symptoms")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.7)
+	private String otherSymptoms;
+
 	public Reading() {}
 
 	public Reading(
@@ -67,7 +74,8 @@ public class Reading {
 			boolean isPregnant,
 			Integer gestationalAge,
 			@NotNull ReadingColour colour,
-			@NotNull Date timestamp
+			@NotNull Date timestamp,
+			@Nullable String otherSymptoms
 	) {
 		this.patientId = patientId;
 		this.systolic = systolic;
@@ -77,6 +85,7 @@ public class Reading {
 		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
+		this.otherSymptoms = otherSymptoms;
 	}
 
 	public Reading(
@@ -88,7 +97,8 @@ public class Reading {
 			boolean isPregnant,
 			Integer gestationalAge,
 			@NotNull ReadingColour colour,
-			@NotNull Date timestamp
+			@NotNull Date timestamp,
+			@Nullable String otherSymptoms
 	) {
 		this.id = id;
 		this.patientId = patientId;
@@ -99,6 +109,7 @@ public class Reading {
 		this.gestationalAge = gestationalAge;
 		this.colour = colour;
 		this.timestamp = timestamp;
+		this.otherSymptoms = otherSymptoms;
 	}
 
 	public Integer getId() {
@@ -173,6 +184,14 @@ public class Reading {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getOtherSymptoms() {
+		return otherSymptoms;
+	}
+
+	public void setOtherSymptoms(String otherSymptoms) {
+		this.otherSymptoms = otherSymptoms;
 	}
 
 	@Override

@@ -50,7 +50,6 @@ public class PatientRepositoryGetPatientsAndReadingsTests {
 				.sex(Sex.FEMALE)
 				.medicalHistory("x")
 				.drugHistory("y")
-				.otherSymptoms("z")
 				.zoneNumber("1")
 				// use Timestamp instead of Date because assertj's isEqualTo doesn't
 				// think they're equal even when .equal does
@@ -82,7 +81,6 @@ public class PatientRepositoryGetPatientsAndReadingsTests {
 				.sex(Sex.FEMALE)
 				.medicalHistory(null)
 				.drugHistory(null)
-				.otherSymptoms(null)
 				// use Timestamp instead of Date because assertj's isEqualTo doesn't
 				// think they're equal even when .equal does
 				.lastUpdated(new Timestamp(new Date().getTime()))

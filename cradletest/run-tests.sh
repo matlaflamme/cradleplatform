@@ -35,7 +35,7 @@ if [[ $1 == "--verbose" ]]; then
 else
     docker-compose -f docker-compose.yml -f docker-compose-silent.yml up --build --force-recreate --abort-on-container-exit --exit-code-from tester
 fi
-$RESULT=$?
+RESULT=$?
 
 # Cleanup containers to have a fresh start the next time tests are run.
 docker-compose rm -f

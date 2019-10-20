@@ -22,7 +22,6 @@ CREATE TABLE patient (
     sex INT NOT NULL,                   -- enumerated {male, female, unknown}
     medical_history VARCHAR(255) DEFAULT '',
     drug_history VARCHAR(255) DEFAULT '',
-    other_symptoms VARCHAR(255),
     last_updated DATETIME NOT NULL
 );
 
@@ -37,5 +36,28 @@ CREATE TABLE reading (
     gestational_age INT,                -- in days
     colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
+    other_symptoms TEXT,
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
+
+CREATE TABLE symptom (
+     id INT PRIMARY KEY,
+     text VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE symptom_reading_relation (
+    sid INT NOT NULL,
+    rid INT NOT NULL,
+    PRIMARY KEY (sid, rid),
+    FOREIGN KEY (sid) REFERENCES symptom (id),
+    FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
+);
+
+
+-- Statically Defined Data
+INSERT INTO symptom VALUES (0, 'Headache');
+INSERT INTO symptom VALUES (1, 'Blurred Vision');
+INSERT INTO symptom VALUES (2, 'Abdominal Pain');
+INSERT INTO symptom VALUES (3, 'Bleeding');
+INSERT INTO symptom VALUES (4, 'Feverish');
+INSERT INTO symptom VALUES (5, 'Unwell');

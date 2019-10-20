@@ -36,7 +36,6 @@ public class PatientRepositoryCustomImpl implements PatientRepositoryCustom {
 				"       p.sex,\n" +
 				"       p.medical_history,\n" +
 				"       p.drug_history,\n" +
-				"       p.other_symptoms,\n" +
 				"       p.last_updated,\n" +
 				"       r.id AS rid,\n" +
 				"       r.systolic,\n" +
@@ -45,6 +44,7 @@ public class PatientRepositoryCustomImpl implements PatientRepositoryCustom {
 				"       r.is_pregnant,\n" +
 				"       r.gestational_age,\n" +
 				"       r.colour,\n" +
+				"       r.other_symptoms,\n" +
 				"       r.timestamp\n" +
 				"FROM (SELECT rids.id AS rid\n" +
 				"      FROM (SELECT r.id, r.timestamp FROM reading r) AS rids\n" +
@@ -68,7 +68,6 @@ public class PatientRepositoryCustomImpl implements PatientRepositoryCustom {
 					.sex(Sex.valueOf(tuple.get("sex", Integer.class)))
 					.medicalHistory(tuple.get("medical_history", String.class))
 					.drugHistory(tuple.get("drug_history", String.class))
-					.otherSymptoms(tuple.get("other_symptoms", String.class))
 					.lastUpdated(tuple.get("last_updated", Date.class))
 					.build();
 

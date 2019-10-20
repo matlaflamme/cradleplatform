@@ -67,6 +67,7 @@ public class PatientController {
 		return patientManagerService.savePatient(patient);
 	}
 
+	@Deprecated
 	@PostMapping("/reading")
 	public Reading createReading(@RequestBody Reading reading) throws Exception {
 		return patientManagerService.saveReading(reading);
