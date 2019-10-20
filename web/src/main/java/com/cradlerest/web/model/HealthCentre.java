@@ -6,6 +6,10 @@ import java.util.List;
 /**
  * Defines a health centre
  *
+ * 	For each referral the VHT has made, they can see:
+ * 	Health centre referred to,
+ * 	Distance from health centre,
+ * 	Mode of transport to reach health centre
  */
 @Entity
 @Table(name = "health_centre")
@@ -35,6 +39,10 @@ public class HealthCentre {
 
 	@Column(name = "patients")
 	private List<String> patients;
+
+//	@Column(name = "location")
+//	private Location location;
+
 
 	HealthCentre() {}
 
