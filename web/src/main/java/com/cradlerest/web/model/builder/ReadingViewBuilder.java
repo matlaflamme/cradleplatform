@@ -4,6 +4,7 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.SymptomView;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.cradlerest.web.util.Validation.assertFieldNotNull;
@@ -26,6 +27,10 @@ public class ReadingViewBuilder extends AbstractReadingBuilder<ReadingView, Read
 	public ReadingViewBuilder symptoms(@NotNull List<SymptomView> symptomViews) {
 		value.setSymptoms(symptomViews);
 		return self();
+	}
+
+	public ReadingViewBuilder symptoms(@NotNull SymptomView... symptomViews) {
+		return symptoms(Arrays.asList(symptomViews));
 	}
 
 	@Override

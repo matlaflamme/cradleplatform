@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.model.view.SymptomView;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "symptom")
-public class Symptom {
+public class Symptom implements SymptomView {
 
 	@Id
 	@Column(name = "id")

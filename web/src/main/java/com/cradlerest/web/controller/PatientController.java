@@ -57,6 +57,7 @@ public class PatientController {
 		return patientManagerService.getPatientWithId(id);
 	}
 
+	@Deprecated
 	@GetMapping("/{id}/readings")
 	public List<Reading> readings(@PathVariable("id") String id) {
 		return patientManagerService.getReadingsForPatientWithId(id);
@@ -67,6 +68,7 @@ public class PatientController {
 		return patientManagerService.savePatient(patient);
 	}
 
+	@Deprecated
 	@PostMapping("/reading")
 	public Reading createReading(@RequestBody Reading reading) throws Exception {
 		return patientManagerService.saveReading(reading);
