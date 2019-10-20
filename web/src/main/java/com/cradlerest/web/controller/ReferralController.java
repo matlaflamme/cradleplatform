@@ -23,27 +23,27 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Used to test Twilio webhook / handle SMS referral
- * currently using: /api/twilio/uploadsms
+ * Handles referrals
+ *
+ * Twilio currently using: /api/twilio/uploadsms
  *
  */
 @RestController
-@RequestMapping("/api/twilio")
-public class TwilioWebhook {
+@RequestMapping("/api/referral/")
+public class ReferralController {
 
 	private UserRepository userRepository;
 	private ReferralRepository referralRepository;
 	private PatientManagerService patientManagerService;
 
-	public TwilioWebhook(PatientManagerService patientManagerService) {
+	public ReferralController(PatientManagerService patientManagerService) {
 		this.patientManagerService = patientManagerService;
 	}
 
 	/**
-	 * Returns a string as an SMS reply (this replies to the sender with a text)
-	 * https://www.twilio.com/docs/sms/twiml#twilios-request-to-your-application
+	 * Handles Twilio post request (VHT has no internet)
 	 *
-	 * Example body:
+	 * Example request "Body":
 	 * {
 	 * 		"patientName":"JS",
 	 * 		"patientId":"123",
@@ -64,8 +64,8 @@ public class TwilioWebhook {
 	 * @throws IOException
 	 * @return A SMS from Twilio number to whoever sent the text.
 	 */
-	@PostMapping(path = "/uploadsms", consumes = "application/x-www-form-urlencoded")
-	public String respondToSmS(WebRequest request, HttpServletResponse response) throws IOException {
+	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
+	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 
 		// Parses request body (body of text send by VHT)
@@ -76,5 +76,19 @@ public class TwilioWebhook {
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
 		System.out.println(requestBody);
 		return "Success\n: " + requestBody.toString();
+	}
+
+	/**
+	 * Handle referral sent through request
+	 *
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@PostMapping(path = "/send")
+	public String saveReferral(WebRequest request, HttpServletResponse response) throws IOException {
+		// TODO
+		return "Success";
 	}
 }
