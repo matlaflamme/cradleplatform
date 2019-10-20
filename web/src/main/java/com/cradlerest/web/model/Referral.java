@@ -51,7 +51,6 @@ public class Referral {
 	@Column(name = "comments")
 	private String comments;
 
-
 	Referral() {}
 
 	Referral(Integer id, String patientId, String vhtId, Date timestamp) {
