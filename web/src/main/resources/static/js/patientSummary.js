@@ -2,7 +2,7 @@
 Vue.component('patient_readings', {
     data: function() {
         return { rows: null//Request data from the server from this function. Get a JSON file as a response?
-                //[{ date: '2/11/1995', time: '14:33', bp: '100/88', heartRate: '80', light: 'Green'}]
+            //[{ date: '2/11/1995', time: '14:33', bp: '100/88', heartRate: '80', light: 'Green'}]
         }
     },
     template: '<table class="table table-striped table-hover">\n' +
@@ -16,13 +16,12 @@ Vue.component('patient_readings', {
         '</tr>' +
         '</thead>' +
         '<tbody>' +
-        '<tr v-for="row in rows" v-on:click="click(row.id)">' +
-        '<th>{{row.id}}</th>' +
+        '<tr v-for="row in rows">' +
         '<th>{{row.timestamp}}</th>' +
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
         '<td>{{row.heartRate}}</td>' +
-        '<td>{{row.colour}}</td>' +
+        '<span class="dot" id="readingLight" ref="readingLight">{{readLight(row.colour)}}</span>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
@@ -32,25 +31,30 @@ Vue.component('patient_readings', {
         axios.get('/api/patient/'+ id + '/readings').then(response => (this.rows = response.data))
     },
     methods: {
-        click: function(row_id) {
-            //signs in
-            console.log(row_id);
-        }
-    }
-});
+        readLight: function (color_id) {
+            let color = 'green';
+            switch (color_id) {
+                case 0:
+                    color = 'green';
+                    break;
+                case 1:
+                    color = 'yellow';
+                    break;
+                case 2:
+                    color = 'yellow';
+                    break;
+                case 3:
+                    color = 'red';
+                case 4:
+                    color = 'red';
 
-Vue.component('reading_info', {
-    template: '<div className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog"' +
-        'aria-labelledby="myLargeModalLabel" aria-hidden="true">' +
-        '<div className="modal-dialog modal-lg">' +
-        '<div className="modal-content">' +
-        '...' +
-        '</div>' +
-        '</div>' +
-        '</div>',
-    mounted() {
-    },
-    methods: {
+                    break;
+            }
+            // console.log(this);
+            console.log(this.$refs.readingLight);
+            // this.setAttribute("style", "background-color:" +  color + ";");
+            return color
+        }
     }
 });
 
@@ -85,49 +89,49 @@ Vue.component('basic_info', {
         return {
             patientData: //starter data so that "patientData" is not null when the page is loaded
                 {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
-                "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
-                "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
-                    "timestamp":""}]} //data in the form of json string
+                    "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
+                    "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
+                        "timestamp":""}]} //data in the form of json string
         }
     },
     template:
         '<div>'+
-            '<div class="patientInfo">\n' +
-            '    <h6>Patient Name:</h6>\n' +
-            '    <p class="patientName">{{patientData.name}}<br></p>\n' +
-            '    <h6>ID:</h6>\n' +
-            '    <p class="patientId">{{patientData.id}}<br></p>\n' +
-            '    <h6>Date Of Birth:</h6>\n' +
-            '    <p class="DOB">{{patientData.birthYear}}<br></p>\n' +
-            '    <h6>Sex:</h6>\n' +
-            '    <p class="patientSex">{{getPatientSex(patientData.sex)}}<br></p>' + //calls getPatientSex method
-            '</div>\n' +
-            '    <h2>Latest Reading</h2>\n' +
-            '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">\n' +
-            '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
-            '    <span id="light" ref="light" class="dot"></span>' +
-            '    <img id="arrow" ref="arrow" src="/img/arrow_down.png" height="50" width="50" style="margin-bottom: 12px">' +
-            '    <br>\n' +
-            '    <h6 style="display:inline-block;">Systolic:</h6>\n' +
-            '    <p id="BP" style="display:inline-block">{{patientData.readings[0].systolic}}</p>\n' +
-            '    <br>\n' +
-            '    <h6 style="display:inline-block;">Diastolic:</h6>\n' +
-            '    <p id="BP" style="display:inline-block">{{patientData.readings[0].diastolic}}</p>\n' +
-            '    <br>\n' +
-            '    <h6 style="display:inline-block;">Gestational Age:</h6>\n' +
-            '    <p class="GestationalAge">{{patientData.gestationalAge}}</p>\n' +
-            '    <p> Weeks</p>\n' +
-            '    <h2>Symptoms</h2>\n' +
-            '    <div class= "info" id="symptoms">Received overcame oh sensible so at an.\n' +
-            '            Formed do change merely to county it. Am separate contempt\n' +
-            '            domestic to to oh. On relation my so addition branched.</div>\n' +
-            '    <h2>Current Medications</h2>\n' +
-            '    <ul id="currentMedication">\n' +
-            '        <li >item 1 </li>\n' +
-            '        <li >item 2</li>\n' +
-            '        <li >item 3</li>\n' +
-            '        <li >item 4</li>\n' +
-            '    </ul>' +
+        '<div class="patientInfo">\n' +
+        '    <h6>Patient Name:</h6>\n' +
+        '    <p class="patientName">{{patientData.name}}<br></p>\n' +
+        '    <h6>ID:</h6>\n' +
+        '    <p class="patientId">{{patientData.id}}<br></p>\n' +
+        '    <h6>Date Of Birth:</h6>\n' +
+        '    <p class="DOB">{{patientData.birthYear}}<br></p>\n' +
+        '    <h6>Sex:</h6>\n' +
+        '    <p class="patientSex">{{getPatientSex(patientData.sex)}}<br></p>' + //calls getPatientSex method
+        '</div>\n' +
+        '    <h2>Latest Reading</h2>\n' +
+        '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">\n' +
+        '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
+        '    <span id="light" ref="light" class="dot"></span>' +
+        '    <img id="arrow" ref="arrow" src="/img/arrow_down.png" height="50" width="50" style="margin-bottom: 12px">' +
+        '    <br>\n' +
+        '    <h6 style="display:inline-block;">Systolic:</h6>\n' +
+        '    <p id="BP" style="display:inline-block">{{patientData.readings[0].systolic}}</p>\n' +
+        '    <br>\n' +
+        '    <h6 style="display:inline-block;">Diastolic:</h6>\n' +
+        '    <p id="BP" style="display:inline-block">{{patientData.readings[0].diastolic}}</p>\n' +
+        '    <br>\n' +
+        '    <h6 style="display:inline-block;">Gestational Age:</h6>\n' +
+        '    <p class="GestationalAge">{{patientData.gestationalAge}}</p>\n' +
+        '    <p> Weeks</p>\n' +
+        '    <h2>Symptoms</h2>\n' +
+        '    <div class= "info" id="symptoms">Received overcame oh sensible so at an.\n' +
+        '            Formed do change merely to county it. Am separate contempt\n' +
+        '            domestic to to oh. On relation my so addition branched.</div>\n' +
+        '    <h2>Current Medications</h2>\n' +
+        '    <ul id="currentMedication">\n' +
+        '        <li >item 1 </li>\n' +
+        '        <li >item 2</li>\n' +
+        '        <li >item 3</li>\n' +
+        '        <li >item 4</li>\n' +
+        '    </ul>' +
         '</div>',
     mounted() {
         let urlQuery = new URLSearchParams(location.search);
@@ -166,10 +170,9 @@ Vue.component('basic_info', {
                 case 4:
                     color = 'red';
                     this.$refs.arrow.src = '/img/arrow_down.png';
-
                     break;
             }
-           this.$refs.light.setAttribute("style", "background-color:" +  color + ";");
+            this.$refs.light.setAttribute("style", "background-color:" +  color + ";");
         }
     }
 });
