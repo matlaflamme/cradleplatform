@@ -47,9 +47,9 @@ input{
     width: 100%;
     background: #fff;
     margin-bottom: 4%;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; /* light Gray */
     padding: 3%;
-    color: #555;
+    color: #555; /* Gray */
     font: 95% Arial, Helvetica, sans-serif;
 
 
@@ -69,7 +69,7 @@ form label{
 }
 
 
-p{
+p{   /* paragraph tag */
     font-size:10px;line-height: 18px;
 }
 
