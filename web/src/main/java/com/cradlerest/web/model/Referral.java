@@ -24,17 +24,14 @@ public class Referral {
 	@Column(name = "id")
 	private Integer id;
 
-	@ManyToOne() // a patient can have many referrals
-	@JoinColumn(name = "pid")
-	private String patientId; // one referra
+	@Column(name = "patient")
+	private Patient patient;
 
-	@ManyToOne()
-	@JoinColumn(name = "vid")
-	private String vht;
+	@Column(name = "vht")
+	private User vht;
 
-	@OneToOne()
-	@JoinColumn(name = "readingId")
-	private String readingId;
+	@Column(name = "reading")
+	private Reading reading;
 
 	@Column(name = "timestamp")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
@@ -42,10 +39,10 @@ public class Referral {
 	// temporary
 	// TODO: Health Centre entity
 	@Column(name = "health_centre")
-	private String healthCentreId;
+	private String healthCentre;
 
 	// temporary
-	@Column(name = "healthCentreNumber")
+	@Column(name = "health_centre_number")
 	private String healthCentreNumber;
 
 	@Column(name = "comments")
@@ -53,27 +50,30 @@ public class Referral {
 
 	Referral() {}
 
-	Referral(Integer id, String patientId, String vhtId, Date timestamp) {
+	Referral(Integer id, Patient patient, User vht, Reading reading, Date timestamp, String healthCentre, String healthCentreNumber) {
 		this.id = id;
-		this.patientId = patientId;
-		this.vht = vhtId;
+		this.patient = patient;
+		this.vht = vht;
+		this.reading = reading;
 		this.timestamp = timestamp;
+		this.healthCentre = healthCentre;
+		this.healthCentreNumber = healthCentreNumber;
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
-	public String getPatientId() {
-		return patientId;
+	public Patient getPatient() {
+		return patient;
 	}
 
-	public String getVht() {
+	public User vht() {
 		return vht;
 	}
 
-	public String getReadingId() {
-		return readingId;
+	public Reading getReading() {
+		return reading;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
@@ -81,12 +81,12 @@ public class Referral {
 		return timestamp;
 	}
 
-	public String getHealthCentreId() {
-		return healthCentreId;
+	public String getHealthCentre() {
+		return healthCentre;
 	}
 
-	public void setHealthCentreId(String healthCentreId) {
-		this.healthCentreId = healthCentreId;
+	public void setHealthCentre(String healthCentre) {
+		this.healthCentre = healthCentre;
 	}
 
 	public String getHealthCentreNumber() {
