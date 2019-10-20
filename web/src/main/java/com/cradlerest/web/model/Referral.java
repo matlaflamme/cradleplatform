@@ -48,6 +48,10 @@ public class Referral {
 	@Column(name = "healthCentreNumber")
 	private String healthCentreNumber;
 
+	@Column(name = "comments")
+	private String comments;
+
+
 	Referral() {}
 
 	Referral(Integer id, String patientId, String vhtId, Date timestamp) {
@@ -61,32 +65,16 @@ public class Referral {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getPatientId() {
 		return patientId;
-	}
-
-	public void setPatientId(String patientId) {
-		this.patientId = patientId;
 	}
 
 	public String getVht() {
 		return vht;
 	}
 
-	public void setVht(String vht) {
-		this.vht = vht;
-	}
-
 	public String getReadingId() {
 		return readingId;
-	}
-
-	public void setReadingId(String readingId) {
-		this.readingId = readingId;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
@@ -94,8 +82,24 @@ public class Referral {
 		return timestamp;
 	}
 
-	@JsonDeserialize(using = DateDeserializer.class)
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+	public String getHealthCentreId() {
+		return healthCentreId;
 	}
+
+	public void setHealthCentreId(String healthCentreId) {
+		this.healthCentreId = healthCentreId;
+	}
+
+	public String getHealthCentreNumber() {
+		return healthCentreNumber;
+	}
+
+	public void setHealthCentreNumber(String healthCentreNumber) {
+		this.healthCentreNumber = healthCentreNumber;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
 }
