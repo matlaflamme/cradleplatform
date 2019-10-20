@@ -93,4 +93,8 @@ public class HealthCentre {
 	public void setManagerPhoneNumber(String managerPhoneNumber) {
 		this.managerPhoneNumber = managerPhoneNumber;
 	}
+
+	public List<String> getPatients() {
+		return patients;
+	}
 }
