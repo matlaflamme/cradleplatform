@@ -1,5 +1,6 @@
 package com.cradlerest.web.service.mock;
 
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,19 +12,19 @@ import java.util.List;
 public class MockReadingManager implements ReadingManager {
 
 	@Override
-	public Object getReadingView(@NotNull Integer readingId) {
+	public ReadingView getReadingView(@NotNull Integer readingId) {
 		// TODO: implement me
 		return null;
 	}
 
 	@Override
-	public List<Object> getAllReadingViewsForPatient(@NotNull String patientId) {
+	public List<ReadingView> getAllReadingViewsForPatient(@NotNull String patientId) {
 		// TODO: implement me
 		return null;
 	}
 
 	@Override
-	public void saveReadingView(@NotNull Object readingView) {
+	public void saveReadingView(@NotNull ReadingView readingView) {
 		// TODO: implement me
 	}
 }

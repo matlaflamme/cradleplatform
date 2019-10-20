@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.view.ReadingView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,9 +24,6 @@ import java.util.List;
  */
 public interface ReadingManager {
 
-	// TODO: consider creating a model class for the reading view instead of
-	//		 hiding its internals behind an opaque object
-
 	/**
 	 * Returns a reading view for the reading with a given identifier.
 	 * @param readingId The id of the reading view to construct.
@@ -33,7 +31,7 @@ public interface ReadingManager {
 	 * @throws EntityNotFoundException If unable to find a reading with the
 	 * 	given identifier.
 	 */
-	Object getReadingView(@NotNull Integer readingId) throws EntityNotFoundException;
+	ReadingView getReadingView(@NotNull Integer readingId) throws EntityNotFoundException;
 
 	/**
 	 * Returns a list of all reading views for a given patient.
@@ -42,11 +40,11 @@ public interface ReadingManager {
 	 * @throws EntityNotFoundException If unable to find a patient with the
 	 * 	given identifier.
 	 */
-	List<Object> getAllReadingViewsForPatient(@NotNull String patientId) throws EntityNotFoundException;
+	List<ReadingView> getAllReadingViewsForPatient(@NotNull String patientId) throws EntityNotFoundException;
 
 	/**
 	 * Deconstructs and persists a given reading view.
 	 * @param readingView A reading view.
 	 */
-	void saveReadingView(@NotNull Object readingView);
+	void saveReadingView(@NotNull ReadingView readingView);
 }
