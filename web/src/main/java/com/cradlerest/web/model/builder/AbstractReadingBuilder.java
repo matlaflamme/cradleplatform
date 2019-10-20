@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
+import static com.cradlerest.web.util.Validation.assertFieldNotNull;
+
 /**
  * Abstract builder for classes which extend the {@code Reading} class.
  * Implements builder methods for all of {@code Reading}'s fields which will
@@ -98,5 +100,9 @@ abstract class AbstractReadingBuilder<T extends Reading, Self>  extends Abstract
 	public Self timestamp(@NotNull String timestampText) {
 		value.setTimestamp(DateParser.parseDateTime(timestampText));
 		return self();
+	}
+
+	protected void validate() throws InstantiationError {
+		assertFieldNotNull(value.getId(), "id");
 	}
 }

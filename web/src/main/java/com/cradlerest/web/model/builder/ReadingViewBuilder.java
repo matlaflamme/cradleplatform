@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.cradlerest.web.util.Validation.assertFieldNotNull;
+
 /**
  * The builder class for {@code ReadingView} objects.
  *
@@ -26,10 +28,20 @@ public class ReadingViewBuilder extends AbstractReadingBuilder<ReadingView, Read
 		return self();
 	}
 
-	// TODO: override `build` to validate before building
+	@Override
+	public ReadingView build() throws InstantiationError {
+		validate();
+		return value;
+	}
 
 	@Override
 	protected ReadingViewBuilder self() {
 		return this;
+	}
+
+	@Override
+	protected void validate() throws InstantiationError {
+		super.validate();
+		assertFieldNotNull(value.getSymptoms(), "symptoms");
 	}
 }
