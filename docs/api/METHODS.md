@@ -15,6 +15,9 @@ information about the entities returned by these methods see
     * [`GET /api/patient/{id}/readings`](#get-apipatientidreadings)
     * [`POST /api/patient`](#post-apipatient)
     * [`POST /api/reading`](#post-apireading)
+    * [`GET /api/reading/{id}`](#get-apireadingid)
+    * [`GET /api/reading/allForPatient/{id}`](#get-apireadingallforpatientid)
+    * [`POST /api/reading/save`](#post-apireadingsave)
 
 ## Patient Methods
 
@@ -136,6 +139,8 @@ None
 
 ### `GET /api/patient/{id}/readings`
 
+> **DEPRECIATED**: Use `GET /api/reading/allForPatient/{id}` instead.
+
 Returns only the readings for the patient with a given `id`.
 
 #### Path Variables
@@ -181,7 +186,10 @@ is valid).
 | `otherSympotoms` | `string` | `no` | Any other symptoms the patient has |
 | `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
-### `POST /api/reading`
+
+### `POST /api/patient/reading`
+
+> **DEPRECIATED**: Use `/api/reading/save` instead.
 
 Inserts a new reading entity into the database.
 
@@ -207,3 +215,72 @@ can be added.
 | `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient in days|
 | `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow_down=1, yellow_up=2,red_down=3, red_up=4} |
 | `timestamp` | `string` | `yes` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |
+
+
+### `GET /api/reading/{id}`
+
+Returns a [reading view](ENTITIES.md#reading-view) object for a reading with a given identifier.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `number` | Reading Identifier |
+
+#### Returns
+
+A [reading view](ENTITIES.md#reading-view) entity for the reading with a given id.
+
+#### Errors
+
+Returns a 404-NotFound exception if unable to find a reading with the specified id.
+
+
+### `GET /api/reading/allForPatient/{id}`
+
+> Replaces `GET /api/patient/{id}/readings`.
+
+Returns a list of all readings for a given patient.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `string` | Patient Identifier |
+
+#### Returns
+
+A JSON array of [reading view](ENTITIES.md#readingview) entities associated with the patient with a given id.
+
+#### Errors
+
+Returns a 404-NotFound exception if unable to find a patient with the specified id.
+
+
+### `POST /api/reading/save`
+
+> Replaces `POST /api/patient/reading`.
+
+Inserts a new, or updates an existing, reading in the database.
+
+Whether the method updates or inserts a new item depends on the request's `id` field.
+**To insert a new reading, the `id` field must be `null`** as the database automatically
+creates new ids only when the field is `null`. To update an existing reading, the `id`
+field should hold the `id` value of the reading to update.
+
+A patient with the given `patientId` field **must** already exist in the system before
+a new reading can be created for them.
+
+| Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `no` | Reading primary key, auto-generated if no present |
+| `patentId` | `string` | `yes` | Id of the patient that this reading is for |
+| `systolic` | `number` | `yes` | Systolic reading value |
+| `diastolic` | `number` | `yes` | Diastolic reading value |
+| `heartRate` | `number` | `yes` | Heart rate reading value |
+| `pregnant` | `boolean` | If `sex` != Male (`0`) | Is the patient pregnant? |
+| `gestationalAge` | `number` | If `pregnant` == `true` | Gestational age of the patient in days|
+| `colour` | `number` | `yes` | CRADLE reading colour, enumerated: {green=0, yellow_down=1, yellow_up=2,red_down=3, red_up=4} |
+| `timestamp` | `string` | `yes` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |
+| `symptoms` | `[string]` | `yes` | A list of [symptoms](ENTITIES.md#symptom) for this reading |
+
