@@ -1,6 +1,7 @@
 package com.cradlerest.web.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Defines a health centre
@@ -32,6 +33,8 @@ public class HealthCentre {
 	@Column(name = "manager_phone_number")
 	private String managerPhoneNumber;
 
+	@Column(name = "patients")
+	private List<String> patients;
 
 	HealthCentre() {}
 

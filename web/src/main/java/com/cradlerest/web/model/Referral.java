@@ -41,7 +41,7 @@ public class Referral {
 
 	// temporary
 	// TODO: Health Centre entity
-	@Column(name = "healthCentre")
+	@Column(name = "health_centre")
 	private String healthCentreId;
 
 	// temporary
