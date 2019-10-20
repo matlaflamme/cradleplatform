@@ -174,7 +174,6 @@ public class Patient {
 				sex == patient.sex &&
 				Objects.equals(medicalHistory, patient.medicalHistory) &&
 				Objects.equals(drugHistory, patient.drugHistory) &&
-				Objects.equals(otherSymptoms, patient.otherSymptoms) &&
 				lastUpdated.equals(patient.lastUpdated);
 	}
 
