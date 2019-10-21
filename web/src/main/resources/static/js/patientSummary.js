@@ -21,17 +21,17 @@ Vue.component('patient_readings', {
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
         '<td>{{row.heartRate}}</td>' +
-        '{{readLight(row.colour)}}' +
+        '<span v-bind:class="readLight" class="dot" id="readingLight" ref="readingLight">{{readLight(this, row.colour)}}</span>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
-    mounted() {
+    mounted() {z
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => (this.rows = response.data))
     },
     methods: {
-        readLight: function (color_id) {
+        readLight: function (light,color_id) {
             let color = 'green';
             switch (color_id) {
                 case 0:
@@ -50,10 +50,11 @@ Vue.component('patient_readings', {
 
                     break;
             }
-            var newLight = document.createElement("span");
-            newLight.setAttribute("class", "dot");
-            newLight.setAttribute("style", "background-color:" +  color + ";");
-            return (newLight,color);
+            console.log($refs.readingLight);
+            var elementId = this.readingLight;
+
+            // light.setAttribute("style", "background-color:" +  color + ";");
+            return color
         }
     }
 });
