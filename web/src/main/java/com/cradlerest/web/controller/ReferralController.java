@@ -115,6 +115,7 @@ public class ReferralController {
 		logger.info("timestamp: " + timestamp);
 		String healthCentreName = requestBody.get("healthCentre").textValue();
 		logger.info("healthCentreName: " + healthCentreName);
+		String comments = requestBody.get("comments").textValue();
 
 		Patient currentPatient = null;
 		try {
@@ -155,6 +156,7 @@ public class ReferralController {
 				.readingId(currentReading.getId())
 				.healthCentre(healthCentreName)
 				.healthCentreNumber("+2052052055")
+				.comments(comments)
 				.build();
 
 
