@@ -2,7 +2,7 @@
 Vue.component('patient_readings', {
     data: function() {
         return { rows: null//Request data from the server from this function. Get a JSON file as a response?
-            //[{ date: '2/11/1995', time: '14:33', bp: '100/88', heartRate: '80', light: 'Green'}]
+                           //[{ date: '2/11/1995', time: '14:33', bp: '100/88', heartRate: '80', light: 'Green'}]
         }
     },
     template: '<table class="table table-striped table-hover">\n' +
@@ -52,7 +52,7 @@ Vue.component('patient_readings', {
             }
             // console.log(this);
             console.log(this.$refs.readingLight);
-            // this.setAttribute("style", "background-color:" +  color + ";");
+            this.$refs.readingLight.setAttribute("style", "background-color:" +  color + ";");
             return color
         }
     }
