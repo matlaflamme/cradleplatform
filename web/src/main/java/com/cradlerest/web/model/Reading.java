@@ -76,9 +76,6 @@ public class Reading {
 		this.timestamp = timestamp;
 	}
 
-	public Reading(String patientId, Integer systolic, Integer diastolic, Integer heartRate, ReadingColour colour, String timestamp) {
-	}
-
 	public Integer getId() {
 		return id;
 	}

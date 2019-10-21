@@ -2,6 +2,8 @@ package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
+import com.cradlerest.web.model.builder.ReadingBuilder;
+import com.cradlerest.web.model.builder.ReferralBuilder;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.repository.HealthCentreRepository;
 import com.cradlerest.web.service.repository.ReferralRepository;
@@ -124,7 +126,7 @@ public class ReferralController {
 			// OR
 			// request all necessary information from initial referral
 		}
-
+		System.out.println("patientId::" + currentPatient.getId());
 		Optional<User> currentVHT = null;
 		try {
 			currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
@@ -136,9 +138,27 @@ public class ReferralController {
 		// TODO: Initializing DB with health centres, validating health centre name, handling exception
 		//Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
 
-		Reading currentReading = patientManagerService.saveReading(new Reading("001", systolic, diastolic, heartRate, ReadingColour.fromKey(readingColourKey), timestamp));
+		Reading currentReading = new ReadingBuilder()
+				.pid(currentPatient.getId())
+				.colour(ReadingColour.fromKey(readingColourKey))
+				.diastolic(diastolic)
+				.systolic(systolic)
+				.heartRate(heartRate)
+				.timestamp(timestamp)
+				.build();
 
-		referralRepository.save(new Referral("001", currentVHT.get().getId(), currentReading.getId(), timestamp, healthCentreName, "+2052052055"));
+		patientManagerService.saveReading(currentReading);
+
+		Referral currentReferral = new ReferralBuilder()
+				.pid(currentPatient.getId())
+				.vid(currentVHT.get().getId())
+				.readingId(currentReading.getId())
+				.healthCentre(healthCentreName)
+				.healthCentreNumber("+2052052055")
+				.build();
+
+
+		referralRepository.save(currentReferral);
 
 		// TODO: timestamp matches Reading entity timestamp
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",

@@ -5,6 +5,7 @@ import com.cradlerest.web.service.DateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -38,12 +39,14 @@ public class Referral {
 //	@JoinColumn(name = "reading_id")
 //	private Reading reading;
 
+	@Column(name = "pid")
 	private String patientId;
-	private Integer vhtId;
-	private Integer readingId;
 
-	@Column(name = "timestamp")
-	private String timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+	@Column(name = "vid")
+	private Integer vhtId;
+
+	@Column(name = "reading_id")
+	private Integer readingId;
 
 	// temporary
 	// TODO: Health Centre entity
@@ -59,34 +62,43 @@ public class Referral {
 
 	public Referral() {}
 
-	public Referral(String patientId, Integer vhtId, Integer readingId, String timestamp, String healthCentre, String healthCentreNumber) {
+	public Referral(String patientId, Integer vhtId, Integer readingId, String healthCentre, String healthCentreNumber, String comments) {
 		this.patientId = patientId;
 		this.vhtId = vhtId;
 		this.readingId = readingId;
-		this.timestamp = timestamp;
 		this.healthCentre = healthCentre;
 		this.healthCentreNumber = healthCentreNumber;
+		this.comments = comments;
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
+	public void setId(Integer id) { this.id = id; }
+
 	public String getPatientId() {
 		return patientId;
+	}
+
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
 	}
 
 	public Integer getVhtId() {
 		return vhtId;
 	}
 
+	public void setVhtId(Integer vhtId) {
+		this.vhtId = vhtId;
+	}
+
 	public Integer getReadingId() {
 		return readingId;
 	}
 
-	@JsonSerialize(using = DateSerializer.class)
-	public String getTimestamp() {
-		return timestamp;
+	public void setReadingId(Integer readingId) {
+		this.readingId = readingId;
 	}
 
 	public String getHealthCentre() {
@@ -109,4 +121,7 @@ public class Referral {
 		return comments;
 	}
 
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 }

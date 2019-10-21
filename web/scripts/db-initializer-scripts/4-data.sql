@@ -78,3 +78,6 @@ VALUES ('001', 130, 100, 80, 2, '2019-09-24 12:31:34');
 
 INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
 VALUES ('002', 140, 80, 93, 2, '2018-06-12 08:54:15')
+
+INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
+VALUES ('001', 3, 1, 'Twilio', '+12053465536')

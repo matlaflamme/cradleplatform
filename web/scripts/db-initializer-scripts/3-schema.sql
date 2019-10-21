@@ -4,7 +4,6 @@
 
 USE cradlerest;
 
-
 CREATE TABLE user (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) UNIQUE NOT NULL,
@@ -36,4 +35,14 @@ CREATE TABLE reading (
     colour INT NOT NULL,                -- enumerated {green, yellow, red}
     timestamp DATETIME NOT NULL,
     FOREIGN KEY (pid) REFERENCES patient (id)
+);
+
+CREATE TABLE referral (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pid VARCHAR(255) NOT NULL,
+    vid INT NOT NULL,
+    reading_id INT NOT NULL,
+    health_centre VARCHAR(255),
+    health_centre_number VARCHAR(255),
+    comments VARCHAR(9001)
 );
