@@ -21,41 +21,38 @@ Vue.component('patient_readings', {
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
         '<td>{{row.heartRate}}</td>' +
-        '<span v-bind:class="readLight" class="dot" id="readingLight" ref="readingLight">{{readLight(this, row.colour)}}</span>' +
+        '<span class="dot" :style="row.colorstyle"></span>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
-    mounted() {z
+    mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-        axios.get('/api/patient/'+ id + '/readings').then(response => (this.rows = response.data))
+        axios.get('/api/patient/'+ id + '/readings').then(response => {
+            this.rows = response.data
+            this.rows.forEach((row)=>{
+                row.colorid = 'green';
+                switch (row.colour) {
+                    case 0:
+                        row.colorstyle = {"background-color": 'green'};
+                        break;
+                    case 1:
+                        row.colorstyle =  {"background-color": 'yellow'};
+                        break;
+                    case 2:
+                        row.colorstyle = {"background-color": 'yellow'};
+                        break;
+                    case 3:
+                        row.colorstyle = {"background-color": 'red'};
+                    case 4:
+                        row.colorstyle = {"background-color": 'red'};
+                        break;
+                }
+            })
+        })
     },
     methods: {
-        readLight: function (light,color_id) {
-            let color = 'green';
-            switch (color_id) {
-                case 0:
-                    color = 'green';
-                    break;
-                case 1:
-                    color = 'yellow';
-                    break;
-                case 2:
-                    color = 'yellow';
-                    break;
-                case 3:
-                    color = 'red';
-                case 4:
-                    color = 'red';
 
-                    break;
-            }
-            console.log($refs.readingLight);
-            var elementId = this.readingLight;
-
-            // light.setAttribute("style", "background-color:" +  color + ";");
-            return color
-        }
     }
 });
 
