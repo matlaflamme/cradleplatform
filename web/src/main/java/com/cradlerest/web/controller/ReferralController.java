@@ -45,7 +45,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/referral/")
 public class ReferralController {
-	Logger logger = LoggerFactory.getLogger(ReferralController.class);
+	private Logger logger = LoggerFactory.getLogger(ReferralController.class);
 	private UserRepository userRepository; // VHT INFO
 	private ReferralRepository referralRepository; // Saving referrals
 	private HealthCentreRepository healthCentreRepository;
