@@ -5,30 +5,30 @@ h2 {
 }
 
 
-.container p {
+.side-panel p {
     padding: 0px 0px;
     margin: 0;
     display: inline;
 }
 
-.container{
-    display: inline-block;
-    padding: 12px 12px;
+.side-panel{
+    /*display: inline-block;*/
+    padding: 4px 4px;
     width: fit-content;
     border-style: solid;
     border-width: 2px;
     border-color: #0c9090;
-    margin-left: 1%;
+    margin: 1px 5px;
 
 }
-.container h2{
+.side-panel h2{
     color: black;
     font-size: 20px;
     font-weight: bold;
     color: #0b6c6d; /* Green */
 }
 
-.container h6{
+.side-panel h6{
     padding: 0px 0px;
     margin: 0;
     display: inline;
@@ -37,7 +37,7 @@ h2 {
 
 
 #heart_beat{
-    color: #db2e43;
+    color: black;
     display: inline;
     padding: 7px 7px;
 
@@ -59,12 +59,14 @@ h2 {
     border-style: solid;
     border-width: 1px;
     border-color: #0c9090;
-    margin-left: 1%;
+    margin-left: 5px;
+    margin-right: 5px;
     font-size: 14px;
 
 }
 
-.container ul{
+.side-panel ul{
+    position: relative;
     list-style-type:none;
     border-style: solid;
     border-width: 1px;
@@ -72,30 +74,24 @@ h2 {
     text-align: left;
     margin: 0;
     padding: 8px 8px;
+    width: fit-content;
 }
 
-.container li{
+.side-panel li{
     text-align: left;
-    margin-left: 1%;
     font-size: 14px;
+    width: fit-content;
 }
 
-#patientReadings{
-    top: 66px;
-    position: absolute;
-    left: 27%;
+.bg-light {
+    background-color: #0b908f!important; /* NavBar background */
 }
 
-.navbar-dark {
-    background-color: #0c9090;
-    color: white;
+.nav-link:hover {
+    color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
 }
 
-.navbar-brand a {
-    color: white;
-}
 
-ul.nav a:hover {
-    background-color: #0b6c6d !important; /*Overrides bootstrap changes nav-bar links hover colour */
+.row{
+    margin-left: 7%;
 }
-
