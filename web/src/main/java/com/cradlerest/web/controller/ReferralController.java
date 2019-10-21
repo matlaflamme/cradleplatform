@@ -88,10 +88,10 @@ public class ReferralController {
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11"
 		String patientId = requestBody.get("patientId").textValue();
 		String timestamp = requestBody.get("timestamp").textValue().replace("T", "");
-		Integer systolic = requestBody.get("systolic").intValue();
-		Integer diastolic = requestBody.get("diastolic").intValue();
-		Integer heartRate = requestBody.get("heartRate").intValue();
-		String readingColour = requestBody.get("readingColour").val;
+		int systolic = requestBody.get("systolic").intValue();
+		int diastolic = requestBody.get("diastolic").intValue();
+		int heartRate = requestBody.get("heartRate").intValue();
+		int readingColourKey = requestBody.get("readingColour").intValue();
 
 		Patient currentPatient;
 		try {
@@ -99,26 +99,7 @@ public class ReferralController {
 		} catch (EntityNotFoundException exception) {
 			// TODO: No patient found, create new patient
 		}
-		Reading currentReading = patientManagerService.saveReading(new Reading(patientId, systolic, diastolic, heartRate, readingColour, timestamp));
-
-		@Column(name = "pid")
-		private String patientId;
-
-		@Column(name = "systolic")
-		private Integer systolic;
-
-		@Column(name = "diastolic")
-		private Integer diastolic;
-
-		@Column(name = "heart_rate")
-		private Integer heartRate;
-
-		@Column(name = "colour")
-		@Enumerated(EnumType.ORDINAL)
-		private ReadingColour colour; // Use *INTEGER* values {0..4}
-
-		@Column(name = "timestamp")
-		private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+		Reading currentReading = patientManagerService.saveReading(new Reading(patientId, systolic, diastolic, heartRate, ReadingColour.fromKey(readingColourKey), timestamp));
 
 		// TODO: timestamp matches Reading entity timestamp
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
