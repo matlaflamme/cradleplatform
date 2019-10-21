@@ -164,7 +164,7 @@ public class ReferralController {
 
 		// TODO: timestamp matches Reading entity timestamp
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
-		return "Success\n: " +
+		return "Success:\n " +
 				"Health centre referred: " + healthCentreName;
 	}
 
