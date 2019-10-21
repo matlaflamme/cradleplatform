@@ -16,6 +16,8 @@ import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.messaging.Message;
 import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -43,7 +45,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/referral/")
 public class ReferralController {
-
+	Logger logger = LoggerFactory.getLogger(ReferralController.class);
 	private UserRepository userRepository; // VHT INFO
 	private ReferralRepository referralRepository; // Saving referrals
 	private HealthCentreRepository healthCentreRepository;
@@ -58,7 +60,7 @@ public class ReferralController {
 
 	/**
 	 * Handles Twilio post request (VHT has no internet)
-	 *
+	 * TODO: Request validator. Right now, anyone can post to this url
 	 * Example request "Body":
 	 * {
 	 * 		"patientName":"JS",
@@ -93,21 +95,30 @@ public class ReferralController {
 		// **JsonNodes are immutable**
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
+		System.out.println(requestBody.toString());
 
 		String patientId = requestBody.get("patientId").textValue();
+		logger.info("patientId: " + patientId);
 		// String patientName = requestBody.get("patientName").textValue();
 		// int patientAge = requestBody.get("patientAge").intValue();
 		int systolic = requestBody.get("systolic").intValue();
+		logger.info("systolic: " + systolic);
 		int diastolic = requestBody.get("diastolic").intValue();
+		logger.info("diastolic: " + diastolic);
 		int heartRate = requestBody.get("heartRate").intValue();
+		logger.info("heartRate: " + heartRate);
 		int readingColourKey = requestBody.get("readingColour").intValue();
-		String timestamp = requestBody.get("timestamp").textValue().replace("T", "");
+		logger.info("readingColourKey: " + readingColourKey);
+		String timestamp = requestBody.get("timestamp").textValue().replace("T", " ");
+		logger.info("timestamp: " + timestamp);
 		String healthCentreName = requestBody.get("healthCentre").textValue();
+		logger.info("healthCentreName: " + healthCentreName);
 
 		Patient currentPatient = null;
 		try {
 			currentPatient = patientManagerService.getPatientWithId(patientId);
 		} catch (EntityNotFoundException exception) {
+			exception.printStackTrace();
 			// TODO: No patient found, create new patient
 			// We can either send another text message requesting more information
 			// OR
@@ -118,6 +129,7 @@ public class ReferralController {
 		try {
 			currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
 		} catch (UsernameNotFoundException exception) {
+			exception.printStackTrace();
 			// TODO: VHT not found, create new VHT?
 		}
 
@@ -130,7 +142,6 @@ public class ReferralController {
 
 		// TODO: timestamp matches Reading entity timestamp
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
-		System.out.println(requestBody);
 		return "Success\n: " +
 				"Health centre referred: " + healthCentreName;
 	}
