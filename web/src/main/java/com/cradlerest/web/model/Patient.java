@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 
 /**
@@ -58,11 +59,6 @@ public class Patient {
 	@DataGenNullChance(0.5)
 	private String drugHistory;
 
-	@Column(name = "other_symptoms")
-	@Generator(GibberishSentenceGenerator.class)
-	@DataGenNullChance(0.7)
-	private String otherSymptoms;
-
 	@Column(name = "last_updated", nullable = false)
 	@DataGenDateRange(min = "2018-01-01", max = "2019-12-31")
 	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
@@ -79,7 +75,6 @@ public class Patient {
 			Sex sex,
 			String medicalHistory,
 			String drugHistory,
-			String otherSymptoms,
 			@NotNull Date lastUpdated
 	) {
 		this.id = id;
@@ -90,7 +85,6 @@ public class Patient {
 		this.sex = sex;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
-		this.otherSymptoms = otherSymptoms;
 		this.lastUpdated = lastUpdated;
 	}
 
@@ -158,14 +152,6 @@ public class Patient {
 		this.drugHistory = drugHistory;
 	}
 
-	public String getOtherSymptoms() {
-		return otherSymptoms;
-	}
-
-	public void setOtherSymptoms(String otherSymptoms) {
-		this.otherSymptoms = otherSymptoms;
-	}
-
 	@JsonSerialize(using = DateSerializer.class)
 	public Date getLastUpdated() {
 		return lastUpdated;
@@ -174,5 +160,25 @@ public class Patient {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Patient patient = (Patient) o;
+		return id.equals(patient.id) &&
+				name.equals(patient.name) &&
+				villageNumber.equals(patient.villageNumber) &&
+				birthYear.equals(patient.birthYear) &&
+				sex == patient.sex &&
+				Objects.equals(medicalHistory, patient.medicalHistory) &&
+				Objects.equals(drugHistory, patient.drugHistory) &&
+				lastUpdated.equals(patient.lastUpdated);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

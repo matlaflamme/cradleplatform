@@ -5,9 +5,9 @@ package com.cradlerest.web.model.builder;
  * objects. Means that an attempt was made to instantiate an incomplete or
  * invalid object.
  */
-class InstantiationError extends Error {
+public class InstantiationError extends Error {
 
-	InstantiationError(String message) {
+	public InstantiationError(String message) {
 		super(message);
 	}
 }

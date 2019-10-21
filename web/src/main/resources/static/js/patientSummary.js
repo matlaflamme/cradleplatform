@@ -16,7 +16,8 @@ Vue.component('patient_readings', {
         '</tr>' +
         '</thead>' +
         '<tbody>' +
-        '<tr v-for="row in rows">' +
+        '<tr v-for="row in rows" v-on:click="click(row.id)">' +
+        '<th>{{row.id}}</th>' +
         '<th>{{row.timestamp}}</th>' +
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
@@ -29,6 +30,27 @@ Vue.component('patient_readings', {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => (this.rows = response.data))
+    },
+    methods: {
+        click: function(row_id) {
+            //signs in
+            console.log(row_id);
+        }
+    }
+});
+
+Vue.component('reading_info', {
+    template: '<div className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog"' +
+        'aria-labelledby="myLargeModalLabel" aria-hidden="true">' +
+        '<div className="modal-dialog modal-lg">' +
+        '<div className="modal-content">' +
+        '...' +
+        '</div>' +
+        '</div>' +
+        '</div>',
+    mounted() {
+    },
+    methods: {
     }
 });
 

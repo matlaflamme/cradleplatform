@@ -1,0 +1,35 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: maven:latest
+  cache:
+    paths:
+      - .m2/repository/
+      - web/target/
+  before_script:
+    - cd web
+  script:
+    - mvn compile
+
+unit-test:
+  stage: test
+  image: maven:latest
+  cache:
+    paths:
+      - .m2/repository/
+      - web/target/
+  before_script:
+    - cd web
+  script:
+    - mvn test
+
+integration-test:
+  stage: test
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - ./ci-scripts/ci-integration-tests.sh

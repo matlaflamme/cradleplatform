@@ -5,27 +5,15 @@ import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Sex;
-import com.cradlerest.web.model.builder.PatientBuilder;
-import com.cradlerest.web.model.builder.ReadingBuilder;
+import com.cradlerest.web.model.*;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
-import com.cradlerest.web.util.HybridFileDecrypter;
-import com.cradlerest.web.util.Zipper;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -102,6 +90,17 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	}
 
 	/**
+	 * Returns the list of all patients in the the database paired with their
+	 * latest reading. If a patient has no readings, then {@code null} is
+	 * returned in place of one.
+	 * @return A list of patient/reading pairs.
+	 */
+	@Override
+	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading() {
+		return patientRepository.getAllPatientsAndLatestReadings();
+	}
+
+	/**
 	 * Returns the list of readings associated with the patient with a given
 	 * {@param id}.
 	 * @param id Unique identifier for a patient.
@@ -165,72 +164,6 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		}
 		validateReading(reading);
 		return readingRepository.save(reading);
-	}
-
-	@Override
-	public Reading constructReadingFromEncrypted(MultipartFile file) throws IOException, GeneralSecurityException {
-		JSONObject reading = decryptUpload(file);
-
-		// TODO : format JSON so android matches Database
-		String id = reading.getString("patientId");
-		String villageNumber = reading.getString("villageNumber");
-		String patientName = reading.getString("patientName");
-		String gender = reading.getString("patientSex");
-		String symptoms = reading.getJSONArray("symptoms").toString();
-		String readingColour = reading.getString("readingColour");
-		String medicalHistory = reading.getString("medicalHistory");
-		String drugHistory = reading.getString("drugHistory");
-		int birthYear = reading.getInt("birthYear");
-
-		boolean pregnant = reading.getBoolean("pregnant");
-
-		int diastolic = reading.getInt("bpDiastolic");
-		int systolic = reading.getInt("bpSystolic");
-		int heartRate = reading.getInt("heartRateBPM");
-		int gestationalAge = reading.getInt("gestationalAgeInWeeks");
-
-		String dateCreated = reading.getString("dateTimeTaken");
-		ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateCreated);
-		Timestamp timestamp = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
-
-		// Create or update patient
-		Patient readingPatient = new PatientBuilder()
-				.id(id)
-				.villageNumber(villageNumber)
-				.name(patientName)
-				.birthYear(birthYear)
-				.sex(Sex.valueOf(gender))
-//				.pregnant(pregnant)
-//				.gestationalAgeWeeks(gestationalAge)
-				.medicalHistory(medicalHistory)
-				.drugHistory(drugHistory)
-				.otherSymptoms(symptoms)
-				.build();
-		patientRepository.save(readingPatient);
-
-		// Create new reading
-		Reading newReading = new ReadingBuilder()
-				.pid(readingPatient.getId())
-				.colour(ReadingColour.valueOf(readingColour))
-				.diastolic(diastolic)
-				.systolic(systolic)
-				.heartRate(heartRate)
-				.timestamp(timestamp)
-				.build();
-		readingRepository.save(newReading);
-
-		return newReading;
-	}
-
-	private JSONObject decryptUpload(MultipartFile file) throws IOException, GeneralSecurityException {
-		// Unzip uploaded file
-		Map<String, byte[]> encryptedFiles = Zipper.unZip(file.getInputStream());
-
-		// Decrypt unzipped files
-		ByteArrayInputStream decryptedZip = HybridFileDecrypter.hybridDecryptFile(encryptedFiles);
-
-		JSONObject uploadedJSON = new JSONObject(new String(decryptedZip.readAllBytes()));
-		return uploadedJSON;
 	}
 
 	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {

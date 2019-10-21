@@ -18,12 +18,11 @@
         "id":"001",
         "name":"Harumi Youko",
         "villageNumber":"1",
-        "zone": "1",
+        "zoneNumber":"1",
         "birthYear":1995,
         "sex":1,
         "medicalHistory":null,
         "drugHistory":null,
-        "otherSymptoms":null,
         "lastUpdated":"2019-09-20 20:12:32"
       }
       ]]>
@@ -50,7 +49,7 @@
         "id":"X",
         "name":"Test",
         "villageNumber":"32",
-        "zone": "1",
+        "zoneNumber":"1",
         "birthYear":1990,
         "sex":0,
         "lastUpdated":"2019-09-20 20:12:32"
@@ -67,7 +66,7 @@
         "id":"1000",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "zone": "1",
+        "zoneNumber":"1",
         "birthYear":2000,
         "sex":1,
         "lastUpdated":"2019-09-20 20:12:32"
@@ -84,7 +83,7 @@
         "id":"1000",
         "name":"Not Important To This Test",
         "villageNumber":"0",
-        "zoneNumber":"1"
+        "zoneNumber":"1",
         "birthYear":2000,
         "sex":2,
         "lastUpdated":"2019-09-20 20:12:32"
@@ -92,5 +91,64 @@
       ]]>
     </Request>
     <Response status="200"/>
+  </TestCase>
+
+  <TestCase name="Get Mock Reading View">
+    <!-- TODO: update this test once actual ReadingManager is implemented -->
+    <Request method="GET" uri="/api/reading/1"/>
+    <Response status="200">
+      <![CDATA[
+      {
+        "id":1,
+        "patientId":"001",
+        "systolic":110,
+        "diastolic":80,
+        "heartRate":70,
+        "colour":0,
+        "pregnant":true,
+        "gestationalAge":90,
+        "symptoms":["Headache"],
+        "timestamp":"2019-10-24 09:32:10",
+        "otherSymptoms":null
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
+  <TestCase name="Create New Reading">
+    <Request method="POST" uri="/api/reading/save">
+      <![CDATA[
+      {
+        "patientId":"001",
+        "systolic":110,
+        "diastolic":80,
+        "heartRate":70,
+        "colour":0,
+        "pregnant":true,
+        "gestationalAge":90,
+        "symptoms":["Headache"],
+        "timestamp":"2019-10-24 09:32:10"
+      }
+      ]]>
+    </Request>
+    <Response status="200"/>
+  </TestCase>
+
+  <TestCase name="Create New Reading With Missing Symptoms">
+    <Request method="POST" uri="/api/reading/save">
+      <![CDATA[
+      {
+        "patientId":"001",
+        "systolic":110,
+        "diastolic":80,
+        "heartRate":70,
+        "colour":0,
+        "pregnant":true,
+        "gestationalAge":90,
+        "timestamp":"2019-10-24 09:32:10",
+      }
+      ]]>
+    </Request>
+    <Response status="400"/>
   </TestCase>
 </TestSuite>

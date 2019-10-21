@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
+import static com.cradlerest.web.util.Validation.assertFieldNotNull;
 
 /**
  * Simplifies the process of constructing {@code Patient} objects.
@@ -91,23 +92,12 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder otherSymptoms(@Nullable String text) {
-		patient.setOtherSymptoms(text);
-		return this;
-	}
-
-	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
-		if (object == null) {
-			throw new InstantiationError(String.format("field '%s' is null", fieldName));
-		}
-	}
-
 	private void validate() throws InstantiationError {
-		assertNotNull(patient.getId(), "id");
-		assertNotNull(patient.getName(), "name");
-		assertNotNull(patient.getVillageNumber(), "villageNumber");
-		assertNotNull(patient.getBirthYear(), "birthYear");
-		assertNotNull(patient.getSex(), "sex");
-		assertNotNull(patient.getLastUpdated(), "lastUpdated" );
+		assertFieldNotNull(patient.getId(), "id");
+		assertFieldNotNull(patient.getName(), "name");
+		assertFieldNotNull(patient.getVillageNumber(), "villageNumber");
+		assertFieldNotNull(patient.getBirthYear(), "birthYear");
+		assertFieldNotNull(patient.getSex(), "sex");
+		assertFieldNotNull(patient.getLastUpdated(), "lastUpdated" );
 	}
 }
