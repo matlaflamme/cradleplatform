@@ -24,17 +24,26 @@ public class Referral {
 	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "patient")
-	private Patient patient;
+	// TODO: Foreign keys
+	// Need help with this one.
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "patient_id")
+//	private Patient patient;
 
-	@Column(name = "vht")
-	private User vht;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "user_id")
+//	private User vht;
 
-	@Column(name = "reading")
-	private Reading reading;
+//	@OneToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "reading_id")
+//	private Reading reading;
+
+	private String patientId;
+	private Integer vhtId;
+	private Integer readingId;
 
 	@Column(name = "timestamp")
-	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+	private String timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	// temporary
 	// TODO: Health Centre entity
@@ -48,13 +57,12 @@ public class Referral {
 	@Column(name = "comments")
 	private String comments;
 
-	Referral() {}
+	public Referral() {}
 
-	Referral(Integer id, Patient patient, User vht, Reading reading, Date timestamp, String healthCentre, String healthCentreNumber) {
-		this.id = id;
-		this.patient = patient;
-		this.vht = vht;
-		this.reading = reading;
+	public Referral(String patientId, Integer vhtId, Integer readingId, String timestamp, String healthCentre, String healthCentreNumber) {
+		this.patientId = patientId;
+		this.vhtId = vhtId;
+		this.readingId = readingId;
 		this.timestamp = timestamp;
 		this.healthCentre = healthCentre;
 		this.healthCentreNumber = healthCentreNumber;
@@ -64,20 +72,20 @@ public class Referral {
 		return id;
 	}
 
-	public Patient getPatient() {
-		return patient;
+	public String getPatientId() {
+		return patientId;
 	}
 
-	public User vht() {
-		return vht;
+	public Integer getVhtId() {
+		return vhtId;
 	}
 
-	public Reading getReading() {
-		return reading;
+	public Integer getReadingId() {
+		return readingId;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
-	public Date getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 

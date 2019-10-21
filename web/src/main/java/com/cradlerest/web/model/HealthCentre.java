@@ -37,8 +37,8 @@ public class HealthCentre {
 	@Column(name = "manager_phone_number")
 	private String managerPhoneNumber;
 
-	@Column(name = "patients")
-	private Set<String> patients;
+//	@Column(name = "patients")
+//	private Set<String> patients;
 
 //	@Column(name = "location")
 //	private Location location;
@@ -94,7 +94,4 @@ public class HealthCentre {
 		this.managerPhoneNumber = managerPhoneNumber;
 	}
 
-	public Set<String> getPatients() {
-		return patients;
-	}
 }

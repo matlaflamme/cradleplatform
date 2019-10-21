@@ -1,10 +1,9 @@
 package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
-import com.cradlerest.web.model.Patient;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.ReadingColour;
+import com.cradlerest.web.model.*;
 import com.cradlerest.web.service.PatientManagerService;
+import com.cradlerest.web.service.repository.HealthCentreRepository;
 import com.cradlerest.web.service.repository.ReferralRepository;
 import com.cradlerest.web.service.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,6 +16,8 @@ import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.messaging.Message;
 import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -27,8 +28,11 @@ import javax.persistence.Enumerated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Handles referrals
@@ -40,12 +44,16 @@ import java.util.Map;
 @RequestMapping("/api/referral/")
 public class ReferralController {
 
-	private UserRepository userRepository;
-	private ReferralRepository referralRepository;
-	private PatientManagerService patientManagerService;
+	private UserRepository userRepository; // VHT INFO
+	private ReferralRepository referralRepository; // Saving referrals
+	private HealthCentreRepository healthCentreRepository;
+	private PatientManagerService patientManagerService; // Patients, Readings
 
-	public ReferralController(PatientManagerService patientManagerService) {
+	public ReferralController(PatientManagerService patientManagerService, UserRepository userRepository, ReferralRepository referralRepository, HealthCentreRepository healthCentreRepository) {
 		this.patientManagerService = patientManagerService;
+		this.userRepository = userRepository;
+		this.referralRepository = referralRepository;
+		this.healthCentreRepository = healthCentreRepository;
 	}
 
 	/**
@@ -71,6 +79,7 @@ public class ReferralController {
 	 *  Health centre referred to,
 	 *  TODO: Distance from health centre,
 	 *  TODO: Mode of transport to reach health centre
+	 *  TODO: Repository exception handling
 	 *
 	 * @param request Twilio post response body: https://www.twilio.com/docs/sms/twiml#twilios-request-to-your-application
 	 * @param response
@@ -85,27 +94,45 @@ public class ReferralController {
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
 
-		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11"
 		String patientId = requestBody.get("patientId").textValue();
-		String timestamp = requestBody.get("timestamp").textValue().replace("T", "");
+		// String patientName = requestBody.get("patientName").textValue();
+		// int patientAge = requestBody.get("patientAge").intValue();
 		int systolic = requestBody.get("systolic").intValue();
 		int diastolic = requestBody.get("diastolic").intValue();
 		int heartRate = requestBody.get("heartRate").intValue();
 		int readingColourKey = requestBody.get("readingColour").intValue();
+		String timestamp = requestBody.get("timestamp").textValue().replace("T", "");
+		String healthCentreName = requestBody.get("healthCentre").textValue();
 
-		Patient currentPatient;
+		Patient currentPatient = null;
 		try {
 			currentPatient = patientManagerService.getPatientWithId(patientId);
 		} catch (EntityNotFoundException exception) {
 			// TODO: No patient found, create new patient
+			// We can either send another text message requesting more information
+			// OR
+			// request all necessary information from initial referral
 		}
-		Reading currentReading = patientManagerService.saveReading(new Reading(patientId, systolic, diastolic, heartRate, ReadingColour.fromKey(readingColourKey), timestamp));
+
+		Optional<User> currentVHT = null;
+		try {
+			currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
+		} catch (UsernameNotFoundException exception) {
+			// TODO: VHT not found, create new VHT?
+		}
+
+		// TODO: Initializing DB with health centres, validating health centre name, handling exception
+		//Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
+
+		Reading currentReading = patientManagerService.saveReading(new Reading(currentPatient.getId(), systolic, diastolic, heartRate, ReadingColour.fromKey(readingColourKey), timestamp));
+
+		referralRepository.save(new Referral(currentPatient.getId(), currentVHT.get().getId(), currentReading.getId(), timestamp, healthCentreName, "+2052052055"));
 
 		// TODO: timestamp matches Reading entity timestamp
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
 		System.out.println(requestBody);
 		return "Success\n: " +
-				"Health centre referred: " + requestBody.get("healthCentre");
+				"Health centre referred: " + healthCentreName;
 	}
 
 	/**
@@ -116,9 +143,21 @@ public class ReferralController {
 	 * @return Response body
 	 * @throws IOException
 	 */
-	@PostMapping(path = "/send")
+	@PostMapping("/send")
 	public String saveReferral(WebRequest request, HttpServletResponse response) throws IOException {
 		// TODO
 		return "Success";
 	}
+
+
+	@GetMapping("/all")
+	public @ResponseBody List<Referral> allReferals() {
+		return referralRepository.findAll();
+	}
+
+//	// TODO:
+//	@GetMapping("/{healthCentreName}/all")
+//	public @ResponseBody List<Referral> allReferals(@PathVariable("healthCentreName") String healthCentreName) {
+//	}
+
 }
