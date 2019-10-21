@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 /**
- * Simplifies the process of constructing {@code Reading} objects.
+ * Simplifies the process of constructing {@code Referral} objects.
  *
  *
  * <h2>Example</h2>

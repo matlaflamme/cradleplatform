@@ -76,7 +76,7 @@ public class ReferralController {
 	 * 		"timestamp":"2019-10-19T23:20:11",
 	 * 		"healthCentre":"Twilio",
 	 * 		"VHT":"Jackson",
-	 * 		"comments:":""
+	 * 		"comments":"\"HHahHhaha\""
 	 * }
 	 *
 	 *  For each referral the VHT has made, they can see:
@@ -184,13 +184,13 @@ public class ReferralController {
 
 
 	@GetMapping("/all")
-	public @ResponseBody List<Referral> allReferals() {
+	public @ResponseBody List<Referral> allReferrals() {
 		return referralRepository.findAll();
 	}
 
-//	// TODO:
-//	@GetMapping("/{healthCentreName}/all")
-//	public @ResponseBody List<Referral> allReferals(@PathVariable("healthCentreName") String healthCentreName) {
-//	}
+	@GetMapping("/{healthCentreName}/all")
+	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) {
+		return referralRepository.findAllByHealthCentre(healthCentreName);
+	}
 
 }
