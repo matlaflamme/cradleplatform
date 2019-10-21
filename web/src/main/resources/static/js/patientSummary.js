@@ -21,7 +21,7 @@ Vue.component('patient_readings', {
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
         '<td>{{row.heartRate}}</td>' +
-        '<span class="dot" id="readingLight" ref="readingLight">{{readLight(row.colour)}}</span>' +
+        '{{readLight(row.colour)}}' +
         '</tr>' +
         '</tbody>' +
         '</table>',
@@ -50,10 +50,10 @@ Vue.component('patient_readings', {
 
                     break;
             }
-            // console.log(this);
-            console.log(this.$refs.readingLight);
-            this.$refs.readingLight.setAttribute("style", "background-color:" +  color + ";");
-            return color
+            var newLight = document.createElement("span");
+            newLight.setAttribute("class", "dot");
+            newLight.setAttribute("style", "background-color:" +  color + ";");
+            return (newLight,color);
         }
     }
 });
