@@ -22,69 +22,22 @@
                 app
                 clipped
                 v-model="drawer"
-
         >
-<!--            items in sidebar. Turn into component and re-use?-->
-<!--            Icons from: https://material.io/resources/icons/?icon=settings_input_antenna&style=baseline-->
+<!--            items in sidebar. See sidebar_item component for more
+                title, icon and clickable are props that are being passed to the component -->
+<!--            Icons from: https://material.io/resources/icons/?icon=settings_input_antenna&style=baseline -->
             <v-list dense>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>home</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Home</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                <sidebar_item title="Home" icon="home" clickable="admin-home"></sidebar_item>
+
                 <v-subheader class="mt-3 grey--text text--darken-1">Statistical Analysis</v-subheader>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>assessment</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Readings</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>assignment</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Referrals</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>rate_review</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>VHT Performance</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                <sidebar_item title="Readings" icon="assessment" clickable="readings"></sidebar_item>
+                <sidebar_item title="Referrals" icon="assignment" clickable="referrals"></sidebar_item>
+                <sidebar_item title="VHT Performance" icon="rate_review" clickable="vht-performance"></sidebar_item>
+
                 <v-subheader class="mt-3 grey--text text--darken-1">User Management</v-subheader>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>add_circle</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>New Health Center</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>person_add</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>New VHT</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item @click="">
-                    <v-list-item-action>
-                        <v-icon>supervisor_account</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Manage Accounts</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                <sidebar_item title="New Health Center" icon="add_circle" clickable="new-health-center"></sidebar_item>
+                <sidebar_item title="New VHT" icon="person_add" clickable="new-vht"></sidebar_item>
+                <sidebar_item title="Manage Accounts" icon="supervisor_account" clickable="manage-accounts"></sidebar_item>
             </v-list>
         </v-navigation-drawer>
 
