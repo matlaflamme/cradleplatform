@@ -17,6 +17,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 
 /*
@@ -87,6 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.accessDeniedPage("/error")
 				// Enable POST and DELETE methods
 				.and().csrf().disable();
+
 	}
 
 	@Bean
@@ -95,11 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-
 	public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
 		return new CustomAuthenticationSuccessHandler();
 	}
-
-
-
 }
