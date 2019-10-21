@@ -136,9 +136,9 @@ public class ReferralController {
 		// TODO: Initializing DB with health centres, validating health centre name, handling exception
 		//Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
 
-		Reading currentReading = patientManagerService.saveReading(new Reading(currentPatient.getId(), systolic, diastolic, heartRate, ReadingColour.fromKey(readingColourKey), timestamp));
+		Reading currentReading = patientManagerService.saveReading(new Reading("001", systolic, diastolic, heartRate, ReadingColour.fromKey(readingColourKey), timestamp));
 
-		referralRepository.save(new Referral(currentPatient.getId(), currentVHT.get().getId(), currentReading.getId(), timestamp, healthCentreName, "+2052052055"));
+		referralRepository.save(new Referral("001", currentVHT.get().getId(), currentReading.getId(), timestamp, healthCentreName, "+2052052055"));
 
 		// TODO: timestamp matches Reading entity timestamp
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
