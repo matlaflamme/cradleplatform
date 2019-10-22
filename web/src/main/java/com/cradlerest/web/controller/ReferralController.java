@@ -1,42 +1,16 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
-import com.cradlerest.web.model.builder.ReadingBuilder;
-import com.cradlerest.web.model.builder.ReferralBuilder;
-import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReferralManagerService;
-import com.cradlerest.web.service.repository.HealthCentreRepository;
-import com.cradlerest.web.service.repository.ReferralRepository;
-import com.cradlerest.web.service.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.twilio.example.TwiMLResponseExample;
-import com.twilio.http.Request;
-import com.twilio.http.Response;
-import com.twilio.rest.api.v2010.account.MessageCreator;
-import com.twilio.twiml.MessagingResponse;
-import com.twilio.twiml.messaging.Message;
-import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Handles referrals

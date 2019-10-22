@@ -2,7 +2,6 @@ package com.cradlerest.web.controller;
 
 import com.cradlerest.web.constraints.user.RoleValidator;
 import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
-//import com.cradlerest.web.controller.exceptions.CustomApiError;
 import com.cradlerest.web.controller.exceptions.DatabaseException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.User;
@@ -14,12 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
