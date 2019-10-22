@@ -11,12 +11,13 @@ This file lays out the coding convention for this project. These conventions tak
   - [Formatting](#formatting)
   - [Package Structure](#package-structure)
     - [The Controller Package](#the-controller-package)
-    - [The Model Package](#the-model-package)
+    - [The Model Package](#the-model-package) 
     - [The Service Package](#the-service-package)
   - [Annotations](#annotations)
 - [Android App](#android-app)
 - [JavaScript](#javascript)
 - [HTML](#html)
+- [XML](#xml)
 
 ## Commit Messages
 
@@ -374,4 +375,20 @@ For example:
 </div>
 
 ```
+
+## XML
+When creating XML View boxes, it's important to keep a coherent, consistent structure throughout all sections and files. This can make it easier to parse through different views -- especially nested views.
+Below is the hierarchy for where each kind of tag should be placed.
+
+1. Width
+2. Height
+3. Margins (_, Top, Bottom, Start, then End). Followed by Padding, if any
+3. `newline`
+4. Gravity 
+4. Constraints (Top, Bottom, Start, then End)
+5. `newline`
+6. Format: Tint/Color
+7. Format: Size; etc ...
+8. `newline`
+9. Temporary tag/input (e.g., temporary Magic Strings)
 
