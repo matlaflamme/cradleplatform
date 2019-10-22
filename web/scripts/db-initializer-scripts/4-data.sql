@@ -76,3 +76,12 @@ INSERT INTO symptom VALUES (2, 'Abdominal Pain');
 INSERT INTO symptom VALUES (3, 'Bleeding');
 INSERT INTO symptom VALUES (4, 'Feverish');
 INSERT INTO symptom VALUES (5, 'Unwell');
+
+INSERT INTO health_centre (name, zone, email, health_centre_number, manager_phone_number)
+VALUES ('Twilio', 1, 'fakeemail12345@gmail.com', '+12053465536', '+12053465537');
+
+INSERT INTO health_centre (name, zone, email, health_centre_number, manager_phone_number)
+VALUES ('SFU', 2, 'fakeemail123456@gmail.com', '+12053465538', '+12053465539');
+
+INSERT INTO health_centre (name, zone, email, health_centre_number, manager_phone_number)
+VALUES ('FSU', 3, 'fakeemail123457@gmail.com', '+12053465530', '+12053465531');

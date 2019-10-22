@@ -60,3 +60,11 @@ CREATE TABLE symptom_reading_relation (
     FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
 );
 
+CREATE TABLE health_centre (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    zone INT NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    health_centre_number VARCHAR(255) NOT NULL,
+    manager_phone_number VARCHAR(255) NOT NULL
+);

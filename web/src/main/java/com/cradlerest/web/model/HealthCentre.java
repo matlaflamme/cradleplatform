@@ -30,8 +30,8 @@ public class HealthCentre {
 	private String email;
 
 	// Phone number for the health centre
-	@Column(name = "triage_phone_number")
-	private String triagePhoneNumber;
+	@Column(name = "health_centre_number")
+	private String healthCentreNumber;
 
 	// Person in charge at this health centre
 	@Column(name = "manager_phone_number")
@@ -46,11 +46,11 @@ public class HealthCentre {
 
 	HealthCentre() {}
 
-	HealthCentre(String name, Integer zone, String email, String triagePhoneNumber, String managerPhoneNumber) {
+	HealthCentre(String name, Integer zone, String email, String healthCentreNumber, String managerPhoneNumber) {
 		this.name = name;
 		this.zone = zone;
 		this.email = email;
-		this.triagePhoneNumber = triagePhoneNumber;
+		this.healthCentreNumber = healthCentreNumber;
 		this.managerPhoneNumber = managerPhoneNumber;
 	}
 
@@ -78,12 +78,12 @@ public class HealthCentre {
 		this.email = email;
 	}
 
-	public String getTriagePhoneNumber() {
-		return triagePhoneNumber;
+	public String getHealthCentreNumber() {
+		return healthCentreNumber;
 	}
 
-	public void setTriagePhoneNumber(String triagePhoneNumber) {
-		this.triagePhoneNumber = triagePhoneNumber;
+	public void setHealthCentreNumber(String triagePhoneNumber) {
+		this.healthCentreNumber = triagePhoneNumber;
 	}
 
 	public String getManagerPhoneNumber() {

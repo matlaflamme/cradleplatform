@@ -17,7 +17,6 @@ import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.messaging.Message;
 import org.apache.tomcat.util.json.JSONParser;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +143,7 @@ public class ReferralController {
 
 		Reading currentReading = new ReadingBuilder()
 				.pid(currentPatient.getId())
-				.colour(ReadingColour.fromKey(readingColourKey))
+				.colour(ReadingColour.valueOf(readingColourKey))
 				.diastolic(diastolic)
 				.systolic(systolic)
 				.heartRate(heartRate)

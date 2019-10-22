@@ -1,7 +1,6 @@
 package com.cradlerest.web.service.config;
 
 import com.twilio.security.RequestValidator;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -47,7 +46,6 @@ public class TwilioRequestValidatorFilter implements Filter {
 		boolean isValidRequest = true;
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			System.out.print(IOUtils.toString(request.getReader()));
 			System.out.println("Validating Twilio Requests");
 			LOGGER.info("Validating Twilio Request");
 			// Concatenates the request URL with the query string
