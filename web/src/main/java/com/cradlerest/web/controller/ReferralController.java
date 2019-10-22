@@ -5,6 +5,7 @@ import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.model.builder.ReferralBuilder;
 import com.cradlerest.web.service.PatientManagerService;
+import com.cradlerest.web.service.ReferralManagerService;
 import com.cradlerest.web.service.repository.HealthCentreRepository;
 import com.cradlerest.web.service.repository.ReferralRepository;
 import com.cradlerest.web.service.repository.UserRepository;
@@ -47,16 +48,12 @@ import java.util.Optional;
 @RequestMapping("/api/referral/")
 public class ReferralController {
 	private Logger logger = LoggerFactory.getLogger(ReferralController.class);
-	private UserRepository userRepository; // VHT INFO
-	private ReferralRepository referralRepository; // Saving referrals
-	private HealthCentreRepository healthCentreRepository;
+	private ReferralManagerService referralManagerService;
 	private PatientManagerService patientManagerService; // Patients, Readings
 
-	public ReferralController(PatientManagerService patientManagerService, UserRepository userRepository, ReferralRepository referralRepository, HealthCentreRepository healthCentreRepository) {
+	public ReferralController(PatientManagerService patientManagerService, ReferralManagerService referralManagerService) {
 		this.patientManagerService = patientManagerService;
-		this.userRepository = userRepository;
-		this.referralRepository = referralRepository;
-		this.healthCentreRepository = healthCentreRepository;
+		this.referralManagerService = referralManagerService;
 	}
 
 	/**
@@ -92,80 +89,13 @@ public class ReferralController {
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
 	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-
 		// **JsonNodes are immutable**
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
-		System.out.println(requestBody.toString());
-
-		String patientId = requestBody.get("patientId").textValue();
-		logger.info("patientId: " + patientId);
-		// String patientName = requestBody.get("patientName").textValue();
-		// int patientAge = requestBody.get("patientAge").intValue();
-		int systolic = requestBody.get("systolic").intValue();
-		logger.info("systolic: " + systolic);
-		int diastolic = requestBody.get("diastolic").intValue();
-		logger.info("diastolic: " + diastolic);
-		int heartRate = requestBody.get("heartRate").intValue();
-		logger.info("heartRate: " + heartRate);
-		int readingColourKey = requestBody.get("readingColour").intValue();
-		logger.info("readingColourKey: " + readingColourKey);
-
-		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
-		String timestamp = requestBody.get("timestamp").textValue().replace("T", " ");
-
-		logger.info("timestamp: " + timestamp);
-		String healthCentreName = requestBody.get("healthCentre").textValue();
-		logger.info("healthCentreName: " + healthCentreName);
-		String comments = requestBody.get("comments").textValue();
-
-		Patient currentPatient = null;
-		try {
-			currentPatient = patientManagerService.getPatientWithId(patientId);
-		} catch (EntityNotFoundException exception) {
-			exception.printStackTrace();
-			// TODO: No patient found, create new patient
-			// We can either send another text message requesting more information
-			// OR
-			// request all necessary information from initial referral
-		}
-		System.out.println("patientId::" + currentPatient.getId());
-		Optional<User> currentVHT = null;
-		try {
-			currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
-		} catch (UsernameNotFoundException exception) {
-			exception.printStackTrace();
-			// TODO: VHT not found, create new VHT?
-		}
-
-		// TODO: Initializing DB with health centres, validating health centre name, handling exception
-		//Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
-
-		Reading currentReading = new ReadingBuilder()
-				.pid(currentPatient.getId())
-				.colour(ReadingColour.valueOf(readingColourKey))
-				.diastolic(diastolic)
-				.systolic(systolic)
-				.heartRate(heartRate)
-				.timestamp(timestamp)
-				.build();
-
-		patientManagerService.saveReading(currentReading);
-
-		Referral currentReferral = new ReferralBuilder()
-				.pid(currentPatient.getId())
-				.vid(currentVHT.get().getId())
-				.readingId(currentReading.getId())
-				.healthCentre(healthCentreName)
-				.healthCentreNumber("+2052052055")
-				.comments(comments)
-				.build();
-
-
-		referralRepository.save(currentReferral);
+		Referral savedReferral = referralManagerService.saveReferral(requestBody);
 
 		return "Success:\n " +
-				"Health centre referred: " + healthCentreName;
+				"Health centre referred: " + savedReferral.getHealthCentre();
 	}
 
 	/**
@@ -184,12 +114,12 @@ public class ReferralController {
 
 	@GetMapping("/all")
 	public @ResponseBody List<Referral> allReferrals() {
-		return referralRepository.findAll();
+		return referralManagerService.findAll();
 	}
 
 	@GetMapping("/{healthCentreName}/all")
 	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) {
-		return referralRepository.findAllByHealthCentre(healthCentreName);
+		return referralManagerService.findAllByHealthCentre(healthCentreName);
 	}
 
 }
