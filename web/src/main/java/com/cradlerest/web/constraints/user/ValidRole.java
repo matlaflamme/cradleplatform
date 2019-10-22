@@ -13,7 +13,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * Defines a bean/constraint for a valid role (for users)
+ * Defines an annotation for a valid user role
  */
 @Documented
 @Constraint(validatedBy = RoleValidator.class) // referenced validator class

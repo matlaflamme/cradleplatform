@@ -5,8 +5,9 @@ import com.cradlerest.web.model.Sex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDate;
+import java.util.Date;
 
+import static com.cradlerest.web.util.Validation.assertFieldNotNull;
 
 /**
  * Simplifies the process of constructing {@code Patient} objects.
@@ -52,6 +53,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder zoneNumber(@NotNull String number) {
+		patient.setZoneNumber(number);
+		return this;
+	}
+
 
 	public PatientBuilder birthYear(int year) {
 		patient.setBirthYear(year);
@@ -68,30 +74,11 @@ public class PatientBuilder {
 	 */
 	public PatientBuilder sex(@NotNull Sex sex) {
 		patient.setSex(sex);
-		if (sex == Sex.MALE && patient.isPregnant() == null) {
-			patient.setPregnant(false);
-		}
 		return this;
 	}
 
-	public PatientBuilder pregnant(boolean isPregnant) {
-		patient.setPregnant(isPregnant);
-		return this;
-	}
-
-	public PatientBuilder gestationalAgeMonths(@Nullable Integer months) {
-		if (months == null) {
-			patient.setGestationalAge(null);
-			return this;
-		}
-		// TODO: this rounding assumption may cause an issue
-		final int WEEKS_PER_MONTH = 4;
-		patient.setGestationalAge(months * WEEKS_PER_MONTH);
-		return this;
-	}
-
-	public PatientBuilder gestationalAgeWeeks(@Nullable Integer weeks) {
-		patient.setGestationalAge(weeks);
+	public PatientBuilder lastUpdated(Date lastUpdated) {
+		patient.setLastUpdated(lastUpdated);
 		return this;
 	}
 
@@ -105,26 +92,12 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder otherSymptoms(@Nullable String text) {
-		patient.setOtherSymptoms(text);
-		return this;
-	}
-
-	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
-		if (object == null) {
-			throw new InstantiationError(String.format("field '%s' is null", fieldName));
-		}
-	}
-
 	private void validate() throws InstantiationError {
-		assertNotNull(patient.getId(), "id");
-		assertNotNull(patient.getName(), "name");
-		assertNotNull(patient.getVillageNumber(), "villageNumber");
-		assertNotNull(patient.getBirthYear(), "birthYear");
-		assertNotNull(patient.getSex(), "sex");
-		assertNotNull(patient.isPregnant(), "isPregnant");
-		if (patient.isPregnant() && patient.getGestationalAge() == null) {
-			throw new InstantiationError("gestationalAge may not be null when isPregnant is true");
-		}
+		assertFieldNotNull(patient.getId(), "id");
+		assertFieldNotNull(patient.getName(), "name");
+		assertFieldNotNull(patient.getVillageNumber(), "villageNumber");
+		assertFieldNotNull(patient.getBirthYear(), "birthYear");
+		assertFieldNotNull(patient.getSex(), "sex");
+		assertFieldNotNull(patient.getLastUpdated(), "lastUpdated" );
 	}
 }

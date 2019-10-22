@@ -3,6 +3,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Defines rules for a user's role(s)
@@ -12,15 +14,21 @@ import java.util.List;
  */
 public class RoleValidator implements ConstraintValidator<ValidRole, String> {
 
-   List<String> validRoles = Arrays.asList("ROLE_ADMIN", "ROLE_VHT", "ROLE_HEALTHWORKER");
-
+   List<String> validRoles = Arrays.stream(Role.values()).map(Role::getRole).collect(Collectors.toList());
+		   ;
    @Override
    public void initialize(ValidRole constraint) {
    }
 
+	/**
+	 *
+	 * @param roles Strings to be validated
+	 * @param context Error message. If none specified, utilizes the default error message (defined in ValidRole interface)
+	 * @return true if roles are valid, otherwise false
+	 */
    @Override
    public boolean isValid(String roles, ConstraintValidatorContext context) {
-       return validateRoles(roles);
+   		return validateRoles(roles);
    }
 
    private boolean validateRoles(String roles) {
@@ -30,7 +38,6 @@ public class RoleValidator implements ConstraintValidator<ValidRole, String> {
        String[] splitRoles = roles.split(",");
        for (String role : splitRoles) {
            if (!validRoles.contains(role)) {
-               System.out.println("derpa");
                return false;
            }
        }

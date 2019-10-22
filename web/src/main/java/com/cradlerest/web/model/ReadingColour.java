@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenOrdinal;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -12,29 +13,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * RED_DOWN (Urgent action needed. Get help and assess mother. Immediately transfer to health centre within 1h.);
  */
 @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+@DataGenOrdinal
 public enum ReadingColour {
-	GREEN(0),
-	YELLOW_DOWN(1),
-	YELLOW_UP(2),
-	RED_DOWN(3),
-	RED_UP(4);
+	GREEN,
+	YELLOW_DOWN,
+	YELLOW_UP,
+	RED_DOWN,
+	RED_UP;
 
-	private final int key;
-
-	ReadingColour(int key) {
-		this.key = key;
-	}
-
-	public int getKey() {
-		return this.key;
-	}
-
-	public static ReadingColour fromKey(int key) {
-		for(ReadingColour type : ReadingColour.values()) {
-			if(type.getKey() == key) {
-				return type;
-			}
-		}
-		return null;
+	public static ReadingColour valueOf(int ordinal) {
+		return ReadingColour.values()[ordinal];
 	}
 }

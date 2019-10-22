@@ -6,12 +6,25 @@
 	<link type="text/css" rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-<h2>Welcome!</h2>
-<p>Please select your position to login</p>
-<div class="positions">
-	<button onclick = 'window.location.assign("/login")'>Login</button>
-    <p id="esketit">Bod</p>
+<h2>Login to your account</h2>
+<div th:if="${param.error}">
+	<p style="color: red">Username or Password is wrong. Please check again!</p>
 </div>
+<div th:if="${param.logout}">
+	<h1 style="color: blue">Logged out.</h1>
+</div>
+<div>
+	<form id="authInput" th:action="@{/login}" method="post">
+		<input type="text" name="username" placeholder="Username">
+		<input type="password" name="password" placeholder="Password">
+		<div class="container">
+			<button type="submit" value="Sign in">Sign In</button>
+			<button v-on:click="createAccount"><a>Create Account</a></button>
+		</div>
+	</form>
+</div>
+<script src="/static/js/home.js"></script>
+</body>
 
 
 <!--	<div>-->
@@ -31,6 +44,5 @@
 <!--	<form th:action="@{/logout}" method="post">-->
 <!--		<input type="submit" value="Sign Out"/>-->
 <!--	</form>-->
-    <script src="/js/login.js"></script>
 </body>
 </html>

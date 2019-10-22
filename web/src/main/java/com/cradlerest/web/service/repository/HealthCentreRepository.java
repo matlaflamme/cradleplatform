@@ -8,7 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface HealthCentreRepository extends JpaRepository<HealthCentre, Integer> {
-
-	@Query("SELECT h FROM HealthCentre h WHERE h.name = ?1")
 	Optional<HealthCentre> findByName(String name);
 }

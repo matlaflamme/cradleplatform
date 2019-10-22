@@ -1,14 +1,9 @@
-.navbar-dark {
-    background-color: #0c9090;
-    color: white;
+.bg-light {
+    background-color: #0b908f!important; /* NavBar background */
 }
 
-.navbar-brand a {
-    color: white;
-}
-
-ul.nav a:hover {
-    background-color: #0b6c6d !important; /*Overrides bootstrap changes nav-bar links hover colour */
+.nav-link:hover {
+    color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
 }
 
 h2 {
@@ -31,7 +26,7 @@ h2 {
     border-radius: 4px;
 }
 
-button:hover {
+.container button:hover {
     opacity: 0.8;
 }
 

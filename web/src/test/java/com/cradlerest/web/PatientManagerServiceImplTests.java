@@ -19,6 +19,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -50,12 +53,16 @@ public class PatientManagerServiceImplTests {
 		// setup responses for repository queries
 		// 	https://www.baeldung.com/spring-boot-testing
 
+		Date date = new GregorianCalendar(2014, 10, 11).getTime();
+
 		Patient patient = new PatientBuilder()
 				.id("001")
 				.name("Taki Tachibana")
 				.villageNumber("1")
+				.zoneNumber("1")
 				.birthYear(1998)
 				.sex(Sex.MALE)
+				.lastUpdated(date)
 				.build();
 
 		Mockito.when(patientRepository.findById(patient.getId()))
@@ -77,8 +84,10 @@ public class PatientManagerServiceImplTests {
 				.isEqualTo("Taki Tachibana");
 		assertThat(result.getBirthYear())
 				.isEqualTo(1998);
-		assertThat(result.isPregnant())
-				.isEqualTo(false);
+		assertThat(result.getZoneNumber())
+                .isEqualTo("1");
+		assertThat(result.getLastUpdated())
+				.isEqualTo(new GregorianCalendar(2014, 10, 11).getTime());
 	}
 
 	@Test(expected = EntityNotFoundException.class)

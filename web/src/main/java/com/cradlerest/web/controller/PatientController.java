@@ -4,10 +4,8 @@ import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.service.PatientManagerService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller responsible for managing requests dealing with patients.
@@ -44,6 +42,11 @@ public class PatientController {
 		return patientManagerService.getAllPatients();
 	}
 
+	@GetMapping("/all_with_latest_reading")
+	public List<?> allSummary() {
+		return patientManagerService.getAllPatientsWithLastReading();
+	}
+
 	@GetMapping("/{id}")
 	public Object profile(@PathVariable("id") String id) throws Exception {
 		return patientManagerService.getFullPatientProfile(id);
@@ -64,11 +67,7 @@ public class PatientController {
 		return patientManagerService.savePatient(patient);
 	}
 
-	@PostMapping("/encrypted_reading")
-	public Reading createReadingFromEncrypted(@RequestParam("userDataFile") MultipartFile file) throws Exception {
-		return patientManagerService.constructReadingFromEncrypted(file);
-	}
-
+	@Deprecated
 	@PostMapping("/reading")
 	public Reading createReading(@RequestBody Reading reading) throws Exception {
 		return patientManagerService.saveReading(reading);

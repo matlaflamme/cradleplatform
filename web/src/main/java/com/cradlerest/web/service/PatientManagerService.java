@@ -1,10 +1,10 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,6 +34,14 @@ public interface PatientManagerService {
 	 * @throws Exception If no such patient exists or an error occurred.
 	 */
 	Patient getPatientWithId(@NotNull String id) throws Exception;
+
+	/**
+	 * Returns the list of all patients in the the database paired with their
+	 * latest reading. If a patient has no readings, then {@code null} is
+	 * returned in place of one.
+	 * @return A list of patient/reading pairs.
+	 */
+	List<PatientWithLatestReadingView> getAllPatientsWithLastReading();
 
 	/**
 	 * Returns the list of all patients in the database.
@@ -80,5 +88,4 @@ public interface PatientManagerService {
 	 */
 	Reading saveReading(@Nullable Reading reading) throws Exception;
 
-	Reading constructReadingFromEncrypted(MultipartFile file) throws Exception;
 }

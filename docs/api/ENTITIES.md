@@ -50,14 +50,12 @@ entity, and, as such, must be separate entities.
 | `id` | `string` | `false` | Unique identifier for the patient |
 | `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
 | `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
-| `initials` | `string` | `false` | Patient's initials |
+| `name` | `string` | `false` | Patient's initials |
 | `birthYear` | `number` | `false` | Patient's birth year |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
-| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
-| `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
-| `otherSymptoms` | `string` | `true` | Text describing any other symptoms that the patient may have |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 
 ### Example
 
@@ -66,28 +64,25 @@ entity, and, as such, must be separate entities.
     "id": "001",
     "villageNumber": "1",
     "zoneNumber": "5",
-    "initials": "AB",
+    "name": "AB",
     "age": 1990,
     "sex": 1,
-    "gestationalAge": 16,
     "medicalHistory": null,
     "drugHistory": null,
-    "otherSymptoms": null,
-    "pregnant": true
+    "lastUpdated": "2019-09-20 20:12:32"
 }
 ```
 
 
 ## Patient Profile
 
-Holds all information related to a patient: including lists of readings and 
-symptoms. To put simply, this entity is the same as the [patient](#patient)
-entity with extra `readings` and `symptoms` fields.
+> Note: In an upcoming update, values in the `readings` array will be switched from [Reading](#reading) entities
+> to [Reading View](#reading-view) entities.
+
+Aggregate information about a patient.
 
 The reading values are ordered by timestamp in descending order meaning that
 the most recent reading will be the first item in the array.
-
-> Note: symptoms not yet implemented
 
 ### Fields
 
@@ -96,16 +91,13 @@ the most recent reading will be the first item in the array.
 | `id` | `string` | `false` | Unique identifier for the patient |
 | `villageNumber` | `string` | `false` | Numerical identifier for the village in which the patient lives |
 | `zoneNumber` | `string` | `false` | Numerical identifier for the zone in which the patient lives |
-| `initials` | `string` | `false` | Patient's initials |
+| `name` | `string` | `false` | Patient's initials |
 | `birthYear` | `number` | `false` | Patient's birth year |
 | `sex` | `number` | `false` | Sex of the patient as an enumerated value `{0=Male, 1=Female, 2=Unknown}` |
-| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
-| `gestationalAge` | `number` | `true` | Gestational age of the patient **in weeks** |
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
-| `otherSymptoms` | `string` | `true` | Text describing any other symptoms that the patient may have |
+| `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `readings` | `array` | `false` | An array of [Reading](#reading) entities
-| `symptoms` | `array` | `false` | An array of [Symptom](#symptom) entities (not yet implemented)
 
 ### Example
 
@@ -114,14 +106,12 @@ the most recent reading will be the first item in the array.
     "id": "001",
     "villageNumber": "1",
     "zoneNumber": "5",
-    "initials": "AB",
+    "name": "AB",
     "birthYear": 1990,
     "sex": 1,
-    "gestationalAge": 16,
     "medicalHistory": null,
     "drugHistory": null,
-    "otherSymptoms": null,
-    "pregnant": true,
+    "lastUpdated": "2019-09-20 20:12:32",
     "readings": [
         {
             "id": 3,
@@ -129,6 +119,8 @@ the most recent reading will be the first item in the array.
             "diastolic": 100,
             "heartRate": 80,
             "colour": 2,
+            "pregnant": true,
+            "gestationalAge": 24,
             "timestamp": "2019-09-24 12:31:34"
         },
         {
@@ -136,6 +128,8 @@ the most recent reading will be the first item in the array.
             "systolic": 130,
             "diastolic": 90,
             "heartRate": 80,
+            "pregnant": true,
+            "gestationalAge": 22,
             "colour": 1,
             "timestamp": "2019-09-22 06:37:00"
         },
@@ -144,15 +138,20 @@ the most recent reading will be the first item in the array.
             "systolic": 100,
             "diastolic": 80,
             "heartRate": 74,
+            "pregnant": true,
+            "gestationalAge": 20,
             "colour": 0,
             "timestamp": "2019-09-20 20:12:32"
         }
-    ],
-    "symptoms": []
+    ]
 }
 ```
 
 ## Reading
+
+> **DEPRECIATED ON FRONTEND**: Use [Reading View](#reading-view) instead.
+>
+> This entity is only meant for communication between the service and database layers.
 
 Holds information about a single CRADLE reading.
 
@@ -164,9 +163,11 @@ Holds information about a single CRADLE reading.
 | `systolic` | `number` | `false` | Systolic (top number) reading |
 | `diastolic` | `number` | `false` | Diastolic (bottom number) reading |
 | `heartRate` | `number` | `false` | Heart rate reading |
-| `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW, 2=RED}` |
+| `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW_DOWN, 2=YELLOW_UP, 3=RED_DOWN,3=RED_UP}` |
+| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
+| `gestationalAge` | `number` | `true` | Gestational age of the patient **in days** |
 | `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
-| `miscellaneousDetails` | `string` | `true` | Other details that a VHT may consider relevant during a reading |
+| `otherSymptoms` | `string` | `true` | Other symptoms that the patient may have |
 
 ### Example
 
@@ -177,7 +178,71 @@ Holds information about a single CRADLE reading.
     "diastolic": 80,
     "heartRate": 74,
     "colour": 0,
+    "pregnant": true,
+    "gestationalAge": 16,
     "timestamp": "2019-09-20 20:12:32",
-    "miscellaneousDetails": null
+    "otherSymptoms": null
 }
 ```
+
+## Reading View
+
+Aggregates information about a reading from multiple sources into a single object.
+
+> Note to backend developers: controllers and the frontend interact with `ReadingView` objects when
+> dealing with readings. Whereas the `Reading` class is meant for interacting directly with the database.
+> The database has no concept of a `ReadingView` as it is a composite view of multiple tables.
+
+### Fields
+
+| Field | Type | Nullable | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `false` | Unique reading identifier |
+| `systolic` | `number` | `false` | Systolic (top number) reading |
+| `diastolic` | `number` | `false` | Diastolic (bottom number) reading |
+| `heartRate` | `number` | `false` | Heart rate reading |
+| `colour` | `number` | `false` | CRADLE colour as an enumerated value `{0=GREEN, 1=YELLOW_DOWN, 2=YELLOW_UP, 3=RED_DOWN,3=RED_UP}` |
+| `pregnant` | `boolean` | `false` | Is the patient pregnant? |
+| `gestationalAge` | `number` | `true` | Gestational age of the patient **in days** |
+| `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+| `otherSymptoms` | `string` | `true` | Other symptoms that the patient may have |
+| `symptoms` | `[string]` | `false` | A list of [symptoms](#symptom) for this reading |
+
+
+### Example
+
+```json
+{
+    "id": 1,
+    "systolic": 100,
+    "diastolic": 80,
+    "heartRate": 74,
+    "colour": 0,
+    "pregnant": true,
+    "gestationalAge": 16,
+    "timestamp": "2019-09-20 20:12:32",
+    "otherSymptoms": null,
+    "symptoms": [
+        "Headache",
+        "Blurred Vision",
+        "Unwell"
+    ]
+}
+```
+
+## Symptom
+
+An enumeration of common symptoms which can be attached to readings. Values are pulled directly from the Android application.
+
+Serialized as a simple JSON string.
+
+### Values
+
+> Note: All values are **case-insensitive**.
+
+* `"Headache"`
+* `"Blurred Vision"`
+* `"Abdominal Pain"`
+* `"Bleeding"`
+* `"Feverish"`
+* `"Unwell"`
