@@ -57,6 +57,9 @@ public class ReferralController {
 	/**
 	 * Handles Twilio post request (VHT has no internet)
 	 * TODO: Request validator. Right now, anyone can post to this url
+	 * @see com.twilio.security.RequestValidator
+	 * It's kinda bugged? Enabling it renders the endpoint inaccessible (always 403-forbidden)
+	 *
 	 * Example request "Body":
 	 * {
 	 * 		"patientName":"JS",
