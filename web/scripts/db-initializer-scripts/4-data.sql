@@ -60,14 +60,17 @@ VALUES ('001', 130, 90, 80, TRUE, 30, 1,' 2019-09-22 6:37:00');
 INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, colour, timestamp)
 VALUES ('001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34');
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, colour, timestamp)
-VALUES ('002', 140, 80, 93, 2, '2018-06-12 08:54:15');
-
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
-VALUES ('002', 140, 80, 93, 2, FALSE, 0, '2018-06-12 08:54:15');
+-- INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
+-- VALUES ('002', 140, 80, 93, 2, FALSE, 0, 0, '2018-06-12 08:54:15');
 
 INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
-VALUES ('001', 3, 1, 'Twilio', '+12053465536');
+VALUES ('001', 3, 3, 'Twilio', '+12053465536');
+
+INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
+VALUES ('001', 3, 4, 'Twilio', '+12053465536');
+
+INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
+VALUES ('002', 3, 3, 'SFU', '+12053465539');
 
 -- Statically Defined Data
 INSERT INTO symptom VALUES (0, 'Headache');
