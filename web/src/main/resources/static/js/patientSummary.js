@@ -61,19 +61,19 @@ function getReadingColorIcon(digit) {
             break;
         case 1:
             colour = 'yellow';
-            arrow = '/img/arrow_up.png';
+            arrow = '/img/arrow_down.png';
             break;
         case 2:
             colour = 'yellow';
-            arrow = '/img/arrow_down.png';
+            arrow = '/img/arrow_up.png';
             break;
         case 3:
             colour = 'red';
-            arrow = '/img/arrow_up.png';
+            arrow = '/img/arrow_down.png';
             break;
         case 4:
             colour = 'red';
-            arrow = '/img/arrow_down.png';
+            arrow = '/img/arrow_up.png';
             break;
     }
     return { 'colour' : colour, 'arrow' : arrow };
