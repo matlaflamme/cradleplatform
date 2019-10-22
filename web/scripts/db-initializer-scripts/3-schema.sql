@@ -60,12 +60,3 @@ CREATE TABLE symptom_reading_relation (
     FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
 );
 
-
--- Statically Defined Data
-INSERT INTO symptom VALUES (0, 'Headache');
-INSERT INTO symptom VALUES (1, 'Blurred Vision');
-INSERT INTO symptom VALUES (2, 'Abdominal Pain');
-INSERT INTO symptom VALUES (3, 'Bleeding');
-INSERT INTO symptom VALUES (4, 'Feverish');
-INSERT INTO symptom VALUES (5, 'Unwell');
-

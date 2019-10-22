@@ -68,3 +68,11 @@ VALUES ('002', 140, 80, 93, 2, FALSE, 0, '2018-06-12 08:54:15');
 
 INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
 VALUES ('001', 3, 1, 'Twilio', '+12053465536');
+
+-- Statically Defined Data
+INSERT INTO symptom VALUES (0, 'Headache');
+INSERT INTO symptom VALUES (1, 'Blurred Vision');
+INSERT INTO symptom VALUES (2, 'Abdominal Pain');
+INSERT INTO symptom VALUES (3, 'Bleeding');
+INSERT INTO symptom VALUES (4, 'Feverish');
+INSERT INTO symptom VALUES (5, 'Unwell');
