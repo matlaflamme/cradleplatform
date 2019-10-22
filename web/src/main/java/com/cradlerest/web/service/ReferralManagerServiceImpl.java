@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * Implements ReferralManagerService
+ *
+ * Still a lot to be done...
+ * @see ReferralController
+ */
 @Service
 public class ReferralManagerServiceImpl implements ReferralManagerService {
 
