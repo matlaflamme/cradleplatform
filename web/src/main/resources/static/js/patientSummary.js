@@ -30,8 +30,13 @@ Vue.component('patient_readings', {
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => {
             this.rows = response.data
+            this.readLight();
+        })
+    },
+    methods: {
+        readLight: function(){
             this.rows.forEach((row)=>{
-                row.colorid = 'green';
+                row.colorstyle = 'green';
                 switch (row.colour) {
                     case 0:
                         row.colorstyle = {"background-color": 'green'};
@@ -49,9 +54,8 @@ Vue.component('patient_readings', {
                         break;
                 }
             })
-        })
-    },
-    methods: {
+
+        }
 
     }
 });
