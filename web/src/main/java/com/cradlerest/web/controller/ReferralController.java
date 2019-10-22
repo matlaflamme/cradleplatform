@@ -111,7 +111,10 @@ public class ReferralController {
 		logger.info("heartRate: " + heartRate);
 		int readingColourKey = requestBody.get("readingColour").intValue();
 		logger.info("readingColourKey: " + readingColourKey);
+
+		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
 		String timestamp = requestBody.get("timestamp").textValue().replace("T", " ");
+
 		logger.info("timestamp: " + timestamp);
 		String healthCentreName = requestBody.get("healthCentre").textValue();
 		logger.info("healthCentreName: " + healthCentreName);
@@ -162,8 +165,6 @@ public class ReferralController {
 
 		referralRepository.save(currentReferral);
 
-		// TODO: timestamp matches Reading entity timestamp
-		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
 		return "Success:\n " +
 				"Health centre referred: " + healthCentreName;
 	}
@@ -181,7 +182,6 @@ public class ReferralController {
 		// TODO
 		return "Success";
 	}
-
 
 	@GetMapping("/all")
 	public @ResponseBody List<Referral> allReferrals() {
