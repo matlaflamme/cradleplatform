@@ -31,23 +31,8 @@ Vue.component('patient_readings', {
         axios.get('/api/patient/'+ id + '/readings').then(response => {
             this.rows = response.data
             this.rows.forEach((row)=>{
-                row.colorid = 'green';
-                switch (row.colour) {
-                    case 0:
-                        row.colorstyle = {"background-color": 'green'};
-                        break;
-                    case 1:
-                        row.colorstyle =  {"background-color": 'yellow'};
-                        break;
-                    case 2:
-                        row.colorstyle = {"background-color": 'yellow'};
-                        break;
-                    case 3:
-                        row.colorstyle = {"background-color": 'red'};
-                    case 4:
-                        row.colorstyle = {"background-color": 'red'};
-                        break;
-                }
+                  let icon = getReadingColorIcon(row.colour);
+                  row.colorstyle = {"background-color": icon['colour']};
             })
         })
     },
@@ -66,6 +51,33 @@ new Vue({
     }
 
 });
+
+function getReadingColorIcon(digit) {
+    colour = 'green';
+    arrow = null;
+    switch (digit) {
+        case 0:
+            colour = 'green';
+            break;
+        case 1:
+            colour = 'yellow';
+            arrow = '/img/arrow_up.png';
+            break;
+        case 2:
+            colour = 'yellow';
+            arrow = '/img/arrow_down.png';
+            break;
+        case 3:
+            colour = 'red';
+            arrow = '/img/arrow_up.png';
+            break;
+        case 4:
+            colour = 'red';
+            arrow = '/img/arrow_down.png';
+            break;
+    }
+    return { 'colour' : colour, 'arrow' : arrow };
+}
 
 //this object is used for the "new reading" button in the navbar
 let newReadingRedirect = new Vue({
@@ -95,7 +107,8 @@ Vue.component('basic_info', {
     template:
         '<div>'+
         '<div class="patientInfo">\n' +
-        '    <h6>Patient Name:</h6>\n' +
+        '    <h2>Patient Information</h2>' +
+        '    <h6>Name:</h6>\n' +
         '    <p class="patientName">{{patientData.name}}<br></p>\n' +
         '    <h6>ID:</h6>\n' +
         '    <p class="patientId">{{patientData.id}}<br></p>\n' +
@@ -151,26 +164,17 @@ Vue.component('basic_info', {
         },
         setLight(pData) {
             let digit = pData.readings[0].colour;
-            let color = 'green';
-            switch (digit) {
-                case 0:
-                    color = 'green';
-                    this.$refs.arrow.src = '/img/white.png';
-                    break;
-                case 1:
-                    this.$refs.arrow.src = '/img/arrow_up.png';
-                case 2:
-                    color = 'yellow';
-                    this.$refs.arrow.src = '/img/arrow_down.png';
-                    break;
-                case 3:
-                    this.$refs.arrow.src = '/img/arrow_up.png';
-                case 4:
-                    color = 'red';
-                    this.$refs.arrow.src = '/img/arrow_down.png';
-                    break;
+            let icon = getReadingColorIcon(digit);
+
+            this.$refs.light.setAttribute("style", "background-color:" +  icon['colour'] + ";");
+
+            if (icon['arrow'] != null) {
+                this.$refs.arrow.src = icon['arrow'];
             }
-            this.$refs.light.setAttribute("style", "background-color:" +  color + ";");
+            else {
+                this.$refs.arrow.hidden = true;
+            }
+
         }
     }
 });
