@@ -380,7 +380,8 @@ For example:
 When creating XML View boxes, it's important to keep a coherent, consistent structure throughout all sections and files. This can make it easier to parse through different views -- especially nested views.
 Below is the hierarchy for where each kind of tag should be placed.
 
-1. Width
+1. ID
+2. Width
 2. Height
 3. Margins (_, Top, Bottom, Start, then End). Followed by Padding, if any
 3. `newline`
