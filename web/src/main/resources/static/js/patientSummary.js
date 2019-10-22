@@ -56,7 +56,6 @@ Vue.component('patient_readings', {
             })
 
         }
-
     }
 });
 
