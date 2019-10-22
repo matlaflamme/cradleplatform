@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -75,8 +76,13 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			// TODO: VHT not found, create new VHT?
 		}
 
-		// TODO: Initializing DB with health centres, validating health centre name, handling exception
-		//Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
+		Optional<HealthCentre> currentHealthCentre = null;
+
+		try {
+			currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
+		} catch (EntityNotFoundException exception) {
+			exception.printStackTrace();
+		}
 
 		Reading currentReading = new ReadingBuilder()
 				.pid(currentPatient.getId())
@@ -93,8 +99,8 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.pid(currentPatient.getId())
 				.vid(currentVHT.get().getId())
 				.readingId(currentReading.getId())
-				.healthCentre(healthCentreName)
-				.healthCentreNumber("+2052052055")
+				.healthCentre(currentHealthCentre.get().getName())
+				.healthCentreNumber(currentHealthCentre.get().getHealthCentreNumber())
 				.comments(comments)
 				.build();
 
@@ -103,7 +109,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	/**
-	 * @return all referrals
+	 * @return All referrals
 	 */
 	public List<Referral> findAll() { return referralRepository.findAll(); }
 
