@@ -75,6 +75,9 @@ Vue.component('sidebar_item', {
             if (clicked === "new-vht") { //@TODO: find a better way to do this
                 window.location.assign("/createAccount")
             }
+            else if (clicked === "admin-home") {
+                window.location.assign("/admin")
+            }
         },
     }
 });
