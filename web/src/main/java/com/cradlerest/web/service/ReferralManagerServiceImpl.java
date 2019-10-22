@@ -65,7 +65,9 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		Patient currentPatient = null;
 		try {
+			logger.info("start");
 			currentPatient = patientManagerService.getPatientWithId(patientId);
+			logger.info("end");
 		} catch (EntityNotFoundException exception) {
 			exception.printStackTrace();
 			// TODO: No patient found, create new patient
@@ -89,7 +91,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		} catch (EntityNotFoundException exception) {
 			exception.printStackTrace();
 		}
-
+		logger.info("patient id : " + currentPatient.getId());
 		Reading currentReading = new ReadingBuilder()
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))

@@ -49,10 +49,8 @@ import java.util.Optional;
 public class ReferralController {
 	private Logger logger = LoggerFactory.getLogger(ReferralController.class);
 	private ReferralManagerService referralManagerService;
-	private PatientManagerService patientManagerService; // Patients, Readings
 
-	public ReferralController(PatientManagerService patientManagerService, ReferralManagerService referralManagerService) {
-		this.patientManagerService = patientManagerService;
+	public ReferralController(ReferralManagerService referralManagerService) {
 		this.referralManagerService = referralManagerService;
 	}
 
