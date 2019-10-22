@@ -36,7 +36,6 @@ Vue.component('patient_readings', {
     methods: {
         readLight: function(){
             this.rows.forEach((row)=>{
-                row.colorstyle = 'green';
                 switch (row.colour) {
                     case 0:
                         row.colorstyle = {"background-color": 'green'};
