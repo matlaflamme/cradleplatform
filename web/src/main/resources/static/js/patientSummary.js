@@ -21,7 +21,7 @@ Vue.component('patient_readings', {
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
         '<td>{{row.heartRate}}</td>' +
-        '<span class="dot" :style="row.colorstyle"></span>' +
+        '<td><span class="dot" :style="row.colorstyle"></span></td>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
@@ -186,4 +186,3 @@ new Vue({
 
     }
 });
-
