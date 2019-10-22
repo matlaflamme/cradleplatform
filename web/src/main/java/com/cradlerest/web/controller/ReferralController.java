@@ -90,7 +90,6 @@ public class ReferralController {
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
 	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		// **JsonNodes are immutable**
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
 		Referral savedReferral = referralManagerService.saveReferral(requestBody);

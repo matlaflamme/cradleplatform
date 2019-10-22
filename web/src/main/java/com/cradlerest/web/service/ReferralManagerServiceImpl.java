@@ -38,6 +38,14 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		this.healthCentreRepository = healthCentreRepository;
 	}
 
+	/**
+	 * Saves a referral
+	 * Corresponding reading is saved to Reading table
+	 *
+	 * @param requestBody IS IMMUTABLE
+	 * @return
+	 * @throws Exception
+	 */
 	@Override
 	public Referral saveReferral(JsonNode requestBody) throws Exception {
 		System.out.println(requestBody.toString());
