@@ -18,7 +18,7 @@
 <div id="app">
     <v-app id="inspire">
 <!--        Navigation drawer = sidebar -->
-        <sidebar_template ref="sidebar"></sidebar_template> <!--Data inside component accessible by $refs.sidebar -->
+        <sidebar_template_admin ref="sidebar"></sidebar_template_admin> <!--Data inside component accessible by $refs.sidebar -->
 
 <!--       @drawer is a custom event thrown by the component, called when the hamburger button is pressed -->
         <navbar_template @drawer="$refs.sidebar.drawer = !$refs.sidebar.drawer"></navbar_template>

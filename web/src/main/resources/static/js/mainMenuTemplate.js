@@ -1,4 +1,4 @@
-Vue.component('sidebar_template', {
+Vue.component('sidebar_template_admin', {
     props: {
         current_user: String
     },
@@ -14,7 +14,7 @@ Vue.component('sidebar_template', {
         '<!--items in sidebar. See sidebar_item component for more\n' +
         'title, icon and clickable are props that are being passed to the component -->\n' +
         '<!--Icons from: https://material.io/resources/icons/?icon=settings_input_antenna&style=baseline -->\n' +
-            '<v-list dense>\n' +
+            '<v-list>\n' +
                 '<sidebar_item title="Home" icon="home" clickable="admin-home"></sidebar_item>\n' +
                 '\n' +
                 '<v-subheader class="mt-3 grey--text text--darken-1">Statistical Analysis</v-subheader>\n' +
@@ -29,6 +29,38 @@ Vue.component('sidebar_template', {
                 '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>\n' +
                 '<sidebar_item title="Sign Out" icon="account_circle" clickable="logout"></sidebar_item>\n' +
             '</v-list>\n' +
+        '</v-navigation-drawer>'
+});
+
+Vue.component('sidebar_template_health', {
+    props: {
+        current_user: String
+    },
+    data: () => ({
+        drawer: null
+    }),
+    template:
+        '<v-navigation-drawer\n' +
+        'app\n' +
+        'clipped\n' +
+        'v-model="drawer"\n' +
+        '>\n' +
+        '<!--items in sidebar. See sidebar_item component for more\n' +
+        'title, icon and clickable are props that are being passed to the component -->\n' +
+        '<!--Icons from: https://material.io/resources/icons/?icon=settings_input_antenna&style=baseline -->\n' +
+        '<v-list>\n' +
+        '<sidebar_item title="Home" icon="home" clickable="health-home"></sidebar_item>\n' +
+        '\n' +
+        '<v-subheader class="mt-3 grey--text text--darken-1">Patients</v-subheader>\n' +
+        '<sidebar_item title="New Referrals" icon="assignment" clickable="new-referrals"></sidebar_item>\n' +
+        '<sidebar_item title="Past Referrals" icon="assignment" clickable="past-referrals"></sidebar_item>\n' +
+        '<sidebar_item title="All Referrals" icon="assignment" clickable="all-referrals"></sidebar_item>\n' +
+        '\n' +
+        '<v-subheader class="mt-3 grey--text text--darken-1">Account</v-subheader>\n' +
+        '<sidebar_item title="Account Settings" icon="settings" clickable="account-settings"></sidebar_item>\n' +
+        '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>\n' +
+        '<sidebar_item title="Sign Out" icon="account_circle" clickable="logout"></sidebar_item>\n' +
+        '</v-list>\n' +
         '</v-navigation-drawer>'
 });
 
@@ -82,6 +114,9 @@ Vue.component('sidebar_item', {
             }
             else if (clicked === "logout") {
                 window.location.assign("/logout")
+            }
+            else if (clicked === "health-home") {
+                window.location.assign("/healthworker")
             }
         },
     }
