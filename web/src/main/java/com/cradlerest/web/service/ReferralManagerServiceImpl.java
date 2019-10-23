@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -94,7 +95,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		try {
 			currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
-		} catch (EntityNotFoundException exception) {
+		} catch (NoSuchElementException exception) {
 			exception.printStackTrace();
 		}
 

@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles referrals
@@ -81,9 +82,13 @@ public class ReferralController {
 	 * @throws IOException
 	 */
 	@PostMapping("/send")
-	public String saveReferral(WebRequest request, HttpServletResponse response) throws IOException {
-		// TODO
-		return "Success";
+	public Referral saveReferral(@RequestBody String request, HttpServletResponse response) throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		// TODO: Handle exceptions, validate etc..
+		JsonNode requestBody = mapper.readTree(request);
+		Referral savedReferral = referralManagerService.saveReferral(requestBody);
+
+		return savedReferral;
 	}
 
 	@GetMapping("/all")
