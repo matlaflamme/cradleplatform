@@ -37,8 +37,17 @@ public class CopyFields {
 		}
 	}
 
+	/**
+	 * Returns a list of declared fields in the given type and it's direct
+	 * superclass if it has one.
+	 * @param type Class to get fields for.
+	 * @return A list of fields.
+	 */
 	private static Vec<Field> fieldsOf(@NotNull Class<?> type) {
 		var fields = Vec.copy(Arrays.asList(type.getDeclaredFields()));
+		if (type.getSuperclass() != null) {
+			fields = fields.append(Arrays.asList(type.getSuperclass().getDeclaredFields()));
+		}
 		fields.forEach(field -> field.setAccessible(true));
 		return fields;
 	}
