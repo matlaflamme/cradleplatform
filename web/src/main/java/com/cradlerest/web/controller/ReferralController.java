@@ -82,13 +82,14 @@ public class ReferralController {
 	 * @throws IOException
 	 */
 	@PostMapping("/send")
-	public Referral saveReferral(@RequestBody String request, HttpServletResponse response) throws Exception {
+	public String saveReferral(@RequestBody String request, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request);
 		Referral savedReferral = referralManagerService.saveReferral(requestBody);
 
-		return savedReferral;
+		return "Success:\n " +
+				"Health centre referred: " + savedReferral.getHealthCentre();
 	}
 
 	@GetMapping("/all")
