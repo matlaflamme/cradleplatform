@@ -13,11 +13,13 @@ Vue.component('new_account_form', {
         username: '',
         usernameRules: [
             v => !!v || 'Username is required',
-            v => (v && v.length <= 30) || 'Username must be less than 30 characters' //an example to show we can limit characters
+            v => (v && v.length <= 25) || 'Username must be less than 30 characters', //an example to show we can limit characters
+            v => (v && v.length >= 6) || 'Username must be at least 6 characters'
         ],
         password: '',
         passwordRules: [
-            v => !!v || 'Password is required'
+            v => !!v || 'Password is required',
+            v => (v && v.length >= 8)  || 'Password must be at least 8 characters'
         ],
         region: '',
         regionRules: [

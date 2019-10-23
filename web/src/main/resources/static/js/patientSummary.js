@@ -1,3 +1,12 @@
+Vue.prototype.$http = axios;
+
+new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => ({
+        drawer: null
+    })
+});
 //This component is used for the center column "Past Readings" table of this page
 Vue.component('patient_readings', {
     data: function() {
@@ -38,6 +47,7 @@ Vue.component('patient_readings', {
     }
 });
 
+Vue.component('model')
 //Needed for the patientReadings component
 new Vue({
     el: '#patientReadings',
