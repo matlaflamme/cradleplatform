@@ -21,7 +21,7 @@ Vue.component('patient_readings', {
         '<td>{{row.systolic}}</td>' +
         '<td>{{row.diastolic}}</td>' +
         '<td>{{row.heartRate}}</td>' +
-        '<span class="dot" :style="row.colorstyle"></span>' +
+        '<td><span class="dot" :style="row.colorstyle"></span></td>' +
         '</tr>' +
         '</tbody>' +
         '</table>',
@@ -30,31 +30,11 @@ Vue.component('patient_readings', {
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => {
             this.rows = response.data
-            this.readLight();
-        })
-    },
-    methods: {
-        readLight: function(){
-            this.rows.forEach((row)=>{
-                switch (row.colour) {
-                    case 0:
-                        row.colorstyle = {"background-color": 'green'};
-                        break;
-                    case 1:
-                        row.colorstyle =  {"background-color": 'yellow'};
-                        break;
-                    case 2:
-                        row.colorstyle = {"background-color": 'yellow'};
-                        break;
-                    case 3:
-                        row.colorstyle = {"background-color": 'red'};
-                    case 4:
-                        row.colorstyle = {"background-color": 'red'};
-                        break;
-                }
+            this.rows.forEach((row)=> {
+                let icon = getReadingColorIcon(row.colour);
+                row.colorstyle = {"background-color": icon['colour']};
             })
-
-        }
+        })
     }
 });
 
@@ -68,6 +48,33 @@ new Vue({
     }
 
 });
+
+function getReadingColorIcon(digit) {
+    let colour = 'green';
+    let arrow = null;
+    switch (digit) {
+        case 0:
+            colour = 'green';
+            break;
+        case 1:
+            colour = 'yellow';
+            arrow = '/img/arrow_down.png';
+            break;
+        case 2:
+            colour = 'yellow';
+            arrow = '/img/arrow_up.png';
+            break;
+        case 3:
+            colour = 'red';
+            arrow = '/img/arrow_down.png';
+            break;
+        case 4:
+            colour = 'red';
+            arrow = '/img/arrow_up.png';
+            break;
+    }
+    return { 'colour' : colour, 'arrow' : arrow };
+};
 
 //this object is used for the "new reading" button in the navbar
 let newReadingRedirect = new Vue({
@@ -97,6 +104,7 @@ Vue.component('basic_info', {
     template:
         '<div>'+
         '<div class="patientInfo">\n' +
+        '    <h2>Patient Info</h2>' +
         '    <h6>Patient Name:</h6>\n' +
         '    <p class="patientName">{{patientData.name}}<br></p>\n' +
         '    <h6>ID:</h6>\n' +
@@ -152,27 +160,15 @@ Vue.component('basic_info', {
             }
         },
         setLight(pData) {
-            let digit = pData.readings[0].colour;
-            let color = 'green';
-            switch (digit) {
-                case 0:
-                    color = 'green';
-                    this.$refs.arrow.src = '/img/white.png';
-                    break;
-                case 1:
-                    this.$refs.arrow.src = '/img/arrow_up.png';
-                case 2:
-                    color = 'yellow';
-                    this.$refs.arrow.src = '/img/arrow_down.png';
-                    break;
-                case 3:
-                    this.$refs.arrow.src = '/img/arrow_up.png';
-                case 4:
-                    color = 'red';
-                    this.$refs.arrow.src = '/img/arrow_down.png';
-                    break;
+            let icon = getReadingColorIcon(pData.readings[0].colour);
+            this.$refs.light.setAttribute("style", "background-color:" +  icon['colour'] + ";");
+
+            if (icon['arrow'] == null) {
+                this.$refs.arrow.hidden = true;
             }
-            this.$refs.light.setAttribute("style", "background-color:" +  color + ";");
+            else {
+                this.$refs.arrow.src = icon['arrow'];
+            }
         }
     }
 });
