@@ -1,3 +1,4 @@
+Vue.prototype.$http = axios;
 Vue.component('new_account_form', {
     vuetify: new Vuetify(),
     props: {
@@ -13,7 +14,21 @@ Vue.component('new_account_form', {
         usernameRules: [
             v => !!v || 'Username is required',
             v => (v && v.length <= 30) || 'Username must be less than 30 characters' //an example to show we can limit characters
-        ]
+        ],
+        password: '',
+        passwordRules: [
+            v => !!v || 'Password is required'
+        ],
+        region: '',
+        regionRules: [
+            v => !!v || 'Region is required'
+        ],
+        zone: '',
+        zoneRules: [
+            v => !!v || 'Zone is required',
+            v => (v && v > 0) || 'Zone number can\'t be negative'
+        ],
+        row: null
     }),
     methods: {
       validate () {
@@ -30,15 +45,32 @@ Vue.component('new_account_form', {
         },
         submit () {
           //@TODO
-          console.log("submit to server")
+
+            axios.post('/api/user/add',
+                {
+                    username: this.username,
+                    password: this.password,
+                    roles: this.row
+                }
+            ).then(response => {console.log(response)});
         }
     },
     template:
+    '<v-card class="overflow-hidden" raised min-width="550" max-height="600"> ' +
+        `<v-card-title>
+            <span class="title">Create a new account</span>`+
+        '</v-card-title> ' +
     `<v-form
       ref="newAccountForm"
       v-model="valid"
       lazy-validation
+      class="ma-5 px-3"
     >` +
+        '<v-radio-group v-model="row" row>' +
+        '<v-radio label="VHT" value="ROLE_VHT"></v-radio>' +
+        '<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>' +
+        '<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>' +
+        '</v-radio-group>' +
      ` <v-text-field
         v-model="name"
         :counter="10"
@@ -52,7 +84,24 @@ Vue.component('new_account_form', {
         label="Username"
         required
       ></v-text-field>` +
-
+        `<v-text-field
+        v-model="password"
+        :rules="passwordRules"
+        label="Password"
+        required
+      ></v-text-field>` +
+        `<v-text-field
+        v-model="region"
+        :rules="regionRules"
+        label="Region"
+        required
+      ></v-text-field>` +
+        `<v-text-field
+        v-model="zone"
+        :rules="zoneRules"
+        label="Zone"
+        required
+      ></v-text-field>` +
       `<v-btn
         :disabled="!valid"
         color="success"
@@ -69,7 +118,8 @@ Vue.component('new_account_form', {
       >
         Clear Form
       </v-btn>
-    </v-form>`
+    </v-form>` +
+        '</v-card>'
 
 })
 

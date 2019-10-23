@@ -1,6 +1,6 @@
 Vue.component('sidebar_template', {
     props: {
-
+        current_user: String
     },
     data: () => ({
         drawer: null
@@ -24,8 +24,10 @@ Vue.component('sidebar_template', {
                 '\n' +
                 '<v-subheader class="mt-3 grey--text text--darken-1">User Management</v-subheader>\n' +
                 '<sidebar_item title="New Health Center" icon="add_circle" clickable="new-health-center"></sidebar_item>\n' +
-                '<sidebar_item title="New VHT" icon="person_add" clickable="new-vht"></sidebar_item>\n' +
+                '<sidebar_item title="New Account" icon="person_add" clickable="new-vht"></sidebar_item>\n' +
                 '<sidebar_item title="Manage Accounts" icon="supervisor_account" clickable="manage-accounts"></sidebar_item>\n' +
+                '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>\n' +
+                '<sidebar_item title="Sign Out" icon="account_circle" clickable="logout"></sidebar_item>\n' +
             '</v-list>\n' +
         '</v-navigation-drawer>'
 });
@@ -61,12 +63,12 @@ Vue.component('sidebar_item', {
     },
     template:
         '<v-list-item @click="changeWindow(clickable)">' +
-        '<v-list-item-action>' +
-        '<v-icon>{{icon}}</v-icon>' +
-        '</v-list-item-action>' +
-        '<v-list-item-content>' +
-        '<v-list-item-title>{{title}}</v-list-item-title>' +
-        '</v-list-item-content>' +
+            '<v-list-item-action>' +
+                '<v-icon>{{icon}}</v-icon>' +
+            '</v-list-item-action>' +
+            '<v-list-item-content>' +
+                '<v-list-item-title>{{title}}</v-list-item-title>' +
+            '</v-list-item-content>' +
         '</v-list-item>',
     methods: {
         changeWindow: function(clicked) { //ideally, a click should call a different function based on prop 'clickable'
@@ -77,6 +79,9 @@ Vue.component('sidebar_item', {
             }
             else if (clicked === "admin-home") {
                 window.location.assign("/admin")
+            }
+            else if (clicked === "logout") {
+                window.location.assign("/logout")
             }
         },
     }

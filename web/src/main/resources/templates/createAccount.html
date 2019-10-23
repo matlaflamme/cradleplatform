@@ -11,14 +11,15 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="/css/adminMain.css">
 </head>
 <body>
 <div id="app">
 	<v-app id="inspire">
-		<!--        Navigation drawer = sidebar -->
-		<sidebar_template ref="sidebar"></sidebar_template> <!--Data inside component accessible by $refs.sidebar -->
+		<!--        Navigation drawer = sidebar --> <!-- ****Current User is not working**** -->
+		<sidebar_template ref="sidebar" current_user="[[${#httpServletRequest.remoteUser}]]"></sidebar_template> <!--Data inside component accessible by $refs.sidebar -->
 
 		<!--       @drawer is a custom event thrown by the component, called when the hamburger button is pressed -->
 		<navbar_template @drawer="$refs.sidebar.drawer = !$refs.sidebar.drawer"></navbar_template>
@@ -27,8 +28,7 @@
 		<v-content>
 			<v-container fill-height>
 				<v-layout justify-center>
-					<new_account_form>Hello?</new_account_form>
-
+					<new_account_form></new_account_form>
 				</v-layout>
 			</v-container>
 		</v-content>
