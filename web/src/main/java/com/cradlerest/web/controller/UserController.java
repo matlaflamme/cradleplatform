@@ -1,13 +1,21 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.constraints.user.RoleValidator;
 import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
+//import com.cradlerest.web.controller.exceptions.CustomApiError;
 import com.cradlerest.web.controller.exceptions.DatabaseException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.User;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,11 +63,18 @@ public class UserController {
 		return optUser.get();
 	}
 
+	/**
+	 * User constraints:
+	 * Username min length: 6
+	 * Password min length: 8
+	 * @see RoleValidator for role constraints
+	 */
 	@PostMapping("/add")
-	public User create(@RequestBody Map<String, String> body) throws AlreadyExistsException {
-		String username = body.get("username");
-		String password = passwordEncoder.encode(body.get("password"));
-		String roles = body.get("roles");
+	@ResponseStatus(HttpStatus.CREATED)
+	public User create(@Valid @RequestBody User user) throws AlreadyExistsException {
+		String username = user.getUsername();
+		String password = passwordEncoder.encode(user.getPassword());
+		String roles = user.getRoles();
 		if (userRepository.findByUsername(username).isPresent()) {
 			throw new AlreadyExistsException(username);
 		}

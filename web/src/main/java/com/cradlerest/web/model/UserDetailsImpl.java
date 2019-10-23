@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-/*
+/**
  * This class defines a user that has been authorized
  *
  * UserDetails interface provided by Spring Security
@@ -27,9 +27,9 @@ public class UserDetailsImpl extends User implements UserDetails {
         super(user);
     }
 
-    /*
+    /**
      * Returns list of authorities determined by user's roles
-	 * A user may have more role.
+	 * A user may have more than 1 role.
      * Possible roles: HEALTHWORKER, VHT, ADMIN
      * Java spring security auto parses ROLE_ADMIN as ADMIN
      */

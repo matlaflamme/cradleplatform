@@ -1,14 +1,18 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.constraints.user.ValidPassword;
+import com.cradlerest.web.constraints.user.ValidRole;
+import com.cradlerest.web.constraints.user.ValidUsername;
 import com.cradlerest.web.util.datagen.annotations.Omit;
-import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /**
  * Class {@code User} is a database entity holding data for users of the web
  * system (admin, health workers, VHTs).
  *
+ * NotEmpty: not null + length > 0
  */
 @Entity
 @Table(name = "user")
@@ -19,12 +23,18 @@ public class User {
 	@Column(name = "id")
 	private Integer id;
 
+	@NotEmpty(message = "username required")
+	@ValidUsername
 	@Column(name = "username")
 	private String username;
 
+	@NotEmpty(message = "Password required") // Bcrypt will encode an empty string so this might be redundant
+	@ValidPassword
 	@Column(name = "password")
 	private String password;
 
+	@NotEmpty(message = "Role required")
+	@ValidRole // valid format "ROLE_XX,ROLE_XX,ROLE_XX", where XX = ADMIN,VHT,HEALTHWORKER
 	@Column(name = "role")
 	private String roles; // ADMIN,VHT,HEALTHWORKER
 
