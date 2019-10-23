@@ -1,5 +1,6 @@
 package com.cradlerest.web.model.builder;
 
+import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.SymptomView;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.cradlerest.web.util.Validation.assertFieldNotNull;
+import static com.cradlerest.web.util.CopyFields.copyFields;
 
 /**
  * The builder class for {@code ReadingView} objects.
@@ -22,6 +24,17 @@ public class ReadingViewBuilder extends AbstractReadingBuilder<ReadingView, Read
 
 	public ReadingViewBuilder() {
 		this.value = new ReadingView();
+	}
+
+	/**
+	 * Copies all fields from a {@code Reading} value to the {@code ReadingView}
+	 * being built.
+	 * @param reading Object to copy fields from.
+	 * @return The builder.
+	 */
+	public ReadingViewBuilder reading(@NotNull Reading reading) {
+		copyFields(reading, value);
+		return self();
 	}
 
 	public ReadingViewBuilder symptoms(@NotNull List<SymptomView> symptomViews) {

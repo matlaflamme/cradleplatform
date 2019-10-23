@@ -4,6 +4,7 @@ import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ReadingController {
 
 	private ReadingManager readingManager;
 
-	public ReadingController(ReadingManager readingManager) {
+	public ReadingController(@Qualifier("mock") ReadingManager readingManager) {
 		this.readingManager = readingManager;
 	}
 
@@ -29,7 +30,7 @@ public class ReadingController {
 	public void save(@RequestBody ReadingView readingView) throws BadRequestException {
 		try {
 			readingManager.saveReadingView(readingView);
-		} catch (InstantiationError e) {
+		} catch (InstantiationError | EntityNotFoundException e) {
 			throw new BadRequestException("invalid request body", e);
 		}
 	}
