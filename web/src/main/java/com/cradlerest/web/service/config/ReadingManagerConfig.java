@@ -8,6 +8,7 @@ import com.cradlerest.web.service.repository.ReadingRepository;
 import com.cradlerest.web.service.repository.SymptomReadingRelationRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * Dependency inject configuration for the {@code ReadingManager} service.
@@ -21,6 +22,7 @@ public class ReadingManagerConfig {
 	}
 
 	@Bean
+	@Primary
 	ReadingManager impl(
 			ReadingRepository readingRepository,
 			SymptomReadingRelationRepository symptomReadingRelationRepository,

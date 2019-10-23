@@ -62,7 +62,7 @@ public class SymptomManagerImpl implements SymptomManager {
 
 	@Override
 	public void relateReadingWithSymptom(@NotNull Integer readingId, @NotNull Integer symptomId) {
-		symptomReadingRelationRepository.save(new SymptomReadingRelation(readingId, symptomId));
+		symptomReadingRelationRepository.save(new SymptomReadingRelation(symptomId, readingId));
 	}
 
 	/**
@@ -81,6 +81,7 @@ public class SymptomManagerImpl implements SymptomManager {
 		symptomCache = new HashMap<>();
 		var symptoms = symptomRepository.findAll();
 		for (var symptom : symptoms) {
+			assert symptom.getId() != null;
 			assert symptom.getText() != null;
 			symptomCache.put(normalize(symptom.getText()), symptom);
 		}

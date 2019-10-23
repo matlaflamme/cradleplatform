@@ -7,6 +7,7 @@ import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.Sex;
 import com.cradlerest.web.model.*;
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
@@ -24,10 +25,16 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 	private PatientRepository patientRepository;
 	private ReadingRepository readingRepository;
+	private ReadingManager readingManager;
 
-	public PatientManagerServiceImpl(PatientRepository patientRepository, ReadingRepository readingRepository) {
+	public PatientManagerServiceImpl(
+			PatientRepository patientRepository,
+			ReadingRepository readingRepository,
+			ReadingManager readingManager
+	) {
 		this.patientRepository = patientRepository;
 		this.readingRepository = readingRepository;
+		this.readingManager = readingManager;
 	}
 
 	/**
@@ -49,19 +56,17 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			// properties declared public to avoid having to write getters/setters for local class
 
 			@JsonUnwrapped
-			@SuppressWarnings("WeakerAccess")
 			public Patient patient;
 
-			@SuppressWarnings("WeakerAccess")
-			public List<Reading> readings;
+			public List<ReadingView> readings;
 
-			private AggregatePatientProfile(Patient patient, List<Reading> readings) {
+			private AggregatePatientProfile(Patient patient, List<ReadingView> readings) {
 				this.patient = patient;
 				this.readings = readings;
 			}
 		}
 
-		return new AggregatePatientProfile(getPatientWithId(id), getReadingsForPatientWithId(id));
+		return new AggregatePatientProfile(getPatientWithId(id), readingManager.getAllReadingViewsForPatient(id));
 	}
 
 	/**
