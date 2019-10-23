@@ -47,5 +47,5 @@ public interface ReadingManager {
 	 * Deconstructs and persists a given reading view.
 	 * @param readingView A reading view.
 	 */
-	void saveReadingView(@NotNull ReadingView readingView) throws InstantiationError;
+	void saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException;
 }

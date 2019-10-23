@@ -1,7 +1,7 @@
 package com.cradlerest.web.service.repository;
 
-import com.cradlerest.web.model.Symptom;
 import com.cradlerest.web.model.SymptomReadingRelation;
+import com.cradlerest.web.model.view.SymptomView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -22,5 +22,5 @@ public interface SymptomReadingRelationRepository extends JpaRepository<SymptomR
 	 * @return A list of symptoms.
 	 */
 	@Query("SELECT s FROM SymptomReadingRelation sr JOIN Symptom s ON sr.symptomId = s.id WHERE sr.readingId = ?1")
-	List<Symptom> getSymptomsForReading(int readingId);
+	List<SymptomView> getSymptomsForReading(int readingId);
 }
