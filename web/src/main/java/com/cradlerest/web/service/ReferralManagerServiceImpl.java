@@ -81,7 +81,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			// OR
 			// request all necessary information from initial referral
 		}
-		System.out.println("patientId::" + currentPatient.getId());
+
 		Optional<User> currentVHT = null;
 		try {
 			currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
@@ -97,7 +97,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		} catch (EntityNotFoundException exception) {
 			exception.printStackTrace();
 		}
-		logger.info("patient id : " + currentPatient.getId());
+
 		Reading currentReading = new ReadingBuilder()// I need this. I shouldn't need this.
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))
