@@ -4,10 +4,7 @@ import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Controller for saving and retrieving {@code ReadingView} objects.
@@ -18,7 +15,7 @@ public class ReadingController {
 
 	private ReadingManager readingManager;
 
-	public ReadingController(@Qualifier("mock") ReadingManager readingManager) {
+	public ReadingController(ReadingManager readingManager) {
 		this.readingManager = readingManager;
 	}
 

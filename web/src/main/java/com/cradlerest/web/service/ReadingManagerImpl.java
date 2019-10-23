@@ -63,7 +63,7 @@ public class ReadingManagerImpl implements ReadingManager {
 
 		// persist all symptoms as well
 		for (var symptomView : readingView.getSymptoms()) {
-			symptomManager.relateReadingWithSymptom(readingView.getId(), symptomView.getText());
+			symptomManager.relateReadingWithSymptom(reading.getId(), symptomView.getText());
 		}
 	}
 }
