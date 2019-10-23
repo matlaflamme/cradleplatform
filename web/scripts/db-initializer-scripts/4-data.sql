@@ -64,7 +64,7 @@ VALUES ('001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34');
 -- VALUES ('002', 140, 80, 93, 2, FALSE, 0, 0, '2018-06-12 08:54:15');
 
 INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
-VALUES ('001', 3, 3, 'Twilio', '+12053465536');
+VALUES ('001', 3, 3, 'Twilio', '+12053465536', 'nihao');
 
 INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number)
 VALUES ('001', 3, 4, 'Twilio', '+12053465536');

@@ -98,8 +98,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			exception.printStackTrace();
 		}
 		logger.info("patient id : " + currentPatient.getId());
-		Reading currentReading = new ReadingBuilder()
-				.id(4) // I need this. I shouldn't need this.
+		Reading currentReading = new ReadingBuilder()// I need this. I shouldn't need this.
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))
 				.diastolic(diastolic)

@@ -103,6 +103,6 @@ abstract class AbstractReadingBuilder<T extends Reading, Self>  extends Abstract
 	}
 
 	protected void validate() throws InstantiationError {
-		assertFieldNotNull(value.getId(), "id");
+		//assertFieldNotNull(value.getId(), "id");
 	}
 }
