@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
+import static com.cradlerest.web.util.Validation.assertFieldNotNull;
 
 /**
  * Simplifies the process of constructing {@code Referral} objects.
@@ -74,18 +75,13 @@ public class ReferralBuilder {
 		return this;
 	}
 
-	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
-		if (object == null) {
-			throw new InstantiationError(String.format("field '%s' is null", fieldName));
-		}
-	}
-
 	private void validate() throws InstantiationError {
-		assertNotNull(referral.getPatientId(), "pid");
-		assertNotNull(referral.getVhtId(), "vid");
-		assertNotNull(referral.getReadingId(), "readingId");
-		assertNotNull(referral.getHealthCentre(), "healthCentre");
-		assertNotNull(referral.getHealthCentreNumber(), "healthCentreNumber");
+		assertFieldNotNull(referral.getPatientId(), "pid");
+		assertFieldNotNull(referral.getVhtId(), "vid");
+		assertFieldNotNull(referral.getReadingId(), "readingId");
+		assertFieldNotNull(referral.getHealthCentre(), "healthCentre");
+		assertFieldNotNull(referral.getHealthCentreNumber(), "healthCentreNumber");
+		assertFieldNotNull(referral.getTimestamp(), "referralTimestamp");
 	}
 }
 
