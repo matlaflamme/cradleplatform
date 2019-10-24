@@ -218,7 +218,7 @@
         <Response status="400"/>
     </TestCase>
     <TestCase name="Get all referrals">
-        <Request method="POST" uri="/api/referral/all"/>
+        <Request method="GET" uri="/api/referral/all"/>
         <Response status="200"/>
     </TestCase>
     <TestCase name="Get all referrals from Twilio health centre">
