@@ -4,4 +4,4 @@ COPY target/*.jar app.jar
 COPY ./scripts/wait-for-it.sh .
 # Wait for db service to setup before launching Spring
 #   https://stackoverflow.com/a/54145469
-CMD ["./wait-for-it.sh", "db:3306", "--", "java","-jar","/app.jar"]
+ENTRYPOINT ["./wait-for-it.sh", "db:3306", "--", "java","-jar","/app.jar"]
