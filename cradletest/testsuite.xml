@@ -186,7 +186,7 @@
                 "heartRate": 30,
                 "readingColour": 1,
                 "readingTimestamp": "2019-10-23T02:25:43.453",
-                "referralTimestamp": "2019-10-23 19:28:39.887",
+                "referralTimestamp": "2019-10-23T19:28:39.887",
                 "healthCentre": "Twilio",
                 "VHT": "vht",
                 "comments": ""
@@ -200,7 +200,7 @@
             <![CDATA[
             {
                 "patientName": "HY",
-                "patientId": "12b12b412414214124124",
+                "patientId": "001",
                 "patientAge": 15,
                 "gestationAge": 60,
                 "systolic": 25,
@@ -208,7 +208,7 @@
                 "heartRate": 30,
                 "readingColour": 1,
                 "readingTimestamp": "2019-10-23T02:25:43.453",
-                "referralTimestamp": "2019-10-23 19:28:39.887",
+                "referralTimestamp": "2019-10-23T19:28:39.887",
                 "healthCentre": "Twiliooo",
                 "VHT": "vht",
                 "comments": ""
