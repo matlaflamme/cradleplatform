@@ -59,12 +59,11 @@ public class ReferralController {
 	 *  TODO: Repository exception handling
 	 *
 	 * @param request Twilio post response body: https://www.twilio.com/docs/sms/twiml#twilios-request-to-your-application
-	 * @param response
 	 * @throws IOException
 	 * @return A SMS from Twilio number to whoever sent the text.
 	 */
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
-	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws Exception {
+	public String saveReferralSMS(WebRequest request) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
@@ -77,13 +76,12 @@ public class ReferralController {
 	/**
 	 * Handle referral sent through HTTP request
 	 *
-	 * @param
-	 * @param response
+	 * @param httpEntity https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpEntity.html
 	 * @return Response body
 	 * @throws IOException
 	 */
 	@PostMapping("/send")
-	public String saveReferral(HttpEntity<String> httpEntity, HttpServletResponse response) throws Exception {
+	public String saveReferral(HttpEntity<String> httpEntity) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(httpEntity.getBody());

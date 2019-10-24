@@ -92,7 +92,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		}
 
 		Optional<HealthCentre> currentHealthCentre = null;
-
 		try {
 			currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
 		} catch (NoSuchElementException exception) {
