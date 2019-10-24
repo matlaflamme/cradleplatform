@@ -35,17 +35,20 @@
                             :headers="headers"
                             :items="rows"
                             :items-per-page="5"
-                            class="elevation-1">
+                            class="elevation-1"
+                        >
 
-                            <template slot="rows" slot-scope="props">
-                                <td>{{props.row.id}}</td>
-                                <td>{{props.row.name}}</td>
-<!--                            <td>{{row.referralDate}}</td>                -->
-<!--                            <td>{{row.bloodPressure}}</td>-->
+                            <template slot="items" slot-scope="props">
+                                <td>{{props.item.patient.id}}</td>
+                                <td>{{props.item.patient.name}}</td>
+                                <td>{{tester(props.item.reading.timestamp)}}</td>
 <!--                            <td>{{row.heartRate}}</td>-->
                             </template>
+                            <template v-slot:item.colour="{ item }">
+                                <td><span class="dot" :style="item.reading.colorstyle"></span></td>
+                            </template>
                             <template v-slot:item.view="{ item }">
-                                <button v-on:click="viewPatientData(item.id)" class="btn btn-outline-info">View Patient Data</button>
+                                <button v-on:click="viewPatientData(item.patient.id)" class="btn btn-outline-info">View Patient Data</button>
                             </template>
                             <template v-slot:item.add="{ item }">
                                 <button v-on:click="addNewReading(item.id)" class="btn btn-outline-secondary">Add New Reading</button>

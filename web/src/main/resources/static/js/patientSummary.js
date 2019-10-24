@@ -38,7 +38,7 @@ Vue.component('patient_readings', {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => {
-            this.rows = response.data
+            this.rows = response.data;
             this.rows.forEach((row)=> {
                 let icon = getReadingColorIcon(row.colour);
                 row.colorstyle = {"background-color": icon['colour']};
@@ -47,7 +47,6 @@ Vue.component('patient_readings', {
     }
 });
 
-Vue.component('model')
 //Needed for the patientReadings component
 new Vue({
     el: '#patientReadings',
@@ -84,7 +83,7 @@ function getReadingColorIcon(digit) {
             break;
     }
     return { 'colour' : colour, 'arrow' : arrow };
-};
+}
 
 //this object is used for the "new reading" button in the navbar
 let newReadingRedirect = new Vue({
