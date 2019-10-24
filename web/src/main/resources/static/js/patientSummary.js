@@ -1,5 +1,34 @@
 Vue.prototype.$http = axios;
 
+function getReadingColorIcon(digit) {
+    let colour = 'green';
+    let arrow = null;
+    switch (digit) {
+        case 0:
+            colour = 'green';
+            break;
+        case 1:
+            colour = 'yellow';
+            arrow = '/img/arrow_down.png';
+            break;
+        case 2:
+            colour = 'yellow';
+            arrow = '/img/arrow_up.png';
+            break;
+        case 3:
+            colour = 'red';
+            arrow = '/img/arrow_down.png';
+            break;
+        case 4:
+            colour = 'red';
+            arrow = '/img/arrow_up.png';
+            break;
+    }
+    return { 'colour' : colour, 'arrow' : arrow };
+};
+
+
+
 //This component is used for the center column "Past Readings" table of this page
 Vue.component('patient_readings', {
     vuetify: new Vuetify(),
@@ -50,35 +79,7 @@ Vue.component('patient_readings', {
 });
 
 
-
-
-function getReadingColorIcon(digit) {
-    let colour = 'green';
-    let arrow = null;
-    switch (digit) {
-        case 0:
-            colour = 'green';
-            break;
-        case 1:
-            colour = 'yellow';
-            arrow = '/img/arrow_down.png';
-            break;
-        case 2:
-            colour = 'yellow';
-            arrow = '/img/arrow_up.png';
-            break;
-        case 3:
-            colour = 'red';
-            arrow = '/img/arrow_down.png';
-            break;
-        case 4:
-            colour = 'red';
-            arrow = '/img/arrow_up.png';
-            break;
-    }
-    return { 'colour' : colour, 'arrow' : arrow };
-};
-
+// This component is for the left side of the page, it reads the patient info and gives a summary on the patient info and last reading
 Vue.component('patient_info', {
     props: {
         title: String, //Usage: {{title}} inside of the template is replaced with the prop
@@ -166,7 +167,7 @@ Vue.component('patient_info', {
 
 });
 
-
+//This component is for the right side of the page which gives a medical history of the patient
 Vue.component('patient_history', {
     props: {
         title: String, //Usage: {{title}} inside of the template is replaced with the prop
