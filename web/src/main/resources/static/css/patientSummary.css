@@ -1,41 +1,8 @@
-h2 {
+h3 {
     color: #0c9090; /* Green */
     text-align: center;
     margin-top: 20px;
 }
-
-
-.side-panel p {
-    padding: 0px 0px;
-    margin: 0;
-    display: inline;
-}
-
-.side-panel{
-    /*display: inline-block;*/
-    padding: 4px 4px;
-    width: fit-content;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #0c9090;
-    margin: 1px 5px;
-
-}
-.side-panel h2{
-    color: black;
-    font-size: 20px;
-    font-weight: bold;
-    color: #0b6c6d; /* Green */
-}
-
-.side-panel h6{
-    padding: 0px 0px;
-    margin: 0;
-    display: inline;
-
-}
-
-
 #heart_beat{
     color: black;
     display: inline;
@@ -52,36 +19,6 @@ h2 {
     margin-top: 10px;
 }
 
-.info {
-    word-wrap: break-word;
-    width: 200px;
-    padding: 8px 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #0c9090;
-    margin-left: 5px;
-    margin-right: 5px;
-    font-size: 14px;
-
-}
-
-.side-panel ul{
-    position: relative;
-    list-style-type:none;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #0c9090;
-    text-align: left;
-    margin: 0;
-    padding: 8px 8px;
-    width: fit-content;
-}
-
-.side-panel li{
-    text-align: left;
-    font-size: 14px;
-    width: fit-content;
-}
 
 .bg-light {
     background-color: #0b908f!important; /* NavBar background */
