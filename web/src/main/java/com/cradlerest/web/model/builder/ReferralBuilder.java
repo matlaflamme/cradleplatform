@@ -11,11 +11,16 @@ import static com.cradlerest.web.util.Validation.assertFieldNotNull;
 /**
  * Simplifies the process of constructing {@code Referral} objects.
  *
- *
- * <h2>Example</h2>
- * <code>
- *	 Reading newReading = new ReadingBuilder()
- * </code>
+ * E.g.
+ * Referral currentReferral = new ReferralBuilder()
+ * 		.pid(currentPatient.getId())
+ * 		.vid(currentVHT.get().getId())
+ * 		.readingId(currentReading.getId())
+ * 		.healthCentre(currentHealthCentre.get().getName())
+ *		.healthCentreNumber(currentHealthCentre.get().getHealthCentreNumber())
+ * 		.comments(comments)
+ * 		.timestamp(referralTimestamp)
+ * 		.build();
  */
 public class ReferralBuilder {
 

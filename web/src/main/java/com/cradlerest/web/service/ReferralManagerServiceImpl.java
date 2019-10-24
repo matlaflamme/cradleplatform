@@ -5,13 +5,19 @@ import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.builder.ReadingBuilder;
+import com.cradlerest.web.model.builder.ReadingViewBuilder;
 import com.cradlerest.web.model.builder.ReferralBuilder;
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.repository.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -49,7 +55,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	@Override
 	public Referral saveReferral(JsonNode requestBody) throws Exception {
 		System.out.println(requestBody.toString());
-
+		ObjectMapper objectMapper = new ObjectMapper();
 		String patientId = requestBody.get("patientId").textValue();
 		// String patientName = requestBody.get("patientName").textValue();
 		// int patientAge = requestBody.get("patientAge").intValue();
@@ -57,6 +63,9 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		int diastolic = requestBody.get("diastolic").intValue();
 		int heartRate = requestBody.get("heartRate").intValue();
 		int readingColourKey = requestBody.get("readingColour").intValue();
+
+		//https://stackoverflow.com/questions/39237835/jackson-jsonnode-to-typed-collection
+		String symptoms = requestBody.get("symptoms").textValue();
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
 		String readingTimestamp = requestBody.get("readingTimestamp").textValue().replace("T", " ");
 		String referralTimestamp = requestBody.get("referralTimestamp").textValue().replace("T", " ");
@@ -68,6 +77,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 						"diastolic: " + diastolic + "\n" +
 						"heartRate: " + heartRate + "\n" +
 						"readingColourKey: " + readingColourKey + "\n" +
+						"symptoms: " + symptoms + " \n" +
 						"readingTimestamp: " + readingTimestamp + "\n" +
 						"referralTimestamp: " + referralTimestamp + "\n" +
 						"healthCentreName: " + healthCentreName + "\n" +
