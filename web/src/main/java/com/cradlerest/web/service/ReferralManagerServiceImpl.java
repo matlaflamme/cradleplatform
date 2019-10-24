@@ -94,19 +94,14 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			// request all necessary information from initial referral
 		}
 
-		Optional<User> currentVHT = null;
-		try {
-			currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
-		} catch (UsernameNotFoundException exception) {
-			exception.printStackTrace();
-			// TODO: VHT not found, create new VHT?
+		Optional<User> currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
+		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
+		if (!currentVHT.isPresent()) {
+			throw new EntityNotFoundException("Not found: " + requestBody.get("VHT").textValue());
 		}
 
-		Optional<HealthCentre> currentHealthCentre = null;
-		try {
-			currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
-		} catch (NoSuchElementException exception) {
-			exception.printStackTrace();
+		if (!currentHealthCentre.isPresent()) {
+			throw new EntityNotFoundException("Not found: " + healthCentreName);
 		}
 
 		Reading currentReading = new ReadingBuilder()// I need this. I shouldn't need this.
