@@ -2,6 +2,7 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
+import com.cradlerest.web.util.datagen.annotations.DataGenDateRange;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
@@ -59,6 +60,9 @@ public class Referral {
 
 	@Column(name = "comments")
 	private String comments;
+
+	@Column(name = "timestamp", nullable = false)
+	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	public Referral() {}
 
@@ -123,5 +127,16 @@ public class Referral {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	@JsonDeserialize(using = DateDeserializer.class)
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 }

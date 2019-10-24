@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,20 +36,20 @@ public class ReferralController {
 	 * @see com.twilio.security.RequestValidator
 	 * It's kinda bugged? Enabling it renders the endpoint inaccessible (always 403-forbidden)
 	 *
-	 * Example request "Body":
+	 * Example of a valid request "Body":
 	 * {
-	 * 		"patientName":"JS",
-	 * 		"patientId":"123",
-	 * 		"patientAge":52,
-	 * 		"gestationAge":180,
-	 * 		"systolic":0,
-	 * 		"diastolic":0,
-	 * 		"heartRate":30,
-	 * 		"readingColour":"In severe shock",
-	 * 		"timestamp":"2019-10-19T23:20:11",
-	 * 		"healthCentre":"Twilio",
-	 * 		"VHT":"Jackson",
-	 * 		"comments":"\"HHahHhaha\""
+	 *     "patientName": "HY",
+	 *     "patientId": "001",
+	 *     "patientAge": 15,
+	 *     "gestationAge": 60,
+	 *     "systolic": 25,
+	 *     "diastolic": 20,
+	 *     "heartRate": 30,
+	 *     "readingColour": 1,
+	 *     "timestamp": "2019-10-23T02:25:43.453",
+	 *     "healthCentre": "Twilio",
+	 * 	   "VHT": "vht",
+	 *     "comments": ""
 	 * }
 	 *
 	 *  For each referral the VHT has made, they can see:
@@ -76,16 +77,16 @@ public class ReferralController {
 	/**
 	 * Handle referral sent through HTTP request
 	 *
-	 * @param request
+	 * @param
 	 * @param response
 	 * @return Response body
 	 * @throws IOException
 	 */
 	@PostMapping("/send")
-	public String saveReferral(@RequestBody String request, HttpServletResponse response) throws Exception {
+	public String saveReferral(HttpEntity<String> httpEntity, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
-		JsonNode requestBody = mapper.readTree(request);
+		JsonNode requestBody = mapper.readTree(httpEntity.getBody());
 		Referral savedReferral = referralManagerService.saveReferral(requestBody);
 
 		return "Success:\n " +

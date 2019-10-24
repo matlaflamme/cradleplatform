@@ -64,6 +64,16 @@ public class ReferralBuilder {
 		return this;
 	}
 
+	public ReferralBuilder timestamp(@NotNull Date timestamp) {
+		referral.setTimestamp(timestamp);
+		return this;
+	}
+
+	public ReferralBuilder timestamp(@NotNull String timestampText) {
+		referral.setTimestamp(DateParser.parseDateTime(timestampText));
+		return this;
+	}
+
 	private void assertNotNull(Object object, String fieldName) throws InstantiationError {
 		if (object == null) {
 			throw new InstantiationError(String.format("field '%s' is null", fieldName));

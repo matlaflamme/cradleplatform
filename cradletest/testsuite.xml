@@ -151,4 +151,25 @@
     </Request>
     <Response status="400"/>
   </TestCase>
+    <TestCase name="Create New Referral">
+        <Request method="POST" uri="/api/referral/send">
+            <![CDATA[
+            {
+                "patientName": "HY",
+                "patientId": "001",
+                "patientAge": 15,
+                "gestationAge": 60,
+                "systolic": 25,
+                "diastolic": 20,
+                "heartRate": 30,
+                "readingColour": 1,
+                "timestamp": "2019-10-23T02:25:43.453",
+                "healthCentre": "Twilio",
+                "VHT": "vht",
+                "comments": ""
+            }
+            ]]>
+        </Request>
+        <Response status="200"></Response>
+    </TestCase>
 </TestSuite>

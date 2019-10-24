@@ -44,7 +44,8 @@ CREATE TABLE referral (
     reading_id INT NOT NULL,
     health_centre VARCHAR(255),
     health_centre_number VARCHAR(255),
-    comments VARCHAR(9001)
+    comments VARCHAR(9001),
+    timestamp DATETIME NOT NULL
 );
 
 CREATE TABLE symptom (

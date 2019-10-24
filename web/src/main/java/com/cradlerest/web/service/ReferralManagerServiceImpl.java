@@ -50,31 +50,40 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		System.out.println(requestBody.toString());
 
 		String patientId = requestBody.get("patientId").textValue();
-		logger.info("patientId: " + patientId);
+		//logger.info("patientId: " + patientId);
 		// String patientName = requestBody.get("patientName").textValue();
 		// int patientAge = requestBody.get("patientAge").intValue();
 		int systolic = requestBody.get("systolic").intValue();
-		logger.info("systolic: " + systolic);
+		//logger.info("systolic: " + systolic);
 		int diastolic = requestBody.get("diastolic").intValue();
-		logger.info("diastolic: " + diastolic);
+		//logger.info("diastolic: " + diastolic);
 		int heartRate = requestBody.get("heartRate").intValue();
-		logger.info("heartRate: " + heartRate);
+		//logger.info("heartRate: " + heartRate);
 		int readingColourKey = requestBody.get("readingColour").intValue();
-		logger.info("readingColourKey: " + readingColourKey);
+		//logger.info("readingColourKey: " + readingColourKey);
 
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
-		String timestamp = requestBody.get("timestamp").textValue().replace("T", " ");
-
-		logger.info("timestamp: " + timestamp);
+		String readingTimestamp = requestBody.get("readingTimestamp").textValue().replace("T", " ");
+		//logger.info("readingTimestamp: " + readingTimestamp);
+		String referralTimestamp = requestBody.get("referralTimestamp").textValue().replace("T", " ");
+		//logger.info("referralTimestamp: " + readingTimestamp);
 		String healthCentreName = requestBody.get("healthCentre").textValue();
-		logger.info("healthCentreName: " + healthCentreName);
+		//logger.info("healthCentreName: " + healthCentreName);
 		String comments = requestBody.get("comments").textValue();
+		logger.info("Referral data \n" +
+						"patientId: " + patientId + "\n" +
+						"systolic: " + systolic + "\n" +
+						"diastolic: " + diastolic + "\n" +
+						"heartRate: " + heartRate + "\n" +
+						"readingColourKey: " + readingColourKey + "\n" +
+						"readingTimestamp: " + readingTimestamp + "\n" +
+						"referralTimestamp: " + referralTimestamp + "\n" +
+						"healthCentreName: " + healthCentreName + "\n" +
+						"comments: " + comments);
 
 		Patient currentPatient = null;
 		try {
-			logger.info("start");
 			currentPatient = patientManagerService.getPatientWithId(patientId);
-			logger.info("end");
 		} catch (EntityNotFoundException exception) {
 			exception.printStackTrace();
 			// TODO: No patient found, create new patient
@@ -105,7 +114,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.diastolic(diastolic)
 				.systolic(systolic)
 				.heartRate(heartRate)
-				.timestamp(timestamp)
+				.timestamp(readingTimestamp)
 				.build();
 
 		patientManagerService.saveReading(currentReading);
@@ -117,6 +126,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.healthCentre(currentHealthCentre.get().getName())
 				.healthCentreNumber(currentHealthCentre.get().getHealthCentreNumber())
 				.comments(comments)
+				.timestamp(referralTimestamp)
 				.build();
 
 
