@@ -96,11 +96,11 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		Optional<User> currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
 		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
-		if (!currentVHT.isPresent()) {
+		if (currentVHT.isEmpty()) {
 			throw new EntityNotFoundException("Not found: " + requestBody.get("VHT").textValue());
 		}
 
-		if (!currentHealthCentre.isPresent()) {
+		if (currentHealthCentre.isEmpty()) {
 			throw new EntityNotFoundException("Not found: " + healthCentreName);
 		}
 
