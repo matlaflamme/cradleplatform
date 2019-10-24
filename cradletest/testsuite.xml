@@ -163,13 +163,14 @@
                 "diastolic": 20,
                 "heartRate": 30,
                 "readingColour": 1,
-                "timestamp": "2019-10-23T02:25:43.453",
+                "readingTimestamp": "2019-10-23T02:25:43.453",
+                "referralTimestamp": "2019-10-23 19:28:39.887",
                 "healthCentre": "Twilio",
                 "VHT": "vht",
                 "comments": ""
             }
             ]]>
         </Request>
-        <Response status="200"></Response>
+        <Response status="400"></Response>
     </TestCase>
 </TestSuite>
