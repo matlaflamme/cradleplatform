@@ -79,116 +79,6 @@ function getReadingColorIcon(digit) {
     return { 'colour' : colour, 'arrow' : arrow };
 };
 
-// //this object is used for the "new reading" button in the navbar
-// let newReadingRedirect = new Vue({
-//     el: '#newReading',
-//     vuetify: new Vuetify(),
-//     methods: {
-//         goToNewReading: function() {
-//             let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
-//             let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-//             window.location.assign("/createNewReading?id=" + id);
-//
-//             //this.router.push("/createNewReading?id=" + id); //not working??
-//         }
-//     }
-// });
-//
-// //This component is responsible for the left column of this page
-// Vue.component('basic_info', {
-//     data: function() {
-//         return {
-//             patientData: //starter data so that "patientData" is not null when the page is loaded
-//                 {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
-//                     "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
-//                     "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
-//                         "timestamp":""}]} //data in the form of json string
-//         }
-//     },
-//     template:
-//         '<div>'+
-//         '<div class="patientInfo">\n' +
-//         '    <h2>Patient Info</h2>' +
-//         '    <h6>Patient Name:</h6>\n' +
-//         '    <p class="patientName">{{patientData.name}}<br></p>\n' +
-//         '    <h6>ID:</h6>\n' +
-//         '    <p class="patientId">{{patientData.id}}<br></p>\n' +
-//         '    <h6>Date Of Birth:</h6>\n' +
-//         '    <p class="DOB">{{patientData.birthYear}}<br></p>\n' +
-//         '    <h6>Sex:</h6>\n' +
-//         '    <p class="patientSex">{{getPatientSex(patientData.sex)}}<br></p>' + //calls getPatientSex method
-//         '</div>\n' +
-//         '    <h2>Latest Reading</h2>\n' +
-//         '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px">\n' +
-//         '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
-//         '    <span id="light" ref="light" class="dot"></span>' +
-//         '    <img id="arrow" ref="arrow" src="/img/arrow_down.png" height="50" width="50" style="margin-bottom: 12px">' +
-//         '    <br>\n' +
-//         '    <h6 style="display:inline-block;">Systolic:</h6>\n' +
-//         '    <p id="BP" style="display:inline-block">{{patientData.readings[0].systolic}}</p>\n' +
-//         '    <br>\n' +
-//         '    <h6 style="display:inline-block;">Diastolic:</h6>\n' +
-//         '    <p id="BP" style="display:inline-block">{{patientData.readings[0].diastolic}}</p>\n' +
-//         '    <br>\n' +
-//         '    <h6 style="display:inline-block;">Gestational Age:</h6>\n' +
-//         '    <p class="GestationalAge">{{patientData.gestationalAge}}</p>\n' +
-//         '    <p> Weeks</p>\n' +
-//         '    <h2>Symptoms</h2>\n' +
-//         '    <div class= "info" id="symptoms">Received overcame oh sensible so at an.\n' +
-//         '            Formed do change merely to county it. Am separate contempt\n' +
-//         '            domestic to to oh. On relation my so addition branched.</div>\n' +
-//         '    <h2>Current Medications</h2>\n' +
-//         '    <ul id="currentMedication">\n' +
-//         '        <li >item 1 </li>\n' +
-//         '        <li >item 2</li>\n' +
-//         '        <li >item 3</li>\n' +
-//         '        <li >item 4</li>\n' +
-//         '    </ul>' +
-//         '</div>',
-//     mounted() {
-//         let urlQuery = new URLSearchParams(location.search);
-//         let id = urlQuery.get('id');
-//         axios.get('/api/patient/' + id).then(response => {
-//             this.patientData = response.data;
-//             this.setLight(response.data) //update light colour based on response from get request
-//         });
-//
-//     },
-//     methods: {
-//         getPatientSex: function(sexVal) {
-//             if (sexVal === 1) {
-//                 return "Female";
-//             }
-//             else {
-//                 return "Male";
-//             }
-//         },
-//         setLight(pData) {
-//             let icon = getReadingColorIcon(pData.readings[0].colour);
-//             this.$refs.light.setAttribute("style", "background-color:" +  icon['colour'] + ";");
-//
-//             if (icon['arrow'] == null) {
-//                 this.$refs.arrow.hidden = true;
-//             }
-//             else {
-//                 this.$refs.arrow.src = icon['arrow'];
-//             }
-//         }
-//     }
-// });
-//
-// //needed for the "basic info" component
-// new Vue({
-//     vuetify: new Vuetify(),
-//     el: '#basicInfo',
-//     methods: {
-//     },
-//     mounted() {
-//     },
-//     computed: {
-//
-//     }
-// });
 Vue.component('patient_info', {
     props: {
         title: String, //Usage: {{title}} inside of the template is replaced with the prop
@@ -273,6 +163,45 @@ Vue.component('patient_info', {
             }
         }
     }
+
+});
+
+
+Vue.component('patient_history', {
+    props: {
+        title: String, //Usage: {{title}} inside of the template is replaced with the prop
+        //Prop is given a value inside of the component's html tag in the html file where its used
+    },
+    template:
+        '<v-card\n' +
+        'class="mx-auto"\n' +
+        'max-width="400"\n' +
+        'raised\n' +
+        '>\n' +
+            '<v-list-item three-line>\n' +
+            '<v-list-item-content>\n' +
+            '<h3>Past Medications</h3>\n' +
+                '<ul id="pastMedication">\n' +
+                    '<li >item 1 </li>\n' +
+                    '<li >item 2</li>\n' +
+                    '<li >item 3</li>\n' +
+                    '<li >item 4</li>\n'+
+                '</ul>\n' +
+                '<h3>Past Symptoms</h3>\n' +
+                '<ul id="pastSymptoms">\n'+
+                    '<li >item 1 </li>\n'+
+                    '<li >item 2</li>\n'+
+                    '<li >item 3</li>\n'+
+                    '<li >item 4</li>\n'+
+                '</ul>\n'+
+                '<h3>Medical History</h3>\n'+
+                '<div>Received overcame oh sensible so at an.\n' +
+                'Formed do change merely to county it. Am separate contempt\n' +
+                'domestic to to oh. On relation my so addition branched.</div>\n' +
+                '</v-list-item-content>' +
+                '</v-list-item three-line>' +
+            '</v-card>\n',
+
 
 });
 
