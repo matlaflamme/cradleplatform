@@ -3,6 +3,7 @@ package com.cradlerest.web.model.builder;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.SymptomView;
+import com.github.maumay.jflow.iterator.Iter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -44,6 +45,13 @@ public class ReadingViewBuilder extends AbstractReadingBuilder<ReadingView, Read
 
 	public ReadingViewBuilder symptoms(@NotNull SymptomView... symptomViews) {
 		return symptoms(Arrays.asList(symptomViews));
+	}
+
+	public ReadingViewBuilder symptoms(@NotNull String... symptomTexts) {
+		var symptomViews = Iter.args(symptomTexts)
+				.map(text -> (SymptomView) () -> text)
+				.toList();
+		return symptoms(symptomViews);
 	}
 
 	@Override
