@@ -31,6 +31,10 @@ docker run --name tester --network ci-network 'cradlerest/tester:latest'
 EXIT_CODE=$?
 
 if [[ $EXIT_CODE != 0 ]]; then
+    printf '\n--- Database Logs ---\n\n'
+    docker logs $DB_CONTAINER
+    printf '\n\n\n'
+    printf '\n--- Web Application Logs ---\n\n'
     docker logs $WEB_CONTAINER
 fi
 
