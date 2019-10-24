@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.ReferralController;
+import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.builder.ReadingBuilder;
@@ -133,7 +134,11 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 * @param healthCentreName
 	 * @return All referrals from a health centre
 	 */
-	public List<Referral> findAllByHealthCentre(String healthCentreName) {
-		return referralRepository.findAllByHealthCentre(healthCentreName);
+	public List<Referral> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException {
+		List<Referral> referrals = referralRepository.findAllByHealthCentre(healthCentreName);
+		if (referrals.isEmpty()) {
+			throw new NoSuchElementException("No referrals found for: " + healthCentreName);
+		}
+		return referrals;
 	}
 }

@@ -173,4 +173,60 @@
         </Request>
         <Response status="200"/>
     </TestCase>
+    <TestCase name="Create New Referral - Bad Patient Id">
+        <Request method="POST" uri="/api/referral/send">
+            <![CDATA[
+            {
+                "patientName": "HY",
+                "patientId": "12b12b412414214124124",
+                "patientAge": 15,
+                "gestationAge": 60,
+                "systolic": 25,
+                "diastolic": 20,
+                "heartRate": 30,
+                "readingColour": 1,
+                "readingTimestamp": "2019-10-23T02:25:43.453",
+                "referralTimestamp": "2019-10-23 19:28:39.887",
+                "healthCentre": "Twilio",
+                "VHT": "vht",
+                "comments": ""
+            }
+            ]]>
+        </Request>
+        <Response status="400"/>
+    </TestCase>
+    <TestCase name="Create New Referral - Bad Health Centre Name">
+        <Request method="POST" uri="/api/referral/send">
+            <![CDATA[
+            {
+                "patientName": "HY",
+                "patientId": "12b12b412414214124124",
+                "patientAge": 15,
+                "gestationAge": 60,
+                "systolic": 25,
+                "diastolic": 20,
+                "heartRate": 30,
+                "readingColour": 1,
+                "readingTimestamp": "2019-10-23T02:25:43.453",
+                "referralTimestamp": "2019-10-23 19:28:39.887",
+                "healthCentre": "Twiliooo",
+                "VHT": "vht",
+                "comments": ""
+            }
+            ]]>
+        </Request>
+        <Response status="400"/>
+    </TestCase>
+    <TestCase name="Get all referrals">
+        <Request method="POST" uri="/api/referral/send"/>
+        <Response status="200"/>
+    </TestCase>
+    <TestCase name="Get all referrals from Twilio health centre">
+        <Request method="POST" uri="/api/referral/twilio/all"/>
+        <Response status="200"/>
+    </TestCase>
+    <TestCase name="Get all referrals from Twilio health centre - Bad health centre name">
+        <Request method="POST" uri="/api/referral/fasdfasdfasdfasdf/all"/>
+        <Response status="500"/>
+    </TestCase>
 </TestSuite>

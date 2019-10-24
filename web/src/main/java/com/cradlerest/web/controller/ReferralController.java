@@ -1,9 +1,12 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.controller.exceptions.BadRequestException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.service.ReferralManagerService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -11,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Handles referrals
@@ -63,14 +69,20 @@ public class ReferralController {
 	 * @return A SMS from Twilio number to whoever sent the text.
 	 */
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
-	public String saveReferralSMS(WebRequest request) throws Exception {
+	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
-		Referral savedReferral = referralManagerService.saveReferral(requestBody);
-
-		return "Success:\n " +
-				"Health centre referred: " + savedReferral.getHealthCentre();
+		Referral savedReferral = null;
+		try {
+			savedReferral = referralManagerService.saveReferral(requestBody);
+			return "Success:\n " +
+					"Health centre referred: " + savedReferral.getHealthCentre();
+		} catch (Exception exception) {
+			// temporay error response
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return stackTraceString(exception);
+		}
 	}
 
 	/**
@@ -81,14 +93,20 @@ public class ReferralController {
 	 * @throws IOException
 	 */
 	@PostMapping("/send")
-	public String saveReferral(HttpEntity<String> httpEntity) throws Exception {
+	public String saveReferral(HttpEntity<String> httpEntity, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(httpEntity.getBody());
-		Referral savedReferral = referralManagerService.saveReferral(requestBody);
-
-		return "Success:\n " +
-				"Health centre referred: " + savedReferral.getHealthCentre();
+		Referral savedReferral = null;
+		try {
+			savedReferral = referralManagerService.saveReferral(requestBody);
+			return "Success:\n " +
+					"Health centre referred: " + savedReferral.getHealthCentre();
+		} catch (Exception exception) {
+			// temporay error response
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return stackTraceString(exception);
+		}
 	}
 
 	@GetMapping("/all")
@@ -97,8 +115,16 @@ public class ReferralController {
 	}
 
 	@GetMapping("/{healthCentreName}/all")
-	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) {
+	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws NoSuchElementException {
 		return referralManagerService.findAllByHealthCentre(healthCentreName);
+	}
+
+	// Returns stack trace for exception as string
+	private String stackTraceString(Exception exception) {
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+		exception.printStackTrace(printWriter);
+		return stringWriter.toString();
 	}
 
 }
