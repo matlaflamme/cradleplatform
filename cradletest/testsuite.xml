@@ -171,6 +171,6 @@
             }
             ]]>
         </Request>
-        <Response status="400"></Response>
+        <Response status="200"></Response>
     </TestCase>
 </TestSuite>
