@@ -50,25 +50,16 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		System.out.println(requestBody.toString());
 
 		String patientId = requestBody.get("patientId").textValue();
-		//logger.info("patientId: " + patientId);
 		// String patientName = requestBody.get("patientName").textValue();
 		// int patientAge = requestBody.get("patientAge").intValue();
 		int systolic = requestBody.get("systolic").intValue();
-		//logger.info("systolic: " + systolic);
 		int diastolic = requestBody.get("diastolic").intValue();
-		//logger.info("diastolic: " + diastolic);
 		int heartRate = requestBody.get("heartRate").intValue();
-		//logger.info("heartRate: " + heartRate);
 		int readingColourKey = requestBody.get("readingColour").intValue();
-		//logger.info("readingColourKey: " + readingColourKey);
-
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
 		String readingTimestamp = requestBody.get("readingTimestamp").textValue().replace("T", " ");
-		//logger.info("readingTimestamp: " + readingTimestamp);
 		String referralTimestamp = requestBody.get("referralTimestamp").textValue().replace("T", " ");
-		//logger.info("referralTimestamp: " + readingTimestamp);
 		String healthCentreName = requestBody.get("healthCentre").textValue();
-		//logger.info("healthCentreName: " + healthCentreName);
 		String comments = requestBody.get("comments").textValue();
 		logger.info("Referral data \n" +
 						"patientId: " + patientId + "\n" +
