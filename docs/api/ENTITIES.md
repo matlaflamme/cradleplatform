@@ -76,9 +76,6 @@ entity, and, as such, must be separate entities.
 
 ## Patient Profile
 
-> Note: In an upcoming update, values in the `readings` array will be switched from [Reading](#reading) entities
-> to [Reading View](#reading-view) entities.
-
 Aggregate information about a patient.
 
 The reading values are ordered by timestamp in descending order meaning that
@@ -97,7 +94,7 @@ the most recent reading will be the first item in the array.
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
-| `readings` | `array` | `false` | An array of [Reading](#reading) entities
+| `readings` | `array` | `false` | An array of [ReadingView](#reading-view) entities
 
 ### Example
 
@@ -121,7 +118,8 @@ the most recent reading will be the first item in the array.
             "colour": 2,
             "pregnant": true,
             "gestationalAge": 24,
-            "timestamp": "2019-09-24 12:31:34"
+            "timestamp": "2019-09-24 12:31:34",
+            "symptoms": []
         },
         {
             "id": 2,
@@ -131,7 +129,11 @@ the most recent reading will be the first item in the array.
             "pregnant": true,
             "gestationalAge": 22,
             "colour": 1,
-            "timestamp": "2019-09-22 06:37:00"
+            "timestamp": "2019-09-22 06:37:00",
+            "symptoms": [
+                "Headache",
+                "Unwell"
+            ]
         },
         {
             "id": 1,
@@ -141,7 +143,10 @@ the most recent reading will be the first item in the array.
             "pregnant": true,
             "gestationalAge": 20,
             "colour": 0,
-            "timestamp": "2019-09-20 20:12:32"
+            "timestamp": "2019-09-20 20:12:32",
+            "symptoms": [
+                "Bleeding"
+            ]
         }
     ]
 }

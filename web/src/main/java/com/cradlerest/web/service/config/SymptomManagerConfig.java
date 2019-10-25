@@ -2,6 +2,7 @@ package com.cradlerest.web.service.config;
 
 import com.cradlerest.web.service.SymptomManager;
 import com.cradlerest.web.service.SymptomManagerImpl;
+import com.cradlerest.web.service.repository.SymptomReadingRelationRepository;
 import com.cradlerest.web.service.repository.SymptomRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,10 @@ public class SymptomManagerConfig {
 	 */
 	@Bean
 	@Scope("singleton")
-	SymptomManager symptomManager(SymptomRepository symptomRepository) {
-		return new SymptomManagerImpl(symptomRepository);
+	SymptomManager symptomManager(
+			SymptomRepository symptomRepository,
+			SymptomReadingRelationRepository symptomReadingRelationRepository
+	) {
+		return new SymptomManagerImpl(symptomRepository, symptomReadingRelationRepository);
 	}
 }
