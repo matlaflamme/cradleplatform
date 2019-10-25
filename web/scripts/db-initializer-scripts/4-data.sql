@@ -36,7 +36,8 @@ VALUES ('001',          -- id
         1,              -- sex
         NULL,           -- medical history
         NULL,           -- drug history
-        '2019-09-20 20:12:32'  -- last updated
+        '2019-09-20 20:12:32',  -- last updated
+        NULL            -- notes
         );
 
 INSERT INTO patient
@@ -48,7 +49,9 @@ VALUES ('002',          -- id
         0,              -- sex
         'hospitalized for X, taking medication for Y', -- medical history
         'there is some history with some drugs', -- drug history
-        '2019-09-20 20:12:32');  -- last updated
+        '2019-09-20 20:12:32',
+        NULL            -- notes
+        );  -- last updated
 
 
 INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)

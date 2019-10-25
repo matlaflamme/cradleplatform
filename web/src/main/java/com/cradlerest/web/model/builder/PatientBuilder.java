@@ -92,6 +92,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder generalNotes(@Nullable String notes) {
+		patient.setGeneralNotes(notes);
+		return this;
+	}
+
 	private void validate() throws InstantiationError {
 		assertFieldNotNull(patient.getId(), "id");
 		assertFieldNotNull(patient.getName(), "name");

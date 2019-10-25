@@ -63,6 +63,11 @@ public class Patient {
 	@DataGenDateRange(min = "2018-01-01", max = "2019-12-31")
 	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
+	@Column(name = "notes")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.7)
+	private String generalNotes;
+
 	public Patient() {
 	}
 
@@ -75,7 +80,8 @@ public class Patient {
 			Sex sex,
 			String medicalHistory,
 			String drugHistory,
-			@NotNull Date lastUpdated
+			@NotNull Date lastUpdated,
+			String generalNotes
 	) {
 		this.id = id;
 		this.name = name;
@@ -86,6 +92,7 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.lastUpdated = lastUpdated;
+		this.generalNotes = generalNotes;
 	}
 
 	public String getId() {
@@ -160,6 +167,14 @@ public class Patient {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
+	}
+
+	public String getGeneralNotes() {
+		return generalNotes;
+	}
+
+	public void setGeneralNotes(String generalNotes) {
+		this.generalNotes = generalNotes;
 	}
 
 	@Override
