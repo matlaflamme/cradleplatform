@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 public class RoleValidator implements ConstraintValidator<ValidRole, String> {
 
-   List<String> validRoles = Arrays.stream(Role.values()).map(Role::getRole).collect(Collectors.toList());
+   private List<String> validRoles = Arrays.stream(Role.values()).map(Role::getRole).collect(Collectors.toList());
 		   ;
    @Override
    public void initialize(ValidRole constraint) {

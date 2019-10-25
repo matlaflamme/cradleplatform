@@ -1,5 +1,6 @@
 package com.cradlerest.web.service.config;
 
+import com.cradlerest.web.constraints.user.Role;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,11 +22,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 //		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //		String roles = auth.getAuthorities().toString();
-		if (roles.contains("ROLE_ADMIN")) {
+		if (roles.contains(Role.ADMIN.getRole())) {
 			httpServletResponse.sendRedirect("/admin");
-		} else if (roles.contains("ROLE_HEALTHWORKER")) {
+		} else if (roles.contains(Role.HEALTHWORKER.getRole())) {
 			httpServletResponse.sendRedirect("/healthworker");
-		} else if (roles.contains("ROLE_VHT")) {
+		} else if (roles.contains(Role.VHT.getRole())) {
 			httpServletResponse.sendRedirect("/vht");
 		}
 	}
