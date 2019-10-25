@@ -5,6 +5,7 @@ Vue.component('new_account_form', {
 
     },
     data: () => ({
+        snackbar: false,
         valid: true,
         name: '',
         nameRules: [
@@ -31,7 +32,10 @@ Vue.component('new_account_form', {
             v => !!v || 'Zone is required',
             v => (v && v > 0) || 'Zone number can\'t be negative'
         ],
-        row: null
+        row: '',
+        rowRules: [
+            v => !!v || 'Role is required'
+        ]
     }),
     methods: {
       validate () {
@@ -53,10 +57,11 @@ Vue.component('new_account_form', {
                     roles: this.row
                 }
             ).then(response => {console.log(response)});
-            this.snackbar = true; //@TODO
+            this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
         }
     },
     template:
+    '<div>' +
     '<v-card class="overflow-hidden" raised min-width="550" max-height="600"> ' +
         `<v-card-title>
             <span class="title">Create a new account</span>`+
@@ -67,7 +72,7 @@ Vue.component('new_account_form', {
       lazy-validation
       class="ma-5 px-3"
     >` +
-        '<v-radio-group v-model="row" row>' +
+        '<v-radio-group v-model="row" row required :rules="rowRules">' +
         '<v-radio label="VHT" value="ROLE_VHT"></v-radio>' +
         '<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>' +
         '<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>' +
@@ -75,7 +80,6 @@ Vue.component('new_account_form', {
      ` <v-text-field
         v-model="name"
         :counter="10"
-        :rules="nameRules"
         label="Name"
       ></v-text-field>` +
         `<v-text-field
@@ -95,12 +99,10 @@ Vue.component('new_account_form', {
       ></v-text-field>` +
         `<v-text-field
         v-model="region"
-        :rules="regionRules"
         label="Region"
       ></v-text-field>` +
         `<v-text-field
         v-model="zone"
-        :rules="zoneRules"
         label="Zone"
       ></v-text-field>` +
       `<v-btn
@@ -120,8 +122,17 @@ Vue.component('new_account_form', {
         Clear Form
       </v-btn>
     </v-form>` +
-        '</v-card>'
-
+        '</v-card>' +
+        '<v-snackbar v-model="snackbar">' +
+            'New user successfully created' +
+            `<v-btn
+                color="pink"
+                @click="snackbar = false"
+            >` +
+                'Close' +
+            '</v-btn>' +
+        '</v-snackbar>' +
+    '</div>'
 })
 
 new Vue({
