@@ -95,7 +95,6 @@
   </TestCase>
 
   <TestCase name="Get Reading View">
-    <!-- TODO: update this test once actual ReadingManager is implemented -->
     <Request method="GET" uri="/api/reading/1"/>
     <Response status="200">
       <![CDATA[
@@ -110,7 +109,8 @@
         "pregnant": true,
         "symptoms": [],
         "systolic": 100,
-        "timestamp": "2019-09-20 20:12:32"
+        "timestamp": "2019-09-20 20:12:32",
+        "readingNotes": null
       }
       ]]>
     </Response>
