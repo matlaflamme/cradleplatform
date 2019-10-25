@@ -67,8 +67,8 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		//https://stackoverflow.com/questions/39237835/jackson-jsonnode-to-typed-collection
 		String symptoms = requestBody.get("symptoms").textValue();
 		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
-		String readingTimestamp = requestBody.get("readingTimestamp").textValue().replace("T", " ");
-		String referralTimestamp = requestBody.get("referralTimestamp").textValue().replace("T", " ");
+		String readingTimestamp = requestBody.get("readingTimestamp").textValue();
+		String referralTimestamp = requestBody.get("referralTimestamp").textValue();
 		String healthCentreName = requestBody.get("healthCentre").textValue();
 		String comments = requestBody.get("comments").textValue();
 		logger.info("Referral data \n" +
@@ -103,8 +103,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		if (currentHealthCentre.isEmpty()) {
 			throw new EntityNotFoundException("Not found: " + healthCentreName);
 		}
-		ObjectMapper mapper = new ObjectMapper();
-		List<String> symptomsList = mapper.readValue(symptoms, List.class);
+
 		ReadingView currentReading = new ReadingViewBuilder()
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))
@@ -112,7 +111,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
-				.symptoms(symptomsList)
+				.symptoms(symptoms.replace("[", "").replace("]", "").split(","))
 				.build();
 
 		patientManagerService.saveReading(currentReading);
