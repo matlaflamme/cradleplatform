@@ -1,4 +1,3 @@
-
 Vue.prototype.$http = axios;
 var readingInput = new Vue ({
     el: '#readingInput',
@@ -78,3 +77,11 @@ function getCurrentDate() {
     console.log(date + ' ' + time);
     return date + ' ' + time; //date and time string returned
 }
+
+new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => ({
+        drawer: null
+    })
+});

@@ -51,7 +51,7 @@
                                 <button v-on:click="viewPatientData(item.patient.id)" class="btn btn-outline-info">View Patient Data</button>
                             </template>
                             <template v-slot:item.add="{ item }">
-                                <button v-on:click="addNewReading(item.id)" class="btn btn-outline-secondary">Add New Reading</button>
+                                <button v-on:click="addNewReading(item.patient.id)" class="btn btn-outline-secondary">Add New Reading</button>
                             </template>
                         </v-data-table>
                     </v-container>
