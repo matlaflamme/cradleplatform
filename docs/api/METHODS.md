@@ -22,9 +22,7 @@ information about the entities returned by these methods see
 
 ### `GET /api/patient/{id}`
 
-Returns the whole profile for a patient with a given `id`: including lists of readings and symptoms.
-
-> Note: Symptoms have not yet been implemented
+Returns the whole profile for a patient with a given `id`: including lists of [reading views](#ENTITIES.md#reading-view).
 
 #### Path Variables
 
@@ -147,13 +145,14 @@ Returns only the readings for the patient with a given `id`.
 
 #### Returns
 
-Returns a JSON array of [reading](ENTITIES.md#reading) entities. If unable to
+Returns a JSON array of [reading view](ENTITIES.md#reading-view) entities. If unable to
 find a patient with the requested `id`, or if there are no readings for the 
 requested patient, an empty array is returned.
 
 #### Errors
 
-None
+Returns an `EntityNotFound` (404) exception if no patient with the given `id` is found
+in the database.
 
 
 ### `POST /api/patient`

@@ -6,8 +6,6 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * Controller for saving and retrieving {@code ReadingView} objects.
  */
@@ -29,7 +27,7 @@ public class ReadingController {
 	public void save(@RequestBody ReadingView readingView) throws BadRequestException {
 		try {
 			readingManager.saveReadingView(readingView);
-		} catch (InstantiationError e) {
+		} catch (InstantiationError | EntityNotFoundException e) {
 			throw new BadRequestException("invalid request body", e);
 		}
 	}

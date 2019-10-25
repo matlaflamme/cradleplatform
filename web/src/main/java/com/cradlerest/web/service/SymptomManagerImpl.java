@@ -2,6 +2,8 @@ package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Symptom;
+import com.cradlerest.web.model.SymptomReadingRelation;
+import com.cradlerest.web.service.repository.SymptomReadingRelationRepository;
 import com.cradlerest.web.service.repository.SymptomRepository;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +21,16 @@ public class SymptomManagerImpl implements SymptomManager {
 
 	private final SymptomRepository symptomRepository;
 
+	private final SymptomReadingRelationRepository symptomReadingRelationRepository;
+
 	private Map<String, Symptom> symptomCache = null;
 
-	public SymptomManagerImpl(SymptomRepository symptomRepository) {
+	public SymptomManagerImpl(
+			SymptomRepository symptomRepository,
+			SymptomReadingRelationRepository symptomReadingRelationRepository
+	) {
 		this.symptomRepository = symptomRepository;
+		this.symptomReadingRelationRepository = symptomReadingRelationRepository;
 	}
 
 	/**
@@ -54,7 +62,7 @@ public class SymptomManagerImpl implements SymptomManager {
 
 	@Override
 	public void relateReadingWithSymptom(@NotNull Integer readingId, @NotNull Integer symptomId) {
-		// TODO: implement me
+		symptomReadingRelationRepository.save(new SymptomReadingRelation(symptomId, readingId));
 	}
 
 	/**
@@ -73,6 +81,7 @@ public class SymptomManagerImpl implements SymptomManager {
 		symptomCache = new HashMap<>();
 		var symptoms = symptomRepository.findAll();
 		for (var symptom : symptoms) {
+			assert symptom.getId() != null;
 			assert symptom.getText() != null;
 			symptomCache.put(normalize(symptom.getText()), symptom);
 		}
