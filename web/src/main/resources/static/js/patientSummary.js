@@ -25,58 +25,89 @@ function getReadingColorIcon(digit) {
             break;
     }
     return { 'colour' : colour, 'arrow' : arrow };
-}
+};
 
 
-
-//This component is used for the center column "Past Readings" table of this page
-Vue.component('patient_readings', {
+let test = new Vue({
+    el: '#table',
     vuetify: new Vuetify(),
-    data: function() {
-        return { rows: null//Request data from the server from this function. Get a JSON file as a response?
-            //[{ date: '2/11/1995', time: '14:33', bp: '100/88', heartRate: '80', light: 'Green'}]
+    data () {
+        return {
+            headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
+                { text: 'timestamp', align: 'left', value: 'timestamp'},
+                { text: 'systolic', value: 'systolic' },
+                { text: 'diastolic', value: 'diastolic', sortable: false },
+                { text: 'heartRate', value: 'heartRate', sortable: false },
+            ],
+            rows: [] //empty to start
         }
     },
-    template:
-        '<v-card\n' +
-//        'class="mx-auto"\n' +
-//        'max-width="400"\n' +
-        'raised\n' +
-        '>\n' +
-        '<h3>Past Readings</h3>\n'+
-        '<table class="table table-striped table-hover">\n' +
-        '<thead>' +
-        '<tr>' +
-        '<th>Date</th>' +
-        '<th>Systolic</th>' +
-        '<th>Diastolic</th>' +
-        '<th>Heart Rate</th>' +
-        '<th>Light</th>' +
-        '</tr>' +
-        '</thead>' +
-        '<tbody>' +
-        '<tr v-for="row in rows">' +
-        '<td>{{row.timestamp}}</td>' +
-        '<td>{{row.systolic}}</td>' +
-        '<td>{{row.systolic}}</td>' +
-        '<td>{{row.heartRate}}</td>' +
-        '<td><span class="dot" :style="row.colorstyle"></span></td>' +
-        '</tr>' +
-        '</tbody>' +
-        '</table>' +
-        '</v-card>\n',
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => {
-            this.rows = response.data;
+            this.rows = response.data
             this.rows.forEach((row)=> {
                 let icon = getReadingColorIcon(row.colour);
                 row.colorstyle = {"background-color": icon['colour']};
             })
         })
+
+    },
+    methods: {
+
     }
 });
+
+
+// //This component is used for the center column "Past Readings" table of this page
+// Vue.component('patient_readings', {
+//     vuetify: new Vuetify(),
+//     data: function() {
+//         return { rows: null//Request data from the server from this function. Get a JSON file as a response?
+//             //[{ date: '2/11/1995', time: '14:33', bp: '100/88', heartRate: '80', light: 'Green'}]
+//         }
+//     },
+//     template:
+//         '<v-card\n' +
+//         'class="mx-auto"\n' +
+//         'max-width="400"\n' +
+//         'raised\n' +
+//         '>\n' +
+//         '<h3>Past Readings</h3>\n'+
+//         '<table class="table table-striped table-hover">\n' +
+//         '<thead>' +
+//         '<tr>' +
+//         '<th>Date</th>' +
+//         '<th>Systolic</th>' +
+//         '<th>Diastolic</th>' +
+//         '<th>Heart Rate</th>' +
+//         '<th>Light</th>' +
+//         '</tr>' +
+//         '</thead>' +
+//         '<tbody>' +
+//         '<tr v-for="row in rows">' +
+//         '<td>{{row.timestamp}}</td>' +
+//         '<td>{{row.systolic}}</td>' +
+//         '<td>{{row.systolic}}</td>' +
+//         '<td>{{row.heartRate}}</td>' +
+//         '<td><span class="dot" :style="row.colorstyle"></span></td>' +
+//         '</tr>' +
+//         '</tbody>' +
+//         '</table>' +
+//         '</v-card>\n',
+//     mounted() {
+//         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
+//         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
+//         axios.get('/api/patient/'+ id + '/readings').then(response => {
+//             this.rows = response.data
+//             this.rows.forEach((row)=> {
+//                 let icon = getReadingColorIcon(row.colour);
+//                 row.colorstyle = {"background-color": icon['colour']};
+//             })
+//         })
+//     }
+// });
 
 
 // This component is for the left side of the page, it reads the patient info and gives a summary on the patient info and last reading
@@ -96,8 +127,8 @@ Vue.component('patient_info', {
     },
     template:
         '<v-card\n' +
-//        'class="mx-auto"\n' +
-//        'max-width="400"\n' +
+        'class="mx-auto"\n' +
+        'max-width="400"\n' +
         'raised\n' +
         '>\n' +
         '    <v-list-item three-line>\n' +
@@ -175,8 +206,8 @@ Vue.component('patient_history', {
     },
     template:
         '<v-card\n' +
-//        'class="mx-auto"\n' +
-//        'max-width="400"\n' +
+        'class="mx-auto"\n' +
+        'max-width="400"\n' +
         'raised\n' +
         '>\n' +
             '<v-list-item three-line>\n' +

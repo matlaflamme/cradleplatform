@@ -34,13 +34,27 @@
                 <v-layout justify-center>
                     <!--  Grid System for Vuetify -->
                     <v-row>
-                        <v-col cols="12" md="3">
+                        <v-col cols="3">
                             <patient_info></patient_info>
                         </v-col>
-                        <v-col cols="12" md="6">
-                            <patient_readings></patient_readings>
+                        <v-col cols="6">
+                            <div id="table">
+                                <v-data-table
+                                        :headers="headers"
+                                        :items="rows"
+                                        :items-per-page="5"
+                                        class="elevation-1">
+
+                                    <template slot="rows" slot-scope="props">
+                                        <td>{{props.row.timestamp}}</td>
+                                        <td>{{props.row.systolic}}</td>
+                                        <td>{{props.row.diastolic}}</td>
+                                        <td>{{props.row.heartRate}}</td>
+                                    </template>
+                                </v-data-table>
+                            </div>
                         </v-col>
-                        <v-col cols="12" md="3">
+                        <v-col cols="3">
                             <patient_history></patient_history>
                         </v-col>
                     </v-row>
