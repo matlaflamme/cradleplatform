@@ -103,14 +103,16 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		if (currentHealthCentre.isEmpty()) {
 			throw new EntityNotFoundException("Not found: " + healthCentreName);
 		}
-
-		Reading currentReading = new ReadingBuilder()// I need this. I shouldn't need this.
+		ObjectMapper mapper = new ObjectMapper();
+		List<String> symptomsList = mapper.readValue(symptoms, List.class);
+		ReadingView currentReading = new ReadingViewBuilder()
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))
 				.diastolic(diastolic)
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
+				.symptoms(symptomsList)
 				.build();
 
 		patientManagerService.saveReading(currentReading);
