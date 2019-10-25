@@ -38,6 +38,7 @@ CREATE TABLE reading (
     colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
     other_symptoms TEXT,
+    notes TEXT,
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
 

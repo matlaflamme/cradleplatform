@@ -56,6 +56,7 @@ entity, and, as such, must be separate entities.
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+| `generalNotes` | `string` | `true` | General notes about the patient |
 
 ### Example
 
@@ -69,7 +70,8 @@ entity, and, as such, must be separate entities.
     "sex": 1,
     "medicalHistory": null,
     "drugHistory": null,
-    "lastUpdated": "2019-09-20 20:12:32"
+    "lastUpdated": "2019-09-20 20:12:32",
+    "generalNotes": null
 }
 ```
 
@@ -94,6 +96,7 @@ the most recent reading will be the first item in the array.
 | `medicalHistory` | `string` | `true` | Text describing the patient's medical history |
 | `drugHistory` | `string` | `true` | Text describing the patient's drug history |
 | `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+| `generalNotes` | `string` | `true` | General notes about the patient |
 | `readings` | `array` | `false` | An array of [ReadingView](#reading-view) entities
 
 ### Example
@@ -109,6 +112,7 @@ the most recent reading will be the first item in the array.
     "medicalHistory": null,
     "drugHistory": null,
     "lastUpdated": "2019-09-20 20:12:32",
+    "generalNotes": null,
     "readings": [
         {
             "id": 3,
@@ -119,7 +123,8 @@ the most recent reading will be the first item in the array.
             "pregnant": true,
             "gestationalAge": 24,
             "timestamp": "2019-09-24 12:31:34",
-            "symptoms": []
+            "symptoms": [],
+            "readingNotes": null
         },
         {
             "id": 2,
@@ -133,7 +138,8 @@ the most recent reading will be the first item in the array.
             "symptoms": [
                 "Headache",
                 "Unwell"
-            ]
+            ],
+            "readingNotes": "Doesn't feel very good."
         },
         {
             "id": 1,
@@ -146,7 +152,8 @@ the most recent reading will be the first item in the array.
             "timestamp": "2019-09-20 20:12:32",
             "symptoms": [
                 "Bleeding"
-            ]
+            ],
+            "readingNotes": null
         }
     ]
 }
@@ -173,6 +180,7 @@ Holds information about a single CRADLE reading.
 | `gestationalAge` | `number` | `true` | Gestational age of the patient **in days** |
 | `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `otherSymptoms` | `string` | `true` | Other symptoms that the patient may have |
+| `readingNotes` | `string` | `true` | Comments from the VHT on the reading |
 
 ### Example
 
@@ -186,7 +194,8 @@ Holds information about a single CRADLE reading.
     "pregnant": true,
     "gestationalAge": 16,
     "timestamp": "2019-09-20 20:12:32",
-    "otherSymptoms": null
+    "otherSymptoms": null,
+    "readingNotes": null
 }
 ```
 
@@ -211,6 +220,7 @@ Aggregates information about a reading from multiple sources into a single objec
 | `gestationalAge` | `number` | `true` | Gestational age of the patient **in days** |
 | `timestamp`| `string` | `false` | Timestamp of the reading in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `otherSymptoms` | `string` | `true` | Other symptoms that the patient may have |
+| `readingNotes` | `string` | `true` | Comments from the VHT on the reading |
 | `symptoms` | `[string]` | `false` | A list of [symptoms](#symptom) for this reading |
 
 
@@ -227,6 +237,7 @@ Aggregates information about a reading from multiple sources into a single objec
     "gestationalAge": 16,
     "timestamp": "2019-09-20 20:12:32",
     "otherSymptoms": null,
+    "readingNotes": null,
     "symptoms": [
         "Headache",
         "Blurred Vision",
