@@ -23,7 +23,8 @@
         "sex":1,
         "medicalHistory":null,
         "drugHistory":null,
-        "lastUpdated":"2019-09-20 20:12:32"
+        "lastUpdated":"2019-09-20 20:12:32",
+        "generalNotes":null
       }
       ]]>
     </Response>

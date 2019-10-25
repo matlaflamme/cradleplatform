@@ -22,7 +22,8 @@ CREATE TABLE patient (
     sex INT NOT NULL,                   -- enumerated {male, female, unknown}
     medical_history VARCHAR(255) DEFAULT '',
     drug_history VARCHAR(255) DEFAULT '',
-    last_updated DATETIME NOT NULL
+    last_updated DATETIME NOT NULL,
+    notes TEXT
 );
 
 
