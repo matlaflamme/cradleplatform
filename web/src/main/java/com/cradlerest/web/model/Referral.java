@@ -26,20 +26,6 @@ public class Referral {
 	@Column(name = "id")
 	private Integer id;
 
-	// TODO: Foreign keys
-	// Need help with this one.
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "patient_id")
-//	private Patient patient;
-
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "user_id")
-//	private User vht;
-
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "reading_id")
-//	private Reading reading;
-
 	@Column(name = "pid")
 	private String patientId;
 

@@ -37,13 +37,6 @@ public class HealthCentre {
 	@Column(name = "manager_phone_number")
 	private String managerPhoneNumber;
 
-//	@Column(name = "patients")
-//	private Set<String> patients;
-
-//	@Column(name = "location")
-//	private Location location;
-
-
 	HealthCentre() {}
 
 	HealthCentre(String name, Integer zone, String email, String healthCentreNumber, String managerPhoneNumber) {
