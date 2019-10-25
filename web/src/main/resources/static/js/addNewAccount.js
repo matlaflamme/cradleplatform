@@ -17,6 +17,7 @@ Vue.component('new_account_form', {
             v => (v && v.length >= 6) || 'Username must be at least 6 characters'
         ],
         password: '',
+        showPassword: false,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length >= 8)  || 'Password must be at least 8 characters'
@@ -35,7 +36,6 @@ Vue.component('new_account_form', {
     methods: {
       validate () {
           if (this.$refs.newAccountForm.validate()) {
-              this.snackbar = true;
               this.submit();
           }
       },
@@ -46,8 +46,6 @@ Vue.component('new_account_form', {
           this.$refs.newAccountForm.resetValidation()
         },
         submit () {
-          //@TODO
-
             axios.post('/api/user/add',
                 {
                     username: this.username,
@@ -55,6 +53,7 @@ Vue.component('new_account_form', {
                     roles: this.row
                 }
             ).then(response => {console.log(response)});
+            this.snackbar = true; //@TODO
         }
     },
     template:
@@ -78,7 +77,6 @@ Vue.component('new_account_form', {
         :counter="10"
         :rules="nameRules"
         label="Name"
-        required
       ></v-text-field>` +
         `<v-text-field
         v-model="username"
@@ -90,19 +88,20 @@ Vue.component('new_account_form', {
         v-model="password"
         :rules="passwordRules"
         label="Password"
+        :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+        :type="showPassword ? 'text' : 'password'"
+        @click:append="showPassword = !showPassword"
         required
       ></v-text-field>` +
         `<v-text-field
         v-model="region"
         :rules="regionRules"
         label="Region"
-        required
       ></v-text-field>` +
         `<v-text-field
         v-model="zone"
         :rules="zoneRules"
         label="Zone"
-        required
       ></v-text-field>` +
       `<v-btn
         :disabled="!valid"

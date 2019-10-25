@@ -24,7 +24,7 @@ let test = new Vue({
                 let icon = getReadingColorIcon(row.reading.colour);
                 row.reading.colorstyle = {"background-color": icon['colour']};
             })
-            })
+        })
     },
     methods: {
         viewPatientData: function (id) {  //Gets called when View button is pressed
