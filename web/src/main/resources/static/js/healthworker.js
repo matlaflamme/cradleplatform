@@ -14,6 +14,7 @@ let test = new Vue({
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
+        console.log("HIII");
         axios.get('/api/patient/all').then(response => (this.rows = response.data))
     },
     methods: {
