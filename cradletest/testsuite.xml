@@ -228,6 +228,6 @@
     </TestCase>
     <TestCase name="Get all referrals from Twilio health centre - Bad health centre name">
         <Request method="GET" uri="/api/referral/fasdfasdfasdfasdf/all"/>
-        <Response status="500"/>
+        <Response status="404"/>
     </TestCase>
 </TestSuite>
