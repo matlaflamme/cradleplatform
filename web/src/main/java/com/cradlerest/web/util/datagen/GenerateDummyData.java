@@ -15,7 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.util.Arrays;
-import java.util.HashSet;
+
+import static com.cradlerest.web.util.datagen.Algorithm.*;
 
 /**
  * Application entry point for the dummy data generation tool.
@@ -36,7 +37,7 @@ public class GenerateDummyData {
 				? new UniformNoise(args[0].hashCode())
 				: new UniformNoise();
 		try {
-			var entities = linearize(getAllEntityTypes());
+			var entities = linearizeTypes(getAllEntityTypes());
 
 			var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
 			factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
@@ -91,7 +92,7 @@ public class GenerateDummyData {
 	 * @throws MissingAnnotationException If the a field of {@code type} references
 	 * 	a non-entity class via a foreign key.
 	 */
-	static Vec<? extends Class<?>> referencesOf(@NotNull Class<?> type) throws MissingAnnotationException {
+	static Vec<Class<?>> referencesOf(@NotNull Class<?> type) throws MissingAnnotationException {
 		var references = Vec.copy(Arrays.asList(type.getDeclaredFields()))
 				.filter(field -> field.isAnnotationPresent(ForeignKey.class))
 				.map(field -> field.getAnnotation(ForeignKey.class))
@@ -105,7 +106,9 @@ public class GenerateDummyData {
 			}
 		}
 
-		return references;
+		// identity map(e -> e) is required to make the return type Vec<Class<?>>
+		// instead of Vec<? extends Class<?>> for some reason
+		return references.map(e -> e);
 	}
 
 	/**
@@ -124,54 +127,11 @@ public class GenerateDummyData {
 	 * 	in a linearized order.
 	 * @throws DeadlockException If a circular reference is found.
 	 * @throws MissingAnnotationException Propagates from {@code referencesOf}.
+	 * @throws DuplicateItemException If {@code types} contains duplicate entries.
 	 */
-	static Vec<Class<?>> linearize(@NotNull Vec<Class<?>> types)
+	static Vec<Class<?>> linearizeTypes(@NotNull Vec<Class<?>> types)
 			throws DeadlockException, MissingAnnotationException, DuplicateItemException {
 
-		if (types.isEmpty()) {
-			return types;
-		}
-		assertNoDuplicates(types);
-
-		var partitioned = types.partition(type -> referencesOf(type).isEmpty());
-		var ordered = partitioned._1;
-		var unordered = partitioned._2;
-
-		if (ordered.isEmpty()) {
-			throw new DeadlockException("unable to find a class with no foreign keys");
-		}
-
-		while (!unordered.isEmpty()) {
-			final var finalOrdered = ordered;
-			partitioned = unordered.partition(type -> referencesOf(type).all(finalOrdered::contains));
-
-			// if we can't order any classes this round, we have a circular
-			// reference an it is impossible to linearize them
-			if (partitioned._1.isEmpty()) {
-				throw new DeadlockException("circular reference detected");
-			}
-
-			ordered = ordered.append(partitioned._1);
-			unordered = partitioned._2;
-		}
-
-		return ordered;
-	}
-
-	/**
-	 * Throws a {@code DuplicateItemException} in the event that a given
-	 * iterable collection.
-	 * @param iter The iterable collection to check.
-	 * @param <T> The item type. Duplicates are determined via calls to this
-	 *           type's {@code equals} method.
-	 * @throws DuplicateItemException If a duplicate item is found.
-	 */
-	private static <T> void assertNoDuplicates(@NotNull Iterable<T> iter) throws DuplicateItemException {
-		final var items = new HashSet<T>();
-		for (var item : iter) {
-			if (!items.add(item)) {
-				throw new DuplicateItemException(item.toString());
-			}
-		}
+		return linearize(types, GenerateDummyData::referencesOf);
 	}
 }
