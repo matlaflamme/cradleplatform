@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:v-slot="http://www.w3.org/1999/XSL/Transform"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<body>
+<div inline-template th:fragment="patientsFragment">
+<v-content>
+    <v-container>
+        <v-layout jdustify-center>
+            <v-container>
+                <v-data-table :headers="headers" :items="rows" :items-per-page="10" class="elevation-1">
+                    <template slot="rows" slot-scope="props">
+                        <td>{{props.row.id}}</td>
+                        <td>{{props.row.name}}</td>
+                    </template>
+                    <template v-slot:item.view="{ item }">
+                        <button v-on:click="viewPatientData(item.id)" class="btn btn-outline-info">View Patient Data</button>
+                    </template>
+                    <template v-slot:item.add="{ item }">
+                        <button v-on:click="addNewReading(item.id)" class="btn btn-outline-secondary">Add New Reading</button>
+                    </template>
+                </v-data-table>
+            </v-container>
+        </v-layout>
+    </v-container>
+</v-content>
+</div>
+</body>
+</html>
