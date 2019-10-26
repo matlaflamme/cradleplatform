@@ -152,23 +152,26 @@
     </Request>
     <Response status="400"/>
   </TestCase>
+
     <TestCase name="Create New Referral">
         <Request method="POST" uri="/api/referral/send">
             <![CDATA[
             {
-                "patientName": "HY",
-                "patientId": "001",
-                "patientAge": 15,
-                "gestationAge": 60,
-                "systolic": 25,
-                "diastolic": 20,
-                "heartRate": 30,
-                "readingColour": 1,
-                "readingTimestamp": "2019-10-23 02:25:43.453",
-                "referralTimestamp": "2019-10-23 19:28:39.887",
-                "healthCentre": "Twilio",
-                "VHT": "vht",
-                "comments": ""
+              "patientName": "HY",
+              "patientId": "001",
+              "patientAge": 15,
+              "gestationAge": 60,
+              "systolic": 25,
+              "diastolic": 20,
+              "heartRate": 30,
+              "readingColour": 1,
+              "symptoms": "[Blurred vision, Abdominal pain]",
+              "isPregnant": false,
+              "readingTimestamp": "2019-10-24 00:24:21.022",
+              "referralTimestamp": "2019-10-24 00:27:14.317",
+              "healthCentre": "Twilio",
+              "VHT": "vht",
+              "comments": ""
             }
             ]]>
         </Request>
@@ -178,19 +181,21 @@
         <Request method="POST" uri="/api/referral/send">
             <![CDATA[
             {
-                "patientName": "HY",
-                "patientId": "12b12b412414214124124",
-                "patientAge": 15,
-                "gestationAge": 60,
-                "systolic": 25,
-                "diastolic": 20,
-                "heartRate": 30,
-                "readingColour": 1,
-                "readingTimestamp": "2019-10-23 02:25:43.453",
-                "referralTimestamp": "2019-10-23 19:28:39.887",
-                "healthCentre": "Twilio",
-                "VHT": "vht",
-                "comments": ""
+              "patientName": "HY",
+              "patientId": "asd2",
+              "patientAge": 15,
+              "gestationAge": 60,
+              "systolic": 25,
+              "diastolic": 20,
+              "heartRate": 30,
+              "readingColour": 1,
+              "symptoms": "[Blurred vision, Abdominal pain]",
+              "isPregnant": false,
+              "readingTimestamp": "2019-10-24 00:24:21.022",
+              "referralTimestamp": "2019-10-24 00:27:14.317",
+              "healthCentre": "Twilio",
+              "VHT": "vht",
+              "comments": ""
             }
             ]]>
         </Request>
@@ -200,19 +205,21 @@
         <Request method="POST" uri="/api/referral/send">
             <![CDATA[
             {
-                "patientName": "HY",
-                "patientId": "001",
-                "patientAge": 15,
-                "gestationAge": 60,
-                "systolic": 25,
-                "diastolic": 20,
-                "heartRate": 30,
-                "readingColour": 1,
-                "readingTimestamp": "2019-10-23 02:25:43.453",
-                "referralTimestamp": "2019-10-23 19:28:39.887",
-                "healthCentre": "Twiliooo",
-                "VHT": "vht",
-                "comments": ""
+              "patientName": "HY",
+              "patientId": "001",
+              "patientAge": 15,
+              "gestationAge": 60,
+              "systolic": 25,
+              "diastolic": 20,
+              "heartRate": 30,
+              "readingColour": 1,
+              "symptoms": "[Blurred vision, Abdominal pain]",
+              "isPregnant": false,
+              "readingTimestamp": "2019-10-24 00:24:21.022",
+              "referralTimestamp": "2019-10-24 00:27:14.317",
+              "healthCentre": "Twilioo",
+              "VHT": "vht",
+              "comments": ""
             }
             ]]>
         </Request>
