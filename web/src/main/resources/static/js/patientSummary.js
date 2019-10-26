@@ -27,6 +27,52 @@ function getReadingColorIcon(digit) {
     return { 'colour' : colour, 'arrow' : arrow };
 };
 
+Vue.component('readings_table' , {
+    vuetify: new Vuetify(),
+    props: {
+
+    },
+    data: () => ({
+        headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
+            { text: 'Date', align: 'left', value: 'timestamp'},
+            { text: 'Systolic', value: 'systolic' },
+            { text: 'Diastolic', value: 'diastolic'},
+            { text: 'Heart Rate', value: 'heartRate'}
+        ],
+        rows: [] //empty to start
+
+    }),
+    methods: {
+
+    },
+    mounted() {
+        let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
+        let id = urlQuery.get('id'); //search for 'id=' in query and return the value
+        axios.get('/api/patient/'+ id + '/readings').then(response => {
+            this.rows = response.data;
+            console.log(this.rows[0].id);
+            console.log(response.data);
+
+        })
+
+    },
+    template:
+        `<v-data-table
+        :headers="headers"
+        :items="rows"
+        :items-per-page="5"
+        class="elevation-1"
+        >
+        <template slot="rows" slot-scope="props">
+            <td>{{props.row.timestamp}}</td>
+            <td>{{props.row.systolic}}</td>
+            <td>{{props.row.diastolic}}</td>
+            <td>{{props.row.heartRate}}</td>
+        </template>
+        </v-data-table>`
+    ,
+});
+
 
 let test = new Vue({
     el: '#table',

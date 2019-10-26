@@ -38,21 +38,7 @@
                             <patient_info></patient_info>
                         </v-col>
                         <v-col cols="6">
-                            <div id="table">
-                                <v-data-table
-                                        :headers="headers"
-                                        :items="rows"
-                                        :items-per-page="5"
-                                        class="elevation-1">
-
-                                    <template slot="rows" slot-scope="props">
-                                        <td>{{props.row.timestamp}}</td>
-                                        <td>{{props.row.systolic}}</td>
-                                        <td>{{props.row.diastolic}}</td>
-                                        <td>{{props.row.heartRate}}</td>
-                                    </template>
-                                </v-data-table>
-                            </div>
+                            <readings_table></readings_table>
                         </v-col>
                         <v-col cols="3">
                             <patient_history></patient_history>
