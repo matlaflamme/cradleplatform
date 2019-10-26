@@ -1,6 +1,7 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
+import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Entity
 @IdClass(SymptomReadingRelation.IdType.class)
 @Table(name = "symptom_reading_relation")
+@DataGenRelativeAmount(base = Reading.class, multiplier = 1.5)
 public class SymptomReadingRelation {
 
 	/**

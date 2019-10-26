@@ -1,6 +1,7 @@
 package com.cradlerest.web.util.datagen;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
+import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
@@ -15,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.cradlerest.web.util.datagen.Algorithm.*;
 
@@ -38,49 +42,14 @@ public class GenerateDummyData {
 				: new UniformNoise();
 		try {
 			var entities = linearizeTypes(getAllEntityTypes());
-
-			var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
-			factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
-			factory.registerCustomGenerator(new AutoIncrementGenerator());
-
-			for (var entityClass : entities) {
-				var iter = factory.prepare(entityClass);
-				var amount = entityClass.isAnnotationPresent(DataGenAmount.class)
-						? entityClass.getAnnotation(DataGenAmount.class).value()
-						: DEFAULT_AMOUNT;
-				var sqlStatements = iter
-						.take(amount)
-						.map(Data::toSqlStatement)
-						.fold((accum, x) -> accum + "\n\n" + x);
-				System.out.print(sqlStatements + "\n\n\n");
-			}
+			var sqlStatements = generateData(noise, entities)
+					.map(Data::toSqlStatement)
+					.fold((accum, x) -> accum + "\n\n" + x);
+			System.out.println(sqlStatements);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
-	}
-
-	/**
-	 * Returns the set of all database entity classes in the "com.cradlerest.web"
-	 * package. These classes should have a one-to-one correspondence to the
-	 * database schema allowing us to generate dummy data based on their structure.
-	 *
-	 * @return A set of entity classes.
-	 */
-	private static Vec<Class<?>> getAllEntityTypes() throws MissingAnnotationException {
-		Reflections.log = null;
-		var reflections = new Reflections(SEARCH_PACKAGE);
-		var entities = Vec.copy(reflections.getTypesAnnotatedWith(javax.persistence.Entity.class))
-				.filter(e -> !e.isAnnotationPresent(Omit.class));
-
-		// ensure that classes have the @Table annotation
-		for (var entity : entities) {
-			if (!entity.isAnnotationPresent(javax.persistence.Table.class)) {
-				throw MissingAnnotationException.type(entity, javax.persistence.Table.class);
-			}
-		}
-
-		return entities;
 	}
 
 	/**
@@ -132,6 +101,80 @@ public class GenerateDummyData {
 	static Vec<Class<?>> linearizeTypes(@NotNull Vec<Class<?>> types)
 			throws DeadlockException, MissingAnnotationException, DuplicateItemException {
 
-		return linearize(types, GenerateDummyData::referencesOf);
+		return linearize(types, GenerateDummyData::dependenciesOf);
+	}
+
+	/**
+	 * Returns the set of all database entity classes in the "com.cradlerest.web"
+	 * package. These classes should have a one-to-one correspondence to the
+	 * database schema allowing us to generate dummy data based on their structure.
+	 *
+	 * @return A set of entity classes.
+	 */
+	private static Vec<Class<?>> getAllEntityTypes() throws MissingAnnotationException {
+		Reflections.log = null;
+		var reflections = new Reflections(SEARCH_PACKAGE);
+		var entities = Vec.copy(reflections.getTypesAnnotatedWith(javax.persistence.Entity.class))
+				.filter(e -> !e.isAnnotationPresent(Omit.class));
+
+		// ensure that classes have the @Table annotation
+		for (var entity : entities) {
+			if (!entity.isAnnotationPresent(javax.persistence.Table.class)) {
+				throw MissingAnnotationException.type(entity, javax.persistence.Table.class);
+			}
+		}
+
+		return entities;
+	}
+
+	private static Vec<Data> generateData(@NotNull Noise noise, @NotNull Vec<Class<?>> entities) {
+		var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
+		factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
+		factory.registerCustomGenerator(new AutoIncrementGenerator());
+
+		Vec<Data> dataVec = Vec.of();
+		var amountMap = new HashMap<Class<?>, Integer>();
+		for (var entityClass : entities) {
+			var iter = factory.prepare(entityClass);
+			var amount = generationAmount(entityClass, amountMap);
+			amountMap.put(entityClass, amount);
+
+			dataVec = dataVec.append(iter.take(amount).toVec());
+		}
+
+		return dataVec;
+	}
+
+	private static int generationAmount(@NotNull Class<?> type, Map<Class<?>, Integer> amountMap) {
+		if (type.isAnnotationPresent(DataGenRelativeAmount.class)) {
+			var annotation = type.getAnnotation(DataGenRelativeAmount.class);
+			var baseType = annotation.base();
+			var multiplier = annotation.multiplier();
+
+			// failed to linearize properly if this assertion fails
+			assert amountMap.containsKey(baseType);
+
+			return (int) ((double) amountMap.get(baseType) * multiplier);
+		}
+
+		return type.isAnnotationPresent(DataGenAmount.class)
+				? type.getAnnotation(DataGenAmount.class).value()
+				: DEFAULT_AMOUNT;
+	}
+
+	private static Optional<Class<?>> amountGenerationDependency(@NotNull Class<?> type) {
+		return type.isAnnotationPresent(DataGenRelativeAmount.class)
+				? Optional.of(type.getAnnotation(DataGenRelativeAmount.class).base())
+				: Optional.empty();
+	}
+
+	private static Vec<Class<?>> dependenciesOf(@NotNull Class<?> type) throws MissingAnnotationException {
+		var foreignKeyDependencies = referencesOf(type);
+		var amountDependency = amountGenerationDependency(type);
+		if (amountDependency.isEmpty() || foreignKeyDependencies.contains(amountDependency.get())) {
+			return foreignKeyDependencies;
+		}
+
+		return foreignKeyDependencies.append(amountDependency.get());
 	}
 }

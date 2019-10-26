@@ -21,6 +21,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "patient")
+@DataGenAmount(2)
 public class Patient {
 
 	@Id
