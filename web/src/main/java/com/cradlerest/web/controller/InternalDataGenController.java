@@ -24,7 +24,7 @@ public class InternalDataGenController {
 
 	@PostMapping("/db/danger/autogen")
 	public void generateDummyData(@RequestParam(defaultValue = "20") Integer amount) throws BadRequestException {
-		if (amount > MAX_AMOUNT) {
+		if (amount <= 0 || amount > MAX_AMOUNT) {
 			throw new BadRequestException("amount is too large");
 		}
 		dataGenService.generateDummyData(amount);
