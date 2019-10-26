@@ -1,8 +1,10 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenPass;
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.impl.SymptomReadingRelationEnforceUniquePass;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -16,6 +18,7 @@ import java.io.Serializable;
 @IdClass(SymptomReadingRelation.IdType.class)
 @Table(name = "symptom_reading_relation")
 @DataGenRelativeAmount(base = Reading.class, multiplier = 1.5)
+@DataGenPass(SymptomReadingRelationEnforceUniquePass.class)
 public class SymptomReadingRelation {
 
 	/**

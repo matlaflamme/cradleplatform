@@ -4,6 +4,7 @@ import com.cradlerest.web.util.datagen.annotations.DataGenOrdinal;
 import com.github.maumay.jflow.utils.Tup;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.function.BinaryOperator;
 /**
  * General data container.
  */
-class Data {
+public class Data {
 
 	@NotNull
 	private String table;
@@ -34,6 +35,10 @@ class Data {
 	@NotNull
 	Map<String, Object> getColumnValueMap() {
 		return columnValueMap;
+	}
+
+	public @Nullable Object getValueForColumn(@NotNull String column) {
+		return columnValueMap.get(column);
 	}
 
 	/**

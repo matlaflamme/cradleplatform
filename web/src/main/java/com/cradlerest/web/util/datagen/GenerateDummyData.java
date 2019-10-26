@@ -1,16 +1,11 @@
 package com.cradlerest.web.util.datagen;
 
-import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
-import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
-import com.cradlerest.web.util.datagen.annotations.ForeignKey;
-import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.cradlerest.web.model.SymptomReadingRelation;
+import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.DuplicateItemException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
-import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
-import com.cradlerest.web.util.datagen.impl.ForeignKeyRepositoryImpl;
-import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
-import com.cradlerest.web.util.datagen.impl.UniformNoise;
+import com.cradlerest.web.util.datagen.impl.*;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
@@ -29,8 +24,6 @@ import static com.cradlerest.web.util.datagen.Algorithm.*;
  * for the random number generator allowing for the reproduction of data.
  */
 public class GenerateDummyData {
-
-	// TODO: Add support for UNIQUE constraint
 
 	private static final String SEARCH_PACKAGE = "com.cradlerest.web";
 
@@ -128,6 +121,7 @@ public class GenerateDummyData {
 	}
 
 	private static Vec<Data> generateData(@NotNull Noise noise, @NotNull Vec<Class<?>> entities) {
+		var dataPassManager = dataPassManager();
 		var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
 		factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
 		factory.registerCustomGenerator(new AutoIncrementGenerator());
@@ -139,10 +133,23 @@ public class GenerateDummyData {
 			var amount = generationAmount(entityClass, amountMap);
 			amountMap.put(entityClass, amount);
 
-			dataVec = dataVec.append(iter.take(amount).toVec());
+			var entityData = iter.take(amount).toVec();
+			if (entityClass.isAnnotationPresent(DataGenPass.class)) {
+				var pass = dataPassManager.get(entityClass);
+				assert pass != null;
+				entityData = pass.traverse(entityData);
+			}
+
+			dataVec = dataVec.append(entityData);
 		}
 
 		return dataVec;
+	}
+
+	private static DataPassManager dataPassManager() {
+		var manager = new DataPassManager();
+		manager.register(SymptomReadingRelation.class, new SymptomReadingRelationEnforceUniquePass());
+		return manager;
 	}
 
 	private static int generationAmount(@NotNull Class<?> type, Map<Class<?>, Integer> amountMap) {
