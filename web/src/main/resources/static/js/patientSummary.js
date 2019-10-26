@@ -25,7 +25,7 @@ function getReadingColorIcon(digit) {
             break;
     }
     return { 'colour' : colour, 'arrow' : arrow };
-};
+}
 
 
 
@@ -39,8 +39,8 @@ Vue.component('patient_readings', {
     },
     template:
         '<v-card\n' +
-        'class="mx-auto"\n' +
-        'max-width="400"\n' +
+//        'class="mx-auto"\n' +
+//        'max-width="400"\n' +
         'raised\n' +
         '>\n' +
         '<h3>Past Readings</h3>\n'+
@@ -96,8 +96,8 @@ Vue.component('patient_info', {
     },
     template:
         '<v-card\n' +
-        'class="mx-auto"\n' +
-        'max-width="400"\n' +
+//        'class="mx-auto"\n' +
+//        'max-width="400"\n' +
         'raised\n' +
         '>\n' +
         '    <v-list-item three-line>\n' +
@@ -175,8 +175,8 @@ Vue.component('patient_history', {
     },
     template:
         '<v-card\n' +
-        'class="mx-auto"\n' +
-        'max-width="400"\n' +
+//        'class="mx-auto"\n' +
+//        'max-width="400"\n' +
         'raised\n' +
         '>\n' +
             '<v-list-item three-line>\n' +
