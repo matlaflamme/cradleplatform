@@ -65,9 +65,6 @@ Vue.component('readings_table' , {
                 let icon = getReadingColorIcon(row.colour);
                 row.colorstyle = {"background-color": icon['colour']};
             })
-            console.log(this.rows[0].id);
-            console.log(response.data);
-
         })
 
     },
