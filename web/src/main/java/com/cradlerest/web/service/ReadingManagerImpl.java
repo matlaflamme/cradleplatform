@@ -55,15 +55,17 @@ public class ReadingManagerImpl implements ReadingManager {
 	}
 
 	@Override
-	public void saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException {
+	public Reading saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException {
 		// use copyFields to extract the reading and persist it
 		var reading = new Reading();
 		copyFields(readingView, reading);
-		readingRepository.save(reading);
+		var persistedReading = readingRepository.save(reading);
 
 		// persist all symptoms as well
 		for (var symptomView : readingView.getSymptoms()) {
 			symptomManager.relateReadingWithSymptom(reading.getId(), symptomView.getText());
 		}
+
+		return persistedReading;
 	}
 }

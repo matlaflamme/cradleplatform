@@ -2,6 +2,7 @@ package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +47,7 @@ public interface ReadingManager {
 	/**
 	 * Deconstructs and persists a given reading view.
 	 * @param readingView A reading view.
+	 * @return The saved reading.
 	 */
-	void saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException;
+	Reading saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException;
 }
