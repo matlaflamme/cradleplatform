@@ -36,12 +36,18 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private ReferralRepository referralRepository; // Saving referrals
 	private HealthCentreRepository healthCentreRepository;
 	private PatientManagerService patientManagerService; // Patients, Readings
+	private ReadingManager readingManager;
 
-	public ReferralManagerServiceImpl(PatientManagerService patientManagerService, UserRepository userRepository, ReferralRepository referralRepository, HealthCentreRepository healthCentreRepository) {
+	public ReferralManagerServiceImpl(PatientManagerService patientManagerService,
+									  UserRepository userRepository,
+									  ReferralRepository referralRepository,
+									  HealthCentreRepository healthCentreRepository,
+									  ReadingManager readingManager) {
 		this.patientManagerService = patientManagerService;
 		this.userRepository = userRepository;
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
+		this.readingManager = readingManager;
 	}
 
 	/**
@@ -114,7 +120,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.symptoms(symptoms.replace("[", "").replace("]", "").split(","))
 				.build();
 
-		patientManagerService.saveReading(currentReading);
+		readingManager.saveReadingView(currentReading);
 
 		Referral currentReferral = new ReferralBuilder()
 				.pid(currentPatient.getId())

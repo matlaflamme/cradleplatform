@@ -30,7 +30,7 @@ CREATE TABLE reading (
     systolic INT NOT NULL,
     diastolic INT NOT NULL,
     heart_rate INT NOT NULL,
-    is_pregnant BOOLEAN NOT NULL,
+    is_pregnant BOOLEAN,
     gestational_age INT,                -- in days
     colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
