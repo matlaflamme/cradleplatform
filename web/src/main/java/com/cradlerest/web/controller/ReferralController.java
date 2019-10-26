@@ -80,8 +80,8 @@ public class ReferralController {
 					"Health centre referred: " + savedReferral.getHealthCentre();
 		} catch (Exception exception) {
 			// temporay error response
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return stackTraceString(exception);
+			// should try to give VHT more detail on the error
+			return "There was an error processing your referral";
 		}
 	}
 
