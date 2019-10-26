@@ -159,11 +159,11 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 * @param healthCentreName
 	 * @return All referrals from a health centre
 	 */
-	public List<Referral> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException {
-		List<Referral> referrals = referralRepository.findAllByHealthCentre(healthCentreName);
-		if (referrals.isEmpty()) {
-			throw new NoSuchElementException("No referrals found for: " + healthCentreName);
+	public List<Referral> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException{
+		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
+		if (healthCentre.isEmpty()) {
+			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
-		return referrals;
+		return referralRepository.findAllByHealthCentre(healthCentreName);
 	}
 }

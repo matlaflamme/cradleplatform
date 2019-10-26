@@ -115,7 +115,7 @@ public class ReferralController {
 	}
 
 	@GetMapping("/{healthCentreName}/all")
-	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws NoSuchElementException {
+	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
 		return referralManagerService.findAllByHealthCentre(healthCentreName);
 	}
 
