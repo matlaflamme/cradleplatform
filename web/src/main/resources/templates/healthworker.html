@@ -42,7 +42,6 @@
                                 <td>{{props.item.patient.id}}</td>
                                 <td>{{props.item.patient.name}}</td>
                                 <td>{{tester(props.item.reading.timestamp)}}</td>
-<!--                            <td>{{row.heartRate}}</td>-->
                             </template>
                             <template v-slot:item.colour="{ item }">
                                 <td><span class="dot" :style="item.reading.colorstyle"></span></td>

@@ -25,6 +25,7 @@ let test = new Vue({
                 row.reading.colorstyle = {"background-color": icon['colour']};
             })
         })
+        axios.get('/api/patient/all').then(response => (this.rows = response.data))
     },
     methods: {
         viewPatientData: function (id) {  //Gets called when View button is pressed
