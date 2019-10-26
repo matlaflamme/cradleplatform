@@ -17,10 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Implements ReferralManagerService
@@ -110,17 +107,33 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			throw new EntityNotFoundException("Not found: " + healthCentreName);
 		}
 
-		ReadingView currentReading = new ReadingViewBuilder()
+
+//		String[] symptomsArr = symptoms.replace("[", "").replace("]", "").split(",");
+//		// src https://stackoverflow.com/questions/9864568/how-to-trim-white-space-from-all-elements-in-array
+//		String[] symptomsArrNoTrailingWhiteSpace = Arrays.stream(symptomsArr).map(String::trim).toArray(String[]::new);
+
+		// commented because it is returning null
+//		ReadingView currentReading = new ReadingViewBuilder()
+//				.pid(currentPatient.getId())
+//				.pregnant(false)
+//				.colour(ReadingColour.valueOf(readingColourKey))
+//				.diastolic(diastolic)
+//				.systolic(systolic)
+//				.heartRate(heartRate)
+//				.timestamp(readingTimestamp)
+//				.symptoms(symptomsArrNoTrailingWhiteSpace)
+//				.build();
+//		readingManager.saveReadingView(currentReading);
+		Reading currentReading = new ReadingBuilder()
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))
 				.diastolic(diastolic)
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
-				.symptoms(symptoms.replace("[", "").replace("]", "").split(","))
 				.build();
 
-		readingManager.saveReadingView(currentReading);
+		patientManagerService.saveReading(currentReading);
 
 		Referral currentReferral = new ReferralBuilder()
 				.pid(currentPatient.getId())

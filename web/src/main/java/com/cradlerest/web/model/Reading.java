@@ -44,7 +44,7 @@ public class Reading {
 	@DataGenRange(min = 40, max = 110)
 	private Integer heartRate;
 
-	@Column(name = "is_pregnant")
+	@Column(name = "is_pregnant", nullable = false)
 	private Boolean isPregnant;
 
 	@Column(name = "gestational_age")
@@ -227,4 +227,5 @@ public class Reading {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
 }
