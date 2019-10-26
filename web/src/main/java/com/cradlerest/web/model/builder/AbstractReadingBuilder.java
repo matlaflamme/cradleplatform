@@ -102,6 +102,11 @@ abstract class AbstractReadingBuilder<T extends Reading, Self>  extends Abstract
 		return self();
 	}
 
+	public Self readingNotes(@Nullable String notes) {
+		value.setReadingNotes(notes);
+		return self();
+	}
+
 	protected void validate() throws InstantiationError {
 		assertFieldNotNull(value.getId(), "id");
 	}
