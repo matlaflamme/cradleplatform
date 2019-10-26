@@ -108,9 +108,9 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		}
 
 
-//		String[] symptomsArr = symptoms.replace("[", "").replace("]", "").split(",");
-//		// src https://stackoverflow.com/questions/9864568/how-to-trim-white-space-from-all-elements-in-array
-//		String[] symptomsArrNoTrailingWhiteSpace = Arrays.stream(symptomsArr).map(String::trim).toArray(String[]::new);
+		String[] symptomsArr = symptoms.replace("[", "").replace("]", "").split(",");
+		// src https://stackoverflow.com/questions/9864568/how-to-trim-white-space-from-all-elements-in-array
+		String[] symptomsArrNoTrailingWhiteSpace = Arrays.stream(symptomsArr).map(String::trim).toArray(String[]::new);
 
 		// commented because it is returning null
 //		ReadingView currentReading = new ReadingViewBuilder()
@@ -124,6 +124,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 //				.symptoms(symptomsArrNoTrailingWhiteSpace)
 //				.build();
 //		readingManager.saveReadingView(currentReading);
+		System.out.println("dada:" + Arrays.toString(symptomsArrNoTrailingWhiteSpace));
 		Reading currentReading = new ReadingBuilder()
 				.pid(currentPatient.getId())
 				.colour(ReadingColour.valueOf(readingColourKey))
