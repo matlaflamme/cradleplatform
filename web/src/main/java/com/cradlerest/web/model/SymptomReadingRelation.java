@@ -1,5 +1,7 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenRange;
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -73,11 +75,13 @@ public class SymptomReadingRelation {
 	}
 
 	@Id
-	@Column(name = "sid")
+	@Column(name = "sid", nullable = false)
+	@DataGenRange(min = 0, max = 6) // statically define the range of valid symptom ids
 	private Integer symptomId;
 
 	@Id
 	@Column(name = "rid")
+	@ForeignKey(Reading.class)
 	private Integer readingId;
 
 	public SymptomReadingRelation() {

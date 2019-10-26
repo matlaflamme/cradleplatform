@@ -6,6 +6,7 @@ import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.DuplicateItemException;
 import com.cradlerest.web.util.datagen.error.MissingAnnotationException;
+import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
 import com.cradlerest.web.util.datagen.impl.ForeignKeyRepositoryImpl;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.UniformNoise;
@@ -39,6 +40,7 @@ public class GenerateDummyData {
 
 			var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
 			factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
+			factory.registerCustomGenerator(new AutoIncrementGenerator());
 
 			for (var entityClass : entities) {
 				var iter = factory.prepare(entityClass);
