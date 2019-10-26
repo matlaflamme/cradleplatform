@@ -64,6 +64,11 @@ public class Reading {
 	@DataGenNullChance(0.7)
 	private String otherSymptoms;
 
+	@Column(name = "notes")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.8)
+	private String readingNotes;
+
 	public Reading() {}
 
 	public Reading(
@@ -192,6 +197,14 @@ public class Reading {
 
 	public void setOtherSymptoms(String otherSymptoms) {
 		this.otherSymptoms = otherSymptoms;
+	}
+
+	public String getReadingNotes() {
+		return readingNotes;
+	}
+
+	public void setReadingNotes(String readingNotes) {
+		this.readingNotes = readingNotes;
 	}
 
 	@Override

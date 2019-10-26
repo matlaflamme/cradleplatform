@@ -1,8 +1,11 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.PatientManagerService;
+import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +36,14 @@ public class PatientController {
 
 	private PatientManagerService patientManagerService;
 
-	public PatientController(PatientManagerService patientManagerService) {
+	private ReadingManager readingManager;
+
+	public PatientController(
+			PatientManagerService patientManagerService,
+			ReadingManager readingManager
+	) {
 		this.patientManagerService = patientManagerService;
+		this.readingManager = readingManager;
 	}
 
 	@GetMapping("/all")
@@ -58,8 +67,8 @@ public class PatientController {
 	}
 
 	@GetMapping("/{id}/readings")
-	public List<Reading> readings(@PathVariable("id") String id) {
-		return patientManagerService.getReadingsForPatientWithId(id);
+	public List<ReadingView> readings(@PathVariable("id") String id) throws EntityNotFoundException {
+		return readingManager.getAllReadingViewsForPatient(id);
 	}
 
 	@PostMapping("")

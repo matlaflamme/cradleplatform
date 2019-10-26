@@ -2,6 +2,7 @@ package com.cradlerest.web.service.config;
 
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.PatientManagerServiceImpl;
+import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,9 @@ public class PatientManagerServiceConfig {
 	@Bean
 	public PatientManagerService patientManagerService(
 			PatientRepository patientRepository,
-			ReadingRepository readingRepository
+			ReadingRepository readingRepository,
+			ReadingManager readingManager
 	) {
-		return new PatientManagerServiceImpl(patientRepository, readingRepository);
+		return new PatientManagerServiceImpl(patientRepository, readingRepository, readingManager);
 	}
 }

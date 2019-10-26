@@ -6,11 +6,13 @@ import com.cradlerest.web.model.Sex;
 import com.cradlerest.web.model.builder.PatientBuilder;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.PatientManagerServiceImpl;
+import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,7 +37,7 @@ public class PatientManagerServiceImplTests {
 
 		@Bean
 		PatientManagerService patientManagerService() {
-			return new PatientManagerServiceImpl(patientRepository, readingRepository);
+			return new PatientManagerServiceImpl(patientRepository, readingRepository, readingManager);
 		}
 	}
 
@@ -44,6 +46,9 @@ public class PatientManagerServiceImplTests {
 
 	@MockBean
 	ReadingRepository readingRepository;
+
+	@MockBean
+	ReadingManager readingManager;
 
 	@Autowired
 	PatientManagerService patientManagerService;

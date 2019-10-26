@@ -7,6 +7,7 @@ import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import com.cradlerest.web.util.DateParser;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Ignore
 public class PatientRepositoryGetPatientsAndReadingsTests {
 
 	@Autowired
