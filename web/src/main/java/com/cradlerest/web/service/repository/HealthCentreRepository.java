@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface HealthCentreRepository extends JpaRepository<HealthCentre, Integer> {
-	Optional<HealthCentre> findByName(String name) throws EntityNotFoundException;
+	Optional<HealthCentre> findByName(String name);
 }
