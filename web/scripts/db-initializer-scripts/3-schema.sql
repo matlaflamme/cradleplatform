@@ -37,7 +37,7 @@ CREATE TABLE reading (
     colour INT NOT NULL,                -- enumerated {green, yellow_up, yellow_down, red_up, red_down}
     timestamp DATETIME NOT NULL,
     other_symptoms TEXT,
-    FOREIGN KEY (pid) REFERENCES patient (id)
+    FOREIGN KEY (pid) REFERENCES patient (id) ON DELETE CASCADE
 );
 
 CREATE TABLE symptom (

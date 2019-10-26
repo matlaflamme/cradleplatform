@@ -1,4 +1,4 @@
-package com.cradlerest.web.util.datagen;
+package com.cradlerest.web.util;
 
 import com.cradlerest.web.util.datagen.error.DeadlockException;
 import com.cradlerest.web.util.datagen.error.DuplicateItemException;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.function.Function;
 
-class Algorithm {
+public class Algorithm {
 
 	/**
 	 * Orders a vector of elements in such a way that all elements appear after
@@ -26,7 +26,7 @@ class Algorithm {
 	 * 	between the elements in {@code vec}.
 	 * @throws DuplicateItemException If {@code vec} contains duplicate items.
 	 */
-	static <T> Vec<T> linearize(@NotNull Vec<T> vec, @NotNull Function<T, Vec<T>> dependencies)
+	public static <T> Vec<T> linearize(@NotNull Vec<T> vec, @NotNull Function<T, Vec<T>> dependencies)
 			throws DeadlockException, DuplicateItemException {
 
 		if (vec.isEmpty()) {
@@ -74,6 +74,26 @@ class Algorithm {
 				throw new DuplicateItemException(item.toString());
 			}
 		}
+	}
+
+	/**
+	 * Removes any duplicates from {@code iter} returning a new {@code Vec}
+	 * containing no duplicates with the items in the same order as they
+	 * appear in {@code iter}.
+	 * @param iter A collection of items which may contain duplicates.
+	 * @param <T> The item type.
+	 * @return A vector without duplicates.
+	 */
+	public static <T> Vec<T> removeDuplicates(@NotNull Iterable<T> iter) {
+		final var items = new HashSet<T>();
+		Vec<T> result = Vec.of();
+		for (var item : iter) {
+			if (!items.contains(item)) {
+				result = result.append(item);
+				items.add(item);
+			}
+		}
+		return result;
 	}
 
 }

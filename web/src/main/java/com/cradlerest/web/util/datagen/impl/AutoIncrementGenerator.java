@@ -7,7 +7,7 @@ public class AutoIncrementGenerator implements Generator<Integer> {
 
 	private static final String START_VAL_KEY = "start";
 
-	private int nextValue = 0;
+	private int nextValue = 1;
 
 	@Override
 	public Integer generate() {

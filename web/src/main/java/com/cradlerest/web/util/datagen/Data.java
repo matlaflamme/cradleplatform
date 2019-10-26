@@ -27,8 +27,7 @@ public class Data {
 		this.columnValueMap = columnValueMap;
 	}
 
-	@NotNull
-	String getTable() {
+	public @NotNull String getTable() {
 		return table;
 	}
 
@@ -47,7 +46,7 @@ public class Data {
 	 * Assumes that all field types are convertible to an SQL value.
 	 * @return An SQL insert statement.
 	 */
-	String toSqlStatement() {
+	public String toSqlStatement() {
 		final var values = Vec.copy(columnValueMap.entrySet())
 				.map(entry -> Tup.of(entry.getKey(), entry.getValue()));
 

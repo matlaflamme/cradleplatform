@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.cradlerest.web.util.datagen.Algorithm.*;
+import static com.cradlerest.web.util.Algorithm.*;
 
 /**
  * Application entry point for the dummy data generation tool.
@@ -34,8 +34,7 @@ public class GenerateDummyData {
 				? new UniformNoise(args[0].hashCode())
 				: new UniformNoise();
 		try {
-			var entities = linearizeTypes(getAllEntityTypes());
-			var sqlStatements = generateData(noise, entities)
+			var sqlStatements = generate(noise, DEFAULT_AMOUNT)
 					.map(Data::toSqlStatement)
 					.fold((accum, x) -> accum + "\n\n" + x);
 			System.out.println(sqlStatements);
@@ -43,6 +42,11 @@ public class GenerateDummyData {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
+	}
+
+	public static Vec<Data> generate(@NotNull Noise noise, int baseAmount) {
+		var entities = linearizeTypes(getAllEntityTypes());
+		return generateData(noise, baseAmount, entities);
 	}
 
 	/**
@@ -120,7 +124,7 @@ public class GenerateDummyData {
 		return entities;
 	}
 
-	private static Vec<Data> generateData(@NotNull Noise noise, @NotNull Vec<Class<?>> entities) {
+	private static Vec<Data> generateData(@NotNull Noise noise, int baseAmount, @NotNull Vec<Class<?>> entities) {
 		var dataPassManager = dataPassManager();
 		var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
 		factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
@@ -130,7 +134,7 @@ public class GenerateDummyData {
 		var amountMap = new HashMap<Class<?>, Integer>();
 		for (var entityClass : entities) {
 			var iter = factory.prepare(entityClass);
-			var amount = generationAmount(entityClass, amountMap);
+			var amount = generationAmount(entityClass, amountMap, baseAmount);
 			amountMap.put(entityClass, amount);
 
 			var entityData = iter.take(amount).toVec();
@@ -152,7 +156,7 @@ public class GenerateDummyData {
 		return manager;
 	}
 
-	private static int generationAmount(@NotNull Class<?> type, Map<Class<?>, Integer> amountMap) {
+	private static int generationAmount(@NotNull Class<?> type, Map<Class<?>, Integer> amountMap, int baseAmount) {
 		if (type.isAnnotationPresent(DataGenRelativeAmount.class)) {
 			var annotation = type.getAnnotation(DataGenRelativeAmount.class);
 			var baseType = annotation.base();
@@ -166,7 +170,7 @@ public class GenerateDummyData {
 
 		return type.isAnnotationPresent(DataGenAmount.class)
 				? type.getAnnotation(DataGenAmount.class).value()
-				: DEFAULT_AMOUNT;
+				: baseAmount;
 	}
 
 	private static Optional<Class<?>> amountGenerationDependency(@NotNull Class<?> type) {
