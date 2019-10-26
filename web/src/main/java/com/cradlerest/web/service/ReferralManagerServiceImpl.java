@@ -125,8 +125,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.build();
 
 		Reading currentReading = readingManager.saveReadingView(readingView);
-		patientManagerService.saveReading(currentReading);
-		
+
 		Referral currentReferral = new ReferralBuilder()
 				.pid(currentPatient.getId())
 				.vid(currentVHT.get().getId())
@@ -136,7 +135,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.comments(comments)
 				.timestamp(referralTimestamp)
 				.build();
-
 
 		return referralRepository.save(currentReferral);
 	}
