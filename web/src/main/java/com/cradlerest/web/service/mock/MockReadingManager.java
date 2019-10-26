@@ -1,5 +1,6 @@
 package com.cradlerest.web.service.mock;
 
+import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.builder.ReadingViewBuilder;
 import com.cradlerest.web.model.builder.SymptomBuilder;
@@ -64,7 +65,7 @@ public class MockReadingManager implements ReadingManager {
 	}
 
 	@Override
-	public void saveReadingView(@NotNull ReadingView readingView) throws InstantiationError {
+	public Reading saveReadingView(@NotNull ReadingView readingView) throws InstantiationError {
 		assertFieldNotNull(readingView.getPatientId(), "patientId");
 		assertFieldNotNull(readingView.getSystolic(), "systolic");
 		assertFieldNotNull(readingView.getDiastolic(), "diastolic");
@@ -75,5 +76,6 @@ public class MockReadingManager implements ReadingManager {
 		}
 		assertFieldNotNull(readingView.getTimestamp(), "timestamp");
 		assertFieldNotNull(readingView.getSymptoms(), "symptoms");
+		return readingView;
 	}
 }
