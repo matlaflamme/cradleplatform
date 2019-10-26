@@ -34,15 +34,25 @@ Vue.component('readings_table' , {
     },
     data: () => ({
         headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
-            { text: 'Date', align: 'left', value: 'timestamp'},
+            { text: 'Referral Date', value: 'timestamp'},
             { text: 'Systolic', value: 'systolic' },
             { text: 'Diastolic', value: 'diastolic'},
-            { text: 'Heart Rate', value: 'heartRate'}
+            { text: 'Heart Rate', value: 'heartRate'},
+            { text: 'Traffic Light', value: 'colour'}
         ],
         rows: [] //empty to start
 
     }),
     methods: {
+        changeDate: function(patientData) { //Changes date format to be more readable
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            patientData.forEach(pData => {
+                let currDate = new Date(pData.timestamp);
+                let formatted_date = months[currDate.getMonth()] + " " + currDate.getDate() + ", " + currDate.getFullYear();
+                pData.timestamp = formatted_date;
+            });
+            return patientData;
+        }
 
     },
     mounted() {
@@ -50,6 +60,7 @@ Vue.component('readings_table' , {
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         axios.get('/api/patient/'+ id + '/readings').then(response => {
             this.rows = response.data;
+            this.rows = this.changeDate(response.data);
             console.log(this.rows[0].id);
             console.log(response.data);
 
@@ -68,43 +79,11 @@ Vue.component('readings_table' , {
             <td>{{props.row.systolic}}</td>
             <td>{{props.row.diastolic}}</td>
             <td>{{props.row.heartRate}}</td>
+            <td>{{props.row.colour}}</td>
         </template>
         </v-data-table>`
     ,
 });
-
-
-let test = new Vue({
-    el: '#table',
-    vuetify: new Vuetify(),
-    data () {
-        return {
-            headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
-                { text: 'timestamp', align: 'left', value: 'timestamp'},
-                { text: 'systolic', value: 'systolic' },
-                { text: 'diastolic', value: 'diastolic', sortable: false },
-                { text: 'heartRate', value: 'heartRate', sortable: false },
-            ],
-            rows: [] //empty to start
-        }
-    },
-    mounted() {
-        let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
-        let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-        axios.get('/api/patient/'+ id + '/readings').then(response => {
-            this.rows = response.data
-            this.rows.forEach((row)=> {
-                let icon = getReadingColorIcon(row.colour);
-                row.colorstyle = {"background-color": icon['colour']};
-            })
-        })
-
-    },
-    methods: {
-
-    }
-});
-
 
 // //This component is used for the center column "Past Readings" table of this page
 // Vue.component('patient_readings', {
