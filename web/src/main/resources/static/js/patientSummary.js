@@ -61,6 +61,10 @@ Vue.component('readings_table' , {
         axios.get('/api/patient/'+ id + '/readings').then(response => {
             this.rows = response.data;
             this.rows = this.changeDate(response.data);
+            this.rows.forEach((row)=> {
+                let icon = getReadingColorIcon(row.colour);
+                row.colorstyle = {"background-color": icon['colour']};
+            })
             console.log(this.rows[0].id);
             console.log(response.data);
 
@@ -80,6 +84,9 @@ Vue.component('readings_table' , {
             <td>{{props.row.diastolic}}</td>
             <td>{{props.row.heartRate}}</td>
             <td>{{props.row.colour}}</td>
+        </template>
+        <template v-slot:item.colour="{ item }">
+            <td><span class="dot" :style="item.colorstyle"></span></td>
         </template>
         </v-data-table>`
     ,
