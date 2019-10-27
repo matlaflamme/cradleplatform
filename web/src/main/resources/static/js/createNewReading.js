@@ -75,7 +75,7 @@ Vue.component('new_reading',{
         //axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
     },
     template: //@TODO Fix indentation
-        '<v-card class="overflow-hidden"> ' +
+        '<v-card class="overflow-hidden" raised min-width="500"> ' +
         `<v-card-title>
             <span class="title">Add a new reading</span>`+
         '</v-card-title> ' +
