@@ -1,47 +1,53 @@
 //Based off cradlemobile/app/src/main/java/com/cradletrial/cradlevhtapp/model/ReadingAnalysis.java
 
-class trafficLightCalc {
-    //private variables
-    #RED_SYSTOLIC = 160;
-    #RED_DIASTOLIC = 110;
-    #YELLOW_SYSTOLIC = 140;
-    #YELLOW_DIASTOLIC = 90;
-    #SHOCK_HIGH = 1.7;
-    #SHOCK_MEDIUM = 0.9;
+var TrafficLightCalc = function trafficLightCalc() {
 
-    shockIndex;
-    currSystolic;
-    currDiastolic;
-    currHeartRate;
+    const colourEnum = {"GREEN":0, "YELLOW_DOWN":1, "YELLOW_UP":2, "RED_DOWN":3, "RED_UP":4};
 
-    constructor(systolic, diastolic, heartRate) {
+    this.RED_SYSTOLIC = 160;
+    this.RED_DIASTOLIC = 110;
+    this.YELLOW_SYSTOLIC = 140;
+    this.YELLOW_DIASTOLIC = 90;
+    this.SHOCK_HIGH = 1.7;
+    this.SHOCK_MEDIUM = 0.9;
+
+    this.shockIndex;
+    this.currSystolic;
+    this.currDiastolic;
+    this.currHeartRate;
+
+    this.init = function(systolic, diastolic, heartRate) {
         this.currSystolic = systolic;
         this.currDiastolic = diastolic;
         this.currHeartRate = heartRate;
         this.shockIndex = this.getShockIndex(systolic, heartRate);
-    }
+    };
 
-    getShockIndex(systolic, heartRate) {
+    this.getShockIndex = function(systolic, heartRate) {
         return heartRate/systolic;
-    }
+    };
 
-    getColour() {
-        let isBpVeryHigh = (this.currSystolic >= this.#RED_SYSTOLIC) || (this.currDiastolic >= this.#RED_DIASTOLIC);
-        let isBpHigh = (this.currSystolic >= this.#YELLOW_SYSTOLIC) || (this.currDiastolic >= this.#YELLOW_DIASTOLIC);
-        let isSevereShock = (this.shockIndex >= this.#SHOCK_HIGH);
-        let isShock = (this.shockIndex >= this.#SHOCK_MEDIUM);
+    this.getColour = function(systolic, diastolic, heartRate) {
+        this.init(systolic, diastolic, heartRate);
+
+        let isBpVeryHigh = (this.currSystolic >= this.RED_SYSTOLIC) || (this.currDiastolic >= this.RED_DIASTOLIC);
+        let isBpHigh = (this.currSystolic >= this.YELLOW_SYSTOLIC) || (this.currDiastolic >= this.YELLOW_DIASTOLIC);
+        let isSevereShock = (this.shockIndex >= this.SHOCK_HIGH);
+        let isShock = (this.shockIndex >= this.SHOCK_MEDIUM);
 
         //return analysis based on priority
         if (isSevereShock) {
-            return "RED_DOWN";
+            return colourEnum.RED_DOWN;
         } else if (isBpVeryHigh) {
-            return "RED_UP";
+            return colourEnum.RED_UP;
         } else if (isShock) {
-            return "YELLOW_DOWN";
+            return colourEnum.YELLOW_DOWN;
         } else if (isBpHigh) {
-            return "YELLOW_UP";
+            return colourEnum.YELLOW_UP;
         } else {
-            return "GREEN";
+            return colourEnum.GREEN;
         }
     }
-}
+};
+
+export { TrafficLightCalc };
