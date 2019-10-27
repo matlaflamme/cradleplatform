@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PhoneNumberGenerator implements Generator<String> {
 
-	private static final String AREA_CODE = "+1 (604) ";
+	private static final String AREA_CODE = "+1 (555) ";
 
 	private StringGenerator stringGenerator;
 
