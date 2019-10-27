@@ -67,7 +67,7 @@ Vue.component('sidebar_template_health', {
 
 Vue.component('navbar_template', {
     props: {
-
+        current_page: String
     },
     template:
     '<v-app-bar\n' +
@@ -78,7 +78,7 @@ Vue.component('navbar_template', {
         '>\n' +
             '<v-app-bar-nav-icon @click.stop="changeDrawer"></v-app-bar-nav-icon>\n' +
             '<v-toolbar-title class="mr-5 align-center" color=white>\n' +
-                '<span class="title">Cradle Web Platform</span>\n' +
+                '<span class="title">{{current_page}}</span>\n' +
             '</v-toolbar-title>\n' +
         '</v-app-bar>',
     methods: {

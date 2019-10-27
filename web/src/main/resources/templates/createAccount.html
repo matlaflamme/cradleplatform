@@ -22,7 +22,7 @@
 		<sidebar_template_admin ref="sidebar" current_user="[[${#httpServletRequest.remoteUser}]]"></sidebar_template_admin> <!--Data inside component accessible by $refs.sidebar -->
 
 		<!--       @drawer is a custom event thrown by the component, called when the hamburger button is pressed -->
-		<navbar_template @drawer="$refs.sidebar.drawer = !$refs.sidebar.drawer"></navbar_template>
+		<navbar_template @drawer="$refs.sidebar.drawer = !$refs.sidebar.drawer" current_page="Create New Account"></navbar_template>
 
 		<!--        V-content is where the main content of the web app lives-->
 		<v-content>
