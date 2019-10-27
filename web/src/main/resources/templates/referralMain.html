@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform"
+	  xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+	<div th:replace="fragments/head :: headerFragment"></div>
+	<title id="pageTitle">Referrals</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-notifications@1.0.2/dist/vue-notifications.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="/css/referralMain.css">
+</head>
+<body>
+
+<div id="app">
+	<v-app id="inspire">
+		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+		<div th:replace="fragments/navbar :: navbarFragment"></div>
+
+		<!--        V-content is where the main content of the web app lives-->
+		<v-content>
+				<v-layout justify-center>
+					<v-container>
+						<v-data-table
+								:headers="headers"
+								:items="rows"
+								:items-per-page="30"
+								class="elevation-1">
+
+							<template slot="rows" slot-scope="props">
+								<td>{{props.rows.id}}</td>
+								<td>{{props.rows.patientId}}</td>
+								<td>{{props.rows.vhtId}}</td>
+								<td>{{props.rows.healthCentre}}</td>
+								<td>{{props.rows.healthCentreNumber}}</td>
+							</template>
+							<template v-slot:item.view="{ item }">
+								<button v-on:click="viewPatientData(item.patientId)" class="btn btn-outline-info">View Patient Data</button>
+							</template>
+							<template v-slot:item.accept="{ item }">
+								<button v-on:click="accept()" class="btn btn-outline-info">Accept</button>
+							</template>
+							<template slot="rows" slot-scope="props">
+								<td>{{props.rows.timestamp}}</td>
+								<td>{{props.rows.accepter}}</td>
+								<td>{{props.rows.closed}}</td>
+							</template>
+						</v-data-table>
+					</v-container>
+				</v-layout>
+		</v-content>
+	</v-app>
+</div>
+
+<script src="/js/mainMenuTemplate.js"></script>
+<script src="/js/referralMain.js" type="module"></script>
+</body>
+</html>

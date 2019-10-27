@@ -51,6 +51,12 @@ Vue.component('sidebar_item', {
             else if (clicked === "new-reading") {
                 window.location.assign("/createNewReading")
             }
+            else if (clicked === "all-referrals") {
+                window.location.assign("/referrals")
+            }
+            else if (clicked === "all-patients") {
+                window.location.assign("/")
+            }
         },
     }
 });

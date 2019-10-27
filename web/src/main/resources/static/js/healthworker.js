@@ -12,7 +12,7 @@ let test = new Vue({
                 { text: 'View', value: 'view', sortable: false },
                 { text: 'Add', value: 'add', sortable: false },
             ],
-            rows: [] //empty to start
+            rows: [], //empty to start
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
@@ -56,7 +56,7 @@ let test = new Vue({
                 }
             });
             return patientData;
-        }
+        },
     }
 });
 
