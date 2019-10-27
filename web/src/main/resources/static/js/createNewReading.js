@@ -1,74 +1,131 @@
 Vue.prototype.$http = axios;
-var readingInput = new Vue ({
-    el: '#readingInput',
-    data: {
-        errors: [], //array to hold possible invalid input errors
-        patientID: '',
-        heartRate: '',
-        systolic: '',
-        diastolic: '',
+Vue.component('new_reading',{
+    vuetify: new Vuetify(),
+    data: () => ({
+        //For input validation. @TODO rules refuse to recognize these.
+        MAX_SYSTOLIC: 300,
+        MIN_SYSTOLIC: 10,
+        MAX_DIASTOLIC: 300,
+        MIN_DIASTOLIC: 10,
+        MAX_HEART_RATE: 200,
+        MIN_HEART_RATE: 40,
+
+        valid: true,
         colour: '',
-        timestamp: ''
-        // symptoms: '',
-        // diagnosis: '',
-        // medication: '',
-        // medStart: '',
-        // medEnd: ''
-    },
+        timestamp: '',
+        patientID: '',
+        patientIDRules: [
+            v => !!v || 'patientID is required',
+            v => (v && v > 0) || 'Patient ID can\'t be negative'
+        ],
+        heartRate: '',
+        heartRateRules: [
+            v => !!v || 'Heart Rate is required',
+            v => (v && v <= 200) || 'Heart Rate is invalid: low',
+            v => (v && v >= 40) || 'Heart Rate is invalid: high'
+        ],
+        systolic: '',
+        systolicRules: [
+            v => !!v || 'Systolic is required',
+            v => (v && v <= 300) || 'Systolic is invalid',
+            v => (v && v >= 10) || 'Systolic is invalid'
+        ],
+        diastolic: '',
+        diastolicRules: [
+            v => !!v || 'Diastolic is required',
+            v => (v && v <= 300) || 'Diastolic is invalid',
+            v => (v && v >= 10) || 'Diastolic is invalid'
+        ]
+    }),
     methods: {
         submit: function() {
             console.log(new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour());
             //do input validation in a different function
-            if (this.validateInput(this.systolic, this.diastolic, this.heartRate)) {
-                //do this if input validation passes
-                axios.post('/api/patient/reading',
-                    {
-                        patientId: this.patientID,
-                        heartRate: this.heartRate,
-                        systolic: this.systolic,
-                        diastolic: this.diastolic,
-                        colour: new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour(),
-                        timestamp: getCurrentDate()
-                    }
+            axios.post('/api/patient/reading',
+                {
+                    patientId: this.patientID,
+                    heartRate: this.heartRate,
+                    systolic: this.systolic,
+                    diastolic: this.diastolic,
+                    colour: new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour(),
+                    timestamp: getCurrentDate()
+                }
                 ).then(response => {console.log(response)});
-                //console.log("End");
+
                 window.location.assign("/patientSummary?id=" + this.patientID);
+        },
+        validate() {
+            if (this.$refs.newReadingForm.validate()) {
+                this.submit();
             }
         },
-        validateInput: function(systolic, diastolic, heartRate) {
-            //These are used to validate input
-            let MAX_SYSTOLIC = 300;
-            let MIN_SYSTOLIC = 10;
-            let MAX_DIASTOLIC = 300;
-            let MIN_DIASTOLIC = 10;
-            let MAX_HEART_RATE = 200;
-            let MIN_HEART_RATE = 40;
-
-            this.errors = []; //clear previous errors
-            let inputOK = true;
-            if (systolic > MAX_SYSTOLIC || systolic < MIN_SYSTOLIC || !parseInt(systolic, 10)) {
-                inputOK = false;
-                this.errors.push("Systolic is invalid");
-            }
-            if (diastolic > MAX_DIASTOLIC || diastolic < MIN_DIASTOLIC || !parseInt(diastolic, 10)) {
-                inputOK = false;
-                console.log("dias err");
-                this.errors.push("Diastolic is invalid");
-            }
-            if (heartRate > MAX_HEART_RATE || heartRate < MIN_HEART_RATE || !parseInt(heartRate, 10)) {
-                inputOK = false;
-                this.errors.push("Heart Rate is invalid")
-            }
-            console.log(this.errors);
-            return inputOK;
+        reset () {
+            this.$refs.newReadingForm.reset();
+        },
+        resetValidation () {
+            this.$refs.newReadingForm.resetValidation();
         }
     },
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
         this.patientID = id;
+        console.log(id);
+        console.log(this.patientID);
         //axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
-    }
+    },
+    template: //@TODO Fix indentation
+        '<v-card class="overflow-hidden"> ' +
+        `<v-card-title>
+            <span class="title">Add a new reading</span>`+
+        '</v-card-title> ' +
+        `<v-form
+            ref="newReadingForm"
+            v-model="valid"
+            lazy-validation
+            class="ma-5 px-3"
+            >` +
+        ` <v-text-field
+        v-model="patientID"
+        :rules="patientIDRules"
+        label="Patient ID"
+        required
+      ></v-text-field>` +
+        `<v-text-field
+        v-model="heartRate"
+        :rules="heartRateRules"
+        label="Heart Rate"
+        required
+      ></v-text-field>` +
+        `<v-text-field
+        v-model="systolic"
+        :rules="systolicRules"
+        label="Systolic"
+        required
+      ></v-text-field>` +
+        `<v-text-field
+        v-model="diastolic"
+        :rules="diastolicRules"
+        label="Diastolic"
+        required
+      ></v-text-field>` +
+        `<v-btn
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        @click="validate"
+      >
+        Submit
+      </v-btn>` +
+        `<v-btn
+        color="error"
+        class="mr-4"
+        @click="reset"
+      >
+        Clear Form
+      </v-btn>
+    </v-form>` +
+        '</v-card>'
 });
 
 function getCurrentDate() {
