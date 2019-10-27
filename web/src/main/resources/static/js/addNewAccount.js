@@ -5,6 +5,7 @@ Vue.component('new_account_form', {
 
     },
     data: () => ({
+        snackbar: false,
         valid: true,
         name: '',
         nameRules: [
@@ -17,6 +18,7 @@ Vue.component('new_account_form', {
             v => (v && v.length >= 6) || 'Username must be at least 6 characters'
         ],
         password: '',
+        showPassword: false,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length >= 8)  || 'Password must be at least 8 characters'
@@ -30,12 +32,14 @@ Vue.component('new_account_form', {
             v => !!v || 'Zone is required',
             v => (v && v > 0) || 'Zone number can\'t be negative'
         ],
-        row: null
+        row: '',
+        rowRules: [
+            v => !!v || 'Role is required'
+        ]
     }),
     methods: {
       validate () {
           if (this.$refs.newAccountForm.validate()) {
-              this.snackbar = true;
               this.submit();
           }
       },
@@ -46,8 +50,6 @@ Vue.component('new_account_form', {
           this.$refs.newAccountForm.resetValidation()
         },
         submit () {
-          //@TODO
-
             axios.post('/api/user/add',
                 {
                     username: this.username,
@@ -55,9 +57,11 @@ Vue.component('new_account_form', {
                     roles: this.row
                 }
             ).then(response => {console.log(response)});
+            this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
         }
     },
     template:
+    '<div>' +
     '<v-card class="overflow-hidden" raised min-width="550" max-height="600"> ' +
         `<v-card-title>
             <span class="title">Create a new account</span>`+
@@ -68,7 +72,7 @@ Vue.component('new_account_form', {
       lazy-validation
       class="ma-5 px-3"
     >` +
-        '<v-radio-group v-model="row" row>' +
+        '<v-radio-group v-model="row" row required :rules="rowRules">' +
         '<v-radio label="VHT" value="ROLE_VHT"></v-radio>' +
         '<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>' +
         '<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>' +
@@ -76,9 +80,7 @@ Vue.component('new_account_form', {
      ` <v-text-field
         v-model="name"
         :counter="10"
-        :rules="nameRules"
         label="Name"
-        required
       ></v-text-field>` +
         `<v-text-field
         v-model="username"
@@ -90,19 +92,18 @@ Vue.component('new_account_form', {
         v-model="password"
         :rules="passwordRules"
         label="Password"
+        :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+        :type="showPassword ? 'text' : 'password'"
+        @click:append="showPassword = !showPassword"
         required
       ></v-text-field>` +
         `<v-text-field
         v-model="region"
-        :rules="regionRules"
         label="Region"
-        required
       ></v-text-field>` +
         `<v-text-field
         v-model="zone"
-        :rules="zoneRules"
         label="Zone"
-        required
       ></v-text-field>` +
       `<v-btn
         :disabled="!valid"
@@ -121,8 +122,17 @@ Vue.component('new_account_form', {
         Clear Form
       </v-btn>
     </v-form>` +
-        '</v-card>'
-
+        '</v-card>' +
+        '<v-snackbar v-model="snackbar">' +
+            'New user successfully created' +
+            `<v-btn
+                color="pink"
+                @click="snackbar = false"
+            >` +
+                'Close' +
+            '</v-btn>' +
+        '</v-snackbar>' +
+    '</div>'
 })
 
 new Vue({

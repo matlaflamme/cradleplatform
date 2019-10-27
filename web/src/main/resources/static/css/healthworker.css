@@ -1,8 +1,8 @@
-
-.bg-light {
-    background-color: #0b908f!important; /* NavBar background */
-}
-
-.nav-link:hover {
-    color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #07b839;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 10px;
 }

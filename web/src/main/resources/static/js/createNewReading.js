@@ -1,4 +1,3 @@
-
 Vue.prototype.$http = axios;
 var readingInput = new Vue ({
     el: '#readingInput',
@@ -10,11 +9,6 @@ var readingInput = new Vue ({
         diastolic: '',
         colour: '',
         timestamp: ''
-        // symptoms: '',
-        // diagnosis: '',
-        // medication: '',
-        // medStart: '',
-        // medEnd: ''
     },
     methods: {
         submit: function() {
@@ -45,7 +39,7 @@ var readingInput = new Vue ({
             let MAX_HEART_RATE = 200;
             let MIN_HEART_RATE = 40;
 
-            this.errors = []; //clear previous errors
+            this.errors = [];
             let inputOK = true;
             if (systolic > MAX_SYSTOLIC || systolic < MIN_SYSTOLIC || !parseInt(systolic, 10)) {
                 inputOK = false;
@@ -67,7 +61,9 @@ var readingInput = new Vue ({
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-        axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
+        this.patientID = id;
+        this.setPatientID();
+        //axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
     }
 });
 
@@ -78,3 +74,11 @@ function getCurrentDate() {
     console.log(date + ' ' + time);
     return date + ' ' + time; //date and time string returned
 }
+
+new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => ({
+        drawer: null
+    })
+});

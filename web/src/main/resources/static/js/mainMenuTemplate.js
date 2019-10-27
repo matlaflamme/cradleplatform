@@ -45,6 +45,9 @@ Vue.component('sidebar_item', {
             else if (clicked === "logout") {
                 window.location.assign("/logout")
             }
+            else if (clicked === "manage-accounts") {
+                window.location.assign("/manageUserAccounts")
+            }
         },
     }
 });
