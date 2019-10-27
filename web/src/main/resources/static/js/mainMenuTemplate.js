@@ -109,22 +109,17 @@ Vue.component('sidebar_item', {
             console.log("change window to " + clicked);
             if (clicked === "new-vht") { //@TODO: find a better way to do this
                 window.location.assign("/createAccount")
-            }
-            else if (clicked === "admin-home") {
+            } else if (clicked === "admin-home") {
                 window.location.assign("/admin")
-            }
-            else if (clicked === "logout") {
+            } else if (clicked === "logout") {
                 window.location.assign("/logout")
-            }
-            else if (clicked === "health-home") {
+            } else if (clicked === "health-home") {
                 window.location.assign("/healthworker")
             } else if (clicked === "all-referrals") {
                 window.location.assign("/healthworker/referrals")
-            }
-            else if (clicked === "manage-accounts") {
+            } else if (clicked === "manage-accounts") {
                 window.location.assign("/manageUserAccounts")
-            }
-            else if (clicked === "new-reading") {
+            } else if (clicked === "new-reading") {
                 window.location.assign("/createNewReading")
             }
         },

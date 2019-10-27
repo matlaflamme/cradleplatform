@@ -46,7 +46,6 @@ let test = new Vue({
                 console.log(error);
             })
         },
-
         accept: function() {
 
         }

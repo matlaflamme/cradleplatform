@@ -12,7 +12,8 @@ let test = new Vue({
                 { text: 'View', value: 'view', sortable: false },
                 { text: 'Add', value: 'add', sortable: false },
             ],
-            rows: [] //empty to start
+            rows: [], //empty to start
+            referralStore: [] // used to temporarily store referrals to check for new referrals
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
@@ -56,7 +57,14 @@ let test = new Vue({
                 }
             });
             return patientData;
-        }
+        },
+        getReferrals: function() {
+            axios.get('/api/referral/all').then(response => {
+                this.referralStore = response.data;
+            }).catch(error => {
+                console.log(error);
+            })
+        },
     }
 });
 
