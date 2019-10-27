@@ -47,7 +47,8 @@ let test = new Vue({
             })
         },
         accept: function() {
-            axios
+            // TODO: accept referral, pass in health worker Id, time
+            // can't retrieve id at the moment
         }
     },
 
