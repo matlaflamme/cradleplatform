@@ -29,7 +29,7 @@
                                 <td>{{tester(props.item.reading.timestamp)}}</td>
                             </template>
                             <template v-slot:item.colour="{ item }">
-                                <td><span class="dot" :style="item.reading.colorstyle"></span></td>
+                                <span class="dot" :style="item.reading.colorstyle"></span>
                             </template>
                             <template v-slot:item.view="{ item }">
                                 <button v-on:click="viewPatientData(item.patient.id)" class="btn btn-outline-info">View Patient Data</button>

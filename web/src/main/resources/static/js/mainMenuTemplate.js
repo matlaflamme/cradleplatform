@@ -48,6 +48,9 @@ Vue.component('sidebar_item', {
             else if (clicked === "manage-accounts") {
                 window.location.assign("/manageUserAccounts")
             }
+            else if (clicked === "new-reading") {
+                window.location.assign("/createNewReading")
+            }
         },
     }
 });

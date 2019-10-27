@@ -18,14 +18,22 @@ let test = new Vue({
     mounted() { //sends request to server. Puts response into the rows variable
 
         axios.get('/api/patient/all_with_latest_reading').then(response => {
-            //this.rows = response.data;
-            this.rows = this.changeDate(response.data);
-            this.rows.forEach((row)=> {
-                let icon = getReadingColorIcon(row.reading.colour);
-                row.reading.colorstyle = {"background-color": icon['colour']};
-            })
+            try {
+                this.rows = response.data;
+                this.rows.forEach((row)=> {
+                    if (row.reading == null) {
+                        row.reading = {colour: null, timestamp: null};
+                    }
+                    let icon = getReadingColorIcon(row.reading.colour);
+                    row.reading.colorstyle = {"background-color": icon['colour']};
+                });
+                this.rows = this.changeDate(response.data);
+            }
+            catch (err) {
+                // unexpected response
+                console.error(err);
+            }
         })
-        axios.get('/api/patient/all').then(response => (this.rows = response.data))
     },
     methods: {
         viewPatientData: function (id) {  //Gets called when View button is pressed
@@ -39,9 +47,13 @@ let test = new Vue({
         changeDate: function(patientData) { //Changes date format to be more readable
             const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
             patientData.forEach(pData => {
-                let currDate = new Date(pData.reading.timestamp);
-                let formatted_date = months[currDate.getMonth()] + " " + currDate.getDate() + ", " + currDate.getFullYear();
-                pData.reading.timestamp = formatted_date;
+                if (pData.reading.timestamp == null) {
+                    pData.reading.timestamp = "N/A"
+                } else {
+                    let currDate = new Date(pData.reading.timestamp);
+                    let formatted_date = months[currDate.getMonth()] + " " + currDate.getDate() + ", " + currDate.getFullYear();
+                    pData.reading.timestamp = formatted_date;
+                }
             });
             return patientData;
         }
@@ -52,6 +64,9 @@ let test = new Vue({
 function getReadingColorIcon(digit) {
     let colour = 'green';
     switch (digit) {
+        case null:
+            colour = 'white';
+            break;
         case 0:
             colour = 'green';
             break;

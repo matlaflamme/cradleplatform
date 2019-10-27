@@ -46,15 +46,14 @@ public class PatientRepositoryCustomImpl implements PatientRepositoryCustom {
 				"       r.colour,\n" +
 				"       r.other_symptoms,\n" +
 				"       r.timestamp\n" +
-				"FROM (SELECT rids.id AS rid\n" +
-				"      FROM (SELECT r.id, r.timestamp FROM reading r) AS rids\n" +
-				"               INNER JOIN (\n" +
-				"          SELECT r.pid AS pid, MAX(r.timestamp) AS timestamp\n" +
-				"          FROM reading r\n" +
-				"          GROUP BY r.pid) AS ts\n" +
-				"                          ON ts.timestamp = rids.timestamp) AS rel\n" +
-				"    INNER JOIN reading r ON rel.rid = r.id\n" +
-				"    RIGHT OUTER JOIN patient p on r.pid = p.id;", Tuple.class)
+				"FROM patient p LEFT OUTER JOIN reading r on p.id = r.pid\n" +
+				"WHERE r.id IS NULL OR r.id = (SELECT r1.id\n" +
+				"              FROM reading r1\n" +
+				"              WHERE r1.pid = p.id\n" +
+				"                AND r1.timestamp = (SELECT MAX(r2.timestamp)\n" +
+				"                                    FROM reading r2\n" +
+				"                                    WHERE r2.pid = p.id LIMIT 1)\n" +
+				"              LIMIT 1);", Tuple.class)
 				.getResultList();
 
 		var resultList = new ArrayList<PatientWithLatestReadingView>();

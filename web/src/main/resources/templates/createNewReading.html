@@ -12,27 +12,10 @@
         <div th:replace="fragments/sidebar :: sidebarFragment"></div>
         <div th:replace="fragments/navbar :: navbarFragment"></div>
         <v-content>
-            <v-container>
-                <v-layout justify-center>
 
-                <div class="container">
-
-                    <h2>Add New Reading</h2>
-                    <form id="readingInput" @submit.prevent="submit">
-                        <p v-if="errors.length">
-                            <b>Please correct the following error(s):</b>
-                            <ul>
-                                <li v-for="error in errors" style="color:#ba0006"> {{ error }}</li>
-                            </ul>
-                        </p>
-                        <input type="text" v-model="patientID" @change="setPatientID" readonly required>
-                        <input type="text" v-model="heartRate" placeholder="Heart Rate" required>
-                        <input type="text" v-model="systolic" placeholder="Systolic" required>
-                        <input type="text" v-model="diastolic" placeholder="Diastolic" required>
-                        <br><br>
-                        <button type="submit" >Submit</button>
-                    </form>
-                </div>
+            <v-container align-center>
+                <v-layout justify-center align-center>
+                    <new_reading></new_reading>
                 </v-layout>
             </v-container>
         </v-content>
@@ -40,5 +23,6 @@
 </div>
 
 <script src="/js/mainMenuTemplate.js"></script>
+<script src="/js/trafficLightCalc.js"></script>
 <script src="/js/createNewReading.js"></script>
 </body>
