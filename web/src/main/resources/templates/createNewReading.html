@@ -4,7 +4,6 @@
     <div th:replace="fragments/head :: headerFragment"></div>
     <title id="pageTitle">New Reading</title>
 
-    <link type="text/css" rel="stylesheet" href="/css/createNewReading.css">
 </head>
 <body>
 <div id="app">
@@ -12,7 +11,6 @@
         <div th:replace="fragments/sidebar :: sidebarFragment"></div>
         <div th:replace="fragments/navbar :: navbarFragment"></div>
         <v-content>
-
             <v-container align-center>
                 <v-layout justify-center align-center>
                     <new_reading></new_reading>
@@ -22,7 +20,6 @@
     </v-app>
 </div>
 
-<script src="/js/mainMenuTemplate.js"></script>
-<script src="/js/trafficLightCalc.js"></script>
-<script src="/js/createNewReading.js"></script>
+<script type="text/javascript" src="/js/mainMenuTemplate.js"></script>
+<script type="module" src="/js/createNewReading.js"></script>
 </body>

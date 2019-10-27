@@ -1,3 +1,5 @@
+import { TrafficLightCalc } from '/js/trafficLightCalc.js';
+
 Vue.prototype.$http = axios;
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
@@ -39,20 +41,22 @@ Vue.component('new_reading',{
     }),
     methods: {
         submit: function() {
-            console.log(new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour());
+            console.log(new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate));
             //do input validation in a different function
             axios.post('/api/patient/reading',
                 {
                     patientId: this.patientID,
-                    heartRate: this.heartRate,
-                    systolic: this.systolic,
-                    diastolic: this.diastolic,
-                    colour: new trafficLightCalc(this.systolic, this.diastolic, this.heartRate).getColour(),
+                    heartRate: parseInt(this.heartRate),
+                    systolic: parseInt(this.systolic),
+                    diastolic: parseInt(this.diastolic),
+                    colour: new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate),
+                    pregnant: false,
+                    gestationalAge: null,
                     timestamp: getCurrentDate()
                 }
                 ).then(response => {console.log(response)});
 
-                window.location.assign("/patientSummary?id=" + this.patientID);
+                //window.location.assign("/patientSummary?id=" + this.patientID);
         },
         validate() {
             if (this.$refs.newReadingForm.validate()) {
@@ -89,12 +93,6 @@ Vue.component('new_reading',{
         required
       ></v-text-field>` +
         `<v-text-field
-        v-model="heartRate"
-        :rules="heartRateRules"
-        label="Heart Rate"
-        required
-      ></v-text-field>` +
-        `<v-text-field
         v-model="systolic"
         :rules="systolicRules"
         label="Systolic"
@@ -104,6 +102,12 @@ Vue.component('new_reading',{
         v-model="diastolic"
         :rules="diastolicRules"
         label="Diastolic"
+        required
+      ></v-text-field>` +
+        `<v-text-field
+        v-model="heartRate"
+        :rules="heartRateRules"
+        label="Heart Rate"
         required
       ></v-text-field>` +
         `<v-btn
