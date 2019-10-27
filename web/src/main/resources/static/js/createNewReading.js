@@ -1,4 +1,3 @@
-
 Vue.prototype.$http = axios;
 var readingInput = new Vue ({
     el: '#readingInput',
@@ -67,7 +66,8 @@ var readingInput = new Vue ({
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-        axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
+        this.patientID = id;
+        //axios.get('/api/patient/'+ id).then(response => {this.patientID = id})
     }
 });
 
@@ -78,3 +78,11 @@ function getCurrentDate() {
     console.log(date + ' ' + time);
     return date + ' ' + time; //date and time string returned
 }
+
+new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => ({
+        drawer: null
+    })
+});

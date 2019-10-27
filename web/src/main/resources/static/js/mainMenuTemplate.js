@@ -26,7 +26,7 @@ Vue.component('sidebar_template_admin', {
                 '<sidebar_item title="New Health Center" icon="add_circle" clickable="new-health-center"></sidebar_item>\n' +
                 '<sidebar_item title="New Account" icon="person_add" clickable="new-vht"></sidebar_item>\n' +
                 '<sidebar_item title="Manage Accounts" icon="supervisor_account" clickable="manage-accounts"></sidebar_item>\n' +
-                '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>\n' +
+                '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in</v-subheader>\n' +
                 '<sidebar_item title="Sign Out" icon="account_circle" clickable="logout"></sidebar_item>\n' +
             '</v-list>\n' +
         '</v-navigation-drawer>'
@@ -58,7 +58,7 @@ Vue.component('sidebar_template_health', {
         '\n' +
         '<v-subheader class="mt-3 grey--text text--darken-1">Account</v-subheader>\n' +
         '<sidebar_item title="Account Settings" icon="settings" clickable="account-settings"></sidebar_item>\n' +
-        '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>\n' +
+        '<v-subheader class="mt-3 grey--text text--darken-1">Currently signed in</v-subheader>\n' +
         '<sidebar_item title="Sign Out" icon="account_circle" clickable="logout"></sidebar_item>\n' +
         '</v-list>\n' +
         '</v-navigation-drawer>'
@@ -117,6 +117,9 @@ Vue.component('sidebar_item', {
             }
             else if (clicked === "health-home") {
                 window.location.assign("/healthworker")
+            }
+            else if (clicked === "manage-accounts") {
+                window.location.assign("/manageUserAccounts")
             }
         },
     }
