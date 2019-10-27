@@ -53,7 +53,7 @@ public class Reading {
 
 	@Column(name = "colour", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
-	private ReadingColour colour; // Use *INTEGER* values {0..3}
+	private ReadingColour colour; // Use *INTEGER* values {0..4}
 
 	@Column(name = "timestamp", nullable = false)
 	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
@@ -227,4 +227,5 @@ public class Reading {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
 }

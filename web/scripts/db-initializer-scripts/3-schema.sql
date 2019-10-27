@@ -4,14 +4,12 @@
 
 USE cradlerest;
 
-
 CREATE TABLE user (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL
 );
-
 
 CREATE TABLE patient (
     id VARCHAR(255) PRIMARY KEY,
@@ -25,7 +23,6 @@ CREATE TABLE patient (
     last_updated DATETIME NOT NULL,
     notes TEXT
 );
-
 
 CREATE TABLE reading (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -42,6 +39,17 @@ CREATE TABLE reading (
     FOREIGN KEY (pid) REFERENCES patient (id)
 );
 
+CREATE TABLE referral (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pid VARCHAR(255) NOT NULL,
+    vid INT NOT NULL,
+    reading_id INT NOT NULL,
+    health_centre VARCHAR(255),
+    health_centre_number VARCHAR(255),
+    comments VARCHAR(9001),
+    timestamp DATETIME NOT NULL
+);
+
 CREATE TABLE symptom (
      id INT PRIMARY KEY,
      text VARCHAR(255) UNIQUE
@@ -55,11 +63,11 @@ CREATE TABLE symptom_reading_relation (
     FOREIGN KEY (rid) REFERENCES reading (id) ON DELETE CASCADE
 );
 
-
--- Statically Defined Data
-INSERT INTO symptom VALUES (0, 'Headache');
-INSERT INTO symptom VALUES (1, 'Blurred Vision');
-INSERT INTO symptom VALUES (2, 'Abdominal Pain');
-INSERT INTO symptom VALUES (3, 'Bleeding');
-INSERT INTO symptom VALUES (4, 'Feverish');
-INSERT INTO symptom VALUES (5, 'Unwell');
+CREATE TABLE health_centre (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    zone INT NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    health_centre_number VARCHAR(255) NOT NULL,
+    manager_phone_number VARCHAR(255) NOT NULL
+);

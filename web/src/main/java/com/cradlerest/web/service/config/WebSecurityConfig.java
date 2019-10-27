@@ -1,7 +1,9 @@
 package com.cradlerest.web.service.config;
 
+import com.twilio.Twilio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -102,4 +104,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
 		return new CustomAuthenticationSuccessHandler();
 	}
+
+//	@Bean
+//	public FilterRegistrationBean twilioRequestValidatorFilter() {
+//		FilterRegistrationBean  registration = new FilterRegistrationBean();
+//		registration.setFilter(new TwilioRequestValidatorFilter());
+//		registration.addUrlPatterns("/api/referral/send_referral_sms");
+//		registration.setName("twilioFilter");
+//		return registration;
+//	}
+
 }
