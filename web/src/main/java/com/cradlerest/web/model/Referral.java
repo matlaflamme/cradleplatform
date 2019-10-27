@@ -132,7 +132,8 @@ public class Referral {
 		this.timestamp = timestamp;
 	}
 
-	public boolean getClosed() {
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getClosed() {
 		return this.closed;
 	}
 	
@@ -140,9 +141,8 @@ public class Referral {
 	public void setClosed(Date timestamp) {
 		this.closed = timestamp;
 	}
-	
-    @JsonSerialize(using = DateSerializer.class)
-	public Date getAccepter() {
+
+	public String getAccepter() {
 		return this.accepter;
 	}
 
