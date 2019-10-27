@@ -18,15 +18,21 @@ let test = new Vue({
     mounted() { //sends request to server. Puts response into the rows variable
 
         axios.get('/api/patient/all_with_latest_reading').then(response => {
-            this.rows = response.data;
-            this.rows.forEach((row)=> {
-                if (row.reading == null) {
-                    row.reading = {colour: null, timestamp: null};
-                }
-                let icon = getReadingColorIcon(row.reading.colour);
-                row.reading.colorstyle = {"background-color": icon['colour']};
-            });
-            this.rows = this.changeDate(response.data);
+            try {
+                this.rows = response.data;
+                this.rows.forEach((row)=> {
+                    if (row.reading == null) {
+                        row.reading = {colour: null, timestamp: null};
+                    }
+                    let icon = getReadingColorIcon(row.reading.colour);
+                    row.reading.colorstyle = {"background-color": icon['colour']};
+                });
+                this.rows = this.changeDate(response.data);
+            }
+            catch (err) {
+                // unexpected response
+                console.error(err);
+            }
         })
     },
     methods: {
