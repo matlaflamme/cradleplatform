@@ -1,16 +1,50 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Hello VHT</title>
-    <a style="color: blue" th:href="@{/}">Home Page</a>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Logout"/>
-    </form>
+    <div th:replace="fragments/head :: headerFragment"></div>
+    <title id="pageTitle">Home</title>
+
 </head>
 <body>
-<p>VHT page.</p>
-<span th:text="${accountName}"></span>
+
+<div id="app">
+    <v-app id="inspire">
+        <div th:replace="fragments/sidebar :: sidebarFragment"></div>
+        <div th:replace="fragments/navbar :: navbarFragment"></div>
+
+        <v-content>
+            <v-container>
+                <v-layout justify-center>
+                    <v-container>
+                        <v-data-table
+                                :headers="headers"
+                                :items="rows"
+                                :items-per-page="5"
+                                class="elevation-1">
+
+                            <template slot="rows" slot-scope="props">
+                                <td>{{props.row.id}}</td>
+                                <td>{{props.row.name}}</td>
+                            </template>
+                            <template v-slot:item.view="{ item }">
+                                <button v-on:click="viewPatientData(item.id)" class="btn btn-outline-info">View Patient Data</button>
+                            </template>
+                            <template v-slot:item.add="{ item }">
+                                <button v-on:click="addNewReading(item.id)" class="btn btn-outline-secondary">Add New Reading</button>
+                            </template>
+                        </v-data-table>
+                    </v-container>
+                </v-layout>
+            </v-container>
+        </v-content>
+    </v-app>
+</div>
+
+<script src="/js/mainMenuTemplate.js"></script>
+<script src="/js/vht.js"></script>
+
 </body>
 </html>
+
+
+<!--<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>-->
