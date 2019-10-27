@@ -2,11 +2,14 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
-import com.cradlerest.web.util.datagen.annotations.DataGenDateRange;
+import com.cradlerest.web.util.datagen.annotations.*;
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
+import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
+import com.cradlerest.web.util.datagen.impl.NameGenerator;
+import com.cradlerest.web.util.datagen.impl.PhoneNumberGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,43 +21,57 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "referral")
+@DataGenRelativeAmount(base = Patient.class, multiplier = 0.6)
 public class Referral {
 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
+	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
-	@Column(name = "pid")
+	@Column(name = "pid", nullable = false)
+	@ForeignKey(Patient.class)
 	private String patientId;
 
-	@Column(name = "vid")
+	// TODO: Update to foreign key once VHT models are created
+	@Column(name = "vid", nullable = false)
+	@DataGenRange(min = 3, max = 4)
 	private Integer vhtId;
 
-	@Column(name = "reading_id")
+	@Column(name = "reading_id", nullable = false)
+	@ForeignKey(Reading.class)
 	private Integer readingId;
 
 	// temporary
 	// TODO: Health Centre entity
-	@Column(name = "health_centre")
+	@Column(name = "health_centre", nullable = false)
+	// TODO: Update to foreign key
+	@Generator(NameGenerator.class)
 	private String healthCentre;
 
 	// temporary
-	@Column(name = "health_centre_number")
+	@Column(name = "health_centre_number", nullable = false)
+	@Generator(PhoneNumberGenerator.class)
 	private String healthCentreNumber;
 
-	@Column(name = "comments")
+	@Column(name = "comments", nullable = false)
+	@Generator(GibberishSentenceGenerator.class)
 	private String comments;
 
 	@Column(name = "timestamp", nullable = false)
+	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	@Column(name = "closed")
+	@DataGenDateRange(min = "2017-01-01", max = "2019-12-31")
 	private Date closed;
 
 	// TODO: User instaed of String
 	@Column(name = "accepter")
+	@Generator(NameGenerator.class)
+	@DataGenNullChance(0.5)
 	private String accepter;
 
 	public Referral() {}
