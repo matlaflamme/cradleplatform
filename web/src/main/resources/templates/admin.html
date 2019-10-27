@@ -10,14 +10,6 @@
     <v-app id="inspire">
         <div th:replace="fragments/sidebar :: sidebarFragment"></div>
         <div th:replace="fragments/navbar :: navbarFragment"></div>
-
-<<<<<<< HEAD
-<!--       @drawer is a custom event thrown by the component, called when the hamburger button is pressed -->
-        <navbar_template @drawer="$refs.sidebar.drawer = !$refs.sidebar.drawer" current_page="Admin"></navbar_template>
-
-<!--        V-content is where the main content of the web app lives-->
-=======
->>>>>>> 717cededab7dd5f2a11f86e2fe61c15d2698c369
         <v-content>
             <v-container>
                 <v-layout justify-center>
