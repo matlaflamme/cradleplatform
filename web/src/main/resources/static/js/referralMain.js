@@ -47,7 +47,7 @@ let test = new Vue({
             })
         },
         accept: function() {
-
+            axios
         }
     },
 
