@@ -74,7 +74,6 @@ public class ReferralController {
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
 		Referral savedReferral = null;
-		System.out.println("dafzs:" + request.getParameter("From"));
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
