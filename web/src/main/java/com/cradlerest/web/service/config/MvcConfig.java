@@ -25,11 +25,8 @@ public class MvcConfig implements WebMvcConfigurer {
 		registry.addViewController("/patientSummary").setViewName("patientSummary");
 		registry.addViewController("/createNewReading").setViewName("createNewReading");
 		registry.addViewController("/createAccount").setViewName("createAccount");
-<<<<<<< Updated upstream
 		registry.addViewController("/manageUserAccounts").setViewName("manageUserAccounts");
-=======
 		registry.addViewController("/healthworker/referrals").setViewName("referralMain");
->>>>>>> Stashed changes
 	}
 
 }

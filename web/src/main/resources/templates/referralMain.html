@@ -46,7 +46,7 @@
 							<template v-slot:item.view="{ item }">
 								<button v-on:click="viewPatientData(item.patientId)" class="btn btn-outline-info">View Patient Data</button>
 							</template>
-							<template slot="rows">
+							<template v-slot:item.accept="{ item }">
 								<button v-on:click="accept()" class="btn btn-outline-info">Accept</button>
 							</template>
 							<template slot="rows" slot-scope="props">

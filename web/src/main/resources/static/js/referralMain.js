@@ -45,6 +45,10 @@ let test = new Vue({
             }).catch(error => {
                 console.log(error);
             })
+        },
+
+        accept: function() {
+
         }
     },
 
