@@ -1,5 +1,6 @@
 package com.cradlerest.web.service.config;
 
+import com.cradlerest.web.constraints.user.Role;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;

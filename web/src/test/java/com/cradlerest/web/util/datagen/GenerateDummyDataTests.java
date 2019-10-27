@@ -69,13 +69,13 @@ public class GenerateDummyDataTests {
 	public void linearize_WithNoCircularReferences_OrderClasses() {
 		var classes = Vec.of(MockEntityC.class, MockEntityB.class, MockEntityA.class);
 
-		assertThat(GenerateDummyData.linearize(classes))
+		assertThat(GenerateDummyData.linearizeTypes(classes))
 				.isEqualTo(Vec.of(MockEntityA.class, MockEntityC.class, MockEntityB.class));
 	}
 
 	@Test
 	public void linearize_WhenPassedEmptyList_ReturnEmptyList() {
-		assertThat(GenerateDummyData.linearize(Vec.of()))
+		assertThat(GenerateDummyData.linearizeTypes(Vec.of()))
 				.isEmpty();
 	}
 
@@ -83,14 +83,14 @@ public class GenerateDummyDataTests {
 	public void linearize_WhenPassedClassWithoutItsDependencies_ThrowDeadlockException() {
 		var classes = Vec.of(MockEntityB.class, MockEntityC.class);
 
-		GenerateDummyData.linearize(classes);
+		GenerateDummyData.linearizeTypes(classes);
 	}
 
 	@Test(expected = DeadlockException.class)
 	public void linearize_WhenPassedClassesWithCircularReferences_ThrowDeadlockException() {
 		var classes = Vec.of(MockEntityD.class, MockEntityE.class);
 
-		GenerateDummyData.linearize(classes);
+		GenerateDummyData.linearizeTypes(classes);
 	}
 
 	@Test(expected = DeadlockException.class)
@@ -107,13 +107,13 @@ public class GenerateDummyDataTests {
 			private Integer x;
 		}
 
-		GenerateDummyData.linearize(Vec.of(MockEntity.class));
+		GenerateDummyData.linearizeTypes(Vec.of(MockEntity.class));
 	}
 
 	@Test(expected = DuplicateItemException.class)
 	public void linearize_WhenPassedListWithDuplicates_ThrowDuplicateItemException() {
 		var classes = Vec.of(MockEntityA.class, MockEntityC.class, MockEntityA.class);
 
-		GenerateDummyData.linearize(classes);
+		GenerateDummyData.linearizeTypes(classes);
 	}
 }

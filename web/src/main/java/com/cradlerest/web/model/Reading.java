@@ -4,6 +4,7 @@ import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,13 +20,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "reading")
-@DataGenAmount(200)
+@DataGenRelativeAmount(base = Patient.class, multiplier = 2.0)
 public class Reading {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
-	@Omit
+	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
 	@Column(name = "pid", nullable = false)
@@ -53,7 +54,7 @@ public class Reading {
 
 	@Column(name = "colour", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
-	private ReadingColour colour; // Use *INTEGER* values {0..3}
+	private ReadingColour colour; // Use *INTEGER* values {0..4}
 
 	@Column(name = "timestamp", nullable = false)
 	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
@@ -227,4 +228,5 @@ public class Reading {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
 }
