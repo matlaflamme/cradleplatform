@@ -55,6 +55,7 @@ Vue.component('sidebar_template_health', {
         '<sidebar_item title="New Referrals" icon="assignment" clickable="new-referrals"></sidebar_item>\n' +
         '<sidebar_item title="Past Referrals" icon="assignment" clickable="past-referrals"></sidebar_item>\n' +
         '<sidebar_item title="All Referrals" icon="assignment" clickable="all-referrals"></sidebar_item>\n' +
+        '<sidebar_item title="New Reading" icon="assessment" clickable="new-reading"></sidebar_item>\n' +
         '\n' +
         '<v-subheader class="mt-3 grey--text text--darken-1">Account</v-subheader>\n' +
         '<sidebar_item title="Account Settings" icon="settings" clickable="account-settings"></sidebar_item>\n' +
@@ -120,6 +121,9 @@ Vue.component('sidebar_item', {
             }
             else if (clicked === "manage-accounts") {
                 window.location.assign("/manageUserAccounts")
+            }
+            else if (clicked === "new-reading") {
+                window.location.assign("/createNewReading")
             }
         },
     }
