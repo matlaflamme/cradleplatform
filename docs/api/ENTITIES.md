@@ -279,7 +279,7 @@ more time to figure how JPA works.
 
 | Field | Type | Nullable | Description |
 |:-:|:-:|:-:|:-|
-| `id` | `number` | `false` | Unique reading identifier |
+| `id` | `number` | `false` | Unique Referral identifier |
 | `pid` | `string` | `false` | Patient Id |
 | `vid` | `number` | `false` | VHT Id |
 | `reading_id` | `number` | `false` | Reading Id |
@@ -306,3 +306,23 @@ more time to figure how JPA works.
     "accepter": null
 }
 ```
+
+## Health Centre
+
+Facilities where health workers manage referrals and patients.
+
+Each health worker has a manager.
+
+API currently not supported. Only used currently to verify referral health centre names.
+
+### Fields
+
+| Field | Type | Nullable | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `false` | Unique Health Centre identifier |
+| `name` | `string` | `false` | Name |
+| `zone` | `number` | `false` | Zone Number |
+| `email` | `string` | `false` | Reading Id |
+| `health_centre_number` | `string` | `false` | Name of Health Centre referred to by VHT |
+| `manager_phone_number` | `strung` | `false` | Number of Health Centre |
+
