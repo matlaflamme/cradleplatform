@@ -50,6 +50,13 @@ public class Referral {
 	@Column(name = "timestamp", nullable = false)
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
+	@Column(name = "closed", columnDefinition = "boolean default false")
+	private boolean closed;
+
+	// TODO: User instaed of String
+	@Column(name = "accepter", columnDefinition = "boolean default null")
+	private String accepter;
+
 	public Referral() {}
 
 	public Referral(String patientId, Integer vhtId, Integer readingId, String healthCentre, String healthCentreNumber, String comments) {
@@ -115,7 +122,6 @@ public class Referral {
 		this.comments = comments;
 	}
 
-
 	@JsonSerialize(using = DateSerializer.class)
 	public Date getTimestamp() {
 		return timestamp;
@@ -124,5 +130,21 @@ public class Referral {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public boolean getClosed() {
+		return this.closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
+	}
+
+	public String getAccepter() {
+		return this.accepter;
+	}
+
+	public void setAccepter(String accepter) {
+		this.accepter = accepter;
 	}
 }
