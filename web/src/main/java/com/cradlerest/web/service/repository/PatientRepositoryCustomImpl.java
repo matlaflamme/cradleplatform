@@ -47,7 +47,7 @@ public class PatientRepositoryCustomImpl implements PatientRepositoryCustom {
 				"       r.other_symptoms,\n" +
 				"       r.timestamp\n" +
 				"FROM patient p LEFT OUTER JOIN reading r on p.id = r.pid\n" +
-				"WHERE r.id = (SELECT r1.id\n" +
+				"WHERE r.id IS NULL OR r.id = (SELECT r1.id\n" +
 				"              FROM reading r1\n" +
 				"              WHERE r1.pid = p.id\n" +
 				"                AND r1.timestamp = (SELECT MAX(r2.timestamp)\n" +
