@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<body>
+<navbar_template inline-template @drawer="$refs.sidebar.drawer = !$refs.sidebar.drawer" th:fragment="navbarFragment">
+    <v-app-bar app clipped-left color="#0b908f" dark>
+        <v-app-bar-nav-icon @click.stop="changeDrawer"></v-app-bar-nav-icon>
+        <v-toolbar-title class="mr-5 align-center" color=white>
+        <span class="title">Cradle Web Platform</span>
+        </v-toolbar-title>
+        </v-app-bar>
+</navbar_template>
+</body>
+</html>
