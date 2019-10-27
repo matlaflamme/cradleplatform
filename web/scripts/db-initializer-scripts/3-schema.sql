@@ -48,7 +48,7 @@ CREATE TABLE referral (
     health_centre_number VARCHAR(255),
     comments VARCHAR(9001),
     timestamp DATETIME NOT NULL,
-    closed BOOLEAN default false,
+    closed DATETIME default false,
     accepter VARCHAR(255) default null
 );
 
