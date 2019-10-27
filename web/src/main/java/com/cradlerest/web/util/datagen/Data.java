@@ -4,6 +4,7 @@ import com.cradlerest.web.util.datagen.annotations.DataGenOrdinal;
 import com.github.maumay.jflow.utils.Tup;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.function.BinaryOperator;
 /**
  * General data container.
  */
-class Data {
+public class Data {
 
 	@NotNull
 	private String table;
@@ -26,8 +27,7 @@ class Data {
 		this.columnValueMap = columnValueMap;
 	}
 
-	@NotNull
-	String getTable() {
+	public @NotNull String getTable() {
 		return table;
 	}
 
@@ -36,13 +36,17 @@ class Data {
 		return columnValueMap;
 	}
 
+	public @Nullable Object getValueForColumn(@NotNull String column) {
+		return columnValueMap.get(column);
+	}
+
 	/**
 	 * Converts this data instance into a SQL INSERT statement.
 	 *
 	 * Assumes that all field types are convertible to an SQL value.
 	 * @return An SQL insert statement.
 	 */
-	String toSqlStatement() {
+	public String toSqlStatement() {
 		final var values = Vec.copy(columnValueMap.entrySet())
 				.map(entry -> Tup.of(entry.getKey(), entry.getValue()));
 
