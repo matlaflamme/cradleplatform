@@ -1,7 +1,14 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
+import com.cradlerest.web.util.datagen.annotations.DataGenRange;
+import com.cradlerest.web.util.datagen.annotations.Generator;
+import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
+import com.cradlerest.web.util.datagen.impl.EmailGenerator;
+import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
+import com.cradlerest.web.util.datagen.impl.PhoneNumberGenerator;
+
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Defines a health centre
@@ -13,28 +20,36 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "health_centre")
+@DataGenAmount(6)
 public class HealthCentre {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
+	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenRange(min = 1, max = 2)
 	private String name;
 
-	@Column(name = "zone")
+	@Column(name = "zone", nullable = false)
+	@DataGenRange(min = 1, max = 16)
 	private Integer zone;
 
-	@Column(name = "email")
+	@Column(name = "email", nullable = false)
+	@Generator(EmailGenerator.class)
 	private String email;
 
 	// Phone number for the health centre
-	@Column(name = "health_centre_number")
+	@Column(name = "health_centre_number", nullable = false)
+	@Generator(PhoneNumberGenerator.class)
 	private String healthCentreNumber;
 
 	// Person in charge at this health centre
-	@Column(name = "manager_phone_number")
+	@Column(name = "manager_phone_number", nullable = false)
+	@Generator(PhoneNumberGenerator.class)
 	private String managerPhoneNumber;
 
 	HealthCentre() {}
