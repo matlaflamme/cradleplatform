@@ -19,11 +19,30 @@
 		<input type="password" name="password" placeholder="Password">
 		<div class="container">
 			<button type="submit" value="Sign in">Sign In</button>
+			<button v-on:click="createAccount"><a>Create Account</a></button>
 		</div>
 	</form>
 </div>
-<script src="/static/js/login.js"></script>
+<script src="/static/js/home.js"></script>
 </body>
 
+
+<!--	<div>-->
+<!--		<form th:action="@{/login}" method="get">-->
+<!--			<input type="submit" value="Login"/>-->
+<!--		</form>-->
+<!--	</div>-->
+<!--	<h1 th:text="${accountName}"></h1>-->
+<!--	<div>-->
+<!--		<form th:action="@{/logout}" method="post">-->
+<!--			<input type="submit" value="Logout"/>-->
+<!--		</form>-->
+<!--	</div>-->
+
+<!--	<a href="/upload">Upload stuff!</a>-->
+
+<!--	<form th:action="@{/logout}" method="post">-->
+<!--		<input type="submit" value="Sign Out"/>-->
+<!--	</form>-->
 </body>
 </html>

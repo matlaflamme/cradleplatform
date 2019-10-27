@@ -10,5 +10,8 @@ let authInput = new Vue({
             console.log(this.username);
             console.log(this.password);
         },
+        createAccount: function() {
+            //links to new account page
+        }
     }
 });
