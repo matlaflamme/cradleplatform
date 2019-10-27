@@ -36,7 +36,7 @@ CREATE TABLE reading (
     timestamp DATETIME NOT NULL,
     other_symptoms TEXT,
     notes TEXT,
-    FOREIGN KEY (pid) REFERENCES patient (id)
+    FOREIGN KEY (pid) REFERENCES patient (id) ON DELETE CASCADE
 );
 
 CREATE TABLE referral (

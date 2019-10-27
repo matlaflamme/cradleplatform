@@ -21,7 +21,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "patient")
-@DataGenAmount(50)
 public class Patient {
 
 	@Id
