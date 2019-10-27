@@ -53,10 +53,17 @@ Vue.component('new_reading',{
                     pregnant: false,
                     gestationalAge: null,
                     timestamp: getCurrentDate()
+                }).catch(error => {
+                    console.error(error);
                 }
-                ).then(response => {console.log(response)});
+                ).then(response => {
+                    console.log(response)
+                    if (response.status == 200) {
+                        window.location.assign("/patientSummary?id=" + this.patientID);
+                    }
+                });
 
-                //window.location.assign("/patientSummary?id=" + this.patientID);
+                //
         },
         validate() {
             if (this.$refs.newReadingForm.validate()) {
