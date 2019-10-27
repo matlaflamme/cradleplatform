@@ -54,7 +54,7 @@ public class Referral {
 	private Date closed;
 
 	// TODO: User instaed of String
-	@Column(name = "accepter", columnDefinition = "boolean default null")
+	@Column(name = "accepter")
 	private String accepter;
 
 	public Referral() {}
