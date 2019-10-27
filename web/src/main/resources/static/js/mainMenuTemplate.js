@@ -117,6 +117,8 @@ Vue.component('sidebar_item', {
             }
             else if (clicked === "health-home") {
                 window.location.assign("/healthworker")
+            } else if (clicked === "all-referrals") {
+                window.location.assign("/healthworker/referrals")
             }
             else if (clicked === "manage-accounts") {
                 window.location.assign("/manageUserAccounts")
