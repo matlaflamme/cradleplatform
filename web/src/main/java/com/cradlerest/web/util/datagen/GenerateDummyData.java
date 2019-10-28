@@ -129,6 +129,9 @@ public class GenerateDummyData {
 		var factory = new DataFactory(noise, new ForeignKeyRepositoryImpl());
 		factory.registerCustomGenerator(new GibberishSentenceGenerator(noise));
 		factory.registerCustomGenerator(new AutoIncrementGenerator());
+		factory.registerCustomGenerator(new PhoneNumberGenerator(noise));
+		factory.registerCustomGenerator(new EmailGenerator(noise));
+		factory.registerCustomGenerator(new NameGenerator(noise));
 
 		Vec<Data> dataVec = Vec.of();
 		var amountMap = new HashMap<Class<?>, Integer>();
