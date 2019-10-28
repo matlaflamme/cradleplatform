@@ -7,6 +7,44 @@ information about the entities returned by these methods see
 > Note: Any method marked with "Not yet implemented" is an active API method 
 > which may be called, but it will always return a `NotImplementedException`.
 
+* [User Methods](#user-methods)
+    * [`GET /api/user/all`]() - Get all users
+    * [`GET /api/user/{id}`]() - Get all users with id
+    * [`POST /api/user/add`]() - Create a new user
+    * ```json
+      {
+          "username": "john",
+          "password": "doe",
+          "roles:": "ROLE_HEALTHWORKER"
+      }  
+      ```
+    * [`DELETE /api/user/{id}`]() - Deletes user by id
+
+* [Referral Methods](#referral-methods)
+    * [`GET /api/referral/all`]() - Get all referrals 
+    * [`GET /api/referral/{healthCentreName}/all`]() - Get all referrals referred to a health centre (name) 
+    * [`POST /api/referral/send`]() - Sends a new referral. Valid patientId, vht name and health centre required.
+    * ```json
+      {
+          "patientName": "VV",
+          "patientId": "48121900518406",
+          "patientAge": 15,
+          "gestationAge": 60,
+          "systolic": 25,
+          "diastolic": 20,
+          "heartRate": 30,
+          "readingColour": 1,
+          "symptoms": "[Blurred vision, Abdominal pain]",
+          "isPregnant": false,
+          "readingTimestamp": "2019-10-24 00:24:21.022",
+          "referralTimestamp": "2019-10-24 00:27:14.317",
+          "healthCentre": "Ne.",
+          "VHT": "vht",
+          "comments": ""
+      }  
+      ```
+
+
 ## Contents
 
 * [Patient Methods](#patient-methods)
