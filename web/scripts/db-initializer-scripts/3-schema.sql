@@ -18,8 +18,8 @@ CREATE TABLE patient (
     zone VARCHAR(255) NOT NULL,
     birth_year INT NOT NULL,
     sex INT NOT NULL,                   -- enumerated {male, female, unknown}
-    medical_history VARCHAR(255) DEFAULT '',
-    drug_history VARCHAR(255) DEFAULT '',
+    medical_history TEXT DEFAULT '',
+    drug_history TEXT DEFAULT '',
     last_updated DATETIME NOT NULL,
     notes TEXT
 );
@@ -46,7 +46,7 @@ CREATE TABLE referral (
     reading_id INT NOT NULL,
     health_centre VARCHAR(255),
     health_centre_number VARCHAR(255),
-    comments VARCHAR(9001),
+    comments TEXT,
     timestamp DATETIME NOT NULL,
     closed DATETIME,
     accepter VARCHAR(255) default null
