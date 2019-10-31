@@ -6,7 +6,7 @@ let test = new Vue({
     data () {
         return {
             headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
-                { text: 'Referral ID', align: 'left', value: 'id'},
+                { text: 'Referral ID', value: 'id'},
                 { text: 'Patient ID', value: 'patientId' },
                 { text: 'VHT ID', value: 'vhtId' },
                 { text: 'Health Centre', value: 'healthCentre' },
@@ -38,7 +38,7 @@ let test = new Vue({
             window.location.assign("/patientSummary?id=" + id);
         },
         getReferrals: function() {
-            axios.get('/api/referral/all/timestamp-sorted').then(response => {
+            axios.get('/api/referral/all').then(response => {
                 console.log(response);
                 this.rows = response.data;
                 console.log("this rows: " + this.rows);
