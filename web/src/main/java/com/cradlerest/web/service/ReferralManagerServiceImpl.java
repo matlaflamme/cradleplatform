@@ -25,6 +25,7 @@ import java.util.*;
  * Still a lot to be done...
  * @see ReferralController
  */
+
 @Service
 public class ReferralManagerServiceImpl implements ReferralManagerService {
 
@@ -156,4 +157,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		}
 		return referralRepository.findAllByHealthCentre(healthCentreName);
 	}
+
+	public List<Referral> findAllByOrderByTimestampDesc() { return referralRepository.findAllByOrderByTimestampDesc(); }
 }

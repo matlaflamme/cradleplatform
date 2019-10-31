@@ -114,6 +114,15 @@ public class ReferralController {
 		return referralManagerService.findAll();
 	}
 
+	/**
+	 * Returns all referrals sorted by timestamp in descending order
+	 * @return
+	 */
+	@GetMapping("/all/timestamp-sorted")
+	public @ResponseBody List<Referral> allReferralsSortByTimestamp() {
+		return referralManagerService.findAllByOrderByTimestampDesc();
+	}
+
 	@GetMapping("/{healthCentreName}/all")
 	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
 		return referralManagerService.findAllByHealthCentre(healthCentreName);

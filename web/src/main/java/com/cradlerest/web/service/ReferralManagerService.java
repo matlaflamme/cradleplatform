@@ -23,6 +23,7 @@ public interface ReferralManagerService {
 
 	List<Referral> findAll();
 	List<Referral> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
+	List<Referral> findAllByOrderByTimestampDesc();
 
 
 }
