@@ -9,6 +9,7 @@ import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.PhoneNumberGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 /**
  * Defines a health centre
@@ -38,6 +39,7 @@ public class HealthCentre {
 	@DataGenRange(min = 1, max = 16)
 	private Integer zone;
 
+	@Email(message = "invalid email")
 	@Column(name = "email", nullable = false)
 	@Generator(EmailGenerator.class)
 	private String email;
