@@ -56,6 +56,11 @@ public class ReadingManagerImpl implements ReadingManager {
 
 	@Override
 	public Reading saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException {
+		// TODO: set `createdBy` to the id of the user who posted the reading
+		if (readingView.getCreatedBy() == null) {
+			readingView.setCreatedBy(3);
+		}
+
 		// use copyFields to extract the reading and persist it
 		var reading = new Reading();
 		copyFields(readingView, reading);

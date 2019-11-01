@@ -54,14 +54,14 @@ VALUES ('002',          -- id
         );  -- last updated
 
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
-VALUES ('001', 100, 80, 74, TRUE, 15, 0, '2019-09-20 20:12:32');
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp, created_by)
+VALUES ('001', 100, 80, 74, TRUE, 15, 0, '2019-09-20 20:12:32', 3);
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
-VALUES ('001', 130, 90, 80, TRUE, 30, 1,' 2019-09-22 6:37:00');
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp, created_by)
+VALUES ('001', 130, 90, 80, TRUE, 30, 1,' 2019-09-22 6:37:00', 3);
 
-INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, colour, timestamp)
-VALUES ('001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34');
+INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, colour, timestamp, created_by)
+VALUES ('001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34', 3);
 
 -- INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
 -- VALUES ('002', 140, 80, 93, 2, FALSE, 0, 0, '2018-06-12 08:54:15');

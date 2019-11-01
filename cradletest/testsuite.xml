@@ -110,7 +110,8 @@
         "symptoms": [],
         "systolic": 100,
         "timestamp": "2019-09-20 20:12:32",
-        "readingNotes": null
+        "readingNotes": null,
+        "createdBy": 3
       }
       ]]>
     </Response>

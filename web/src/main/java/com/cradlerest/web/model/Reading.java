@@ -69,6 +69,10 @@ public class Reading {
 	@DataGenNullChance(0.8)
 	private String readingNotes;
 
+	@Column(name = "created_by", nullable = false)
+	@DataGenRange(min = 3, max = 4) // always generate as the id for the `vht` user
+	private Integer createdBy;
+
 	public Reading() {}
 
 	public Integer getId() {
@@ -161,20 +165,31 @@ public class Reading {
 		this.readingNotes = readingNotes;
 	}
 
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Reading reading = (Reading) o;
-		return id.equals(reading.id) &&
-				patientId.equals(reading.patientId) &&
-				systolic.equals(reading.systolic) &&
-				diastolic.equals(reading.diastolic) &&
-				heartRate.equals(reading.heartRate) &&
-				isPregnant.equals(reading.isPregnant) &&
+		return Objects.equals(id, reading.id) &&
+				Objects.equals(patientId, reading.patientId) &&
+				Objects.equals(systolic, reading.systolic) &&
+				Objects.equals(diastolic, reading.diastolic) &&
+				Objects.equals(heartRate, reading.heartRate) &&
+				Objects.equals(isPregnant, reading.isPregnant) &&
 				Objects.equals(gestationalAge, reading.gestationalAge) &&
 				colour == reading.colour &&
-				timestamp.equals(reading.timestamp);
+				Objects.equals(timestamp, reading.timestamp) &&
+				Objects.equals(otherSymptoms, reading.otherSymptoms) &&
+				Objects.equals(readingNotes, reading.readingNotes) &&
+				Objects.equals(createdBy, reading.createdBy);
 	}
 
 	@Override
