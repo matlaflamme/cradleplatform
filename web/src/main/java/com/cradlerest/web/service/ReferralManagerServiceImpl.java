@@ -141,11 +141,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	/**
-	 * @return All referrals
-	 */
-	public List<Referral> findAll() { return referralRepository.findAll(); }
-
-	/**
 	 *
 	 * @param healthCentreName
 	 * @return All referrals from a health centre

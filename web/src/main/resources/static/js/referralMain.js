@@ -38,7 +38,7 @@ let test = new Vue({
             window.location.assign("/patientSummary?id=" + id);
         },
         getReferrals: function() {
-            axios.get('/api/referral/all/timestamp-sorted').then(response => {
+            axios.get('/api/referral/all').then(response => {
                 console.log(response);
                 this.rows = response.data;
                 console.log("this rows: " + this.rows);
