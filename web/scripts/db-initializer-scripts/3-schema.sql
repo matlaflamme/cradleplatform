@@ -74,10 +74,12 @@ CREATE TABLE referral
         REFERENCES user (id),
 
     FOREIGN KEY (referred_to)
-        REFERENCES health_centre (id),
+        REFERENCES health_centre (id)
+        ON DELETE CASCADE,
 
     FOREIGN KEY (reading_id)
         REFERENCES reading (id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE symptom
