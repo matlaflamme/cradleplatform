@@ -24,6 +24,7 @@ import java.util.Date;
 @DataGenRelativeAmount(base = Patient.class, multiplier = 0.6)
 public class Referral {
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
