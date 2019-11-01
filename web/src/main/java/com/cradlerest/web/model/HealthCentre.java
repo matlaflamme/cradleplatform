@@ -54,12 +54,12 @@ public class HealthCentre {
 
 	HealthCentre() {}
 
-	HealthCentre(String name, Integer zone, String email, String healthCentreNumber, String managerPhoneNumber) {
-		this.name = name;
-		this.zone = zone;
-		this.email = email;
-		this.healthCentreNumber = healthCentreNumber;
-		this.managerPhoneNumber = managerPhoneNumber;
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {

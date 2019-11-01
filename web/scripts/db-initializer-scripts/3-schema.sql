@@ -49,18 +49,35 @@ CREATE TABLE reading
         REFERENCES user (id)
 );
 
+CREATE TABLE health_centre
+(
+    id                   INT PRIMARY KEY AUTO_INCREMENT,
+    name                 VARCHAR(255) NOT NULL,
+    zone                 INT          NOT NULL,
+    email                VARCHAR(255) NOT NULL,
+    health_centre_number VARCHAR(255) NOT NULL,
+    manager_phone_number VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE referral
 (
     id                   INT PRIMARY KEY AUTO_INCREMENT,
-    pid                  VARCHAR(255) NOT NULL,
-    vid                  INT          NOT NULL,
+    referred_by          INT          NOT NULL,
+    referred_to          INT          NOT NULL,
     reading_id           INT          NOT NULL,
-    health_centre        VARCHAR(255),
-    health_centre_number VARCHAR(255),
     comments             TEXT,
     timestamp            DATETIME     NOT NULL,
     closed               DATETIME,
-    accepter             VARCHAR(255) default null
+    accepter             VARCHAR(255),
+
+    FOREIGN KEY (referred_by)
+        REFERENCES user (id),
+
+    FOREIGN KEY (referred_to)
+        REFERENCES health_centre (id),
+
+    FOREIGN KEY (reading_id)
+        REFERENCES reading (id)
 );
 
 CREATE TABLE symptom
@@ -82,14 +99,4 @@ CREATE TABLE symptom_reading_relation
     FOREIGN KEY (rid)
         REFERENCES reading (id)
         ON DELETE CASCADE
-);
-
-CREATE TABLE health_centre
-(
-    id                   INT PRIMARY KEY AUTO_INCREMENT,
-    name                 VARCHAR(255) NOT NULL,
-    zone                 INT          NOT NULL,
-    email                VARCHAR(255) NOT NULL,
-    health_centre_number VARCHAR(255) NOT NULL,
-    manager_phone_number VARCHAR(255) NOT NULL
 );

@@ -66,23 +66,6 @@ VALUES ('001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34', 3);
 -- INSERT INTO reading (pid, systolic, diastolic, heart_rate, is_pregnant, gestational_age, colour, timestamp)
 -- VALUES ('002', 140, 80, 93, 2, FALSE, 0, 0, '2018-06-12 08:54:15');
 
-INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number, comments, timestamp)
-VALUES ('001', 3, 3, 'Twilio', '+12053465536', 'nihao', '2019-09-24 12:31:34');
-
-INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number, timestamp)
-VALUES ('001', 3, 4, 'Twilio', '+12053465536', '2019-09-24 12:31:34');
-
-INSERT INTO referral (pid, vid, reading_id, health_centre, health_centre_number, timestamp)
-VALUES ('002', 3, 3, 'SFU', '+12053465539', '2019-09-24 12:31:34');
-
--- Statically Defined Data
-INSERT INTO symptom VALUES (0, 'Headache');
-INSERT INTO symptom VALUES (1, 'Blurred Vision');
-INSERT INTO symptom VALUES (2, 'Abdominal Pain');
-INSERT INTO symptom VALUES (3, 'Bleeding');
-INSERT INTO symptom VALUES (4, 'Feverish');
-INSERT INTO symptom VALUES (5, 'Unwell');
-
 INSERT INTO health_centre (name, zone, email, health_centre_number, manager_phone_number)
 VALUES ('Twilio', 1, 'fakeemail12345@gmail.com', '+12053465536', '+12053465537');
 
@@ -91,3 +74,21 @@ VALUES ('SFU', 2, 'fakeemail123456@gmail.com', '+12053465538', '+12053465539');
 
 INSERT INTO health_centre (name, zone, email, health_centre_number, manager_phone_number)
 VALUES ('FSU', 3, 'fakeemail123457@gmail.com', '+12053465530', '+12053465531');
+
+
+INSERT INTO referral (referred_by, reading_id, referred_to, comments, timestamp)
+VALUES (3, 3, 1, 'nihao', '2019-09-24 12:31:34');
+
+INSERT INTO referral (referred_by, reading_id, referred_to, timestamp)
+VALUES (3, 1, 1, '2019-09-24 12:31:34');
+
+INSERT INTO referral (referred_by, reading_id, referred_to, timestamp)
+VALUES (3, 3, 2, '2019-09-24 12:31:34');
+
+-- Statically Defined Data
+INSERT INTO symptom VALUES (0, 'Headache');
+INSERT INTO symptom VALUES (1, 'Blurred Vision');
+INSERT INTO symptom VALUES (2, 'Abdominal Pain');
+INSERT INTO symptom VALUES (3, 'Bleeding');
+INSERT INTO symptom VALUES (4, 'Feverish');
+INSERT INTO symptom VALUES (5, 'Unwell');

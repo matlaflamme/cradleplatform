@@ -14,10 +14,9 @@ import static com.cradlerest.web.util.Validation.assertFieldNotNull;
  * E.g.
  * Referral currentReferral = new ReferralBuilder()
  * 		.pid(currentPatient.getId())
- * 		.vid(currentVHT.get().getId())
+ * 		.referredBy(currentVHT.get().getId())
+ * 		.referredTo(3)
  * 		.readingId(currentReading.getId())
- * 		.healthCentre(currentHealthCentre.get().getName())
- *		.healthCentreNumber(currentHealthCentre.get().getHealthCentreNumber())
  * 		.comments(comments)
  * 		.timestamp(referralTimestamp)
  * 		.build();
@@ -40,28 +39,18 @@ public class ReferralBuilder {
 		return this;
 	}
 
-	public ReferralBuilder pid(@NotNull String pid) {
-		referral.setPatientId(pid);
+	public ReferralBuilder referredBy(@NotNull Integer userId) {
+		referral.setReferredBy(userId);
 		return this;
 	}
 
-	public ReferralBuilder vid(@NotNull Integer vid) {
-		referral.setVhtId(vid);
+	public ReferralBuilder referredTo(@NotNull Integer healthCenterId) {
+		referral.setReferredTo(healthCenterId);
 		return this;
 	}
 
 	public ReferralBuilder readingId(@NotNull Integer readingId) {
 		referral.setReadingId(readingId);
-		return this;
-	}
-
-	public ReferralBuilder healthCentre(@NotNull String healthCentreName) {
-		referral.setHealthCentre(healthCentreName);
-		return this;
-	}
-
-	public ReferralBuilder healthCentreNumber(@NotNull String healthCentreNumber) {
-		referral.setHealthCentreNumber(healthCentreNumber);
 		return this;
 	}
 
@@ -81,11 +70,9 @@ public class ReferralBuilder {
 	}
 
 	private void validate() throws InstantiationError {
-		assertFieldNotNull(referral.getPatientId(), "pid");
-		assertFieldNotNull(referral.getVhtId(), "vid");
+		assertFieldNotNull(referral.getReferredBy(), "referredBy");
+		assertFieldNotNull(referral.getReferredTo(), "referredTo");
 		assertFieldNotNull(referral.getReadingId(), "readingId");
-		assertFieldNotNull(referral.getHealthCentre(), "healthCentre");
-		assertFieldNotNull(referral.getHealthCentreNumber(), "healthCentreNumber");
 		assertFieldNotNull(referral.getTimestamp(), "referralTimestamp");
 	}
 }
