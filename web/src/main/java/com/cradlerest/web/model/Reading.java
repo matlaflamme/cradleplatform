@@ -9,7 +9,6 @@ import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -71,52 +70,6 @@ public class Reading {
 	private String readingNotes;
 
 	public Reading() {}
-
-	public Reading(
-			@NotNull String patientId,
-			int systolic,
-			int diastolic,
-			int heartRate,
-			boolean isPregnant,
-			Integer gestationalAge,
-			@NotNull ReadingColour colour,
-			@NotNull Date timestamp,
-			@Nullable String otherSymptoms
-	) {
-		this.patientId = patientId;
-		this.systolic = systolic;
-		this.diastolic = diastolic;
-		this.heartRate = heartRate;
-		this.isPregnant = isPregnant;
-		this.gestationalAge = gestationalAge;
-		this.colour = colour;
-		this.timestamp = timestamp;
-		this.otherSymptoms = otherSymptoms;
-	}
-
-	public Reading(
-			int id,
-			@NotNull String patientId,
-			int systolic,
-			int diastolic,
-			int heartRate,
-			boolean isPregnant,
-			Integer gestationalAge,
-			@NotNull ReadingColour colour,
-			@NotNull Date timestamp,
-			@Nullable String otherSymptoms
-	) {
-		this.id = id;
-		this.patientId = patientId;
-		this.systolic = systolic;
-		this.diastolic = diastolic;
-		this.heartRate = heartRate;
-		this.isPregnant = isPregnant;
-		this.gestationalAge = gestationalAge;
-		this.colour = colour;
-		this.timestamp = timestamp;
-		this.otherSymptoms = otherSymptoms;
-	}
 
 	public Integer getId() {
 		return id;
