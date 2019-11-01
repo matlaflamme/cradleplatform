@@ -3,10 +3,7 @@ package com.cradlerest.web.model;
 import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
 import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.Generator;
-import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
-import com.cradlerest.web.util.datagen.impl.EmailGenerator;
-import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
-import com.cradlerest.web.util.datagen.impl.PhoneNumberGenerator;
+import com.cradlerest.web.util.datagen.impl.*;
 
 import javax.persistence.*;
 
@@ -30,8 +27,7 @@ public class HealthCentre {
 	private Integer id;
 
 	@Column(name = "name", nullable = false)
-	@Generator(GibberishSentenceGenerator.class)
-	@DataGenRange(min = 1, max = 2)
+	@Generator(NameGenerator.class)
 	private String name;
 
 	@Column(name = "zone", nullable = false)
