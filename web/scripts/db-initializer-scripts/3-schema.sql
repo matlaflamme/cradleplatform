@@ -20,8 +20,8 @@ CREATE TABLE patient
     zone            VARCHAR(255) NOT NULL,
     birth_year      INT          NOT NULL,
     sex             INT          NOT NULL, -- enumerated {male, female, unknown}
-    medical_history TEXT DEFAULT '',
-    drug_history    TEXT DEFAULT '',
+    medical_history TEXT,
+    drug_history    TEXT,
     last_updated    DATETIME     NOT NULL,
     notes           TEXT
 );
