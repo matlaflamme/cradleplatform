@@ -10,7 +10,6 @@ import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.maumay.jflow.utils.Tup;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -131,8 +130,8 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		Reading currentReading = readingManager.saveReadingView(readingView);
 
 		Referral currentReferral = new ReferralBuilder()
-				.referredBy(currentVHT.get().getId())
-				.referredTo(currentHealthCentre.get().getId())
+				.referredByUserId(currentVHT.get().getId())
+				.referredToHealthCenterId(currentHealthCentre.get().getId())
 				.readingId(currentReading.getId())
 				.comments(comments)
 				.timestamp(referralTimestamp)
@@ -162,13 +161,13 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
-		return Vec.copy(referralRepository.findAllByReferredTo(healthCentre.get().getId()))
+		return Vec.copy(referralRepository.findAllByReferredToHealthCenterId(healthCentre.get().getId()))
 				.map(this::computeReferralView)
 				.toList();
 	}
 
 	private ReferralView computeReferralView(@NotNull Referral r) {
-		var optHc = healthCentreRepository.findById(r.getReferredTo());
+		var optHc = healthCentreRepository.findById(r.getReferredToHealthCenterId());
 		if (optHc.isEmpty()) {
 			throw new RuntimeException("unable to find health center: constraint violation");
 		}

@@ -32,11 +32,11 @@ public class Referral {
 	// TODO: Update to foreign key once VHT models are created
 	@Column(name = "referred_by", nullable = false)
 	@DataGenRange(min = 3, max = 4)
-	private Integer referredBy;
+	private Integer referredByUserId;
 
 	@Column(name = "referred_to", nullable = false)
 	@ForeignKey(HealthCentre.class)
-	private Integer referredTo;
+	private Integer referredToHealthCenterId;
 
 	@Column(name = "reading_id", nullable = false)
 	@ForeignKey(Reading.class)
@@ -68,20 +68,20 @@ public class Referral {
 
 	public void setId(Integer id) { this.id = id; }
 
-	public Integer getReferredBy() {
-		return referredBy;
+	public Integer getReferredByUserId() {
+		return referredByUserId;
 	}
 
-	public void setReferredBy(Integer referredBy) {
-		this.referredBy = referredBy;
+	public void setReferredByUserId(Integer referredByUserId) {
+		this.referredByUserId = referredByUserId;
 	}
 
-	public Integer getReferredTo() {
-		return referredTo;
+	public Integer getReferredToHealthCenterId() {
+		return referredToHealthCenterId;
 	}
 
-	public void setReferredTo(Integer referredTo) {
-		this.referredTo = referredTo;
+	public void setReferredToHealthCenterId(Integer referredToHealthCenterId) {
+		this.referredToHealthCenterId = referredToHealthCenterId;
 	}
 
 	public Integer getReadingId() {

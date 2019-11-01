@@ -40,7 +40,7 @@ public interface ReferralView {
 
 			@Override
 			public int getVhtId() {
-				return referral.getReferredBy();
+				return referral.getReferredByUserId();
 			}
 
 			@Override

@@ -73,7 +73,7 @@ public class ReferralController {
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
-					"Health centre referred: " + savedReferral.getReferredTo();
+					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
 		} catch (Exception exception) {
 			// temporay error response
 			// should try to give VHT more detail on the error
@@ -97,7 +97,7 @@ public class ReferralController {
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
-					"Health centre referred: " + savedReferral.getReferredTo();
+					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
 		} catch (Exception exception) {
 			// temporay error response
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
