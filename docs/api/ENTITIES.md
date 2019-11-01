@@ -9,6 +9,9 @@ For an overview of the API methods themselves, see [METHODS.md](METHODS.md).
 * [Patient](#patient)
 * [Patient Profile](#patient-profile)
 * [Reading](#reading)
+* [User](#user)
+* [Referral](#referral)
+* [Health Centre](#health-centre)
 
 ## Exception
 
@@ -262,3 +265,65 @@ Serialized as a simple JSON string.
 * `"Bleeding"`
 * `"Feverish"`
 * `"Unwell"`
+``
+
+## Referral
+
+Typically sent by VHTs from the android app signaling to a health centre a patient in need of attention.
+
+A new reading is created for every referral.
+
+For now, all the objects are referred to using ids rather than actual objects because I need some
+more time to figure how JPA works.
+
+### Fields
+
+| Field | Type | Nullable | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `false` | Unique Referral identifier |
+| `pid` | `string` | `false` | Patient Id |
+| `vid` | `number` | `false` | VHT Id |
+| `readingId` | `number` | `false` | Reading Id |
+| `healthCentre` | `string` | `true` | Name of Health Centre referred to by VHT |
+| `healthCentreNumber` | `strung` | `true` | Number of Health Centre |
+| `comments` | `string` | `true` | Comments that can be included by the VHT  |
+| `timestamp`| `string` | `false` | Timestamp of the referral in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+| `closed` | `string` | `true` | The timestamp at which the referral loop is closed |
+| `accepter` | `string` | `true` | The health worker name that accepts responsibility for the referral |
+
+### Example
+
+```json
+{
+    "id": 3,
+    "patientId": "002",
+    "vhtId": 3,
+    "readingId": 3,
+    "healthCentre": "SFU",
+    "healthCentreNumber": "+12053465539",
+    "comments": "Hi",
+    "timestamp": "2019-09-24 05:31:34",
+    "closed": null,
+    "accepter": null
+}
+```
+
+## Health Centre
+
+Facilities where health workers manage referrals and patients.
+
+Each health worker has a manager.
+
+API currently not supported. Only used currently to verify referral health centre names.
+
+### Fields
+
+| Field | Type | Nullable | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `false` | Unique Health Centre identifier |
+| `name` | `string` | `false` | Name |
+| `zone` | `number` | `false` | Zone Number |
+| `email` | `string` | `false` | Reading Id |
+| `healthCentreNumber` | `string` | `false` | Name of Health Centre referred to by VHT |
+| `managerPhoneNumber` | `string` | `false` | Number of Health Centre |
+
