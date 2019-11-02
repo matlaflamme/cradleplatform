@@ -27,6 +27,39 @@ function getReadingColorIcon(digit) {
     return { 'colour' : colour, 'arrow' : arrow };
 };
 
+Vue.component('basic_info', {
+    vuetify: new Vuetify(),
+    data: () => ({
+        patientInformation: {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
+            "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
+            "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
+                "timestamp":""}]}
+    }),
+    mounted() {
+        let urlQuery = new URLSearchParams(location.search);
+        let id = urlQuery.get('id');
+        axios.get('/api/patient/' + id).then(response => {
+            this.patientInformation = response.data;
+        });
+    },
+    template:
+        '<div>' +
+            '<v-row>' +
+                '<v-col md="4" cols="12">' +
+                    '<strong class="font-weight-thin display-2">Patient Details</strong>' +
+                '</v-col>' +
+                '<v-col md="3" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">ID: <span class="font-weight-light">{{patientInformation.id}}</span></span>' +
+                '</v-col>' +
+                '<v-col md="3" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">Initials: <span class="font-weight-light">{{patientInformation.name}}</span></span>' +
+                '</v-col>' +
+                '<v-col md="2" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">Birth Year: <span class="font-weight-light">{{patientInformation.birthYear}}</span></span>' +
+                '</v-col>' +
+            '</v-row>' +
+        '</div>'
+});
 
 // This compnent is for the center of the page, it shows a table of all the patient readings
 Vue.component('readings_table' , {
@@ -110,17 +143,10 @@ Vue.component('patient_info', {
     template:
         '<v-card\n' +
         'class="mx-auto"\n' +
-        'max-width="400"\n' +
-        'raised\n' +
         '>\n' +
         '    <v-list-item three-line>\n' +
         '        <v-list-item-content>\n' +
-        '       <h3>Patient Information</h3>\n' +
-        '       <p><strong>Patient Name: </strong>{{patientData.name}}</p>' +
-        '       <p><strong>ID: </strong>{{patientData.id}}</p>' +
-        '       <p><strong>Date Of Birth: </strong>{{patientData.birthYear}}</p>' +
-        '       <p><strong>Sex: </strong>{{getPatientSex(patientData.sex)}}</p>' +
-        '       <h3>Latest Reading</h3>\n' +
+        '       <h3 class="font-weight-light">Latest Reading</h3>\n' +
         '        </v-list-item-content>' +
         '    </v-list-item three-line>' +
         '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
@@ -129,14 +155,14 @@ Vue.component('patient_info', {
         '    <img id="arrow" ref="arrow" src="/img/arrow_down.png" height="30" width="20" style="margin-bottom: 12px">\n' +
         '    <v-list-item three-line>\n' +
         '        <v-list-item-content>\n' +
-        '       <p><strong>Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
-        '       <p><strong>Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
-        '       <p><strong>Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
-        '         <h3>Symptoms</h3>\n' +
+        '       <p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
+        '       <p><strong class="font-weight-regular title">Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
+        '       <p><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
+        '         <h3 class="font-weight-light">Symptoms</h3>\n' +
         '        <div>Received overcame oh sensible so at an.\n' +
         '            Formed do change merely to county it. Am separate contempt\n' +
         '            domestic to to oh. On relation my so addition branched.</div>\n' +
-        '        <h3>Current Medications</h3>\n' +
+        '        <h3 class="font-weight-light">Current Medications</h3>\n' +
         '        <ul className="list-group">\n'+
         '        <li className="list-group-item">item 3 </li>\n'+
         '        <li className="list-group-item">item 2</li>\n'+
