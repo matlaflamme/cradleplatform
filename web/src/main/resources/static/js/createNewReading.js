@@ -5,6 +5,7 @@ Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
         e1: 0,
+        symptoms: [],
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
         MIN_SYSTOLIC: 10,
@@ -86,18 +87,18 @@ Vue.component('new_reading',{
     template: //@TODO Fix indentation
     '    <v-stepper v-model="e1">\n' +
         '      <v-stepper-header>\n' +
-        '        <v-stepper-step :complete="e1 > 1" step="1" editable>Name of step 1</v-stepper-step>\n' +
+        '        <v-stepper-step :complete="e1 > 1" step="1" editable></v-stepper-step>\n' +
         '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step :complete="e1 > 2" step="2" editable>Name of step 2</v-stepper-step>\n' +
+        '        <v-stepper-step :complete="e1 > 2" step="2" editable></v-stepper-step>\n' +
         '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step step="3" editable>Name of step 3</v-stepper-step>\n' +
+        '        <v-stepper-step step="3" editable></v-stepper-step>\n' +
         '      </v-stepper-header>\n' +
         '      <v-stepper-items>\n' +
         '        <v-stepper-content step="1">\n' +
         '          <v-card\n' +
-        '        <v-card class="overflow-hidden" raised min-width="500">\n' +
-        '        `<v-card-title>\n' +
-        '            <span class="title">Add a new reading</span>\n' +
+        '        <v-card  :elevation= "0" min-width="500">\n' +
+        '        <v-card-title>\n' +
+        '            <span class="title">Vitals</span>\n' +
         '        </v-card-title>' +
         '        <v-form\n' +
         '            ref="newReadingForm"\n' +
@@ -147,11 +148,19 @@ Vue.component('new_reading',{
         '        </v-stepper-content>\n' +
         '  \n' +
         '        <v-stepper-content step="2">\n' +
-        '          <v-card\n' +
-        '            class="mb-12"\n' +
-        '            color="grey lighten-1"\n' +
-        '            height="200px"\n' +
-        '          ></v-card>\n' +
+        '           <v-card  :elevation= "0" min-width="500">\n' +
+        '           <span class="title">Symptoms</span>\n' +
+        '    <v-container>\n' +
+        '      <p>{{ symptoms }}</p>\n' +
+        '      <v-checkbox v-model="symptoms" label="No Symptoms" value=\'No Symptoms\'></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Headaches" value="Headaches"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vission"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
+        '      <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>' +
+        '    </v-container>\n' +
+        '          </v-card>\n' +
         '  \n' +
         '          <v-btn\n' +
         '            color="primary"\n' +
@@ -170,14 +179,11 @@ Vue.component('new_reading',{
         '  \n' +
         '        <v-stepper-content step="3">\n' +
         '          <v-card\n' +
-        '            class="mb-12"\n' +
-        '            color="grey lighten-1"\n' +
-        '            height="200px"\n' +
         '          ></v-card>\n' +
         '  \n' +
         '          <v-btn\n' +
         '            color="primary"\n' +
-        '            @click="e1 = 1"\n' +
+        '            @click="validate"\n' +
         '          >\n' +
         '            Continue\n' +
         '          </v-btn>\n' +
