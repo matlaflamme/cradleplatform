@@ -4,6 +4,7 @@ Vue.prototype.$http = axios;
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
+        e1: 0,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
         MIN_SYSTOLIC: 10,
@@ -83,58 +84,116 @@ Vue.component('new_reading',{
         this.patientID = id;
     },
     template: //@TODO Fix indentation
-        '<v-card class="overflow-hidden" raised min-width="500"> ' +
-        `<v-card-title>
-            <span class="title">Add a new reading</span>`+
-        '</v-card-title> ' +
-        `<v-form
-            ref="newReadingForm"
-            v-model="valid"
-            lazy-validation
-            class="ma-5 px-3"
-            >` +
-        ` <v-text-field
-        v-model="patientID"
-        :rules="patientIDRules"
-        label="Patient ID"
-        required
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="systolic"
-        :rules="systolicRules"
-        label="Systolic"
-        required
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="diastolic"
-        :rules="diastolicRules"
-        label="Diastolic"
-        required
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="heartRate"
-        :rules="heartRateRules"
-        label="Heart Rate"
-        required
-      ></v-text-field>` +
-        `<v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="validate"
-      >
-        Submit
-      </v-btn>` +
-        `<v-btn
-        color="error"
-        class="mr-4"
-        @click="reset"
-      >
-        Clear Form
-      </v-btn>
-    </v-form>` +
-        '</v-card>'
+    '    <v-stepper v-model="e1">\n' +
+        '      <v-stepper-header>\n' +
+        '        <v-stepper-step :complete="e1 > 1" step="1" editable>Name of step 1</v-stepper-step>\n' +
+        '        <v-divider></v-divider>\n' +
+        '        <v-stepper-step :complete="e1 > 2" step="2" editable>Name of step 2</v-stepper-step>\n' +
+        '        <v-divider></v-divider>\n' +
+        '        <v-stepper-step step="3" editable>Name of step 3</v-stepper-step>\n' +
+        '      </v-stepper-header>\n' +
+        '      <v-stepper-items>\n' +
+        '        <v-stepper-content step="1">\n' +
+        '          <v-card\n' +
+        '        <v-card class="overflow-hidden" raised min-width="500">\n' +
+        '        `<v-card-title>\n' +
+        '            <span class="title">Add a new reading</span>\n' +
+        '        </v-card-title>' +
+        '        <v-form\n' +
+        '            ref="newReadingForm"\n' +
+        '            v-model="valid"\n' +
+        '            lazy-validation\n' +
+        '            class="ma-5 px-3"\n' +
+        '            >' +
+        '        <v-text-field\n' +
+        '        v-model="patientID"\n' +
+        '        :rules="patientIDRules"\n' +
+        '        label="Patient ID"\n' +
+        '        required\n' +
+        '      ></v-text-field>\n' +
+        '        <v-text-field\n' +
+        '        v-model="systolic"\n' +
+        '        :rules="systolicRules"\n' +
+        '        label="Systolic"\n' +
+        '        required\n' +
+        '      ></v-text-field>\n' +
+        '        <v-text-field\n' +
+        '        v-model="diastolic"\n' +
+        '        :rules="diastolicRules"\n' +
+        '        label="Diastolic"\n' +
+        '        required\n' +
+        '      ></v-text-field>\n' +
+        '        <v-text-field\n' +
+        '        v-model="heartRate"\n' +
+        '        :rules="heartRateRules"\n' +
+        '        label="Heart Rate"\n' +
+        '        required\n' +
+        '      ></v-text-field>\n' +
+        '          </v-card>\n' +
+        '  \n' +
+        '          <v-btn\n' +
+        '            color="primary"\n' +
+        '            @click="e1 = 2"\n' +
+        '          >\n' +
+        '            Continue\n' +
+        '          </v-btn>\n' +
+        '  \n' +
+        '          <v-btn\n' +
+        '            color="error"'+
+        '            @click="reset"\n' +
+        '          >\n' +
+        '            reset\n' +
+        '          </v-btn>\n' +
+        '        </v-stepper-content>\n' +
+        '  \n' +
+        '        <v-stepper-content step="2">\n' +
+        '          <v-card\n' +
+        '            class="mb-12"\n' +
+        '            color="grey lighten-1"\n' +
+        '            height="200px"\n' +
+        '          ></v-card>\n' +
+        '  \n' +
+        '          <v-btn\n' +
+        '            color="primary"\n' +
+        '            @click="e1 = 3"\n' +
+        '          >\n' +
+        '            Continue\n' +
+        '          </v-btn>\n' +
+        '  \n' +
+        '          <v-btn\n' +
+        '            color="error"'+
+        '            @click="reset"\n' +
+        '          >\n' +
+        '            reset\n' +
+        '          </v-btn>\n' +
+        '        </v-stepper-content>\n' +
+        '  \n' +
+        '        <v-stepper-content step="3">\n' +
+        '          <v-card\n' +
+        '            class="mb-12"\n' +
+        '            color="grey lighten-1"\n' +
+        '            height="200px"\n' +
+        '          ></v-card>\n' +
+        '  \n' +
+        '          <v-btn\n' +
+        '            color="primary"\n' +
+        '            @click="e1 = 1"\n' +
+        '          >\n' +
+        '            Continue\n' +
+        '          </v-btn>\n' +
+        '  \n' +
+        '          <v-btn\n' +
+        '            color="error"'+
+        '            @click="reset"\n' +
+        '          >\n' +
+        '            reset\n' +
+        '          </v-btn>\n' +
+        '        </v-stepper-content>\n' +
+        '      </v-stepper-items>\n' +
+        '    </v-stepper>'
+
 });
+
 
 function getCurrentDate() {
     let now = new Date(); //new date object
