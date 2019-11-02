@@ -180,45 +180,6 @@ Vue.component('patient_info', {
 
 });
 
-//This component is for the right side of the page which gives a medical history of the patient
-Vue.component('patient_history', {
-    props: {
-        title: String, //Usage: {{title}} inside of the template is replaced with the prop
-        //Prop is given a value inside of the component's html tag in the html file where its used
-    },
-    template:
-        '<v-card\n' +
-        'class="mx-auto"\n' +
-        'max-width="400"\n' +
-        'raised\n' +
-        '>\n' +
-            '<v-list-item three-line>\n' +
-            '<v-list-item-content>\n' +
-            '<h3>Past Medications</h3>\n' +
-                '<ul id="pastMedication">\n' +
-                    '<li >item 1 </li>\n' +
-                    '<li >item 2</li>\n' +
-                    '<li >item 3</li>\n' +
-                    '<li >item 4</li>\n'+
-                '</ul>\n' +
-                '<h3>Past Symptoms</h3>\n' +
-                '<ul id="pastSymptoms">\n'+
-                    '<li >item 1 </li>\n'+
-                    '<li >item 2</li>\n'+
-                    '<li >item 3</li>\n'+
-                    '<li >item 4</li>\n'+
-                '</ul>\n'+
-                '<h3>Medical History</h3>\n'+
-                '<div>Received overcame oh sensible so at an.\n' +
-                'Formed do change merely to county it. Am separate contempt\n' +
-                'domestic to to oh. On relation my so addition branched.</div>\n' +
-                '</v-list-item-content>' +
-                '</v-list-item three-line>' +
-            '</v-card>\n',
-
-
-});
-
 new Vue({
     el: '#app',
     vuetify: new Vuetify(),

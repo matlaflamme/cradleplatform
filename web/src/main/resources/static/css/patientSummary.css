@@ -17,17 +17,3 @@ h3 {
     display: inline-block;
     margin-top: 10px;
 }
-
-
-.bg-light {
-    background-color: #0b908f!important; /* NavBar background */
-}
-
-.nav-link:hover {
-    color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
-}
-
-
-.row{
-    margin-left: 7%;
-}
