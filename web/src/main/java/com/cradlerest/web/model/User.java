@@ -38,7 +38,7 @@ public class User {
 	@Column(name = "role", nullable = false)
 	private String roles; // ADMIN,VHT,HEALTHWORKER
 
-	@Column(name = "active", columnDefinition = "boolean default true", nullable = false)
+	@Column(name = "active", columnDefinition = "default boolean true", nullable = false)
 	private boolean active;
 
 	public User() {}
@@ -48,6 +48,7 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
+		this.active = true;
 	}
 
 	public User(User user) {
@@ -55,12 +56,14 @@ public class User {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.roles = user.getRoles();
+		this.active = true;
 	}
 
 	public User(String username, String password, String roles) {
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
+		this.active = true;
 	}
 
 	public void setId(Integer id) {
@@ -93,6 +96,9 @@ public class User {
 
 	public boolean getActive() { return active; }
 
-	public void setActive(boolean active) { this.active = active; }
+	public void swapActive() {
+		System.out.println("WTF");
+		this.active = !active;
+	}
 
 }
