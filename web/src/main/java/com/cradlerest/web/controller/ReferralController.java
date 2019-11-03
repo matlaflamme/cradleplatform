@@ -79,9 +79,7 @@ public class ReferralController {
 			return "Success:\n " +
 					"Health centre referred: " + savedReferral.getHealthCentre();
 		} catch (Exception exception) {
-			// temporay error response
-			// should try to give VHT more detail on the error
-			return "There was an error processing your referral";
+			return "There was an error processing your referral: " + exception.getMessage();
 		}
 	}
 
@@ -103,9 +101,8 @@ public class ReferralController {
 			return "Success:\n " +
 					"Health centre referred: " + savedReferral.getHealthCentre();
 		} catch (Exception exception) {
-			// temporay error response
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return stackTraceString(exception);
+			return exception.getMessage();
 		}
 	}
 
@@ -117,14 +114,6 @@ public class ReferralController {
 	@GetMapping("/{healthCentreName}/all")
 	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
 		return referralManagerService.findAllByHealthCentre(healthCentreName);
-	}
-
-	// Returns stack trace for exception as string
-	private String stackTraceString(Exception exception) {
-		StringWriter stringWriter = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(stringWriter);
-		exception.printStackTrace(printWriter);
-		return stringWriter.toString();
 	}
 
 }
