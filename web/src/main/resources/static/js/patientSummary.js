@@ -76,7 +76,8 @@ Vue.component('readings_table' , {
             { text: 'Traffic Light', value: 'colour'}
         ],
         rows: [], //empty to start
-        expanded: []
+        expanded: [],
+        graphData: [10, 40, 3, 100, 20, 30, 70, 2, 30, 88],
 
     }),
     methods: {
@@ -105,7 +106,7 @@ Vue.component('readings_table' , {
 
     },
     template:
-
+    '<div>' +
         '<v-data-table' +
         ' :headers="headers"' +
         ' :items="rows"' +
@@ -131,8 +132,22 @@ Vue.component('readings_table' , {
             '<template v-slot:expanded-item="{ headers }">' +
                 '<td :colspan="headers.length">All other reading information goes in here</td>' +
             '</template>' +
-        '</v-data-table>'
-
+        '</v-data-table>' +
+        '<v-spacer class="pt-5"></v-spacer>' +
+        '<v-spacer class="pt-5"></v-spacer>' +
+        '<v-card class="mx-auto">' +
+            '<v-sheet>' +
+                '<v-sparkline ' +
+                    ' :smooth="16"' +
+                    ' :gradient="[\'#f72047\', \'#ffd200\', \'#00E206\']"' +
+                    ' :line-width="3"' +
+                    ' :value="graphData"' +
+                    ' auto-draw' +
+                    ' stroke-linecap="round"' +
+                '></v-sparkline>' +
+            '</v-sheet>' +
+        '</v-card>' +
+    '</div>'
 });
 
 // This component is for the left side of the page, it reads the patient info and gives a summary on the patient info and last reading
