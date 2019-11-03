@@ -86,16 +86,11 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 						"healthCentreName: " + healthCentreName + "\n" +
 						"comments: " + comments);
 
-		Patient currentPatient = null;
-		try {
-			currentPatient = patientManagerService.getPatientWithId(patientId);
-		} catch (EntityNotFoundException exception) {
-			exception.printStackTrace();
-			// TODO: No patient found, create new patient
-			// We can either send another text message requesting more information
-			// OR
-			// request all necessary information from initial referral
-		}
+		// TODO: No patient found, create new patient
+		// We can either send another text message requesting more information
+		// OR
+		// request all necessary information from initial referral
+		Patient currentPatient = patientManagerService.getPatientWithId(patientId);
 
 		Optional<User> currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
 		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
