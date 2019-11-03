@@ -237,4 +237,20 @@
         <Request method="GET" uri="/api/referral/fasdfasdfasdfasdf/all"/>
         <Response status="404"/>
     </TestCase>
+    <TestCase name="Create new user">
+        <Request method="POST" uri="/api/user/add">
+            <![CDATA[
+            {
+              "username":"user100001241241",
+              "password":"user10000",
+              "roles":"ROLE_VHT"
+            }
+            ]]>
+        </Request>
+        <Response status="200"/>
+    </TestCase>
+    <TestCase name="Disabling user100001241241">
+        <Request method="POST" uri="/api/user/user100001241241/change-active"/>
+        <Response status="200"/>
+    </TestCase>
 </TestSuite>
