@@ -4,9 +4,13 @@ import com.cradlerest.web.constraints.user.ValidPassword;
 import com.cradlerest.web.constraints.user.ValidRole;
 import com.cradlerest.web.constraints.user.ValidUsername;
 import com.cradlerest.web.util.datagen.annotations.Omit;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Class {@code User} is a database entity holding data for users of the web
@@ -40,6 +44,14 @@ public class User {
 
 	@Column(name = "active", columnDefinition = "default boolean true", nullable = false)
 	private boolean active;
+
+	@CreationTimestamp
+	@Column(name = "created")
+	private Date created;
+
+	@UpdateTimestamp
+	@Column(name = "modified")
+	private Date modified;
 
 	public User() {}
 
