@@ -109,9 +109,13 @@ public class ReferralController {
 		}
 	}
 
+	/**
+	 * Returns all referrals sorted by timestamp in descending order
+	 * @return
+	 */
 	@GetMapping("/all")
-	public @ResponseBody List<Referral> allReferrals() {
-		return referralManagerService.findAll();
+	public @ResponseBody List<Referral> allReferralsSortByTimestamp() {
+		return referralManagerService.findAllByOrderByTimestampDesc();
 	}
 
 	@GetMapping("/{healthCentreName}/all")
