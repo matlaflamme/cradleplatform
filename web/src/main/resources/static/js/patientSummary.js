@@ -141,37 +141,43 @@ Vue.component('patient_info', {
         }
     },
     template:
-        '<v-card\n' +
-        'class="mx-auto"\n' +
-        '>\n' +
-        '    <v-list-item three-line>\n' +
-        '        <v-list-item-content>\n' +
-        '       <h3 class="font-weight-light">Latest Reading</h3>\n' +
-        '        </v-list-item-content>' +
-        '    </v-list-item three-line>' +
-        '    <img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
-        '    <p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
-        '    <span id="light" ref="light" class="dot"></span>\n' +
-        '    <img id="arrow" ref="arrow" src="/img/arrow_down.png" height="30" width="20" style="margin-bottom: 12px">\n' +
-        '    <v-list-item three-line>\n' +
-        '        <v-list-item-content>\n' +
-        '       <p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
-        '       <p><strong class="font-weight-regular title">Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
-        '       <p><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
-        '         <h3 class="font-weight-light">Symptoms</h3>\n' +
-        '        <div>Received overcame oh sensible so at an.\n' +
-        '            Formed do change merely to county it. Am separate contempt\n' +
-        '            domestic to to oh. On relation my so addition branched.</div>\n' +
-        '        <h3 class="font-weight-light">Current Medications</h3>\n' +
-        '        <ul className="list-group">\n'+
-        '        <li className="list-group-item">item 3 </li>\n'+
-        '        <li className="list-group-item">item 2</li>\n'+
-        '        <li className="list-group-item">item 3</li>\n'+
-        '        <li className="list-group-item">item 4</li>\n'+
-        '        </ul>\n'+
-        '        </v-list-item-content>' +
-        '    </v-list-item three-line>' +
-        '</v-card>\n',
+        '<div class="mx-auto">' +
+            '<v-list-item three-line>\n' +
+                '<v-list-item-content>\n' +
+                    '<h3 class="font-weight-light">Latest Reading</h3>\n' +
+                '</v-list-item-content>' +
+            '</v-list-item three-line>' +
+            '<img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
+            '<p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
+            '<span id="light" ref="light" class="dot"></span>\n' +
+            '<img id="arrow" ref="arrow" src="/img/arrow_down.png" height="30" width="20" style="margin-bottom: 12px">\n' +
+            '<v-list-item three-line>\n' +
+                '<v-list-item-content>\n' +
+                    '<p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
+                    '<p><strong class="font-weight-regular title">Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
+                    '<p><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
+                '</v-list-item-content>' +
+            '</v-list-item>' +
+            '<v-list-item three-line>' +
+                '<v-list-item-content>' +
+                    '<h3 class="font-weight-light">Symptoms</h3>\n' +
+                    '<div>Received overcame oh sensible so at an.\n' +
+                        'Formed do change merely to county it. Am separate contempt\n' +
+                        'domestic to to oh. On relation my so addition branched.</div>\n' +
+                '</v-list-item-content>' +
+            '</v-list-item>' +
+            '<v-list-item three-line>' +
+                '<v-list-item-content>' +
+                    '<h3 class="font-weight-light">Current Medications</h3>\n' +
+                    '<ul className="list-group">\n'+
+                        '<li className="list-group-item">item 3 </li>\n'+
+                        '<li className="list-group-item">item 2</li>\n'+
+                        '<li className="list-group-item">item 3</li>\n'+
+                        '<li className="list-group-item">item 4</li>\n'+
+                    '</ul>\n'+
+                '</v-list-item-content>' +
+            '</v-list-item three-line>' +
+        '</div>',
 
     mounted() {
         let urlQuery = new URLSearchParams(location.search);
