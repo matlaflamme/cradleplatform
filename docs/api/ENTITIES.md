@@ -11,6 +11,7 @@ For an overview of the API methods themselves, see [METHODS.md](METHODS.md).
 * [Reading](#reading)
 * [User](#user)
 * [Referral](#referral)
+* [Health Centre](#health-centre)
 
 ## Exception
 
@@ -282,9 +283,9 @@ more time to figure how JPA works.
 | `id` | `number` | `false` | Unique Referral identifier |
 | `pid` | `string` | `false` | Patient Id |
 | `vid` | `number` | `false` | VHT Id |
-| `reading_id` | `number` | `false` | Reading Id |
-| `health_centre` | `string` | `true` | Name of Health Centre referred to by VHT |
-| `health_centre_number` | `strung` | `true` | Number of Health Centre |
+| `readingId` | `number` | `false` | Reading Id |
+| `healthCentre` | `string` | `true` | Name of Health Centre referred to by VHT |
+| `healthCentreNumber` | `strung` | `true` | Number of Health Centre |
 | `comments` | `string` | `true` | Comments that can be included by the VHT  |
 | `timestamp`| `string` | `false` | Timestamp of the referral in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
 | `closed` | `string` | `true` | The timestamp at which the referral loop is closed |
@@ -323,6 +324,6 @@ API currently not supported. Only used currently to verify referral health centr
 | `name` | `string` | `false` | Name |
 | `zone` | `number` | `false` | Zone Number |
 | `email` | `string` | `false` | Reading Id |
-| `health_centre_number` | `string` | `false` | Name of Health Centre referred to by VHT |
-| `manager_phone_number` | `strung` | `false` | Number of Health Centre |
+| `healthCentreNumber` | `string` | `false` | Name of Health Centre referred to by VHT |
+| `managerPhoneNumber` | `string` | `false` | Number of Health Centre |
 
