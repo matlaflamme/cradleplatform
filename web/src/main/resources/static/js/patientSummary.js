@@ -139,7 +139,10 @@ Vue.component('patient_info', {
                     "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
                         "timestamp":""}]}, //data in the form of json string
             hasSymptoms: false,
-            symptoms: []
+            symptoms: [],
+            takingMedication: false,
+            medications: [],
+            pregnant: false,
         }
     },
     template:
@@ -157,10 +160,10 @@ Vue.component('patient_info', {
                 '<v-list-item-content>\n' +
                     '<p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
                     '<p><strong class="font-weight-regular title">Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
-                    '<p><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
+                    '<p v-if="pregnant"><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.readings[0].gestationalAge}} weeks</p>' +
                 '</v-list-item-content>' +
             '</v-list-item>' +
-            '<v-list-item v-if="symptoms" three-line>' +
+            '<v-list-item v-if="hasSymptoms" three-line>' +
                 //'<v-list-item-content v-for="symptom in symptoms">' +
                 '<v-list-item-content>' +
                     '<h3 class="font-weight-light pb-5">Symptoms</h3>\n' +
@@ -169,17 +172,14 @@ Vue.component('patient_info', {
                     '</ul>\n'+
                 '</v-list-item-content>' +
             '</v-list-item>' +
-            '<v-list-item three-line>' +
+            '<v-list-item v-if="takingMedication" three-line>' +
                 '<v-list-item-content>' +
-                    '<h3 class="font-weight-light">Current Medications</h3>\n' +
-                    '<ul className="list-group">\n'+
-                        '<li className="list-group-item">item 3 </li>\n'+
-                        '<li className="list-group-item">item 2</li>\n'+
-                        '<li className="list-group-item">item 3</li>\n'+
-                        '<li className="list-group-item">item 4</li>\n'+
+                    '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
+                    '<ul className="list-group" v-for="medication in medications">\n'+
+                        '<li className="list-group-item" class="pb-1">{{medication}}</li>\n'+
                     '</ul>\n'+
                 '</v-list-item-content>' +
-            '</v-list-item three-line>' +
+            '</v-list-item>' +
         '</div>',
 
     mounted() {
@@ -190,14 +190,31 @@ Vue.component('patient_info', {
             console.log(response.data);
             this.setLight(response.data); //update light colour based on response from get request
             this.checkSymptoms();
+            this.checkMedications();
+            this.checkPregnant();
         });
 
     },
     methods: {
         checkSymptoms() {
-            this.symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //**********************************************Remove this
+            this.patientData.readings[0].symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //**********************************************Remove this
             if (this.patientData.readings[0].symptoms.length !== 0) {
+                this.symptoms = this.patientData.readings[0].symptoms;
                 this.hasSymptoms = true;
+            }
+        },
+        checkMedications() {
+            this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //***************************************** Remove this
+            if (this.patientData.drugHistory !== null) {
+                this.medications = this.patientData.drugHistory;
+                this.takingMedication = true;
+            }
+        },
+        checkPregnant() {
+            this.patientData.readings[0].gestationalAge = 130; // *********************************************************** Remove this
+            if (this.patientData.readings[0].gestationalAge) {
+                this.pregnant = true;
+                this.patientData.readings[0].gestationalAge = Math.round(this.patientData.readings[0].gestationalAge / 7);
             }
         },
         getPatientSex: function(sexVal) {
