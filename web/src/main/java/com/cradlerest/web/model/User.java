@@ -25,18 +25,21 @@ public class User {
 
 	@NotEmpty(message = "username required")
 	@ValidUsername
-	@Column(name = "username")
+	@Column(name = "username", nullable = false)
 	private String username;
 
 	@NotEmpty(message = "Password required") // Bcrypt will encode an empty string so this might be redundant
 	@ValidPassword
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	@NotEmpty(message = "Role required")
 	@ValidRole // valid format "ROLE_XX,ROLE_XX,ROLE_XX", where XX = ADMIN,VHT,HEALTHWORKER
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	private String roles; // ADMIN,VHT,HEALTHWORKER
+
+	@Column(name = "active", columnDefinition = "boolean default true", nullable = false)
+	private boolean active;
 
 	public User() {}
 
@@ -87,5 +90,9 @@ public class User {
 	}
 
 	public String getRoles() { return roles; }
+
+	public boolean getActive() { return active; }
+
+	public void setActive(boolean active) { this.active = active; }
 
 }

@@ -70,9 +70,8 @@ public class UserDetailsImpl extends User implements UserDetails {
         return true;
     }
 
-    // TODO: This really shouldn't always return true
     @Override
     public boolean isEnabled() {
-        return true;
+        return super.getActive();
     }
 }
