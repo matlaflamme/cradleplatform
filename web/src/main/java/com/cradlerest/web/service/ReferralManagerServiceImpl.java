@@ -114,7 +114,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		ReadingView readingView = new ReadingViewBuilder()
 				.pid(currentPatient.getId())
-				.pregnant(false)
+				.pregnant(false) // TODO: Info not sent through referral at the moment
 				.colour(ReadingColour.valueOf(readingColourKey))
 				.diastolic(diastolic)
 				.systolic(systolic)
