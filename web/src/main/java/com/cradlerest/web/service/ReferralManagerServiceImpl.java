@@ -78,16 +78,16 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		String healthCentreName = requestBody.get("healthCentre").textValue();
 		String comments = requestBody.get("comments").textValue();
 		logger.info("Referral data \n" +
-						"patientId: " + patientId + "\n" +
-						"systolic: " + systolic + "\n" +
-						"diastolic: " + diastolic + "\n" +
-						"heartRate: " + heartRate + "\n" +
-						"readingColourKey: " + readingColourKey + "\n" +
-						"symptoms: " + symptoms + " \n" +
-						"readingTimestamp: " + readingTimestamp + "\n" +
-						"referralTimestamp: " + referralTimestamp + "\n" +
-						"healthCentreName: " + healthCentreName + "\n" +
-						"comments: " + comments);
+				"patientId: " + patientId + "\n" +
+				"systolic: " + systolic + "\n" +
+				"diastolic: " + diastolic + "\n" +
+				"heartRate: " + heartRate + "\n" +
+				"readingColourKey: " + readingColourKey + "\n" +
+				"symptoms: " + symptoms + " \n" +
+				"readingTimestamp: " + readingTimestamp + "\n" +
+				"referralTimestamp: " + referralTimestamp + "\n" +
+				"healthCentreName: " + healthCentreName + "\n" +
+				"comments: " + comments);
 
 		Patient currentPatient = null;
 		try {
@@ -141,17 +141,23 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	/**
-	 *
 	 * @param healthCentreName
 	 * @return All referrals from a health centre
 	 */
 	@Override
-	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException{
+	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException {
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
 		return Vec.copy(referralRepository.findAllByReferredToHealthCenterId(healthCentre.get().getId()))
+				.map(this::computeReferralView)
+				.toList();
+	}
+
+	@Override
+	public List<ReferralView> findAllByOrderByTimestampDesc() {
+		return Vec.copy(referralRepository.findAllByOrderByTimestampDesc())
 				.map(this::computeReferralView)
 				.toList();
 	}
@@ -168,6 +174,4 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		return ReferralView.fromReferral(r, hc.getName(), hc.getHealthCentreNumber(), pid);
 	}
-
-	public List<Referral> findAllByOrderByTimestampDesc() { return referralRepository.findAllByOrderByTimestampDesc(); }
 }

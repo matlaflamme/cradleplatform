@@ -110,7 +110,7 @@ public class ReferralController {
 	 * @return
 	 */
 	@GetMapping("/all")
-	public @ResponseBody List<Referral> allReferralsSortByTimestamp() {
+	public @ResponseBody List<ReferralView> allReferralsSortByTimestamp() {
 		return referralManagerService.findAllByOrderByTimestampDesc();
 	}
 

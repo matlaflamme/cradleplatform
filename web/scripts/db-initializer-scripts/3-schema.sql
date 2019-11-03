@@ -12,7 +12,7 @@ CREATE TABLE user
     role     VARCHAR(255)        NOT NULL,
     active   BOOLEAN             NOT NULL DEFAULT 1,
     created  DATETIME            NOT NULL DEFAULT current_timestamp,
-    modified DATETIME            ON UPDATE current_timestamp
+    modified DATETIME ON UPDATE current_timestamp
 );
 
 CREATE TABLE patient
@@ -64,14 +64,14 @@ CREATE TABLE health_centre
 
 CREATE TABLE referral
 (
-    id                   INT PRIMARY KEY AUTO_INCREMENT,
-    referred_by          INT          NOT NULL,
-    referred_to          INT          NOT NULL,
-    reading_id           INT          NOT NULL,
-    comments             TEXT,
-    timestamp            DATETIME     NOT NULL,
-    closed               DATETIME,
-    accepter             VARCHAR(255),
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    referred_by INT      NOT NULL,
+    referred_to INT      NOT NULL,
+    reading_id  INT      NOT NULL,
+    comments    TEXT,
+    timestamp   DATETIME NOT NULL,
+    closed      DATETIME,
+    accepter    VARCHAR(255),
 
     FOREIGN KEY (referred_by)
         REFERENCES user (id),
