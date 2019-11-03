@@ -247,7 +247,7 @@
             }
             ]]>
         </Request>
-        <Response status="200"/>
+        <Response status="201"/>
     </TestCase>
     <TestCase name="Disabling user100001241241">
         <Request method="POST" uri="/api/user/user100001241241/change-active"/>

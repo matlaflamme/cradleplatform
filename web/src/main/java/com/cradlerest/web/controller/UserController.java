@@ -99,7 +99,7 @@ public class UserController {
 			throw new EntityNotFoundException("user not found: " + username);
 		}
 	}
-	
+
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") int id) throws DatabaseException {
