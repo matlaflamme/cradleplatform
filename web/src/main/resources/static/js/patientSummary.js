@@ -61,7 +61,7 @@ Vue.component('basic_info', {
         '</div>'
 });
 
-// This compnent is for the center of the page, it shows a table of all the patient readings
+// This compnent is for the right of the page, it shows a table of all the patient readings
 Vue.component('readings_table' , {
     vuetify: new Vuetify(),
     props: {
@@ -69,13 +69,14 @@ Vue.component('readings_table' , {
     },
     data: () => ({
         headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
-            { text: 'Referral Date', value: 'timestamp'},
+            { text: 'Reading Date', value: 'timestamp'},
             { text: 'Systolic', value: 'systolic' },
             { text: 'Diastolic', value: 'diastolic'},
             { text: 'Heart Rate', value: 'heartRate'},
             { text: 'Traffic Light', value: 'colour'}
         ],
-        rows: [] //empty to start
+        rows: [], //empty to start
+        expanded: []
 
     }),
     methods: {
@@ -104,25 +105,34 @@ Vue.component('readings_table' , {
 
     },
     template:
-        `
-        <v-data-table
-        :headers="headers"
-        :items="rows"
-        :items-per-page="5"
-        class="elevation-1"
-        >
-        <template slot="rows" slot-scope="props">
-            <td>{{props.row.timestamp}}</td>
-            <td>{{props.row.systolic}}</td>
-            <td>{{props.row.diastolic}}</td>
-            <td>{{props.row.heartRate}}</td>
-            <td>{{props.row.colour}}</td>
-        </template>
-        <template v-slot:item.colour="{ item }">
-            <td><span class="dot" :style="item.colorstyle"></span></td>
-        </template>
-        </v-data-table>`
-    ,
+
+        '<v-data-table' +
+        ' :headers="headers"' +
+        ' :items="rows"' +
+        ' :items-per-page="5"' +
+        ' class="elevation-1"' +
+        ' :expanded.sync="expanded"' +
+        ' show-expand>' +
+            '<template v-slot:top>' +
+                '<v-toolbar flat color="white">' +
+                    '<v-toolbar-title>Past Readings</v-toolbar-title>' +
+                '</v-toolbar>' +
+            '</template>' +
+            '<template slot="rows" slot-scope="props">' +
+                '<td>{{props.row.timestamp}}</td>' +
+                '<td>{{props.row.systolic}}</td>' +
+                '<td>{{props.row.diastolic}}</td>' +
+                '<td>{{props.row.heartRate}}</td>' +
+                '<td>{{props.row.colour}}</td>' +
+            '</template>' +
+            '<template v-slot:item.colour="{ item }">' +
+                '<td><span class="dot" :style="item.colorstyle"></span></td>' +
+            '</template>' +
+            '<template v-slot:expanded-item="{ headers }">' +
+                '<td :colspan="headers.length">All other reading information goes in here</td>' +
+            '</template>' +
+        '</v-data-table>'
+
 });
 
 // This component is for the left side of the page, it reads the patient info and gives a summary on the patient info and last reading
