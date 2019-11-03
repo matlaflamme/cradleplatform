@@ -1,4 +1,5 @@
 package com.cradlerest.web.service.repository;
+
 import com.cradlerest.web.model.Referral;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ import java.util.NoSuchElementException;
  */
 public interface ReferralRepository extends JpaRepository<Referral, Integer> {
 	List<Referral> findAllByReferredToHealthCenterId(@NotNull Integer healthCenterId) throws NoSuchElementException;
+	List<Referral> findAllByOrderByTimestampDesc();
 }

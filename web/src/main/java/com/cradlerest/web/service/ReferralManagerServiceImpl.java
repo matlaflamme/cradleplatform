@@ -141,16 +141,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	/**
-	 * @return All referrals
-	 */
-	@Override
-	public List<ReferralView> findAll() {
-		return Vec.copy(referralRepository.findAll())
-				.map(this::computeReferralView)
-				.toList();
-	}
-
-	/**
 	 *
 	 * @param healthCentreName
 	 * @return All referrals from a health centre
@@ -178,4 +168,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		return ReferralView.fromReferral(r, hc.getName(), hc.getHealthCentreNumber(), pid);
 	}
+
+	public List<Referral> findAllByOrderByTimestampDesc() { return referralRepository.findAllByOrderByTimestampDesc(); }
 }

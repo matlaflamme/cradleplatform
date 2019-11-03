@@ -9,7 +9,10 @@ CREATE TABLE user
     id       INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255)        NOT NULL,
-    role     VARCHAR(255)        NOT NULL
+    role     VARCHAR(255)        NOT NULL,
+    active   BOOLEAN             NOT NULL DEFAULT 1,
+    created  DATETIME            NOT NULL DEFAULT current_timestamp,
+    modified DATETIME            ON UPDATE current_timestamp
 );
 
 CREATE TABLE patient
