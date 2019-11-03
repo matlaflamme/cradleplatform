@@ -137,7 +137,9 @@ Vue.component('patient_info', {
                 {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
                     "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
                     "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
-                        "timestamp":""}]} //data in the form of json string
+                        "timestamp":""}]}, //data in the form of json string
+            hasSymptoms: false,
+            symptoms: []
         }
     },
     template:
@@ -158,12 +160,13 @@ Vue.component('patient_info', {
                     '<p><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
                 '</v-list-item-content>' +
             '</v-list-item>' +
-            '<v-list-item three-line>' +
+            '<v-list-item v-if="symptoms" three-line>' +
+                //'<v-list-item-content v-for="symptom in symptoms">' +
                 '<v-list-item-content>' +
-                    '<h3 class="font-weight-light">Symptoms</h3>\n' +
-                    '<div>Received overcame oh sensible so at an.\n' +
-                        'Formed do change merely to county it. Am separate contempt\n' +
-                        'domestic to to oh. On relation my so addition branched.</div>\n' +
+                    '<h3 class="font-weight-light pb-5">Symptoms</h3>\n' +
+                    '<ul className="list-group" v-for="symptom in symptoms">\n'+
+                        '<li className="list-group-item" class="pb-1">{{symptom}}</li>\n'+
+                    '</ul>\n'+
                 '</v-list-item-content>' +
             '</v-list-item>' +
             '<v-list-item three-line>' +
@@ -184,11 +187,19 @@ Vue.component('patient_info', {
         let id = urlQuery.get('id');
         axios.get('/api/patient/' + id).then(response => {
             this.patientData = response.data;
-            this.setLight(response.data) //update light colour based on response from get request
+            console.log(response.data);
+            this.setLight(response.data); //update light colour based on response from get request
+            this.checkSymptoms();
         });
 
     },
     methods: {
+        checkSymptoms() {
+            this.symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //**********************************************Remove this
+            if (this.patientData.readings[0].symptoms.length !== 0) {
+                this.hasSymptoms = true;
+            }
+        },
         getPatientSex: function(sexVal) {
             if (sexVal === 1) {
                 return "Female";
