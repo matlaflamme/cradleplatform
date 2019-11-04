@@ -103,7 +103,7 @@ Vue.component('patient_info', {
         return {
             patientData: //starter data so that "patientData" is not null when the page is loaded
                 {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
-                    "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":[],"pregnant":null,
+                    "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"symptoms":[],"pregnant":null,
                     "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
                         "timestamp":""}]} //data in the form of json string
         }
@@ -134,7 +134,7 @@ Vue.component('patient_info', {
         '       <p><strong>Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
         '       <p><strong>Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
         '         <h3>Symptoms</h3>\n' +
-        '        <div>{{patientData.readings[0].otherSymptoms}}</div>\n' +
+        '        <div>{{patientData.readings[0].symptoms}}</div>\n' +
         '        <h3>Current Medications</h3>\n' +
         '        <ul className="list-group">\n'+
         '        <li className="list-group-item">item 3 </li>\n'+

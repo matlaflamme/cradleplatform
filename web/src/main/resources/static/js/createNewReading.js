@@ -5,7 +5,7 @@ Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
         e1: 0,
-        otherSymptoms: [],
+        symptoms: [],
         medications:[],
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
@@ -56,7 +56,7 @@ Vue.component('new_reading',{
                     pregnant: false,
                     gestationalAge: null,
                     timestamp: getCurrentDate(),
-                    otherSymptoms: this.otherSymptoms,
+                    symptoms: this.symptoms,
                     medications: this.medications
                 }).catch(error => {
                     console.error(error);
@@ -160,14 +160,14 @@ Vue.component('new_reading',{
         '        <v-stepper-content step="2">\n' +
         '           <v-card  :elevation= "0" min-width="500">\n' +
         '    <v-container>\n' +
-        '      <p>{{ otherSymptoms }}</p>\n' +
-        '      <v-checkbox v-model="otherSymptoms" label="No Symptoms" value=\'No Symptoms\'></v-checkbox>\n' +
-        '      <v-checkbox v-model="otherSymptoms" label="Headaches" value="Headaches"></v-checkbox>\n' +
-        '      <v-checkbox v-model="otherSymptoms" label="Blurred Vision" value="Blurred Vission"></v-checkbox>\n' +
-        '      <v-checkbox v-model="otherSymptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
-        '      <v-checkbox v-model="otherSymptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
-        '      <v-checkbox v-model="otherSymptoms" label="Feverish" value="Feverish"></v-checkbox>\n' +
-        '      <v-checkbox v-model="otherSymptoms" label="Unwell" value="Unwell"></v-checkbox>' +
+        '      <p>{{ symptoms }}</p>\n' +
+        '      <v-checkbox v-model="symptoms" label="No Symptoms" value=\'No Symptoms\'></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Headaches" value="Headaches"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vission"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
+        '      <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>' +
         '    </v-container>\n' +
         '          </v-card>\n' +
         '  \n' +
