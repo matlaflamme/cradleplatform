@@ -36,7 +36,6 @@ Vue.component('users_table' , {
                 this.rows = response.data;
                 for (let i = 0; i < this.rows.length; i++) {
                     this.rows[i].roles = this.rows[i].roles.replace("ROLE_", "");
-                    console.log(this.rows[i].roles)
                 }
             }).catch(error => {
                 console.log(error);

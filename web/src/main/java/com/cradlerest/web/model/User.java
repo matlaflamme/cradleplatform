@@ -113,7 +113,6 @@ public class User {
 	public boolean getActive() { return active; }
 
 	public void swapActive() {
-		System.out.println("WTF");
 		this.active = !active;
 	}
 
