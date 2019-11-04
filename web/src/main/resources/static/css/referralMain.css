@@ -7,6 +7,10 @@
     color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
 }
 
-tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, .05);
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+    opacity: 0;
 }

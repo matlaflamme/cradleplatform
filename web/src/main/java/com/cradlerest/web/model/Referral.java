@@ -7,7 +7,6 @@ import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.NameGenerator;
-import com.cradlerest.web.util.datagen.impl.PhoneNumberGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -24,37 +23,24 @@ import java.util.Date;
 @DataGenRelativeAmount(base = Patient.class, multiplier = 0.6)
 public class Referral {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
-	@Column(name = "pid", nullable = false)
-	@ForeignKey(Patient.class)
-	private String patientId;
-
 	// TODO: Update to foreign key once VHT models are created
-	@Column(name = "vid", nullable = false)
+	@Column(name = "referred_by", nullable = false)
 	@DataGenRange(min = 3, max = 4)
-	private Integer vhtId;
+	private Integer referredByUserId;
+
+	@Column(name = "referred_to", nullable = false)
+	@ForeignKey(HealthCentre.class)
+	private Integer referredToHealthCenterId;
 
 	@Column(name = "reading_id", nullable = false)
 	@ForeignKey(Reading.class)
 	private Integer readingId;
-
-	// temporary
-	// TODO: Health Centre entity
-	@Column(name = "health_centre", nullable = false)
-	// TODO: Update to foreign key
-	@Generator(NameGenerator.class)
-	private String healthCentre;
-
-	// temporary
-	@Column(name = "health_centre_number", nullable = false)
-	@Generator(PhoneNumberGenerator.class)
-	private String healthCentreNumber;
 
 	@Column(name = "comments", nullable = false)
 	@Generator(GibberishSentenceGenerator.class)
@@ -76,35 +62,26 @@ public class Referral {
 
 	public Referral() {}
 
-	public Referral(String patientId, Integer vhtId, Integer readingId, String healthCentre, String healthCentreNumber, String comments) {
-		this.patientId = patientId;
-		this.vhtId = vhtId;
-		this.readingId = readingId;
-		this.healthCentre = healthCentre;
-		this.healthCentreNumber = healthCentreNumber;
-		this.comments = comments;
-	}
-
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) { this.id = id; }
 
-	public String getPatientId() {
-		return patientId;
+	public Integer getReferredByUserId() {
+		return referredByUserId;
 	}
 
-	public void setPatientId(String patientId) {
-		this.patientId = patientId;
+	public void setReferredByUserId(Integer referredByUserId) {
+		this.referredByUserId = referredByUserId;
 	}
 
-	public Integer getVhtId() {
-		return vhtId;
+	public Integer getReferredToHealthCenterId() {
+		return referredToHealthCenterId;
 	}
 
-	public void setVhtId(Integer vhtId) {
-		this.vhtId = vhtId;
+	public void setReferredToHealthCenterId(Integer referredToHealthCenterId) {
+		this.referredToHealthCenterId = referredToHealthCenterId;
 	}
 
 	public Integer getReadingId() {
@@ -113,22 +90,6 @@ public class Referral {
 
 	public void setReadingId(Integer readingId) {
 		this.readingId = readingId;
-	}
-
-	public String getHealthCentre() {
-		return healthCentre;
-	}
-
-	public void setHealthCentre(String healthCentre) {
-		this.healthCentre = healthCentre;
-	}
-
-	public String getHealthCentreNumber() {
-		return healthCentreNumber;
-	}
-
-	public void setHealthCentreNumber(String healthCentreNumber) {
-		this.healthCentreNumber = healthCentreNumber;
 	}
 
 	public String getComments() {

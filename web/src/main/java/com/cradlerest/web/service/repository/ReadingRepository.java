@@ -16,4 +16,7 @@ public interface ReadingRepository extends JpaRepository<Reading, Integer>, Pati
 
 	@Query("SELECT r FROM Reading r WHERE r.patientId = ?1 ORDER BY r.timestamp DESC")
 	List<Reading> findAllByPatientId(@NotNull String patientId);
+
+	@Query("SELECT r.patientId FROM Reading r WHERE r.id = ?1")
+	String findPatientIdOfReadingWithId(int readingId);
 }
