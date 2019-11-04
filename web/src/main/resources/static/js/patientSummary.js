@@ -134,7 +134,9 @@ Vue.component('patient_info', {
         '       <p><strong>Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
         '       <p><strong>Gestational Age: </strong>{{patientData.gestationalAge}} days</p>' +
         '         <h3>Symptoms</h3>\n' +
-        '        <div>{{patientData.readings[0].symptoms}}</div>\n' +
+        '<ul>\n' +
+        '  <li v-for="item in patientData.readings[0].symptoms">{{ item }}</li>\n' +
+        '</ul>'+
         '        <h3>Current Medications</h3>\n' +
         '        <ul className="list-group">\n'+
         '        <li className="list-group-item">item 3 </li>\n'+

@@ -57,7 +57,7 @@ Vue.component('new_reading',{
                     gestationalAge: null,
                     timestamp: getCurrentDate(),
                     symptoms: this.symptoms,
-                    // medications: this.medications
+                    // medications: this.medications //Not implemented in the server yet
                 }).catch(error => {
                     console.error(error);
                 }
@@ -72,8 +72,8 @@ Vue.component('new_reading',{
         },
         validate() {
             if (this.$refs.newReadingForm.validate(this)) {
-                if (this.symptoms == ["No Symptoms"]){
-                    this.symptoms = [];
+                if (this.symptoms.includes("No Symptoms")){
+                    this.symptoms = []; //If no symptom is selected we have to return an empty list
                 }
                 this.submit();
             }
@@ -86,8 +86,6 @@ Vue.component('new_reading',{
         },
         addRow() {
             this.medications.push({})
-            console.log(this);
-            console.log(JSON.stringify(this.symptoms));
         },
         deleteRow(index) {
             this.medications.splice(index,1)
@@ -109,6 +107,7 @@ Vue.component('new_reading',{
         '        <v-stepper-step step="3" editable>Medications</v-stepper-step>\n' +
         '      </v-stepper-header>\n' +
         '      <v-stepper-items>\n' +
+        //This part is the first tab
         '        <v-stepper-content step="1">\n' +
         '          <v-card\n' +
         '        <v-card  :elevation= "0" min-width="500">\n' +
@@ -145,28 +144,25 @@ Vue.component('new_reading',{
         '        required\n' +
         '      ></v-text-field>\n' +
         '          </v-card>\n' +
-        '  \n' +
         '          <v-btn\n' +
         '            color="primary"\n' +
         '            @click="e1 = 2"\n' +
         '          >\n' +
         '            Continue\n' +
         '          </v-btn>\n' +
-        '  \n' +
         '          <v-btn\n' +
         '            color="error"'+
         '            @click="reset"\n' +
         '          >\n' +
         '            reset\n' +
         '          </v-btn>\n' +
+        //This part is the second tab
         '        </v-stepper-content>\n' +
-        '  \n' +
         '        <v-stepper-content step="2">\n' +
         '           <v-card  :elevation= "0" min-width="500">\n' +
         '    <v-container>\n' +
-        '      <p>{{ symptoms }}</p>\n' +
         '      <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Headaches" value="Headaches"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>\n' +
         '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>\n' +
         '      <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
         '      <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
@@ -174,49 +170,38 @@ Vue.component('new_reading',{
         '      <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>' +
         '    </v-container>\n' +
         '          </v-card>\n' +
-        '  \n' +
         '          <v-btn\n' +
         '            color="primary"\n' +
         '            @click="e1 = 3"\n' +
         '          >\n' +
         '            Continue\n' +
         '          </v-btn>\n' +
-        '  \n' +
-        '          <v-btn\n' +
-        '            color="error"'+
-        '            @click="reset"\n' +
-        '          >\n' +
-        '            reset\n' +
-        '          </v-btn>\n' +
+        //This part is the third tab
         '        </v-stepper-content>\n' +
-        '  \n' +
         '        <v-stepper-content step="3">\n' +
         '          <v-card  :elevation= "0" min-width="500">\n' +
         '    <ul>\n' +
-        '      <p>{{ medications }}</p>\n' +
         '      <li v-for="(input, index) in medications">\n' +
         '        <v-text-field\n' +
         '        v-model="input.medicince"\n' +
         '        label="Medication"\n' +
         '        required\n' +
-        '      >- {{ input.dose }}  </v-text-field>\n' +
+        '      >{{input.dose }}  </v-text-field>\n' +
         '        <v-text-field\n' +
         '        v-model="input.dose"\n' +
         '        label="Dose"\n' +
         '        required\n' +
-        '      >- {{ input.dose}}  </v-text-field>\n' +
+        '      >{{input.dose}}  </v-text-field>\n' +
         '        <v-text-field\n' +
         '        v-model="input.frequency"\n' +
         '        label="Usage frequency"\n' +
         '        required\n' +
         '      >- {{ input.frequency}}  </v-text-field>\n' +
-        '      <v-btn @click="deleteRow(index)">\n' +
+        '      <v-btn color="error" small @click="deleteRow(index)">\n' +
         '      delete</v-btn>' +
         '      </li>\n' +
         '    </ul>\n' +
-        '    \n' +
         '          </v-card>\n' +
-        '  \n' +
         '      <v-btn @click="addRow">\n' +
         '      Add new medication</v-btn>' +
         '          <v-btn\n' +
@@ -224,13 +209,6 @@ Vue.component('new_reading',{
         '            @click="validate"\n' +
         '          >\n' +
         '            Save reading\n' +
-        '          </v-btn>\n' +
-        '  \n' +
-        '          <v-btn\n' +
-        '            color="error"'+
-        '            @click="reset"\n' +
-        '          >\n' +
-        '            reset\n' +
         '          </v-btn>\n' +
         '        </v-stepper-content>\n' +
         '      </v-stepper-items>\n' +
