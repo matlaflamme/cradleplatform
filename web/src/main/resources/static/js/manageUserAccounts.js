@@ -32,7 +32,7 @@ Vue.component('users_table' , {
         },
         getUsers: function() {
             axios.get('/api/user/all').then(response => {
-                console.log(response.data[0]);
+                console.log(response.data[0].active == true);
                 this.rows = response.data;
             }).catch(error => {
                 console.log(error);
@@ -77,18 +77,18 @@ Vue.component('users_table' , {
         :headers="headers"
         :items="rows"
         :search="search"
-        class="elevation-1"
-        >
-        <template slot="rows" slot-scope="props">
-            <td>{{props.row.username}}</td>
-            <td>{{props.row.roles}}</td>
-            <td>{{props.row.created}}</td>
-            <td>{{props.row.modified}}</td>
-            <template v-slot:item.active="{ item }">
-                <v-btn v-if="item.active == true" color="red" v-on:click="updateActive(item)">Disable</v-btn>
-                <v-btn v-if="item.active == false" color="green" v-on:click="updateActive(item)">Enable</v-btn>
+        class="elevation-1">
+            <template v-slot:body="props">
+                <tbody>
+                    <tr v-for="(item, index) in props.items" :key="index">
+                        <td>{{item.username}}</td>
+                        <td>{{item.roles}}</td>
+                        <td>{{item.created}}</td>
+                        <td>{{item.modified}}</td>
+                        <td><v-btn color="green" v-on:click="updateActive(item)" >{{item.active}}</v-btn></td>
+                    </tr>
+                </tbody>
             </template>
-        </template>
         </v-data-table>
         </v-card>
         </template>
