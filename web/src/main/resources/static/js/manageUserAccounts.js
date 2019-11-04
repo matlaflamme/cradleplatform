@@ -32,8 +32,12 @@ Vue.component('users_table' , {
         },
         getUsers: function() {
             axios.get('/api/user/all').then(response => {
-                console.log(response.data[0].active == true);
+                console.log(response.data[0].roles.replace("ROLE_", ""));
                 this.rows = response.data;
+                for (let i = 0; i < this.rows.length; i++) {
+                    this.rows[i].roles = this.rows[i].roles.replace("ROLE_", "");
+                    console.log(this.rows[i].roles)
+                }
             }).catch(error => {
                 console.log(error);
             })
