@@ -46,7 +46,7 @@ Vue.component('new_reading',{
         submit: function() {
             console.log(new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate));
             //do input validation in a different function
-            axios.post('/api/patient/reading',
+            axios.post('/api/reading/save',
                 {
                     patientId: this.patientID,
                     heartRate: parseInt(this.heartRate),
@@ -57,7 +57,7 @@ Vue.component('new_reading',{
                     gestationalAge: null,
                     timestamp: getCurrentDate(),
                     symptoms: this.symptoms,
-                    medications: this.medications
+                    // medications: this.medications
                 }).catch(error => {
                     console.error(error);
                 }
@@ -72,6 +72,9 @@ Vue.component('new_reading',{
         },
         validate() {
             if (this.$refs.newReadingForm.validate(this)) {
+                if (this.symptoms == ["No Symptoms"]){
+                    this.symptoms = [];
+                }
                 this.submit();
             }
         },
@@ -84,6 +87,7 @@ Vue.component('new_reading',{
         addRow() {
             this.medications.push({})
             console.log(this);
+            console.log(JSON.stringify(this.symptoms));
         },
         deleteRow(index) {
             this.medications.splice(index,1)
@@ -161,9 +165,9 @@ Vue.component('new_reading',{
         '           <v-card  :elevation= "0" min-width="500">\n' +
         '    <v-container>\n' +
         '      <p>{{ symptoms }}</p>\n' +
-        '      <v-checkbox v-model="symptoms" label="No Symptoms" value=\'No Symptoms\'></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>\n' +
         '      <v-checkbox v-model="symptoms" label="Headaches" value="Headaches"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vission"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>\n' +
         '      <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
         '      <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
         '      <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>\n' +
