@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.constraints.user.Role;
 import com.cradlerest.web.constraints.user.ValidPassword;
 import com.cradlerest.web.constraints.user.ValidRole;
 import com.cradlerest.web.constraints.user.ValidUsername;
@@ -113,7 +114,10 @@ public class User {
 	public boolean getActive() { return active; }
 
 	public void swapActive() {
-		this.active = !active;
+		// Admins cannot be disabled?
+		if (!roles.equals(Role.ADMIN.getRole())) {
+			this.active = !active;
+		}
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
