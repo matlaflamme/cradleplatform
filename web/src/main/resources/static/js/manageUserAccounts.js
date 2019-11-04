@@ -40,7 +40,15 @@ Vue.component('users_table' , {
         },
 
         updateActive: function(user) {
-            console.log("clicked: " + user.username);
+            let endpoint = "/api/user/" + user.username + "/change-active";
+            axios.post(endpoint).then(response => {
+                console.log("success swapped: " + user.username);
+            }).catch(error => {
+                console.log(error);
+            })
+            // retrieve updated user
+            // TODO: rather than all the users, we should just retrieve this user and then modify our front end array "rows"
+            this.getUsers();
         },
 
         isActive: function(user) {
@@ -85,7 +93,10 @@ Vue.component('users_table' , {
                         <td>{{item.roles}}</td>
                         <td>{{item.created}}</td>
                         <td>{{item.modified}}</td>
-                        <td><v-btn color="green" v-on:click="updateActive(item)" >{{item.active}}</v-btn></td>
+                        <td>
+                            <v-btn v-if="item.active == false" color="green" v-on:click="updateActive(item)" >Enable</v-btn>
+                            <v-btn v-if="item.active == true" color="red" v-on:click="updateActive(item)" >Disable</v-btn>
+                        </td>
                     </tr>
                 </tbody>
             </template>
