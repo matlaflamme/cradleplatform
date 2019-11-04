@@ -129,8 +129,18 @@ Vue.component('readings_table' , {
             '<template v-slot:item.colour="{ item }">' +
                 '<td><span class="dot" :style="item.colorstyle"></span></td>' +
             '</template>' +
-            '<template v-slot:expanded-item="{ headers }">' +
-                '<td :colspan="headers.length">All other reading information goes in here</td>' +
+            '<template v-slot:expanded-item="{ headers, item }">' +
+                '<td :colspan="headers.length">' +
+                    '<v-list-item three-line>' +
+                        '<v-list-item-content>' +
+                            '<ul className="list-group">\n'+
+                                '<li className="list-group-item" class="pb-1">Gestational Age: {{item.gestationalAge}}</li>\n'+
+                                '<li className="list-group-item" class="pb-1">Symptoms: {{item.symptoms}}</li>\n'+
+                                '<li className="list-group-item" class="pb-1">Other Notes: {{item.readingNotes}}</li>\n'+
+                            '</ul>\n' +
+                        '</v-list-item-content>' +
+                    '</v-list-item>' +
+                '</td>'+
             '</template>' +
         '</v-data-table>' +
         '<v-spacer class="pt-5"></v-spacer>' +
