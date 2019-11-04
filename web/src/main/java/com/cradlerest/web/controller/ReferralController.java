@@ -1,24 +1,20 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
+import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.ReferralManagerService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.catalina.filters.ExpiresFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * Handles referrals
@@ -77,7 +73,7 @@ public class ReferralController {
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
-					"Health centre referred: " + savedReferral.getHealthCentre();
+					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
 		} catch (Exception exception) {
 			return "There was an error processing your referral: " + exception.getMessage();
 		}
@@ -99,20 +95,24 @@ public class ReferralController {
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
-					"Health centre referred: " + savedReferral.getHealthCentre();
+					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
 		} catch (Exception exception) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return exception.getMessage();
 		}
 	}
 
+	/**
+	 * Returns all referrals sorted by timestamp in descending order
+	 * @return
+	 */
 	@GetMapping("/all")
-	public @ResponseBody List<Referral> allReferrals() {
-		return referralManagerService.findAll();
+	public @ResponseBody List<ReferralView> allReferralsSortByTimestamp() {
+		return referralManagerService.findAllByOrderByTimestampDesc();
 	}
 
 	@GetMapping("/{healthCentreName}/all")
-	public @ResponseBody List<Referral> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
+	public @ResponseBody List<ReferralView> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
 		return referralManagerService.findAllByHealthCentre(healthCentreName);
 	}
 

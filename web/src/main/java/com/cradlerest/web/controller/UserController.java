@@ -80,6 +80,27 @@ public class UserController {
 		return userRepository.save(new User(username, password, roles));
 	}
 
+	/**
+	 * Swaps the active value of a user
+	 * If user is not active, they cannot be authenticated
+	 *
+	 * @param username
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	@PostMapping("/{username}/change-active")
+	public String updateUserIsActive(@PathVariable("username") String username) throws EntityNotFoundException{
+		Optional<User> foundUser = userRepository.findByUsername(username);
+		if (!foundUser.isEmpty()) {
+			foundUser.get().swapActive();
+			userRepository.save(foundUser.get());
+			return "User active set to (1=true,0=false): " + foundUser.get().getActive();
+		} else {
+			throw new EntityNotFoundException("user not found: " + username);
+		}
+	}
+
+
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") int id) throws DatabaseException {
 		try {
