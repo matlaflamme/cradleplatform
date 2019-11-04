@@ -42,13 +42,13 @@ Vue.component('users_table' , {
         updateActive: function(user) {
             let endpoint = "/api/user/" + user.username + "/change-active";
             axios.post(endpoint).then(response => {
+                // update user list
+                // TODO: rather than all the users, we should just retrieve this user and then modify our front end array "rows"
+                this.getUsers();
                 console.log("success swapped: " + user.username);
             }).catch(error => {
                 console.log(error);
             })
-            // retrieve updated user
-            // TODO: rather than all the users, we should just retrieve this user and then modify our front end array "rows"
-            this.getUsers();
         },
 
         isActive: function(user) {
