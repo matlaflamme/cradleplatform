@@ -77,7 +77,8 @@ Vue.component('readings_table' , {
         ],
         rows: [], //empty to start
         expanded: [],
-        graphData: [10, 40, 3, 100, 20, 30, 70, 2, 30, 88],
+        graphData: [0,0], //if size is less than two initially, an error pops up in the console?
+        labels: [] //labels must be in the same order as graphData
 
     }),
     methods: {
@@ -89,6 +90,29 @@ Vue.component('readings_table' , {
                 pData.timestamp = formatted_date;
             });
             return patientData;
+        },
+        calcGraphData(readings) {
+            console.log(readings);
+            this.graphData.pop(); //remove two initial zeros from array
+            this.graphData.pop();
+            for (let i = 0; i < 10 && i < readings.length; i++) {
+                let shockIndex = readings[i].heartRate / readings[i].systolic;
+                this.graphData.push(Number.parseFloat(shockIndex.toFixed(2)));
+                this.pushLabel(shockIndex);
+            }
+            this.graphData.reverse(); //reverse so it shows from oldest (left) to newest (right) on graph
+            this.labels.reverse();
+        },
+        pushLabel(shockIndex) {
+            if (shockIndex < 0.5) {
+                this.labels.push("Low")
+            }
+            else if (shockIndex < 0.7) { //between 0.5 and 0.7 is considered normal
+                this.labels.push("Normal") //https://www.mdcalc.com/shock-index
+            }
+            else {
+                this.labels.push("High")
+            }
         }
 
     },
@@ -98,12 +122,12 @@ Vue.component('readings_table' , {
         axios.get('/api/patient/'+ id + '/readings').then(response => {
             this.rows = response.data;
             this.rows = this.changeDate(response.data);
+            this.calcGraphData(response.data);
             this.rows.forEach((row)=> {
                 let icon = getReadingColorIcon(row.colour);
                 row.colorstyle = {"background-color": icon['colour']};
             })
         })
-
     },
     template:
     '<div>' +
@@ -144,15 +168,18 @@ Vue.component('readings_table' , {
             '</template>' +
         '</v-data-table>' +
         '<v-spacer class="pt-5"></v-spacer>' +
-        '<v-spacer class="pt-5"></v-spacer>' +
+        '<h3 class="font-weight-light pb-2">Shock index of last 10 readings</h3>' +
         '<v-card class="mx-auto">' +
             '<v-sheet>' +
                 '<v-sparkline ' +
                     ' :smooth="16"' +
-                    ' :gradient="[\'#f72047\', \'#ffd200\', \'#00E206\']"' +
+                    ' :gradient="[\'#0c9090\']"' +
+                    ' padding="20"' +
                     ' :line-width="3"' +
                     ' :value="graphData"' +
+                    ' :labels="labels"' +
                     ' auto-draw' +
+                    ' show-labels="true"' +
                     ' stroke-linecap="round"' +
                 '></v-sparkline>' +
             '</v-sheet>' +
@@ -188,7 +215,7 @@ Vue.component('patient_info', {
                 '</v-list-item-content>' +
             '</v-list-item three-line>' +
             '<img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
-            '<p id="heart_beat">{{patientData.readings[0].heartRate}}</p>\n' +
+            '<p id="heart_beat" class="title">{{patientData.readings[0].heartRate}}</p>\n' +
             '<span id="light" ref="light" class="dot"></span>\n' +
             '<img id="arrow" ref="arrow" src="/img/arrow_down.png" height="30" width="20" style="margin-bottom: 12px">\n' +
             '<v-list-item three-line>\n' +
