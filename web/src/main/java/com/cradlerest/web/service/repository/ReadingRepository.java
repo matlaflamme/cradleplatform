@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Database repository for {@code Reading} entities.
@@ -21,4 +22,6 @@ public interface ReadingRepository extends JpaRepository<Reading, Integer>, Pati
 	String findPatientIdOfReadingWithId(int readingId);
 
 	List<Reading> findAllByCreatedBy(int createdBy);
+
+	Optional<Reading> findFirstByPatientIdOrderByTimestampDesc(String patientId);
 }

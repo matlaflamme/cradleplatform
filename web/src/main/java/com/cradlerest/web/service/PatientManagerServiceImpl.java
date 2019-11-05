@@ -1,6 +1,5 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Patient;
@@ -11,6 +10,7 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.repository.PatientRepository;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -124,8 +124,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @return A list of patients.
 	 */
 	@Override
-	public List<Patient> getPatientsReferredToHealthCenter(int healthCenterId) {
-		return patientRepository.getAllReferredToHealthCenter(healthCenterId);
+	public List<PatientWithLatestReadingView> getPatientsReferredToHealthCenter(int healthCenterId) {
+		return Vec.copy(patientRepository.getAllReferredToHealthCenter(healthCenterId))
+				.map(this::pairWithLatestReading)
+				.toList();
 	}
 
 	/**
@@ -135,8 +137,21 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @return A list of patients.
 	 */
 	@Override
-	public List<Patient> getPatientsWithReadingsCreatedBy(int userId) {
-		return patientRepository.getAllWithReadingsBy(userId);
+	public List<PatientWithLatestReadingView> getPatientsWithReadingsCreatedBy(int userId) {
+		return Vec.copy(patientRepository.getAllWithReadingsBy(userId))
+				.map(this::pairWithLatestReading)
+				.toList();
+	}
+
+	/**
+	 * Takes a patient and pairs it with its latest reading.
+	 * @param patient The patient to pair with.
+	 * @return The patient along with its latest reading.
+	 */
+	@Override
+	public PatientWithLatestReadingView pairWithLatestReading(@NotNull Patient patient) {
+		var optReading = readingRepository.findFirstByPatientIdOrderByTimestampDesc(patient.getId());
+		return new PatientWithLatestReadingView(patient, optReading.orElse(null));
 	}
 
 	/**

@@ -64,7 +64,7 @@ public interface PatientManagerService {
 	 * @param healthCenterId The id of the health center to query patients for.
 	 * @return A list of patients.
 	 */
-	List<Patient> getPatientsReferredToHealthCenter(int healthCenterId);
+	List<PatientWithLatestReadingView> getPatientsReferredToHealthCenter(int healthCenterId);
 
 	/**
 	 * Returns all of the patients who have a reading created by a specific
@@ -72,7 +72,14 @@ public interface PatientManagerService {
 	 * @param userId The id of the user to get patients for.
 	 * @return A list of patients.
 	 */
-	List<Patient> getPatientsWithReadingsCreatedBy(int userId);
+	List<PatientWithLatestReadingView> getPatientsWithReadingsCreatedBy(int userId);
+
+	/**
+	 * Takes a patient and pairs it with its latest reading.
+	 * @param patient The patient to pair with.
+	 * @return The patient along with its latest reading.
+	 */
+	PatientWithLatestReadingView pairWithLatestReading(@NotNull Patient patient);
 
 	/**
 	 * Creates a new, or updates an existing, patient in the system. If a patient

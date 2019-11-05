@@ -1,6 +1,6 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
@@ -24,7 +24,7 @@ public class VHTController {
 	}
 
 	@GetMapping("/{id}/patients")
-	public List<Patient> patients(@PathVariable("id") int id) {
+	public List<PatientWithLatestReadingView> patients(@PathVariable("id") int id) {
 		return patientManagerService.getPatientsWithReadingsCreatedBy(id);
 	}
 

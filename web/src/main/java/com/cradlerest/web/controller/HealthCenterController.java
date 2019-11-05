@@ -1,6 +1,6 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.service.PatientManagerService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ public class HealthCenterController {
 	}
 
 	@GetMapping("/{id}/patients")
-	public List<Patient> patients(@PathVariable("id") int id) {
+	public List<PatientWithLatestReadingView> patients(@PathVariable("id") int id) {
 		return patientManagerService.getPatientsReferredToHealthCenter(id);
 	}
 }
