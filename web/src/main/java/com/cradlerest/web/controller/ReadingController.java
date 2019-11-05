@@ -16,7 +16,11 @@ import java.util.Map;
 @RequestMapping("/api/reading")
 public class ReadingController {
 
-	private ReadingManager readingManager;
+    private static final String SYSTOLIC = "systolic";
+    private static final String DIASTOLIC = "diastolic";
+    private static final String HEART_RATE = "heartRate";
+
+    private ReadingManager readingManager;
 
 	public ReadingController(ReadingManager readingManager) {
 		this.readingManager = readingManager;
@@ -55,9 +59,9 @@ public class ReadingController {
 		Integer diastolic;
 		Integer heartRate;
 		try{
-			systolic = Integer.parseInt(params.get("systolic"));
-			diastolic = Integer.parseInt(params.get("diastolic"));
-			heartRate = Integer.parseInt(params.get("heartRate"));
+			systolic = Integer.parseInt(params.get(SYSTOLIC));
+			diastolic = Integer.parseInt(params.get(DIASTOLIC));
+			heartRate = Integer.parseInt(params.get(HEART_RATE));
 			return ReadingColour.computeColour(systolic, diastolic, heartRate).ordinal();
 		}catch (Exception e) {
 			throw new BadRequestException("Missing or invalid argument", e);
