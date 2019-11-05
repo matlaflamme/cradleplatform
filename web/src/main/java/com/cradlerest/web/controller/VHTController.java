@@ -1,7 +1,9 @@
 package com.cradlerest.web.controller;
 
 import com.cradlerest.web.model.Patient;
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.PatientManagerService;
+import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +16,20 @@ import java.util.List;
 public class VHTController {
 
 	private PatientManagerService patientManagerService;
+	private ReadingManager readingManager;
 
-	public VHTController(PatientManagerService patientManagerService) {
+	public VHTController(PatientManagerService patientManagerService, ReadingManager readingManager) {
 		this.patientManagerService = patientManagerService;
+		this.readingManager = readingManager;
 	}
 
 	@GetMapping("/{id}/patients")
 	public List<Patient> patients(@PathVariable("id") int id) {
 		return patientManagerService.getPatientsWithReadingsCreatedBy(id);
+	}
+
+	@GetMapping("/{id}/readings")
+	public List<ReadingView> readings(@PathVariable("id") int id) {
+		return readingManager.getAllCreatedBy(id);
 	}
 }

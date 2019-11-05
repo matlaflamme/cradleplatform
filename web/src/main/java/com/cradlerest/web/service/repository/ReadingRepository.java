@@ -19,4 +19,6 @@ public interface ReadingRepository extends JpaRepository<Reading, Integer>, Pati
 
 	@Query("SELECT r.patientId FROM Reading r WHERE r.id = ?1")
 	String findPatientIdOfReadingWithId(int readingId);
+
+	List<Reading> findAllByCreatedBy(int createdBy);
 }
