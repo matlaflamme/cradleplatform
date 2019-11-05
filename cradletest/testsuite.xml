@@ -261,16 +261,32 @@
         <![CDATA[
         [
           {
-            "id":  "001",
-            "name":  "Harumi Youko",
-            "villageNumber":  "1",
-            "zoneNumber":  "1",
-            "birthYear":  1995,
-            "sex":  1,
-            "medicalHistory":  null,
-            "drugHistory":  null,
-            "lastUpdated":  "2019-09-20 20:12:32",
-            "generalNotes":  null
+            "patient": {
+              "birthYear": 1995,
+              "drugHistory": null,
+              "generalNotes": null,
+              "id": "001",
+              "lastUpdated": "2019-09-20 20:12:32",
+              "medicalHistory": null,
+              "name": "Harumi Youko",
+              "sex": 1,
+              "villageNumber": "1",
+              "zoneNumber": "1"
+            },
+            "reading": {
+              "colour": 0,
+              "createdBy": 3,
+              "diastolic": 80,
+              "gestationalAge": 90,
+              "heartRate": 70,
+              "id": 4,
+              "otherSymptoms": null,
+              "patientId": "001",
+              "pregnant": true,
+              "readingNotes": null,
+              "systolic": 110,
+              "timestamp": "2019-10-24 09:32:10"
+            }
           }
         ]
         ]]>
@@ -290,18 +306,34 @@
       <Request method="GET" uri="/api/vht/3/patients"/>
       <Response status="200">
         <![CDATA[
-        [
+         [
           {
-            "id":  "001",
-            "name":  "Harumi Youko",
-            "villageNumber":  "1",
-            "zoneNumber":  "1",
-            "birthYear":  1995,
-            "sex":  1,
-            "medicalHistory":  null,
-            "drugHistory":  null,
-            "lastUpdated":  "2019-09-20 20:12:32",
-            "generalNotes":  null
+            "patient": {
+              "birthYear": 1995,
+              "drugHistory": null,
+              "generalNotes": null,
+              "id": "001",
+              "lastUpdated": "2019-09-20 20:12:32",
+              "medicalHistory": null,
+              "name": "Harumi Youko",
+              "sex": 1,
+              "villageNumber": "1",
+              "zoneNumber": "1"
+            },
+            "reading": {
+              "colour": 0,
+              "createdBy": 3,
+              "diastolic": 80,
+              "gestationalAge": 90,
+              "heartRate": 70,
+              "id": 4,
+              "otherSymptoms": null,
+              "patientId": "001",
+              "pregnant": true,
+              "readingNotes": null,
+              "systolic": 110,
+              "timestamp": "2019-10-24 09:32:10"
+            }
           }
         ]
         ]]>
