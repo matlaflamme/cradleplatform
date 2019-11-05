@@ -118,6 +118,17 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	}
 
 	/**
+	 * Returns all of the patients which have been referred to a specific
+	 * health center.
+	 * @param healthCenterId The id of the health center to query patients for.
+	 * @return A list of patients.
+	 */
+	@Override
+	public List<Patient> getPatientsReferredToHealthCenter(int healthCenterId) {
+		return patientRepository.getAllReferredToHealthCenter(healthCenterId);
+	}
+
+	/**
 	 * Creates a new, or updates an existing, patient in the system. If a patient
 	 * with the same id as {@param patient} exists, then that patient's profile
 	 * will be overwritten with the contents of {@param patient}. If no such
