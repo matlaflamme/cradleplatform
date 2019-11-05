@@ -254,4 +254,66 @@
         <Request method="POST" uri="/api/user/user100001241241/change-active"/>
         <Response status="200"/>
     </TestCase>
+
+    <TestCase name="Get Patients at Health Center">
+      <Request method="GET" uri="/api/hc/1/patients"/>
+      <Response status="200">
+        <![CDATA[
+        [
+          {
+            "id":  "001",
+            "name":  "Harumi Youko",
+            "villageNumber":  "1",
+            "zoneNumber":  "1",
+            "birthYear":  1995,
+            "sex":  1,
+            "medicalHistory":  null,
+            "drugHistory":  null,
+            "lastUpdated":  "2019-09-20 20:12:32",
+            "generalNotes":  null
+          }
+        ]
+        ]]>
+      </Response>
+    </TestCase>
+
+    <TestCase name="Get Patients at Invalid Health Center">
+      <Request method="GET" uri="/api/hc/10/patients"/>
+      <Response status="200">
+        <![CDATA[
+        []
+        ]]>
+      </Response>
+    </TestCase>
+
+    <TestCase name="Get Patients For VHT">
+      <Request method="GET" uri="/api/vht/3/patients"/>
+      <Response status="200">
+        <![CDATA[
+        [
+          {
+            "id":  "001",
+            "name":  "Harumi Youko",
+            "villageNumber":  "1",
+            "zoneNumber":  "1",
+            "birthYear":  1995,
+            "sex":  1,
+            "medicalHistory":  null,
+            "drugHistory":  null,
+            "lastUpdated":  "2019-09-20 20:12:32",
+            "generalNotes":  null
+          }
+        ]
+        ]]>
+      </Response>
+    </TestCase>
+
+    <TestCase name="Get Patients For Invalid VHT">
+      <Request method="GET" uri="/api/vht/100/patients"/>
+      <Response status="200">
+        <![CDATA[
+        []
+        ]]>
+      </Response>
+    </TestCase>
 </TestSuite>
