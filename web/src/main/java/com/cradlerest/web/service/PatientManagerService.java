@@ -67,6 +67,14 @@ public interface PatientManagerService {
 	List<Patient> getPatientsReferredToHealthCenter(int healthCenterId);
 
 	/**
+	 * Returns all of the patients who have a reading created by a specific
+	 * user.
+	 * @param userId The id of the user to get patients for.
+	 * @return A list of patients.
+	 */
+	List<Patient> getPatientsWithReadingsCreatedBy(int userId);
+
+	/**
 	 * Creates a new, or updates an existing, patient in the system. If a patient
 	 * with the same id as {@param patient} exists, then that patient's profile
 	 * will be overwritten with the contents of {@param patient}. If no such
