@@ -38,6 +38,7 @@ public class SymptomReadingRelationRepositoryTests {
 				.gestationalAgeDays(0)
 				.colour(ReadingColour.GREEN)
 				.timestamp(new Timestamp(DateParser.parseDateTime("2019-10-01 23:00:00").getTime()))
+				.createdBy(3)
 				.build();
 
 	@Test

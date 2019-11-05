@@ -1,20 +1,19 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.ReferralController;
-import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
-import com.cradlerest.web.model.builder.ReadingBuilder;
 import com.cradlerest.web.model.builder.ReadingViewBuilder;
 import com.cradlerest.web.model.builder.ReferralBuilder;
 import com.cradlerest.web.model.view.ReadingView;
+import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.maumay.jflow.vec.Vec;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,17 +33,21 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private HealthCentreRepository healthCentreRepository;
 	private PatientManagerService patientManagerService; // Patients, Readings
 	private ReadingManager readingManager;
+	private ReadingRepository readingRepository;
 
 	public ReferralManagerServiceImpl(PatientManagerService patientManagerService,
 									  UserRepository userRepository,
 									  ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
-									  ReadingManager readingManager) {
+									  ReadingManager readingManager,
+									  ReadingRepository readingRepository
+	) {
 		this.patientManagerService = patientManagerService;
 		this.userRepository = userRepository;
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
 		this.readingManager = readingManager;
+		this.readingRepository = readingRepository;
 	}
 
 	/**
@@ -75,16 +78,16 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		String healthCentreName = requestBody.get("healthCentre").textValue();
 		String comments = requestBody.get("comments").textValue();
 		logger.info("Referral data \n" +
-						"patientId: " + patientId + "\n" +
-						"systolic: " + systolic + "\n" +
-						"diastolic: " + diastolic + "\n" +
-						"heartRate: " + heartRate + "\n" +
-						"readingColourKey: " + readingColourKey + "\n" +
-						"symptoms: " + symptoms + " \n" +
-						"readingTimestamp: " + readingTimestamp + "\n" +
-						"referralTimestamp: " + referralTimestamp + "\n" +
-						"healthCentreName: " + healthCentreName + "\n" +
-						"comments: " + comments);
+				"patientId: " + patientId + "\n" +
+				"systolic: " + systolic + "\n" +
+				"diastolic: " + diastolic + "\n" +
+				"heartRate: " + heartRate + "\n" +
+				"readingColourKey: " + readingColourKey + "\n" +
+				"symptoms: " + symptoms + " \n" +
+				"readingTimestamp: " + readingTimestamp + "\n" +
+				"referralTimestamp: " + referralTimestamp + "\n" +
+				"healthCentreName: " + healthCentreName + "\n" +
+				"comments: " + comments);
 
 		Patient currentPatient = null;
 		try {
@@ -127,11 +130,9 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		Reading currentReading = readingManager.saveReadingView(readingView);
 
 		Referral currentReferral = new ReferralBuilder()
-				.pid(currentPatient.getId())
-				.vid(currentVHT.get().getId())
+				.referredByUserId(currentVHT.get().getId())
+				.referredToHealthCenterId(currentHealthCentre.get().getId())
 				.readingId(currentReading.getId())
-				.healthCentre(currentHealthCentre.get().getName())
-				.healthCentreNumber(currentHealthCentre.get().getHealthCentreNumber())
 				.comments(comments)
 				.timestamp(referralTimestamp)
 				.build();
@@ -140,20 +141,37 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	/**
-	 * @return All referrals
-	 */
-	public List<Referral> findAll() { return referralRepository.findAll(); }
-
-	/**
-	 *
 	 * @param healthCentreName
 	 * @return All referrals from a health centre
 	 */
-	public List<Referral> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException{
+	@Override
+	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException {
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
-		return referralRepository.findAllByHealthCentre(healthCentreName);
+		return Vec.copy(referralRepository.findAllByReferredToHealthCenterId(healthCentre.get().getId()))
+				.map(this::computeReferralView)
+				.toList();
+	}
+
+	@Override
+	public List<ReferralView> findAllByOrderByTimestampDesc() {
+		return Vec.copy(referralRepository.findAllByOrderByTimestampDesc())
+				.map(this::computeReferralView)
+				.toList();
+	}
+
+	private ReferralView computeReferralView(@NotNull Referral r) {
+		var optHc = healthCentreRepository.findById(r.getReferredToHealthCenterId());
+		if (optHc.isEmpty()) {
+			throw new RuntimeException("unable to find health center: constraint violation");
+		}
+		var hc = optHc.get();
+
+		var pid = readingRepository.findPatientIdOfReadingWithId(r.getReadingId());
+		assert pid != null; // constraint violation if it is
+
+		return ReferralView.fromReferral(r, hc.getName(), hc.getHealthCentreNumber(), pid);
 	}
 }

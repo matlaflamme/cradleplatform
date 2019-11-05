@@ -1,8 +1,8 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Referral;
+import com.cradlerest.web.model.view.ReferralView;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public interface ReferralManagerService {
 	 */
 	Referral saveReferral(JsonNode requestBody) throws Exception;
 
-	List<Referral> findAll();
-	List<Referral> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
+	List<ReferralView> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
+	List<ReferralView> findAllByOrderByTimestampDesc();
 
 
 }

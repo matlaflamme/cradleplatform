@@ -107,6 +107,11 @@ abstract class AbstractReadingBuilder<T extends Reading, Self>  extends Abstract
 		return self();
 	}
 
+	public Self createdBy(@NotNull Integer userId) {
+		value.setCreatedBy(userId);
+		return self();
+	}
+
 	protected void validate() throws InstantiationError {
 		//assertFieldNotNull(value.getId(), "id");
 	}

@@ -124,6 +124,7 @@ Vue.component('readings_table' , {
             this.rows = this.changeDate(response.data);
             this.calcGraphData(response.data);
             this.rows.forEach((row)=> {
+                console.log(row);
                 let icon = getReadingColorIcon(row.colour);
                 row.colorstyle = {"background-color": icon['colour']};
             })
@@ -197,7 +198,7 @@ Vue.component('patient_info', {
         return {
             patientData: //starter data so that "patientData" is not null when the page is loaded
                 {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
-                    "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
+                    "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"symptoms":[],"pregnant":null,
                     "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
                         "timestamp":""}]}, //data in the form of json string
             hasSymptoms: false,

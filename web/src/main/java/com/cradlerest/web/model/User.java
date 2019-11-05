@@ -3,10 +3,18 @@ package com.cradlerest.web.model;
 import com.cradlerest.web.constraints.user.ValidPassword;
 import com.cradlerest.web.constraints.user.ValidRole;
 import com.cradlerest.web.constraints.user.ValidUsername;
+import com.cradlerest.web.service.DateDeserializer;
+import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.Omit;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Class {@code User} is a database entity holding data for users of the web
@@ -25,18 +33,29 @@ public class User {
 
 	@NotEmpty(message = "username required")
 	@ValidUsername
-	@Column(name = "username")
+	@Column(name = "username", nullable = false)
 	private String username;
 
 	@NotEmpty(message = "Password required") // Bcrypt will encode an empty string so this might be redundant
 	@ValidPassword
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	@NotEmpty(message = "Role required")
 	@ValidRole // valid format "ROLE_XX,ROLE_XX,ROLE_XX", where XX = ADMIN,VHT,HEALTHWORKER
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	private String roles; // ADMIN,VHT,HEALTHWORKER
+
+	@Column(name = "active", columnDefinition = "default boolean true", nullable = false)
+	private boolean active;
+
+	@CreationTimestamp
+	@Column(name = "created")
+	private Date created;
+
+	@UpdateTimestamp
+	@Column(name = "modified")
+	private Date modified;
 
 	public User() {}
 
@@ -45,6 +64,7 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
+		this.active = true;
 	}
 
 	public User(User user) {
@@ -52,12 +72,14 @@ public class User {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.roles = user.getRoles();
+		this.active = true;
 	}
 
 	public User(String username, String password, String roles) {
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
+		this.active = true;
 	}
 
 	public void setId(Integer id) {
@@ -87,5 +109,23 @@ public class User {
 	}
 
 	public String getRoles() { return roles; }
+
+	public boolean getActive() { return active; }
+
+	public void swapActive() {
+		System.out.println("WTF");
+		this.active = !active;
+	}
+
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getCreated() {
+		return created;
+	}
+
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getModified() {
+		return modified;
+	}
+
 
 }
