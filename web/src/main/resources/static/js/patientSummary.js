@@ -259,21 +259,21 @@ Vue.component('patient_info', {
     },
     methods: {
         checkSymptoms() {
-            this.patientData.readings[0].symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //**********************************************Remove this
+            //this.patientData.readings[0].symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //For testing only
             if (this.patientData.readings[0].symptoms.length !== 0) {
                 this.symptoms = this.patientData.readings[0].symptoms;
                 this.hasSymptoms = true;
             }
         },
         checkMedications() {
-            this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //***************************************** Remove this
+            //this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //For testing only
             if (this.patientData.drugHistory !== null) {
                 this.medications = this.patientData.drugHistory;
                 this.takingMedication = true;
             }
         },
         checkPregnant() {
-            this.patientData.readings[0].gestationalAge = 130; // *********************************************************** Remove this
+            //this.patientData.readings[0].gestationalAge = 130; //For testing only
             if (this.patientData.readings[0].gestationalAge) {
                 this.pregnant = true;
                 this.patientData.readings[0].gestationalAge = Math.round(this.patientData.readings[0].gestationalAge / 7);
