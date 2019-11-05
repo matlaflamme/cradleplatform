@@ -55,6 +55,9 @@ information about the entities returned by these methods see
     * [`POST /api/reading`](#post-apireading)
     * [`GET /api/reading/{id}`](#get-apireadingid)
     * [`POST /api/reading/save`](#post-apireadingsave)
+    * [`GET /api/hc/{id}/patients`](#get-apihcidpatients)
+    * [`GET /api/vht/{id}/patients`](#get-apivhtidpatients)
+    * [`GET /api/vht/{id}/readings`](#get-apivhtidreadings)
 
 ## Patient Methods
 
@@ -296,3 +299,47 @@ a new reading can be created for them.
 | `timestamp` | `string` | `yes` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |
 | `symptoms` | `[string]` | `yes` | A list of [symptoms](ENTITIES.md#symptom) for this reading |
 
+
+### `GET /api/hc/{id}/patients`
+
+Returns the list of all patients, and their latest readings, referred to a given health center.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `number` | Health Center Identifier |
+
+#### Returns
+
+A list of patients and their latest readings. Returns an empty array in the event that `id` is invalid.
+
+
+### `GET /api/vht/{id}/patients`
+
+Returns the list of all patients, and their latest readings, who have a reading created by a given user.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `number` | User Identifier |
+
+#### Returns
+
+A list of patients and their latest readings. Returns an empty array in the event that `id` is invalid.
+
+
+### `GET /api/vht/{id}/readings`
+
+A list of all readings created by the VHT with a given id.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `number` | User Identifier |
+
+#### Returns
+
+A list of [reading views](ENTITIES.md#reading-view). Returns an empty array in the event that `id` is invalid.
