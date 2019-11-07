@@ -49,7 +49,9 @@ Vue.component('sidebar_item', {
                 window.location.assign("/manageUserAccounts")
             }
             else if (clicked === "new-reading") {
-                window.location.assign("/createNewReading")
+                let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
+                let id = urlQuery.get('id'); //search for 'id=' in query and return the value
+                window.location.assign("/createNewReading?id=" + id)
             }
             else if (clicked === "all-referrals") {
                 window.location.assign("/referrals")

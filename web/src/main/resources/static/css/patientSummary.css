@@ -1,6 +1,6 @@
 h3 {
     color: #0c9090; /* Green */
-    text-align: center;
+    text-align: left;
 }
 #heart_beat{
     color: black;
@@ -18,16 +18,12 @@ h3 {
     margin-top: 10px;
 }
 
-
-.bg-light {
-    background-color: #0b908f!important; /* NavBar background */
+#header {
+    position: relative;
 }
 
-.nav-link:hover {
-    color: #c7c7c7 !important; /*Overrides bootstrap changes nav-bar links text hover colour */
-}
-
-
-.row{
-    margin-left: 7%;
+#header-content { /*Used to push patient details to the bottom of their respective columns */
+    position: absolute;
+    bottom: 12px;
+    left: 15px;
 }
