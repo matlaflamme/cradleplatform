@@ -1,5 +1,4 @@
-let authInput = new Vue({
-    el: '#authInput',
+Vue.component('login' , {
     data: {
         username : '',
         password : ''
