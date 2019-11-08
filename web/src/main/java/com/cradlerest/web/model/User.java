@@ -4,17 +4,13 @@ import com.cradlerest.web.constraints.user.Role;
 import com.cradlerest.web.constraints.user.ValidPassword;
 import com.cradlerest.web.constraints.user.ValidRole;
 import com.cradlerest.web.constraints.user.ValidUsername;
-import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.Omit;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -73,7 +69,7 @@ public class User {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.roles = user.getRoles();
-		this.active = true;
+		this.active = user.getActive();
 	}
 
 	public User(String username, String password, String roles) {
