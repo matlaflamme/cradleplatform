@@ -11,11 +11,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/hc")
-public class HealthCenterController {
+public class HealthCentreController {
 
 	private PatientManagerService patientManagerService;
 
-	public HealthCenterController(PatientManagerService patientManagerService) {
+	public HealthCentreController(PatientManagerService patientManagerService) {
 		this.patientManagerService = patientManagerService;
 	}
 
