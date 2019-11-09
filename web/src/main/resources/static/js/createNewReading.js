@@ -95,7 +95,9 @@ Vue.component('new_reading',{
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
         let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-        this.patientID = id;
+        if (id !== "null") {
+            this.patientID = id;
+        }
     },
     template: //@TODO Fix indentation
     '    <v-stepper v-model="e1">\n' +
