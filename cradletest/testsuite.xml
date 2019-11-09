@@ -59,9 +59,7 @@
     <Request method="GET" uri="/api/reading/trafficlight?systolic=5&amp;diastolic=200&amp;heartRate=20"/>
     <Response status="200">
       <![CDATA[
-      {
-        3
-      }
+      3
       ]]>
     </Response>
   </TestCase>
