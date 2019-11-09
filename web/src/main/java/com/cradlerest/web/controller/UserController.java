@@ -39,11 +39,11 @@ public class UserController {
 
 	private UserRepository userRepository;
 
-	@Autowired
 	private PasswordEncoder  passwordEncoder;
 
-	public UserController(UserRepository userRepository) {
+	public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@GetMapping("/all")
