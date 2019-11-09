@@ -53,15 +53,9 @@ public class ReadingController {
 
 	// Proper way of calling this https://localhost:9000/api/reading/trafficlight?systolic=SYSTOLIC_INPUT_VALUE&diastolic=DIASTOLIC_INPUT_VALUE&heartRate=HEART_RATE_INPUT_VALUE
 	@GetMapping ("trafficlight")
-	public Integer getLight(@RequestParam Map<String,String> params) throws BadRequestException {
+	public Integer getLight(@RequestParam int systolic, @RequestParam int diastolic, @RequestParam int heartRate) throws BadRequestException {
 
-		Integer systolic;
-		Integer diastolic;
-		Integer heartRate;
 		try{
-			systolic = Integer.parseInt(params.get(SYSTOLIC));
-			diastolic = Integer.parseInt(params.get(DIASTOLIC));
-			heartRate = Integer.parseInt(params.get(HEART_RATE));
 			return ReadingColour.computeColour(systolic, diastolic, heartRate).ordinal();
 		}catch (Exception e) {
 			throw new BadRequestException("Missing or invalid argument", e);
