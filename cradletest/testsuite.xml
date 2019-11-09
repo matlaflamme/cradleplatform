@@ -60,7 +60,7 @@
     <Response status="200">
       <![CDATA[
       {
-        "light":"3" 
+        3
       }
       ]]>
     </Response>
