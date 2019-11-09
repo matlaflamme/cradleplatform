@@ -31,7 +31,7 @@
   </TestCase>
   
  <TestCase name="Compute Invalid Reading Traffic Light Value">
-    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&ampsystolic=13&ampheartRate=20w"/>
+    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&amp;systolic=13&amp;heartRate=20w"/>
     <Response status="400">
       <![CDATA[
       {
@@ -44,7 +44,7 @@
   </TestCase>
   
  <TestCase name="Compute Invalid Reading Traffic Light Missing Value">
-    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&ampsystolic=13"/>
+    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&amp;systolic=13"/>
     <Response status="400">
       <![CDATA[
       {
@@ -56,7 +56,7 @@
     </Response>
     
   </TestCase> <TestCase name="Compute Valid Reading Traffic Light">
-    <Request method="GET" uri="/api/reading/trafficlight?systolic=5&ampdiastolic=200&ampheartRate=20"/>
+    <Request method="GET" uri="/api/reading/trafficlight?systolic=5&amp;diastolic=200&amp;heartRate=20"/>
     <Response status="400">
       <![CDATA[
       {
