@@ -15,11 +15,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/reading")
 public class ReadingController {
-
-    private static final String SYSTOLIC = "systolic";
-    private static final String DIASTOLIC = "diastolic";
-    private static final String HEART_RATE = "heartRate";
-
     private ReadingManager readingManager;
 
 	public ReadingController(ReadingManager readingManager) {
