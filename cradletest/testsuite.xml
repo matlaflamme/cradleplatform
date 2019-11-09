@@ -29,6 +29,20 @@
       ]]>
     </Response>
   </TestCase>
+  
+ <TestCase name="Compute Invalid Reading">
+    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&systolic=13"/>
+    <Response status="400">
+      <![CDATA[
+      {
+        "code":400,
+        "error":"Bad Request",
+        "message":"Missing or invalid argument"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+
 
   <TestCase name="Request For Non-existant Patient">
     <Request method="GET" uri="/api/patient/X/info"/>
