@@ -55,7 +55,7 @@ public class UserController {
 	public @ResponseBody User get(@PathVariable("id") int id) throws DatabaseException {
 		Optional<User> optUser = userRepository.findById(id);
 
-		if (!optUser.isPresent()) {
+		if (optUser.isEmpty()) {
 			throw new EntityNotFoundException(id);
 		}
 		return optUser.get();
@@ -84,14 +84,14 @@ public class UserController {
 	 * Swaps the active value of a user
 	 * If user is not active, they cannot be authenticated
 	 *
-	 * @param username
-	 * @return
-	 * @throws EntityNotFoundException
+	 * @param username A username.
+	 * @return A response message.
+	 * @throws EntityNotFoundException If no user with the given user name exists.
 	 */
 	@PostMapping("/{username}/change-active")
 	public String updateUserIsActive(@PathVariable("username") String username) throws EntityNotFoundException{
 		Optional<User> foundUser = userRepository.findByUsername(username);
-		if (!foundUser.isEmpty()) {
+		if (foundUser.isPresent()) {
 			foundUser.get().swapActive();
 			userRepository.save(foundUser.get());
 			return "User active set to (1=true,0=false): " + foundUser.get().getActive();
