@@ -30,14 +30,37 @@
     </Response>
   </TestCase>
   
- <TestCase name="Compute Invalid Reading">
-    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&systolic=13"/>
+ <TestCase name="Compute Invalid Reading Traffic Light Value">
+    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&ampsystolic=13&ampheartRate=20w"/>
     <Response status="400">
       <![CDATA[
       {
         "code":400,
         "error":"Bad Request",
         "message":"Missing or invalid argument"
+      }
+      ]]>
+    </Response>
+  </TestCase>
+  
+ <TestCase name="Compute Invalid Reading Traffic Light Missing Value">
+    <Request method="GET" uri="/api/reading/trafficlight?diastolic=1&ampsystolic=13"/>
+    <Response status="400">
+      <![CDATA[
+      {
+        "code":400,
+        "error":"Bad Request",
+        "message":"Missing or invalid argument"
+      }
+      ]]>
+    </Response>
+    
+  </TestCase> <TestCase name="Compute Valid Reading Traffic Light">
+    <Request method="GET" uri="/api/reading/trafficlight?systolic=5&ampdiastolic=200&ampheartRate=20"/>
+    <Response status="400">
+      <![CDATA[
+      {
+        "light":"3" 
       }
       ]]>
     </Response>
