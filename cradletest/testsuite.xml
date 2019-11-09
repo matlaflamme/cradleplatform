@@ -57,7 +57,7 @@
     
   </TestCase> <TestCase name="Compute Valid Reading Traffic Light">
     <Request method="GET" uri="/api/reading/trafficlight?systolic=5&amp;diastolic=200&amp;heartRate=20"/>
-    <Response status="400">
+    <Response status="200">
       <![CDATA[
       {
         "light":"3" 
