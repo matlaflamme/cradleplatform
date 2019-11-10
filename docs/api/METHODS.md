@@ -315,7 +315,7 @@ Returns the list of all patients, and their latest readings, referred to a given
 A list of patients and their latest readings. Returns an empty array in the event that `id` is invalid.
 
 
-### `GET /api/vht/{id}/patients`
+### `GET /api/user/{id}/patients`
 
 Returns the list of all patients, and their latest readings, who have a reading created by a given user.
 
@@ -330,9 +330,9 @@ Returns the list of all patients, and their latest readings, who have a reading 
 A list of patients and their latest readings. Returns an empty array in the event that `id` is invalid.
 
 
-### `GET /api/vht/{id}/readings`
+### `GET /api/user/{id}/readings`
 
-A list of all readings created by the VHT with a given id.
+A list of all readings created by the user with a given id.
 
 #### Path Variables
 
