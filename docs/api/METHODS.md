@@ -56,8 +56,8 @@ information about the entities returned by these methods see
     * [`GET /api/reading/{id}`](#get-apireadingid)
     * [`POST /api/reading/save`](#post-apireadingsave)
     * [`GET /api/hc/{id}/patients`](#get-apihcidpatients)
-    * [`GET /api/vht/{id}/patients`](#get-apivhtidpatients)
-    * [`GET /api/vht/{id}/readings`](#get-apivhtidreadings)
+    * [`GET /api/user/{id}/patients`](#get-apiuseridpatients)
+    * [`GET /api/user/{id}/readings`](#get-apiuseridreadings)
 
 ## Patient Methods
 
