@@ -303,7 +303,7 @@
     </TestCase>
 
     <TestCase name="Get Patients For VHT">
-      <Request method="GET" uri="/api/vht/3/patients"/>
+      <Request method="GET" uri="/api/user/3/patients"/>
       <Response status="200">
         <![CDATA[
          [
@@ -341,7 +341,7 @@
     </TestCase>
 
     <TestCase name="Get Patients For Invalid VHT">
-      <Request method="GET" uri="/api/vht/100/patients"/>
+      <Request method="GET" uri="/api/user/100/patients"/>
       <Response status="200">
         <![CDATA[
         []

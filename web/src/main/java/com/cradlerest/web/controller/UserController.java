@@ -4,15 +4,14 @@ import com.cradlerest.web.constraints.user.RoleValidator;
 import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
 import com.cradlerest.web.controller.exceptions.DatabaseException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.model.User;
+import com.cradlerest.web.model.view.ReadingView;
+import com.cradlerest.web.service.PatientManagerService;
+import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.service.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -38,12 +37,18 @@ import java.util.Optional;
 public class UserController {
 
 	private UserRepository userRepository;
-
 	private PasswordEncoder  passwordEncoder;
+	private PatientManagerService patientManagerService;
+	private ReadingManager readingManager;
 
-	public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserController(UserRepository userRepository,
+						  PasswordEncoder passwordEncoder,
+						  PatientManagerService patientManagerService,
+						  ReadingManager readingManager) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.patientManagerService = patientManagerService;
+		this.readingManager = readingManager;
 	}
 
 	@GetMapping("/all")
@@ -108,5 +113,27 @@ public class UserController {
 		} catch (Exception e) {
 			throw new EntityNotFoundException(id);
 		}
+	}
+
+	/**
+	 * Returns a list of patients who have readings created by a given user. If
+	 * unable to find a user with the given id, an empty list is returned.
+	 * @param id A user id.
+	 * @return A list of patients with their latest readings.
+	 */
+	@GetMapping("/{id}/patients")
+	public List<PatientWithLatestReadingView> patients(@PathVariable("id") int id) {
+		return patientManagerService.getPatientsWithReadingsCreatedBy(id);
+	}
+
+	/**
+	 * Returns a list of all readings created by a given user. If unable to
+	 * find a user with the given id, an empty list is returned.
+	 * @param id A user id.
+	 * @return A list of readings created by this user.
+	 */
+	@GetMapping("/{id}/readings")
+	public List<ReadingView> readings(@PathVariable("id") int id) {
+		return readingManager.getAllCreatedBy(id);
 	}
 }
