@@ -2,9 +2,12 @@ package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Controller for saving and retrieving {@code ReadingView} objects.
@@ -12,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/reading")
 public class ReadingController {
-
-	private ReadingManager readingManager;
+    private ReadingManager readingManager;
 
 	public ReadingController(ReadingManager readingManager) {
 		this.readingManager = readingManager;
@@ -42,5 +44,17 @@ public class ReadingController {
 	@GetMapping("{id}")
 	public ReadingView get(@PathVariable("id") Integer readingId) throws EntityNotFoundException {
 		return readingManager.getReadingView(readingId);
+	}
+
+	// Proper way of calling this https://localhost:9000/api/reading/trafficlight?systolic=SYSTOLIC_INPUT_VALUE&diastolic=DIASTOLIC_INPUT_VALUE&heartRate=HEART_RATE_INPUT_VALUE
+	@GetMapping ("trafficlight")
+	public Integer getLight(@RequestParam int systolic, @RequestParam int diastolic, @RequestParam int heartRate) throws BadRequestException {
+
+		try{
+			return ReadingColour.computeColour(systolic, diastolic, heartRate).ordinal();
+		}catch (Exception e) {
+			throw new BadRequestException("Missing or invalid argument", e);
+		}
+
 	}
 }
