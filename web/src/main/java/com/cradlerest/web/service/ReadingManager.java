@@ -45,6 +45,13 @@ public interface ReadingManager {
 	List<ReadingView> getAllReadingViewsForPatient(@NotNull String patientId) throws EntityNotFoundException;
 
 	/**
+	 * Returns the list of all readings created by a specific user.
+	 * @param userId The id of the user to get readings for.
+	 * @return A list of reading views.
+	 */
+	List<ReadingView> getAllCreatedBy(int userId);
+
+	/**
 	 * Deconstructs and persists a given reading view.
 	 * @param readingView A reading view.
 	 * @return The saved reading.
