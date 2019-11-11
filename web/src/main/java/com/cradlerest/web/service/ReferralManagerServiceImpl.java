@@ -89,42 +89,36 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				"healthCentreName: " + healthCentreName + "\n" +
 				"comments: " + comments);
 
-		Patient currentPatient = null;
-		try {
-			currentPatient = patientManagerService.getPatientWithId(patientId);
-		} catch (EntityNotFoundException exception) {
-			exception.printStackTrace();
-			// TODO: No patient found, create new patient
-			// We can either send another text message requesting more information
-			// OR
-			// request all necessary information from initial referral
-		}
+		// TODO: No patient found, create new patient
+		// We can either send another text message requesting more information
+		// OR
+		// request all necessary information from initial referral
+		Patient currentPatient = patientManagerService.getPatientWithId(patientId);
 
 		Optional<User> currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
 		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (currentVHT.isEmpty()) {
-			throw new EntityNotFoundException("Not found: " + requestBody.get("VHT").textValue());
+			throw new EntityNotFoundException("VHT username not found: " + requestBody.get("VHT").textValue());
 		}
 
 		if (currentHealthCentre.isEmpty()) {
-			throw new EntityNotFoundException("Not found: " + healthCentreName);
+			throw new EntityNotFoundException("Health centre not found: " + healthCentreName);
 		}
 
 
 		String[] symptomsArr = symptoms.replace("[", "").replace("]", "").split(",");
-		// src https://stackoverflow.com/questions/9864568/how-to-trim-white-space-from-all-elements-in-array
+
 		String[] symptomsArrNoTrailingWhiteSpace = Arrays.stream(symptomsArr).map(String::trim).toArray(String[]::new);
 
-		// commented because it is returning null
 		ReadingView readingView = new ReadingViewBuilder()
 				.pid(currentPatient.getId())
-				.pregnant(false)
+				.pregnant(false) // TODO: Info not sent through referral at the moment
 				.colour(ReadingColour.valueOf(readingColourKey))
 				.diastolic(diastolic)
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
-				.symptoms(symptomsArrNoTrailingWhiteSpace)
+				.symptoms(symptomsArrNoTrailingWhiteSpace) // TODO: Symptoms are not saved! BUG
 				.build();
 
 		Reading currentReading = readingManager.saveReadingView(readingView);
