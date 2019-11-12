@@ -9,8 +9,11 @@ import com.cradlerest.web.model.User;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
+import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -135,5 +138,28 @@ public class UserController {
 	@GetMapping("/{id}/readings")
 	public List<ReadingView> readings(@PathVariable("id") int id) {
 		return readingManager.getAllCreatedBy(id);
+	}
+
+	/**
+	 * A test API method which returns the username of the requesting user.
+	 * @return The requesting user's username.
+	 */
+	@GetMapping("/whoami")
+	public Object whoAmI() {
+		class Result {
+			public String username;
+
+			private Result(String username) {
+				this.username = username;
+			}
+		}
+
+		var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetailsImpl) {
+			var userDetails = (UserDetailsImpl) principal;
+			return new Result(userDetails.getUsername());
+		} else {
+			return principal;
+		}
 	}
 }

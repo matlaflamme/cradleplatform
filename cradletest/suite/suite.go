@@ -14,9 +14,10 @@ import (
 
 // TestSuite holds the top-level test data unmarshalled from an XML file.
 type TestSuite struct {
-	XMLName   xml.Name   `xml:"TestSuite"`
-	TestCases []TestCase `xml:"TestCase"`
-	Batches   []Batch    `xml:"Batch"`
+	XMLName     xml.Name        `xml:"TestSuite"`
+	TestCases   []TestCase      `xml:"TestCase"`
+	Batches     []Batch         `xml:"Batch"`
+	DefaultAuth *Authentication `xml:"Authentication"`
 }
 
 // TestCase holds data for a single test case.
@@ -28,9 +29,17 @@ type TestCase struct {
 
 // Request holds data for the Request XML tag.
 type Request struct {
-	Method *string `xml:"method,attr"`
-	URI    *string `xml:"uri,attr"`
-	Body   []byte  `xml:",chardata"`
+	Method   *string `xml:"method,attr"`
+	URI      *string `xml:"uri,attr"`
+	Username *string `xml:"username,attr"`
+	Password *string `xml:"password,attr"`
+	Body     []byte  `xml:",chardata"`
+}
+
+// Authentication holds user credentials.
+type Authentication struct {
+	Username *string `xml:"username,attr"`
+	Password *string `xml:"password,attr"`
 }
 
 // BodyReader returns a new io.Reader for a request's body.
@@ -50,19 +59,35 @@ func (r Request) BodyReader() io.Reader {
 // It is important to note that this function does not send the request itself,
 // but instead generates a go function which can be called later to generate
 // the request.
-func (r Request) PrepRequest() func() (*http.Response, error) {
+func (r Request) PrepRequest(defaultAuth *Authentication) func() (*http.Response, error) {
 	url := cli.URL() + *r.URI
-	switch *r.Method {
-	case "GET":
-		return func() (*http.Response, error) {
-			return http.Get(url)
+	auth := defaultAuth
+	if r.Username != nil {
+		if r.Password != nil {
+			auth = &Authentication{
+				Username: r.Username,
+				Password: r.Password,
+			}
+		} else {
+			panic("username supplied with no password")
 		}
-	case "POST":
-		return func() (*http.Response, error) {
-			return http.Post(url, "application/json", r.BodyReader())
-		}
-	default:
-		panic("unsupported HTTP method: " + *r.Method)
+	}
+
+	request, err := http.NewRequest(*r.Method, url, r.BodyReader())
+	if err != nil {
+		panic(err)
+	}
+
+	if auth != nil {
+		request.SetBasicAuth(*auth.Username, *auth.Password)
+	}
+
+	if *r.Method == "POST" {
+		request.Header.Set("Content-Type", "application/json")
+	}
+
+	return func() (*http.Response, error) {
+		return http.DefaultClient.Do(request)
 	}
 }
 
@@ -124,11 +149,11 @@ func Validate(ts *TestSuite, out io.Writer) bool {
 
 func validateTestCase(tc *TestCase, out io.Writer) bool {
 	if tc.Request == nil {
-		fmt.Fprintln(out, "TestCase: missing Request element")
+		_, _ = fmt.Fprintln(out, "TestCase: missing Request element")
 		return false
 	}
 	if tc.Response == nil {
-		fmt.Fprintln(out, "TestCase: missing Response element")
+		_, _ = fmt.Fprintln(out, "TestCase: missing Response element")
 		return false
 	}
 	return true

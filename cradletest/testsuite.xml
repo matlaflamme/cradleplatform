@@ -348,4 +348,23 @@
         ]]>
       </Response>
     </TestCase>
+
+    <TestCase name="Who Am I? Admin">
+        <Request method="GET" uri="/api/user/whoami" username="admin" password="admin"/>
+        <Response status="200">
+            <![CDATA[{"username":"admin"}]]>
+        </Response>
+    </TestCase>
+    <TestCase name="Who Am I? Health">
+        <Request method="GET" uri="/api/user/whoami" username="health" password="health"/>
+        <Response status="200">
+            <![CDATA[{"username":"health"}]]>
+        </Response>
+    </TestCase>
+    <TestCase name="Who Am I? VHT">
+        <Request method="GET" uri="/api/user/whoami" username="vht" password="vht"/>
+        <Response status="200">
+            <![CDATA[{"username":"vht"}]]>
+        </Response>
+    </TestCase>
 </TestSuite>
