@@ -1,30 +1,25 @@
 Vue.prototype.$http = axios;
 
 function getReadingColorIcon(digit) {
-    let colour = 'green';
-    let arrow = null;
+    let light = 'green';
     switch (digit) {
         case 0:
-            colour = 'green';
+            light = 'green';
             break;
         case 1:
-            colour = 'yellow';
-            arrow = '/img/arrow_down.png';
+            light = 'yellow_down';
             break;
         case 2:
-            colour = 'yellow';
-            arrow = '/img/arrow_up.png';
+            light = 'yellow_up';
             break;
         case 3:
-            colour = 'red';
-            arrow = '/img/arrow_down.png';
+            light = 'red_down';
             break;
         case 4:
-            colour = 'red';
-            arrow = '/img/arrow_up.png';
+            light = 'red_up';
             break;
     }
-    return { 'colour' : colour, 'arrow' : arrow };
+    return light;
 };
 
 Vue.component('basic_info', {
@@ -125,8 +120,8 @@ Vue.component('readings_table' , {
             this.calcGraphData(response.data);
             this.rows.forEach((row)=> {
                 console.log(row);
-                let icon = getReadingColorIcon(row.colour);
-                row.colorstyle = {"background-color": icon['colour']};
+                // let icon = getReadingColorIcon(row.colour);
+                // row.colorstyle = {"background-color": icon['colour']};
             })
         })
     },
@@ -217,8 +212,7 @@ Vue.component('patient_info', {
             '</v-list-item three-line>' +
             '<img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
             '<p id="heart_beat" class="title">{{patientData.readings[0].heartRate}}</p>\n' +
-            '<span id="light" ref="light" class="dot"></span>\n' +
-            '<img id="arrow" ref="arrow" src="/img/arrow_down.png" height="30" width="20" style="margin-bottom: 12px">\n' +
+            '<img id="light" ref="light" src="/img/white.png" height="50" width="60" style="margin-bottom: 12px">\n' +
             '<v-list-item three-line>\n' +
                 '<v-list-item-content>\n' +
                     '<p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
@@ -290,13 +284,24 @@ Vue.component('patient_info', {
         },
         setLight(pData) {
             let icon = getReadingColorIcon(pData.readings[0].colour);
-            this.$refs.light.setAttribute("style", "background-color:" +  icon['colour'] + ";");
+            console.log(icon)
+            switch (icon) {
+                case 'green':
+                    this.$refs.light.src = '/img/green.png';
+                    break;
+                case 'yellow_down':
+                    this.$refs.light.src = '/img/yellow_down.png';
+                    break;
+                case 'yellow_up':
+                    this.$refs.light.src = '/img/yellow_up.png';
+                    break;
+                case 'red_down':
+                    this.$refs.light.src = '/img/red_down.png';
+                    break;
+                case 'red_up':
+                    this.$refs.light.src = '/img/red_up.png';
+                    break;
 
-            if (icon['arrow'] == null) {
-                this.$refs.arrow.hidden = true;
-            }
-            else {
-                this.$refs.arrow.src = icon['arrow'];
             }
         }
     }
