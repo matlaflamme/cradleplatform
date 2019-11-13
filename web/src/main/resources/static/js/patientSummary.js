@@ -1,8 +1,11 @@
 Vue.prototype.$http = axios;
 
-function getReadingColorIcon(digit) {
-    let light = 'green';
+function getReadingColorIcon(digit){
+    let light = 'white';
     switch (digit) {
+        case null:
+            light = 'white';
+            break;
         case 0:
             light = 'green';
             break;
@@ -21,6 +24,7 @@ function getReadingColorIcon(digit) {
     }
     return "/img/" + light + ".png";
 };
+
 
 Vue.component('basic_info', {
     vuetify: new Vuetify(),
@@ -119,7 +123,6 @@ Vue.component('readings_table' , {
             this.rows = this.changeDate(response.data);
             this.calcGraphData(response.data);
             this.rows.forEach((row)=> {
-                console.log(row);
                 row.colorstyle = getReadingColorIcon(row.colour);
             })
         })
