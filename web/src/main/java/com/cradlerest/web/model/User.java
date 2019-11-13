@@ -75,6 +75,9 @@ public class User {
 		this.password = user.getPassword();
 		this.roles = user.getRoles();
 		this.active = user.getActive();
+		this.created = user.getCreated();
+		this.modified = user.getModified();
+		this.worksAtHealthCentreId = user.getWorksAtHealthCentreId();
 	}
 
 	public User(String username, String password, String roles) {
