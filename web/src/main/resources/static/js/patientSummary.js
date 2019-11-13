@@ -19,7 +19,7 @@ function getReadingColorIcon(digit) {
             light = 'red_up';
             break;
     }
-    return light;
+    return "/img/" + light + ".png";
 };
 
 Vue.component('basic_info', {
@@ -120,8 +120,7 @@ Vue.component('readings_table' , {
             this.calcGraphData(response.data);
             this.rows.forEach((row)=> {
                 console.log(row);
-                // let icon = getReadingColorIcon(row.colour);
-                // row.colorstyle = {"background-color": icon['colour']};
+                row.colorstyle = getReadingColorIcon(row.colour);
             })
         })
     },
@@ -147,7 +146,7 @@ Vue.component('readings_table' , {
                 '<td>{{props.row.colour}}</td>' +
             '</template>' +
             '<template v-slot:item.colour="{ item }">' +
-                '<td><span class="dot" :style="item.colorstyle"></span></td>' +
+                '<td><img id="light" ref="light" :src=item.colorstyle height="50" width="60" style="margin-bottom: 12px"></td>' +
             '</template>' +
             '<template v-slot:expanded-item="{ headers, item }">' +
                 '<td :colspan="headers.length">' +
@@ -212,7 +211,7 @@ Vue.component('patient_info', {
             '</v-list-item three-line>' +
             '<img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
             '<p id="heart_beat" class="title">{{patientData.readings[0].heartRate}}</p>\n' +
-            '<img id="light" ref="light" src="/img/white.png" height="50" width="60" style="margin-bottom: 12px">\n' +
+            '<img id="light" ref="light" :src= this.light height="50" width="60" style="margin-bottom: 12px">\n' +
             '<v-list-item three-line>\n' +
                 '<v-list-item-content>\n' +
                     '<p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
@@ -245,7 +244,7 @@ Vue.component('patient_info', {
         axios.get('/api/patient/' + id).then(response => {
             this.patientData = response.data;
             console.log(response.data);
-            this.setLight(response.data); //update light colour based on response from get request
+            this.light = getReadingColorIcon(response.data.readings[0].colour);
             this.checkSymptoms();
             this.checkMedications();
             this.checkPregnant();
@@ -282,28 +281,6 @@ Vue.component('patient_info', {
                 return "Male";
             }
         },
-        setLight(pData) {
-            let icon = getReadingColorIcon(pData.readings[0].colour);
-            console.log(icon)
-            switch (icon) {
-                case 'green':
-                    this.$refs.light.src = '/img/green.png';
-                    break;
-                case 'yellow_down':
-                    this.$refs.light.src = '/img/yellow_down.png';
-                    break;
-                case 'yellow_up':
-                    this.$refs.light.src = '/img/yellow_up.png';
-                    break;
-                case 'red_down':
-                    this.$refs.light.src = '/img/red_down.png';
-                    break;
-                case 'red_up':
-                    this.$refs.light.src = '/img/red_up.png';
-                    break;
-
-            }
-        }
     }
 
 });
