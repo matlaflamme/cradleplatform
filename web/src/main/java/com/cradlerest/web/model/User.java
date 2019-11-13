@@ -9,6 +9,8 @@ import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.jetbrains.annotations.Nullable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -53,6 +55,9 @@ public class User {
 	@UpdateTimestamp
 	@Column(name = "modified")
 	private Date modified;
+
+	@Column(name = "works_at")
+	private Integer worksAtHealthCentreId;
 
 	public User() {}
 
@@ -126,5 +131,12 @@ public class User {
 		return modified;
 	}
 
+	@Nullable
+	public Integer getWorksAtHealthCentreId() {
+		return worksAtHealthCentreId;
+	}
 
+	public void setWorksAtHealthCentreId(@Nullable Integer worksAtHealthCentreId) {
+		this.worksAtHealthCentreId = worksAtHealthCentreId;
+	}
 }
