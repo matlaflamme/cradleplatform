@@ -108,6 +108,40 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * Associates a specified user with a given health centre. This method may
+	 * be used to update or add a new association. Use "remove-health-centre"
+	 * to delete an existing association.
+	 * @param username The username of the user to update.
+	 * @param healthCentreId The id of the health centre to associate with.
+	 * @throws EntityNotFoundException If unable to find the requested user or
+	 * 	health centre.
+	 */
+	@PostMapping("/{username}/set-health-centre")
+	public void updateWorksAtHealthCentreId(@PathVariable("username") String username,
+											@RequestParam("hcid") int healthCentreId)
+			throws EntityNotFoundException {
+		try {
+			userRepository.updateWorksAtByUsername(username, healthCentreId);
+		} catch (Exception e) {
+			throw new EntityNotFoundException("unable to find user or health centre", e);
+		}
+	}
+
+	/**
+	 * Removes a health centre association for a given user.
+	 * @param username The username of the user to update.
+	 * @throws EntityNotFoundException If unable to find the user.
+	 */
+	@PostMapping("/{username}/remove-health-centre")
+	public void deleteWorksAtHealthCentreId(@PathVariable("username") String username) throws EntityNotFoundException {
+		try {
+			userRepository.updateWorksAtByUsername(username, null);
+		} catch (Exception e) {
+			throw new EntityNotFoundException("unable to find user", e);
+		}
+	}
+
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") int id) throws DatabaseException {
