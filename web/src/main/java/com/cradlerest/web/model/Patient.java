@@ -48,6 +48,11 @@ public class Patient {
 	@Enumerated(EnumType.ORDINAL)
 	private Sex sex;
 
+	@Column(name = "medication")
+	@Generator(GibberishSentenceGenerator.class)
+	@DataGenNullChance(0.5)
+	private String medication;
+
 	@Column(name = "medical_history")
 	@Generator(GibberishSentenceGenerator.class)
 	@DataGenNullChance(0.5)
@@ -77,6 +82,7 @@ public class Patient {
 			String name,
 			Integer birthYear,
 			Sex sex,
+			String medication,
 			String medicalHistory,
 			String drugHistory,
 			@NotNull Date lastUpdated,
@@ -88,6 +94,7 @@ public class Patient {
 		this.zoneNumber = zoneNumber;
 		this.birthYear = birthYear;
 		this.sex = sex;
+		this.medication = medication;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.lastUpdated = lastUpdated;
@@ -150,6 +157,14 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 	}
 
+	public String getMedication() {
+		return medication;
+	}
+
+	public void setMedication(String medication) {
+		this.medication = medication;
+	}
+
 	public String getDrugHistory() {
 		return drugHistory;
 	}
@@ -186,6 +201,7 @@ public class Patient {
 				villageNumber.equals(patient.villageNumber) &&
 				birthYear.equals(patient.birthYear) &&
 				sex == patient.sex &&
+				Objects.equals(medication, patient.medication) &&
 				Objects.equals(medicalHistory, patient.medicalHistory) &&
 				Objects.equals(drugHistory, patient.drugHistory) &&
 				lastUpdated.equals(patient.lastUpdated);

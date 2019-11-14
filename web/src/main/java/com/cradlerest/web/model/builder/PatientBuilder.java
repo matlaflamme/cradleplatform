@@ -87,6 +87,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder medication(@Nullable String text) {
+		patient.setMedication(text);
+		return this;
+	}
+
 	public PatientBuilder drugHistory(@Nullable String text) {
 		patient.setDrugHistory(text);
 		return this;
