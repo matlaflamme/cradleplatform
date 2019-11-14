@@ -12,7 +12,6 @@ import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -159,7 +158,7 @@ public class UserController {
 				this.id = id;
 			}
 		}
-		var optUser = userRepository.findByUsername(username);
+		Optional<User> optUser = userRepository.findByUsername(username);
 		if (optUser.isEmpty()) {
 			throw new EntityNotFoundException("unable to find user with username: " + username);
 		}
