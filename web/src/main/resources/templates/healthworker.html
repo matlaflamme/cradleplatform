@@ -29,7 +29,8 @@
                                 <td>{{tester(props.item.reading.timestamp)}}</td>
                             </template>
                             <template v-slot:item.colour="{ item }">
-                                <span class="dot" :style="item.reading.colorstyle"></span>
+<!--                                <span class="dot" :style="item.reading.colorstyle"></span>-->
+                                <td><img id="light" ref="light" :src=item.reading.colorstyle height="50" width="60" style="margin-bottom: 12px"></td>
                             </template>
                             <template v-slot:item.view="{ item }">
                                 <button v-on:click="viewPatientData(item.patient.id)" class="btn btn-outline-info">View Patient Data</button>
