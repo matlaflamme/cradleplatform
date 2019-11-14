@@ -142,6 +142,31 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * Returns the id of the health centre that a given user is associated with.
+	 * May be {@code null}.
+	 * @param username The username of the user to look for.
+	 * @return The id of the health centre the user is associated with, or
+	 * 	{@code null} if the user is not affiliated with any centre.
+	 * @throws EntityNotFoundException If unable to find the user.
+	 */
+	@GetMapping("/{username}/health-centre")
+	public Object getHealthCentre(@PathVariable("username") String username) throws EntityNotFoundException {
+		class Result {
+			public Integer id;
+
+			private Result(Integer id) {
+				this.id = id;
+			}
+		}
+		var optUser = userRepository.findByUsername(username);
+		if (optUser.isEmpty()) {
+			throw new EntityNotFoundException("unable to find user with username: " + username);
+		}
+		var id = optUser.get().getWorksAtHealthCentreId();
+		return new Result(id);
+	}
+
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") int id) throws DatabaseException {
