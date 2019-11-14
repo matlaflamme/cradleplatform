@@ -67,6 +67,7 @@ public class PatientManagerServiceImplTests {
 				.zoneNumber("1")
 				.birthYear(1998)
 				.sex(Sex.MALE)
+				.medication("Tylenol")
 				.lastUpdated(date)
 				.build();
 
@@ -93,6 +94,8 @@ public class PatientManagerServiceImplTests {
                 .isEqualTo("1");
 		assertThat(result.getLastUpdated())
 				.isEqualTo(new GregorianCalendar(2014, 10, 11).getTime());
+		assertThat(result.getMedication())
+				.isEqualTo("Tylenol");
 	}
 
 	@Test(expected = EntityNotFoundException.class)
