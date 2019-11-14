@@ -8,6 +8,7 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,5 +78,10 @@ public class MockReadingManager implements ReadingManager {
 		assertFieldNotNull(readingView.getTimestamp(), "timestamp");
 		assertFieldNotNull(readingView.getSymptoms(), "symptoms");
 		return readingView;
+	}
+
+	@Override
+	public List<ReadingView> getAllCreatedBy(int userId) {
+		return new ArrayList<>();
 	}
 }

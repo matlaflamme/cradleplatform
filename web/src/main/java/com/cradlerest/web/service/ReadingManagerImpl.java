@@ -6,6 +6,7 @@ import com.cradlerest.web.model.builder.ReadingViewBuilder;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import com.cradlerest.web.service.repository.SymptomReadingRelationRepository;
+import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -37,11 +38,7 @@ public class ReadingManagerImpl implements ReadingManager {
 		}
 
 		var reading = optionalReading.get();
-		var symptoms = symptomReadingRelationRepository.getSymptomsForReading(readingId);
-		return new ReadingViewBuilder()
-				.reading(reading)
-				.symptoms(symptoms)
-				.build();
+		return convertToReadingView(reading);
 	}
 
 	@Override
@@ -52,6 +49,14 @@ public class ReadingManagerImpl implements ReadingManager {
 			readingViews.add(getReadingView(reading.getId()));
 		}
 		return readingViews;
+	}
+
+	@Override
+	public List<ReadingView> getAllCreatedBy(int userId) {
+		var readings = readingRepository.findAllByCreatedBy(userId);
+		return Vec.copy(readings)
+				.map(this::convertToReadingView)
+				.toList();
 	}
 
 	@Override
@@ -72,5 +77,14 @@ public class ReadingManagerImpl implements ReadingManager {
 		}
 
 		return persistedReading;
+	}
+
+	private ReadingView convertToReadingView(@NotNull Reading reading) {
+		assert reading.getId() != null;
+		var symptoms = symptomReadingRelationRepository.getSymptomsForReading(reading.getId());
+		return new ReadingViewBuilder()
+				.reading(reading)
+				.symptoms(symptoms)
+				.build();
 	}
 }

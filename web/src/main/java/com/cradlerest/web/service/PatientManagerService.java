@@ -59,6 +59,29 @@ public interface PatientManagerService {
 	List<Reading> getReadingsForPatientWithId(@NotNull String id);
 
 	/**
+	 * Returns all of the patients which have been referred to a specific
+	 * health center.
+	 * @param healthCenterId The id of the health center to query patients for.
+	 * @return A list of patients.
+	 */
+	List<PatientWithLatestReadingView> getPatientsReferredToHealthCenter(int healthCenterId);
+
+	/**
+	 * Returns all of the patients who have a reading created by a specific
+	 * user.
+	 * @param userId The id of the user to get patients for.
+	 * @return A list of patients.
+	 */
+	List<PatientWithLatestReadingView> getPatientsWithReadingsCreatedBy(int userId);
+
+	/**
+	 * Takes a patient and pairs it with its latest reading.
+	 * @param patient The patient to pair with.
+	 * @return The patient along with its latest reading.
+	 */
+	PatientWithLatestReadingView pairWithLatestReading(@NotNull Patient patient);
+
+	/**
 	 * Creates a new, or updates an existing, patient in the system. If a patient
 	 * with the same id as {@param patient} exists, then that patient's profile
 	 * will be overwritten with the contents of {@param patient}. If no such

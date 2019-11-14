@@ -5,6 +5,7 @@ import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,11 +27,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByUsername(username);
         userOptional.orElseThrow(() -> new UsernameNotFoundException("No user found with username " + username));
-
         System.out.println("username: " + username);
         // Creates the authenticated user(s)
         UserDetails authorizedUserDetails = userOptional.map(UserDetailsImpl::new).get();
-
         // Will throw exception if user detail is invalid (locked, expired, disabled, credentials expired)
         // https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/authentication/AccountStatusUserDetailsChecker.java
         new AccountStatusUserDetailsChecker().check(authorizedUserDetails);

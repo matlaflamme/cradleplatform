@@ -18,10 +18,14 @@ func New() runtime.Runtime {
 	return serialEnvironment{}
 }
 
-type serialEnvironment struct{}
+type serialEnvironment struct {
+	defaultAuth *suite.Authentication
+}
 
 // Run executes a TestSuite serially.
 func (env serialEnvironment) Run(ts suite.TestSuite) ([]runtime.Result, error) {
+	env.defaultAuth = ts.DefaultAuth
+
 	n := len(ts.TestCases)
 	for _, b := range ts.Batches {
 		n += len(b.TestCases)
@@ -31,7 +35,7 @@ func (env serialEnvironment) Run(ts suite.TestSuite) ([]runtime.Result, error) {
 
 	i := 0
 	exec := func(t suite.TestCase) error {
-		r, err := runTest(t)
+		r, err := runTest(t, env)
 		if err != nil {
 			return err
 		}
@@ -55,8 +59,8 @@ func (env serialEnvironment) Run(ts suite.TestSuite) ([]runtime.Result, error) {
 	return results, nil
 }
 
-func runTest(t suite.TestCase) (result *runtime.Result, err error) {
-	fn := t.Request.PrepRequest()
+func runTest(t suite.TestCase, env serialEnvironment) (result *runtime.Result, err error) {
+	fn := t.Request.PrepRequest(env.defaultAuth)
 
 	// execute request
 	resp, err := fn()
