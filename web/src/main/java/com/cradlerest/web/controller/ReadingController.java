@@ -3,11 +3,10 @@ package com.cradlerest.web.controller;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.ReadingColour;
+import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * Controller for saving and retrieving {@code ReadingView} objects.
@@ -26,9 +25,9 @@ public class ReadingController {
 	 * @param readingView The reading view to save.
 	 */
 	@PostMapping("save")
-	public void save(@RequestBody ReadingView readingView) throws BadRequestException {
+	public Reading save(@RequestBody ReadingView readingView) throws BadRequestException {
 		try {
-			readingManager.saveReadingView(readingView);
+			return readingManager.saveReadingView(readingView);
 		} catch (InstantiationError | EntityNotFoundException e) {
 			throw new BadRequestException("invalid request body", e);
 		}
