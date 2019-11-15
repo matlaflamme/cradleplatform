@@ -22,6 +22,7 @@
         "birthYear":1995,
         "sex":1,
         "medicalHistory":null,
+        "medication": null,
         "drugHistory":null,
         "lastUpdated":"2019-09-20 20:12:32",
         "generalNotes":null
@@ -268,6 +269,7 @@
               "id": "001",
               "lastUpdated": "2019-09-20 20:12:32",
               "medicalHistory": null,
+              "medication": null,
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
@@ -315,6 +317,7 @@
               "id": "001",
               "lastUpdated": "2019-09-20 20:12:32",
               "medicalHistory": null,
+              "medication": null,
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
