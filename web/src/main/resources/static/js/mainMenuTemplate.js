@@ -59,6 +59,9 @@ Vue.component('sidebar_item', {
             else if (clicked === "all-patients") {
                 window.location.assign("/")
             }
+            else if (clicked == 'admin-logs') {
+                window.location.assign("/adminLogs")
+            }
         },
     }
 });
