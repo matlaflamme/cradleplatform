@@ -48,7 +48,7 @@ Vue.component('new_patient_form', {
             this.$refs.newPatientForm.resetValidation()
         },
         submit () {
-            // axios.post('/api/user/add',
+            // axios.post('/api/patient',
             //     {
             //         username: this.username,
             //         password: this.password,
