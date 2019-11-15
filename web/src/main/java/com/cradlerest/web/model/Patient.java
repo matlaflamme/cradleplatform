@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -189,6 +190,14 @@ public class Patient {
 
 	public void setGeneralNotes(String generalNotes) {
 		this.generalNotes = generalNotes;
+	}
+
+	public void addMedication(String medication){
+		if(this.medication != "") {
+			this.medication = this.medication + "\t" + (medication.replaceAll("\t", "    "));
+		}else {
+			this.medication = (medication.replaceAll("\t", "    "));
+		}
 	}
 
 	@Override
