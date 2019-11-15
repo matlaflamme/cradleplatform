@@ -23,10 +23,21 @@
                 <sidebar_item title="Referrals" icon="assignment" clickable="all-referrals"></sidebar_item>
                 <sidebar_item title="New Reading" icon="assessment" clickable="new-reading"></sidebar_item>
             </div>
+            <div sec:authorize="hasRole('ROLE_VHT')">
+                <v-subheader class="mt-3 grey--text text--darken-1">Patients</v-subheader>
+                <sidebar_item title="Patients" icon="assignment" clickable="all-patients"></sidebar_item>
+                <sidebar_item title="Referrals" icon="assignment" clickable="all-referrals"></sidebar_item>
+                <sidebar_item title="New Reading" icon="assessment" clickable="new-reading"></sidebar_item>
+            </div>
+
 
             <v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>
             <sidebar_item title="Account Settings" icon="settings" clickable="account-settings"></sidebar_item>
+            <div sec:authorize="hasRole('ROLE_VHT')">
+                <sidebar_item title="Help" icon="help" clickable="help"></sidebar_item>
+            </div>
             <sidebar_item title="Sign Out" icon="account_circle" clickable="logout"></sidebar_item>
+
         </v-list>
     </v-navigation-drawer>
 </sidebar_template >
