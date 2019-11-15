@@ -26,7 +26,12 @@ Vue.component('new_patient_form', {
         zoneRules: [
             v => !!v || 'Zone is required',
         ],
-        sex: '',
+        select: { sex: 'Female', value: 1 },
+        items: [
+            { sex: 'Male', value: 0 },
+            { sex: 'Female', value: 1 },
+            { sex: 'Other', value: 2 },
+        ],
         sexRules: [
             v => !!v || 'sex is required',
         ],
@@ -48,21 +53,26 @@ Vue.component('new_patient_form', {
             this.$refs.newPatientForm.resetValidation()
         },
         submit () {
-            // axios.post('/api/patient',
-            //     {
-            //         username: this.username,
-            //         password: this.password,
-            //         roles: this.row
-            //     }
-            // ).then(response => {console.log(response)});
-            // this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
+            axios.post('/api/patient',
+                {
+                    id: "090",
+                    name: "pn",
+                    villageNumber: "89",
+                    birthYear: 1995,
+                    sex: 1,
+                    medicalHistory: null,
+                    drugHistory: null,
+                    lastUpdated: "2019-10-20 13:12:72"
+                }
+            ).then(response => {console.log(response)});
+            this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
         }
     },
     template:
         '<div>' +
         '<v-card class="overflow-hidden" raised min-width="550" max-height="600"> ' +
         `<v-card-title>
-            <span class="title">Create a new patient</span>`+
+            <span class="title">Create a new patient</span>` +
         '</v-card-title> ' +
         `<v-form
       ref="newPatientForm"
@@ -92,11 +102,17 @@ Vue.component('new_patient_form', {
         label="Zone"
         :rules="zoneRules"
       ></v-text-field>` +
-        `<v-text-field
-        v-model="sex"
-        label="Sex"
-        :rules="sexRules"
-      ></v-text-field>` +
+        `
+      <v-select
+            v-model="select"
+            :items="items"
+            item-text="sex"
+            item-value="value"
+            label="Select"
+            persistent-hint
+            return-object
+            single-line
+          ></v-select>` +
         `<v-text-field
         v-model="birthYear"
         label="Birth Year"
