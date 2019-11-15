@@ -94,9 +94,7 @@ public class PatientBuilder {
 	}
 
 	public PatientBuilder medication(@Nullable ArrayList<String> text) {
-		for (String item : text) {
-			patient.addMedication(item);
-		}
+		patient.addMedication(text);
 		return this;
 	}
 
