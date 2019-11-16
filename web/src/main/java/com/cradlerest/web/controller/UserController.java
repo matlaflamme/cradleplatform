@@ -12,7 +12,6 @@ import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +105,65 @@ public class UserController {
 		} else {
 			throw new EntityNotFoundException("user not found: " + username);
 		}
+	}
+
+	/**
+	 * Associates a specified user with a given health centre. This method may
+	 * be used to update or add a new association. Use "remove-health-centre"
+	 * to delete an existing association.
+	 * @param username The username of the user to update.
+	 * @param healthCentreId The id of the health centre to associate with.
+	 * @throws EntityNotFoundException If unable to find the requested user or
+	 * 	health centre.
+	 */
+	@PostMapping("/{username}/set-health-centre")
+	public void updateWorksAtHealthCentreId(@PathVariable("username") String username,
+											@RequestParam("hcid") int healthCentreId)
+			throws EntityNotFoundException {
+		try {
+			userRepository.updateWorksAtByUsername(username, healthCentreId);
+		} catch (Exception e) {
+			throw new EntityNotFoundException("unable to find user or health centre", e);
+		}
+	}
+
+	/**
+	 * Removes a health centre association for a given user.
+	 * @param username The username of the user to update.
+	 * @throws EntityNotFoundException If unable to find the user.
+	 */
+	@PostMapping("/{username}/remove-health-centre")
+	public void deleteWorksAtHealthCentreId(@PathVariable("username") String username) throws EntityNotFoundException {
+		try {
+			userRepository.updateWorksAtByUsername(username, null);
+		} catch (Exception e) {
+			throw new EntityNotFoundException("unable to find user", e);
+		}
+	}
+
+	/**
+	 * Returns the id of the health centre that a given user is associated with.
+	 * May be {@code null}.
+	 * @param username The username of the user to look for.
+	 * @return The id of the health centre the user is associated with, or
+	 * 	{@code null} if the user is not affiliated with any centre.
+	 * @throws EntityNotFoundException If unable to find the user.
+	 */
+	@GetMapping("/{username}/health-centre")
+	public Object getHealthCentre(@PathVariable("username") String username) throws EntityNotFoundException {
+		class Result {
+			public Integer id;
+
+			private Result(Integer id) {
+				this.id = id;
+			}
+		}
+		Optional<User> optUser = userRepository.findByUsername(username);
+		if (optUser.isEmpty()) {
+			throw new EntityNotFoundException("unable to find user with username: " + username);
+		}
+		var id = optUser.get().getWorksAtHealthCentreId();
+		return new Result(id);
 	}
 
 

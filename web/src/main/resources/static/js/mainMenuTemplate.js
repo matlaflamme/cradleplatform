@@ -62,6 +62,9 @@ Vue.component('sidebar_item', {
             else if (clicked == 'admin-logs') {
                 window.location.assign("/adminLogs")
             }
+            else if (clicked === "help") {
+                window.location.assign("/help")
+            }
         },
     }
 });

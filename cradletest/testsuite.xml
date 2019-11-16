@@ -367,4 +367,24 @@
             <![CDATA[{"username":"vht"}]]>
         </Response>
     </TestCase>
+
+    <Batch>
+        <!-- Ensure that we execute these tests together -->
+        <TestCase name="Set Health Centre Association">
+            <Request method="POST" uri="/api/user/health/set-health-centre?hcid=2" username="admin" password="admin"/>
+            <Response status="200"/>
+        </TestCase>
+        <TestCase name="Check Health Centre Association">
+            <Request method="GET" uri="/api/user/health/health-centre" username="admin" password="admin"/>
+            <Response status="200">{"id":2}</Response>
+        </TestCase>
+        <TestCase name="Remove Health Centre Association">
+            <Request method="POST" uri="/api/user/health/remove-health-centre" username="admin" password="admin"/>
+            <Response status="200"/>
+        </TestCase>
+        <TestCase name="Check Health Centre Association After Removal">
+            <Request method="GET" uri="/api/user/health/health-centre" username="admin" password="admin"/>
+            <Response status="200">{"id":null}</Response>
+        </TestCase>
+    </Batch>
 </TestSuite>
