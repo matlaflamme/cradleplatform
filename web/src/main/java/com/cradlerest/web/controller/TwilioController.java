@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
  * Accessing twilio logs. Ideally this is not done by our API but this is just to make SMS testing simpler.
  *
- * Currently returns the most recent twilio log (SMS)
+ * Returns ALL logs from the beginning of time
  */
 @RestController
 @RequestMapping("/api/twilio")
@@ -31,27 +34,42 @@ public class TwilioController {
 	@Value("${twilio.auth_token}")
 	private String auth_token;
 
-	// Anytime SMS is sent to/from Twilio a log is created
+
+	/**
+	 * Fetches SMS logs from Twilio account (security details above)
+	 *
+	 * For testing purposes as having the auth_token available is not secure.
+	 *
+	 * @return
+	 */
 	@GetMapping("/logs")
-	public @ResponseBody String getLogs() {
+	public @ResponseBody List<Message> getLogs() {
 		Twilio.init(account_sid, auth_token);
 		ResourceSet<Message> messages = Message.reader().read();
-		for (Message record : messages) {
-			return record.toString();
+
+		// Converting ResourceSet to List
+		List<Message> messagesList = new ArrayList<>();
+
+		Iterator<Message> messagesIterator = messages.iterator();
+		while (messagesIterator.hasNext()) {
+			messagesList.add(messagesIterator.next());
 		}
-		return "x";
+		return messagesList;
 	}
 
 	// Alerts are errors
 	@GetMapping("/alerts")
-	public @ResponseBody String getAlerts() {
+	public @ResponseBody List<Alert> getAlerts() {
 		Twilio.init(account_sid, auth_token);
-
 		ResourceSet<Alert> alerts = Alert.reader().read();
 
-		for (Alert alert : alerts) {
-			return alert.toString();
+		// Converting ResourceSet to list
+		List<Alert> alertsList = new ArrayList<>();
+
+		Iterator<Alert> alertsIterator = alerts.iterator();
+		while (alertsIterator.hasNext()) {
+			alertsList.add(alertsIterator.next());
 		}
-		return "x";
+		return alertsList;
 	}
 }
