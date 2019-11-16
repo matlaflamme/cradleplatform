@@ -27,16 +27,16 @@ Vue.component('admin_logs' , {
         },
         getLogs: function() {
             axios.get('/api/twilio/logs').then(response => {
-                console.log("dada: " + response.data.split(',')[0]);
-                this.smsLogs = response.data.split(',');
+                console.log("dada: " + response.data[0]);
+                this.smsLogs = response.data[0];
             }).catch(error => {
                 console.log(error);
             })
         },
         getAlerts: function() {
             axios.get('/api/twilio/alerts').then(response => {
-                console.log("dada: " + response.data.split(',')[0]);
-                this.alertLogs = response.data.split(',');
+                console.log("dada: " + response.data[0]);
+                this.alertLogs = response.data[0];
             }).catch(error => {
                 console.log(error);
             })
@@ -54,7 +54,8 @@ Vue.component('admin_logs' , {
     template:
         `
         <div>
-            <h2>Admin Logs</h2>
+            <h2>Admin Logs.</h2>
+            <h3>Current active number: +12053465536</h3>
                 <twilio_log_list v-bind:logs="smsLogs" title="Latest SMS Log"></twilio_log_list>
                 <twilio_log_list v-bind:logs="alertLogs" title="Latest Alert Log"></twilio_log_list>
         </div>
