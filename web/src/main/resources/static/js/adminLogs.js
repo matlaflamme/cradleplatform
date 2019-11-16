@@ -27,6 +27,7 @@ Vue.component('admin_logs' , {
         },
         getLogs: function() {
             axios.get('/api/twilio/logs').then(response => {
+                // TODO: handle all logs (instead of just the latest one)
                 console.log("dada: " + response.data[0]);
                 this.smsLogs = response.data[0];
             }).catch(error => {
@@ -35,6 +36,7 @@ Vue.component('admin_logs' , {
         },
         getAlerts: function() {
             axios.get('/api/twilio/alerts').then(response => {
+                // TODO: handle all logs (instead of just the latest one)
                 console.log("dada: " + response.data[0]);
                 this.alertLogs = response.data[0];
             }).catch(error => {
