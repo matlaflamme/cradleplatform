@@ -39,4 +39,59 @@ public class Stats {
     }
 
 
+    public int getNumberOfReadings() {
+        return numberOfReadings;
+    }
+
+    public void setNumberOfReadings(int numberOfReadings) {
+        this.numberOfReadings = numberOfReadings;
+    }
+
+    public int getNumberOfReds() {
+        return numberOfReds;
+    }
+
+    public void setNumberOfReds(int numberOfReds) {
+        this.numberOfReds = numberOfReds;
+    }
+
+    public int getNumberOfGreens() {
+        return numberOfGreens;
+    }
+
+    public void setNumberOfGreens(int numberOfGreens) {
+        this.numberOfGreens = numberOfGreens;
+    }
+
+    public int getNumberOfYellows() {
+        return numberOfYellows;
+    }
+
+    public void setNumberOfYellows(int numberOfYellows) {
+        this.numberOfYellows = numberOfYellows;
+    }
+
+    public int getNumberOfPatientsSeen() {
+        return numberOfPatientsSeen;
+    }
+
+    public void setNumberOfPatientsSeen(int numberOfPatientsSeen) {
+        this.numberOfPatientsSeen = numberOfPatientsSeen;
+    }
+
+    public int getNumberOfVHTs() {
+        return numberOfVHTs;
+    }
+
+    public void setNumberOfVHTs(int numberOfVHTs) {
+        this.numberOfVHTs = numberOfVHTs;
+    }
+
+    public int getNumberOfReadingsTaken() {
+        return numberOfReadingsTaken;
+    }
+
+    public void setNumberOfReadingsTaken(int numberOfReadingsTaken) {
+        this.numberOfReadingsTaken = numberOfReadingsTaken;
+    }
 }
