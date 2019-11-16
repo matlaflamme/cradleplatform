@@ -10,8 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -191,6 +190,24 @@ public class Patient {
 		this.generalNotes = generalNotes;
 	}
 
+	public void addMedication(String medication){
+		if(this.medication.length() > 0 ) {
+			this.medication = this.medication + "\t" + (medication.replaceAll("\t", "    "));
+		}else {
+			this.medication = (medication.replaceAll("\t", "    "));
+		}
+	}
+
+	public void addMedication(List<String> medication){
+		for (String newMedication : medication) {
+			if (this.medication.length() > 0 ) {
+				this.medication = this.medication + "\t" + (newMedication.replaceAll("\t", "    "));
+			} else {
+				this.medication = (newMedication.replaceAll("\t", "    "));
+			}
+		}
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -210,5 +227,22 @@ public class Patient {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	public void removeMedication(String medication) {
+		String currentMedications = this.getMedication();
+
+		List<String> medicationList =
+				Arrays.asList(
+						currentMedications.split("\t")
+				);
+
+		setMedication("");
+		for (String item : medicationList) {
+			if (!item.equals(medication)) {
+				addMedication(item);
+			}
+		}
+
 	}
 }
