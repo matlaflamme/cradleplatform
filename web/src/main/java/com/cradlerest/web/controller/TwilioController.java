@@ -58,7 +58,7 @@ public class TwilioController {
 	}
 
 	// Alerts are errors
-	// TODO: Currently outputs 2008 API format instead of 2010 API. Not sure why...
+	// TODO: Currently outputs 2008 API format instead of 2010 API (latest). Not sure why...
 	@GetMapping("/alerts")
 	public @ResponseBody List<Alert> getAlerts() {
 		Twilio.init(account_sid, auth_token);

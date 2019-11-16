@@ -75,16 +75,6 @@ Vue.component('twilio_log_list' , {
             required: true
         }
     },
-    data () {
-        return {
-            search: '',
-            rows: [] //empty to start
-        }
-    },
-    mounted() {
-        console.log("mylogs: " + this.logs);
-    },
-
     template:
         `
         <template>
