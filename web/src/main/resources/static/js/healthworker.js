@@ -24,8 +24,7 @@ let test = new Vue({
                     if (row.reading == null) {
                         row.reading = {colour: null, timestamp: null};
                     }
-                    let icon = getReadingColorIcon(row.reading.colour);
-                    row.reading.colorstyle = {"background-color": icon['colour']};
+                    row.reading.colorstyle = getReadingColorIcon(row.reading.colour);
                 });
                 this.rows = this.changeDate(response.data);
             }
@@ -62,26 +61,26 @@ let test = new Vue({
 
 //From patientSummary page. Move into common js file to be reused?
 function getReadingColorIcon(digit) {
-    let colour = 'green';
+    let light = 'white';
     switch (digit) {
         case null:
-            colour = 'white';
+            light = 'white';
             break;
         case 0:
-            colour = 'green';
+            light = 'green';
             break;
         case 1:
-            colour = 'yellow';
+            light = 'yellow_down';
             break;
         case 2:
-            colour = 'yellow';
+            light = 'yellow_up';
             break;
         case 3:
-            colour = 'red';
+            light = 'red_down';
             break;
         case 4:
-            colour = 'red';
+            light = 'red_up';
             break;
     }
-    return {'colour' : colour};
-}
+    return "/img/" + light + ".png";
+};
