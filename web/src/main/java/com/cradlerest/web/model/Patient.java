@@ -191,6 +191,9 @@ public class Patient {
 	}
 
 	public void addMedication(String medication){
+		if(this.medication == null){
+			this.medication = "";
+		}
 		if(this.medication.length() > 0 ) {
 			this.medication = this.medication + "\t" + (medication.replaceAll("\t", "    "));
 		}else {
@@ -199,6 +202,9 @@ public class Patient {
 	}
 
 	public void addMedication(List<String> medication){
+		if(this.medication == null){
+			this.medication = "";
+		}
 		for (String newMedication : medication) {
 			if (this.medication.length() > 0 ) {
 				this.medication = this.medication + "\t" + (newMedication.replaceAll("\t", "    "));
