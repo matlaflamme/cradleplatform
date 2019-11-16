@@ -26,7 +26,7 @@ Vue.component('new_patient_form', {
         zoneRules: [
             v => !!v || 'Zone is required',
         ],
-        select: { sex: 'Female', value: 1 },
+        select: {},
         items: [
             { sex: 'Male', value: 0 },
             { sex: 'Female', value: 1 },
@@ -108,7 +108,7 @@ Vue.component('new_patient_form', {
             :items="items"
             item-text="sex"
             item-value="value"
-            label="Select"
+            label="Sex"
             persistent-hint
             return-object
             single-line
