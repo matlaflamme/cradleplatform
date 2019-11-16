@@ -7,7 +7,7 @@ public class Stats {
     private int numberOfYellows;
     private int numberOfPatientsSeen;
     private int numberOfVHTs;
-    private int numberOfReadingsTaken;
+    private int numberOfReferrals;
 
 
     public Stats(
@@ -17,7 +17,7 @@ public class Stats {
             int numberOfYellows,
             int numberOfPatientsSeen,
             int numberOfVHTs,
-            int numberOfReadingsTaken
+            int numberOfReferrals
     ) {
         this.numberOfReadings = numberOfReadings;
         this.numberOfReds = numberOfReds;
@@ -25,7 +25,7 @@ public class Stats {
         this.numberOfYellows = numberOfYellows;
         this.numberOfPatientsSeen = numberOfPatientsSeen;
         this.numberOfVHTs = numberOfVHTs;
-        this.numberOfReadingsTaken = numberOfReadingsTaken;
+        this.numberOfReferrals = numberOfReferrals;
     }
 
     public Stats() {
@@ -35,7 +35,7 @@ public class Stats {
         this.numberOfYellows = 0;
         this.numberOfPatientsSeen = 0;
         this.numberOfVHTs = 0;
-        this.numberOfReadingsTaken = 0;
+        this.numberOfReferrals = 0;
     }
 
 
@@ -87,11 +87,11 @@ public class Stats {
         this.numberOfVHTs = numberOfVHTs;
     }
 
-    public int getNumberOfReadingsTaken() {
-        return numberOfReadingsTaken;
+    public int getNumberOfReferrals() {
+        return numberOfReferrals;
     }
 
-    public void setNumberOfReadingsTaken(int numberOfReadingsTaken) {
-        this.numberOfReadingsTaken = numberOfReadingsTaken;
+    public void setNumberOfReferrals(int numberOfReferrals) {
+        this.numberOfReferrals = numberOfReferrals;
     }
 }
