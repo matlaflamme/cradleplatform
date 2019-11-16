@@ -73,7 +73,13 @@ public class PatientController {
 		return readingManager.getAllReadingViewsForPatient(id);
 	}
 
-	@PostMapping("/{id}/addMedication")
+
+	@PostMapping("")
+	public Patient createPatient(@RequestBody Patient patient) throws Exception {
+		return patientManagerService.savePatient(patient);
+	}
+
+		@PostMapping("/{id}/addMedication")
 	public Patient addMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
 		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
 		personToAddMedicationTo.addMedication(medication);
