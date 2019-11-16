@@ -1,6 +1,6 @@
 Vue.prototype.$http = axios;
 
-Vue.component('adminLogs' , {
+Vue.component('admin_logs' , {
     vuetify: new Vuetify(),
     props: {
 
@@ -27,7 +27,7 @@ Vue.component('adminLogs' , {
         },
         getLogs: function() {
             axios.get('/api/twilio/logs').then(response => {
-                console.log("dada: " + response.data.split(','));
+                console.log("dada: " + response.data.split(',')[0]);
                 this.smsLogs = response.data.split(',');
             }).catch(error => {
                 console.log(error);
@@ -35,7 +35,7 @@ Vue.component('adminLogs' , {
         },
         getAlerts: function() {
             axios.get('/api/twilio/alerts').then(response => {
-                console.log("dada: " + response.data.split(','));
+                console.log("dada: " + response.data.split(',')[0]);
                 this.alertLogs = response.data.split(',');
             }).catch(error => {
                 console.log(error);
@@ -55,9 +55,45 @@ Vue.component('adminLogs' , {
         `
         <div>
             <h2>Admin Logs</h2>
-<!--                <twilio_log_list v-bind:logs="smsLogs" title="SMS Logs"></twilio_log_list>-->
-<!--                <twilio_log_list v-bind:logs="alertLogs" title="Alert Logs"></twilio_log_list>-->
+                <twilio_log_list v-bind:logs="smsLogs" title="Latest SMS Log"></twilio_log_list>
+                <twilio_log_list v-bind:logs="alertLogs" title="Latest Alert Log"></twilio_log_list>
         </div>
+        `
+
+});
+
+Vue.component('twilio_log_list' , {
+    vuetify: new Vuetify(),
+    props: {
+        title: {
+            type: String,
+            required: true
+        },
+        logs: {
+            type: Array,
+            required: true
+        }
+    },
+    data () {
+        return {
+            search: '',
+            rows: [] //empty to start
+        }
+    },
+    mounted() {
+        console.log("mylogs: " + this.logs);
+    },
+
+    template:
+        `
+        <template>
+            <div id="logs-list">
+                <h2>{{title}}</h2>
+                <li v-for="(log, x) in logs" :key="x">
+                    {{log}}
+                </li>
+            </div>
+        </template>
         `
     ,
 });
