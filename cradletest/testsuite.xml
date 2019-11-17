@@ -254,6 +254,10 @@
         <Request method="POST" uri="/api/user/user100001241241/change-active"/>
         <Response status="200"/>
     </TestCase>
+    <TestCase name="Retrieve all health centres">
+      <Request method="GET" uri="/api/hc/all">
+      <Response status="200"/>
+    </TestCase>
     <TestCase name="Get Patients at Health Center">
       <Request method="GET" uri="/api/hc/1/patients"/>
       <Response status="200">
