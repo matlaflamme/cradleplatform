@@ -268,7 +268,7 @@
     </TestCase>
 
     <TestCase name="Create a health centre">
-      <Request method="GET" uri="/api/hc/create">
+      <Request method="POST" uri="/api/hc/create">
         <![CDATA[
         {
           "name": "JY",
