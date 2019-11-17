@@ -33,7 +33,7 @@ Vue.component('info_card', {
 Vue.component('mychart', {
     template:
     '<div>\n' +
-        '<apexchart width="500" type="bar" :options="chartOptions" :series="series"></apexchart>\n' +
+        '<apexchart height="500" type="bar" :options="chartOptions" :series="series"></apexchart>\n' +
     '</div>',
     components: {
         apexchart: VueApexCharts,
@@ -45,14 +45,24 @@ Vue.component('mychart', {
                     id: 'vuechart-example'
                 },
                 xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+                    categories: []
                 }
             },
             series: [{
-                name: 'series-1',
-                data: [30, 40, 35, 50, 49, 60, 70, 91]
+                name: 'Previous 30-day period',
+                data: []
+                }, {
+                name: 'Current 30-day period',
+                data: []
             }]
         }
+    },
+    created() { //using created so that data is ready for chart on page load (animation works)
+        this.chartOptions.xaxis.categories = ["Greens", "Yellows", "Reds"];
+        this.series[0].data = [30, 40, 35]; //previous
+        this.series[1].data = [50, 50, 50]; //current
+
+        //will be using an axios method to get these numbers
     }
 });
 
