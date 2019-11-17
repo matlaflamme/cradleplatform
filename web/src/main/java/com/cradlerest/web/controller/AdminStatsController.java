@@ -1,6 +1,7 @@
 package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.DualMonthStats;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.Stats;
@@ -37,29 +38,21 @@ public class AdminStatsController {
     }
 
     @GetMapping("/overview")
-    public Stats overview() {
-        List<Patient> allPatients = patientManagerService.getAllPatients();
-
+    public DualMonthStats overview() {
         List<Reading> readings = new ArrayList<>();
         List<Reading> readingsTrend = new ArrayList<>();
-        List<ReferralView> thisMonthReferrals = new ArrayList<ReferralView>();
-        List<ReferralView> lastMonthReferrals = new ArrayList<ReferralView>();
+        List<ReferralView> referrals = new ArrayList<ReferralView>();
+        List<ReferralView> referralsTrend = new ArrayList<ReferralView>();
         Stats thisMonth = new Stats();
         Stats lastMonth = new Stats();
 
+        gatherAllReferrals(referrals, referralsTrend);
+        gatherAllReadings(readings, readingsTrend);
 
-        int numberOfReferrals = 0;
+        thisMonth = GenerateStats(readings, referrals);
+        lastMonth = GenerateStats(readingsTrend, referralsTrend);
 
-
-
-        gatherAllReferrals(thisMonthReferrals, lastMonthReferrals);
-
-        gatherAllReadings(allPatients, readings, readingsTrend);
-
-        thisMonth = GenerateStats(readings);
-        lastMonth = GenerateStats(readingsTrend);
-
-        return new Stats();
+        return new DualMonthStats(thisMonth,lastMonth);
     }
 
     private void gatherAllReferrals(List<ReferralView> thisMonthReferrals, List<ReferralView> lastMonthReferrals) {
@@ -68,26 +61,26 @@ public class AdminStatsController {
         oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
         twoMonthsAgo = twoMonthsAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS * 2, ChronoUnit.DAYS);
         List<ReferralView> allReferrals = referralManagerService.findAllByOrderByTimestampDesc();
+
         for (ReferralView referral : allReferrals) {
-
+            Instant referralDate = referral.getTimestamp().toInstant();
+            if(referralDate.isAfter(oneMonthAgo)){
+                thisMonthReferrals.add(referral);
+            }else if (referralDate.isAfter(twoMonthsAgo)){
+                lastMonthReferrals.add(referral);
+            }
         }
-
-        int i = thisMonthReferrals.size();
-        i = lastMonthReferrals.size();
     }
 
-    private Stats GenerateStats(List<Reading> readings) {
+    private Stats GenerateStats(List<Reading> readings, List<ReferralView> referrals) {
         Stats stats = new Stats();
+        // readings Stats
         Set<String> hashSetOfPatients = new HashSet<String>();
         Set<Integer> hashSetOfVHTs = new HashSet<Integer>();
-        int numberOfReadings = 0;
         int numberOfReds = 0 ;
         int numberOfGreens = 0;
         int numberOfYellows = 0;
         for (Reading reading : readings) {
-            // gather total readings
-            numberOfReadings++;
-
             // gather ReadingColours
             if(reading.getColour().isGreen()){
                 numberOfGreens++;
@@ -104,20 +97,23 @@ public class AdminStatsController {
             hashSetOfPatients.add(reading.getPatientId());
         }
         stats.setNumberOfGreens(numberOfGreens);
-        stats.setNumberOfPatientsSeen(hashSetOfPatients.size());
-        stats.setNumberOfReadings(numberOfReadings);
         stats.setNumberOfReds(numberOfReds);
         stats.setNumberOfYellows(numberOfYellows);
+        stats.setNumberOfPatientsSeen(hashSetOfPatients.size());
+        stats.setNumberOfReadings(readings.size());
         stats.setNumberOfVHTs(hashSetOfVHTs.size());
 
+        //referralStats
+        stats.setNumberOfReferrals(referrals.size());
         return stats;
     }
 
     private void gatherAllReadings(
-            List<Patient> allPatients,
             List<Reading> thisMonthReadings,
             List<Reading> lastMonthReadings
     ) {
+        List<Patient> allPatients = patientManagerService.getAllPatients();
+
         Instant oneMonthAgo = Instant.now();
         Instant twoMonthsAgo = Instant.now();
         oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
