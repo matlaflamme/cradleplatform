@@ -156,6 +156,13 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 	}
 
+	public ArrayList<String> getMedicationAsList(){
+		if(this.medication == null){
+			return new ArrayList<String>();
+		}
+		return new ArrayList<String>(Arrays.asList(medication.split("\t")));
+	}
+
 	public String getMedication() {
 		return medication;
 	}
