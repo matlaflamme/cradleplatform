@@ -41,16 +41,14 @@ public class AdminStatsController {
     public DualMonthStats overview() {
         List<Reading> readings = new ArrayList<>();
         List<Reading> readingsTrend = new ArrayList<>();
-        List<ReferralView> referrals = new ArrayList<ReferralView>();
-        List<ReferralView> referralsTrend = new ArrayList<ReferralView>();
-        Stats thisMonth = new Stats();
-        Stats lastMonth = new Stats();
+        List<ReferralView> referrals = new ArrayList<>();
+        List<ReferralView> referralsTrend = new ArrayList<>();
 
         gatherAllReferrals(referrals, referralsTrend);
         gatherAllReadings(readings, readingsTrend);
 
-        thisMonth = GenerateStats(readings, referrals);
-        lastMonth = GenerateStats(readingsTrend, referralsTrend);
+        Stats thisMonth = GenerateStats(readings, referrals);
+        Stats lastMonth = GenerateStats(readingsTrend, referralsTrend);
 
         return new DualMonthStats(thisMonth,lastMonth);
     }
@@ -75,8 +73,8 @@ public class AdminStatsController {
     private Stats GenerateStats(List<Reading> readings, List<ReferralView> referrals) {
         Stats stats = new Stats();
         // readings Stats
-        Set<String> hashSetOfPatients = new HashSet<String>();
-        Set<Integer> hashSetOfVHTs = new HashSet<Integer>();
+        Set<String> hashSetOfPatients = new HashSet<>();
+        Set<Integer> hashSetOfVHTs = new HashSet<>();
         int numberOfReds = 0 ;
         int numberOfGreens = 0;
         int numberOfYellows = 0;
