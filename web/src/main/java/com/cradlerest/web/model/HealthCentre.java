@@ -7,6 +7,7 @@ import com.cradlerest.web.util.datagen.impl.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 /**
  * Defines a health centre
@@ -29,25 +30,30 @@ public class HealthCentre {
 
 	@Column(name = "name", nullable = false)
 	@Generator(NameGenerator.class)
+	@NotNull(message = "Missing name")
 	private String name;
 
 	@Column(name = "zone", nullable = false)
 	@DataGenRange(min = 1, max = 16)
+	@NotNull(message = "Missing zone")
 	private Integer zone;
 
 	@Email(message = "invalid email")
 	@Column(name = "email", nullable = false)
 	@Generator(EmailGenerator.class)
+	@NotNull(message = "Missing email")
 	private String email;
 
 	// Phone number for the health centre
 	@Column(name = "health_centre_number", nullable = false)
 	@Generator(PhoneNumberGenerator.class)
+	@NotNull(message = "Missing health centre number")
 	private String healthCentreNumber;
 
 	// Person in charge at this health centre
 	@Column(name = "manager_phone_number", nullable = false)
 	@Generator(PhoneNumberGenerator.class)
+	@NotNull(message = "Missing manager phone number")
 	private String managerPhoneNumber;
 
 	HealthCentre() {}

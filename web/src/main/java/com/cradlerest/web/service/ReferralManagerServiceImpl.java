@@ -118,7 +118,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
-				.symptoms(symptomsArrNoTrailingWhiteSpace) // TODO: Symptoms are not saved! BUG
+				.symptoms(symptomsArrNoTrailingWhiteSpace)
 				.build();
 
 		Reading currentReading = readingManager.saveReadingView(readingView);
