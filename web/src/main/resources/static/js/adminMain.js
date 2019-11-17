@@ -28,6 +28,10 @@ Vue.component('info_card', {
 });
 
 Vue.component('mychart', {
+    props: {
+        prevChartValues: Array,
+        currChartValues: Array
+    },
     template:
     '<div>\n' +
         '<apexchart height="500" type="bar" :options="chartOptions" :series="series"></apexchart>\n' +
@@ -56,13 +60,14 @@ Vue.component('mychart', {
     },
     created() { //using created so that data is ready for chart on page load (animation works)
         this.chartOptions.xaxis.categories = ["Greens", "Yellows", "Reds"];
-        this.series[0].data = [30, 40, 35]; //previous
-        this.series[1].data = [50, 50, 50]; //current
-
-        //will be using an axios method to get these numbers
-        //axios.get('/api/admin/info').then(response => {
-        //
-        //});
+        //received its data through props, which are retrieved from the parent components axios request
+        this.series = [{
+            name: this.series[0].name,
+            data: this.prevChartValues
+            }, {
+            name: this.series[1].name,
+            data: this.currChartValues
+            }]
     }
 });
 
@@ -81,28 +86,34 @@ Vue.component('admin_dashboard', {
         currNumReferrals: 0,
         prevNumReferrals: 0,
         currNumVHTs: 0,
-        prevNumVHT: 0
+        prevNumVHT: 0,
+        referralsIcon: "",
+        readingsIcon: "",
+        patientsIcon: "",
     }),
     template:
         '<v-row>\n' +
             '<v-col cols="12" md="4">\n' +
-                '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" icon="trending_up"></info_card>\n' +
+                '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" :icon="referralsIcon"></info_card>\n' +
             '</v-col>\n' +
             '<v-col cols="12" md="4">\n' +
-                '<info_card id="info_card2" :value="currNumReadings" title="Readings this month" icon="trending_up"></info_card>\n' +
+                '<info_card id="info_card2" :value="currNumReadings" title="Readings this month" :icon="readingsIcon"></info_card>\n' +
             '</v-col>\n' +
             '<v-col cols="12" md="4">\n' +
-                '<info_card id="info_card3" :value="currNumPatientsSeen" title="Patients seen this month" icon="trending_down"></info_card>\n' +
+                '<info_card id="info_card3" :value="currNumPatientsSeen" title="Patients seen this month" :icon="patientsIcon"></info_card>\n' +
             '</v-col>\n' +
             '<v-col cols="12">\n' +
-        '<v-spacer class="pt-5"></v-spacer>' +
-                '<mychart></mychart>\n' +
+                '<v-spacer class="pt-5"></v-spacer>' +
+                '<mychart :prevChartValues="prevChartValues()" :currChartValues="currChartValues()"></mychart>\n' +
             '</v-col>\n' +
         '</v-row>',
     created() {
         this.setAllValsForTesting(); //remove this after api endpoint is set up
         //axios.get('/api/admin/info').then(response => {
         //@TODO: Determine trends, fix text sizing, fix subtitles
+        this.readingsIcon = this.getIcons(this.currNumReadings, this.prevNumReadings);
+        this.referralsIcon = this.getIcons(this.currNumReferrals, this.prevNumReferrals);
+        this.patientsIcon = this.getIcons(this.currNumPatientsSeen, this.prevNumPatientsSeen);
     },
     methods: {
         setAllValsForTesting() {
@@ -120,6 +131,23 @@ Vue.component('admin_dashboard', {
             this.prevNumReferrals = 54;
             this.currNumVHTs = 26;
             this.prevNumVHT = 12;
+        },
+        getIcons(currVal, prevVal) {
+            let up = "trending_up";
+            let down = "trending_down";
+            if (currVal < prevVal) {
+                return down;
+            }
+            else {
+                return up;
+            }
+        },
+        currChartValues() {
+            console.log(this.currNumReds);
+           return [this.currNumGreens, this.currNumYellows, this.currNumReds];
+        },
+        prevChartValues() {
+            return [this.prevNumGreens, this.prevNumYellows, this.prevNumReds];
         }
     }
 });
