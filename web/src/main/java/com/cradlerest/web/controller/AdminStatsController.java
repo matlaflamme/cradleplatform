@@ -34,8 +34,8 @@ public class AdminStatsController {
     @GetMapping("/overview")
     public Stats overview() {
         List<Patient> allPatients = patientManagerService.getAllPatients();
-        List<Reading> thisMonthReadings = new ArrayList<>();
-        List<Reading> lastMonthReadings = new ArrayList<>();
+        List<Reading> readings = new ArrayList<>();
+        List<Reading> readingsTrend = new ArrayList<>();
 
 
 
@@ -43,13 +43,32 @@ public class AdminStatsController {
         int numberOfReds = 0 ;
         int numberOfGreens = 0;
         int numberOfYellows = 0;
-        int numberOfPatientsSeen = 0;
-        int numberOfVHTs = 0;
         int numberOfReferrals = 0;
 
-        gatherAllReadings(allPatients, thisMonthReadings, lastMonthReadings);
 
-        for (Reading reading : thisMonthReadings) {
+        gatherAllReadings(allPatients, readings, readingsTrend);
+
+        Set<String> hashSetOfPatients = new HashSet<String>();
+        Set<Integer> hashSetOfVHTs = new HashSet<Integer>();
+
+        for (Reading reading : readings) {
+            // gather total readings
+            numberOfReadings++;
+
+            // gather ReadingColours
+            if(reading.getColour().isGreen()){
+                numberOfGreens++;
+            }
+            if(reading.getColour().isRed()){
+                numberOfReds++;
+            }
+            if(reading.getColour().isYellow()){
+                numberOfYellows++;
+            }
+
+            //gather VHT and Patient data
+            hashSetOfVHTs.add(reading.getCreatedBy());
+            hashSetOfPatients.add(reading.getPatientId());
 
         }
 
@@ -58,13 +77,17 @@ public class AdminStatsController {
                 numberOfReds,
                 numberOfGreens,
                 numberOfYellows,
-                numberOfPatientsSeen,
-                numberOfVHTs,
+                hashSetOfPatients.size(),
+                hashSetOfVHTs.size(),
                 numberOfReferrals
         );
     }
 
-    private void gatherAllReadings(List<Patient> allPatients, List<Reading> thisMonthReadings, List<Reading> lastMonthReadings) {
+    private void gatherAllReadings(
+            List<Patient> allPatients,
+            List<Reading> thisMonthReadings,
+            List<Reading> lastMonthReadings
+    ) {
         Instant oneMonthAgo = Instant.now();
         Instant twoMonthsAgo = Instant.now();
         oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
@@ -73,10 +96,9 @@ public class AdminStatsController {
         // gathersAllReadings
         for (Patient patient : allPatients) {
             try {
-                List<ReadingView> allReadngs = readingManager.getAllReadingViewsForPatient(patient.getId());
-                for( ReadingView reading : allReadngs){
+                List<ReadingView> allReadings = readingManager.getAllReadingViewsForPatient(patient.getId());
+                for( ReadingView reading : allReadings){
                     Instant readingDate = reading.getTimestamp().toInstant();
-
                     if(readingDate.isAfter(oneMonthAgo)){
                         thisMonthReadings.add(reading);
                     }else if(readingDate.isAfter(twoMonthsAgo)){
