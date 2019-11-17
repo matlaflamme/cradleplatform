@@ -156,7 +156,7 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 	}
 
-	public ArrayList<String> getMedicationAsList(){
+	public ArrayList<String> medicationAsList(){
 		if(this.medication == null){
 			return new ArrayList<String>();
 		}

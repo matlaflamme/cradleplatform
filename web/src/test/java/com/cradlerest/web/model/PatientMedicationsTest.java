@@ -8,15 +8,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 public class PatientMedicationsTest {
 
     @Test
     public void getMedicationAsList() {
         Patient patient = CreateNewTestPatient();
         patient.addMedication("Tylenol\t Asprin");
-        ArrayList<String> arrayList = patient.getMedicationAsList();
+        ArrayList<String> arrayList = patient.medicationAsList();
         Assert.assertEquals(arrayList.size(), 1);
     }
 
