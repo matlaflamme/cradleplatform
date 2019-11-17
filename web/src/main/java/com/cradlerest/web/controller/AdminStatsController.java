@@ -53,23 +53,6 @@ public class AdminStatsController {
         return new DualMonthStats(thisMonth,lastMonth);
     }
 
-    private void gatherAllReferrals(List<ReferralView> thisMonthReferrals, List<ReferralView> lastMonthReferrals) {
-        Instant oneMonthAgo = Instant.now();
-        Instant twoMonthsAgo = Instant.now();
-        oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
-        twoMonthsAgo = twoMonthsAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS * 2, ChronoUnit.DAYS);
-        List<ReferralView> allReferrals = referralManagerService.findAllByOrderByTimestampDesc();
-
-        for (ReferralView referral : allReferrals) {
-            Instant referralDate = referral.getTimestamp().toInstant();
-            if(referralDate.isAfter(oneMonthAgo)){
-                thisMonthReferrals.add(referral);
-            }else if (referralDate.isAfter(twoMonthsAgo)){
-                lastMonthReferrals.add(referral);
-            }
-        }
-    }
-
     private Stats GenerateStats(List<Reading> readings, List<ReferralView> referrals) {
         Stats stats = new Stats();
         // readings Stats
@@ -104,6 +87,23 @@ public class AdminStatsController {
         //referralStats
         stats.setNumberOfReferrals(referrals.size());
         return stats;
+    }
+
+    private void gatherAllReferrals(List<ReferralView> thisMonthReferrals, List<ReferralView> lastMonthReferrals) {
+        Instant oneMonthAgo = Instant.now();
+        Instant twoMonthsAgo = Instant.now();
+        oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
+        twoMonthsAgo = twoMonthsAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS * 2, ChronoUnit.DAYS);
+        List<ReferralView> allReferrals = referralManagerService.findAllByOrderByTimestampDesc();
+
+        for (ReferralView referral : allReferrals) {
+            Instant referralDate = referral.getTimestamp().toInstant();
+            if(referralDate.isAfter(oneMonthAgo)){
+                thisMonthReferrals.add(referral);
+            }else if (referralDate.isAfter(twoMonthsAgo)){
+                lastMonthReferrals.add(referral);
+            }
+        }
     }
 
     private void gatherAllReadings(
