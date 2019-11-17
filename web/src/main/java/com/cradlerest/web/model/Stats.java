@@ -11,12 +11,14 @@ public class Stats {
 
 
     public Stats(
+            // reading info
             int numberOfReadings,
             int numberOfReds,
             int numberOfGreens,
             int numberOfYellows,
             int numberOfPatientsSeen,
             int numberOfVHTs,
+            // might need referral details
             int numberOfReferrals
     ) {
         this.numberOfReadings = numberOfReadings;
