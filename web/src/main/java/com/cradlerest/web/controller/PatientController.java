@@ -79,7 +79,7 @@ public class PatientController {
 		return patientManagerService.savePatient(patient);
 	}
 
-		@PostMapping("/{id}/addMedication")
+	@PostMapping("/{id}/addMedication")
 	public Patient addMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
 		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
 		personToAddMedicationTo.addMedication(medication);
