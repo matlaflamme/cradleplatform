@@ -387,4 +387,20 @@
             <Response status="200">{"id":null}</Response>
         </TestCase>
     </Batch>
+
+    <TestCase name="New Patient Test">
+        <Request method="POST" uri="/api/patient">
+            <![CDATA[
+              {
+                  "id": "090",
+                  "name": "pn",
+                  "villageNumber": "89",
+                  "birthYear": 1995,
+                  "sex": 1,
+                  "zoneNumber": "10"
+              }
+            ]]>
+        </Request>
+        <Response status="200"/>
+    </TestCase>
 </TestSuite>

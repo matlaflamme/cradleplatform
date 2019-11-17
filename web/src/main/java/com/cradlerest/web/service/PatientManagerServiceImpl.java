@@ -14,6 +14,7 @@ import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -173,6 +174,11 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			throw new BadRequestException("request body is null");
 		}
 
+		// If patient doesn't have a last updated field, set it to the current time.
+		if (patient.getLastUpdated() == null) {
+			patient.setLastUpdated(new Date());
+		}
+
 		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
 
 		if (checkPatient.isPresent()) {
@@ -221,6 +227,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated");
+		assertNotNull(patient.getZoneNumber(), "zoneNumber");
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {
