@@ -279,7 +279,7 @@
         }
         ]]>
       </Request>
-      <Response status="200"/>
+      <Response status="201"/>
     </TestCase>
 
     <TestCase name="Create a health centre: Bad email">
