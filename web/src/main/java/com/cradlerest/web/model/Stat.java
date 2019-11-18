@@ -1,6 +1,6 @@
 package com.cradlerest.web.model;
 
-public class Stats {
+public class Stat {
     private int numberOfReadings;
     private int numberOfReds;
     private int numberOfGreens;
@@ -10,7 +10,7 @@ public class Stats {
     private int numberOfReferrals;
 
 
-    public Stats(
+    public Stat(
             // reading info
             int numberOfReadings,
             int numberOfReds,
@@ -30,7 +30,7 @@ public class Stats {
         this.numberOfReferrals = numberOfReferrals;
     }
 
-    public Stats() {
+    public Stat() {
         this.numberOfReadings = 0;
         this.numberOfReds = 0;
         this.numberOfGreens = 0;

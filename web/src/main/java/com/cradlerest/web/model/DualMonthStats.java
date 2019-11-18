@@ -1,29 +1,29 @@
 package com.cradlerest.web.model;
 
 public class DualMonthStats {
-    public DualMonthStats(Stats stats, Stats statsTrend) {
-        this.stats = stats;
-        this.statsTrend = statsTrend;
+    public DualMonthStats(Stat stat, Stat statTrend) {
+        this.stat = stat;
+        this.statTrend = statTrend;
     }
 
-    public Stats getStats() {
-        return stats;
+    public Stat getStat() {
+        return stat;
     }
 
-    public void setStats(Stats stats) {
-        this.stats = stats;
+    public void setStat(Stat stat) {
+        this.stat = stat;
     }
 
-    public Stats getStatsTrend() {
-        return statsTrend;
+    public Stat getStatTrend() {
+        return statTrend;
     }
 
-    public void setStatsTrend(Stats statsTrend) {
-        this.statsTrend = statsTrend;
+    public void setStatTrend(Stat statTrend) {
+        this.statTrend = statTrend;
     }
 
-    private Stats stats;
-    private Stats statsTrend;
+    private Stat stat;
+    private Stat statTrend;
 
 
 }

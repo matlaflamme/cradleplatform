@@ -4,7 +4,7 @@ import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.DualMonthStats;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.Stats;
+import com.cradlerest.web.model.Stat;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.PatientManagerService;
@@ -48,14 +48,14 @@ public class AdminStatsController {
         gatherAllReferrals(referrals, referralsTrend, VHTID);
         gatherAllReadings(readings, readingsTrend, VHTID);
 
-        Stats thisMonth = GenerateStats(readings, referrals);
-        Stats lastMonth = GenerateStats(readingsTrend, referralsTrend);
+        Stat thisMonth = GenerateStats(readings, referrals);
+        Stat lastMonth = GenerateStats(readingsTrend, referralsTrend);
 
         return new DualMonthStats(thisMonth,lastMonth);
     }
 
-    private Stats GenerateStats(List<Reading> readings, List<ReferralView> referrals) {
-        Stats stats = new Stats();
+    private Stat GenerateStats(List<Reading> readings, List<ReferralView> referrals) {
+        Stat stat = new Stat();
         // readings Stats
         Set<String> hashSetOfPatients = new HashSet<>();
         Set<Integer> hashSetOfVHTs = new HashSet<>();
@@ -78,16 +78,16 @@ public class AdminStatsController {
             hashSetOfVHTs.add(reading.getCreatedBy());
             hashSetOfPatients.add(reading.getPatientId());
         }
-        stats.setNumberOfGreens(numberOfGreens);
-        stats.setNumberOfReds(numberOfReds);
-        stats.setNumberOfYellows(numberOfYellows);
-        stats.setNumberOfPatientsSeen(hashSetOfPatients.size());
-        stats.setNumberOfReadings(readings.size());
-        stats.setNumberOfVHTs(hashSetOfVHTs.size());
+        stat.setNumberOfGreens(numberOfGreens);
+        stat.setNumberOfReds(numberOfReds);
+        stat.setNumberOfYellows(numberOfYellows);
+        stat.setNumberOfPatientsSeen(hashSetOfPatients.size());
+        stat.setNumberOfReadings(readings.size());
+        stat.setNumberOfVHTs(hashSetOfVHTs.size());
 
         //referralStats
-        stats.setNumberOfReferrals(referrals.size());
-        return stats;
+        stat.setNumberOfReferrals(referrals.size());
+        return stat;
     }
 
     private void gatherAllReferrals(
