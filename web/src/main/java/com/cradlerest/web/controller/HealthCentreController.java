@@ -46,7 +46,7 @@ public class HealthCentreController {
 		return healthCentreRepository.save(healthCentre);
 	}
 
-	@PutMapping("/{id}")
+	@PostMapping("/{id}")
 	public HealthCentre updateHealthCentre(@PathVariable Integer id, @Valid @RequestBody HealthCentre healthCentre) throws EntityNotFoundException {
 		Optional<HealthCentre> healthCentreToUpdate = healthCentreRepository.findById(id);
 		if (!healthCentreToUpdate.isPresent()) {
