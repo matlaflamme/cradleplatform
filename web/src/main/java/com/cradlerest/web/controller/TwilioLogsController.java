@@ -6,6 +6,7 @@ import com.twilio.base.ResourceSet;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.monitor.v1.Alert;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,10 +25,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/twilio")
 public class TwilioLogsController {
-	@Value("${twilio.account_sid}")
+	@Value("$ {twilio.account_sid}")
 	private String account_sid;
 
-	@Value("${twilio.auth_token}")
+	@Value("$ {twilio.auth_token}")
 	private String auth_token;
 
 	/**
