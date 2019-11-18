@@ -2,7 +2,8 @@ Vue.component('info_card', {
     props: {
         title: String, //Usage: {{title}} inside of the template is replaced with the prop
         value: String, //Prop is given a value inside of the component's html tag in the html file where its used
-        icon: String
+        icon: String,
+        subtitle: String
     },
     template:
     '<v-card\n' +
@@ -14,7 +15,7 @@ Vue.component('info_card', {
             '<v-list-item-content>\n' +
                 '<div class="title">{{title}}</div>\n' +
                 '<v-list-item-title class="display-3">{{value}}</v-list-item-title>\n' +
-                '<v-list-item-subtitle class="subtitle-1">173 VHTs across 12 zones</v-list-item-subtitle>\n' +
+                '<v-list-item-subtitle class="subtitle-1">{{subtitle}}</v-list-item-subtitle>\n' +
             '</v-list-item-content>\n' +
 
             '<v-list-item-icon\n' +
@@ -94,13 +95,13 @@ Vue.component('admin_dashboard', {
     template:
         '<v-row>\n' +
             '<v-col cols="12" md="4">\n' +
-                '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" :icon="referralsIcon"></info_card>\n' +
+                '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" :icon="referralsIcon" :subtitle="getSubtitle(currNumReferrals, prevNumReferrals)"></info_card>\n' +
             '</v-col>\n' +
             '<v-col cols="12" md="4">\n' +
-                '<info_card id="info_card2" :value="currNumReadings" title="Readings this month" :icon="readingsIcon"></info_card>\n' +
+                '<info_card id="info_card2" :value="currNumReadings" title="Readings this month" :icon="readingsIcon" :subtitle="getSubtitle(currNumReadings, prevNumReadings)"></info_card>\n' +
             '</v-col>\n' +
             '<v-col cols="12" md="4">\n' +
-                '<info_card id="info_card3" :value="currNumPatientsSeen" title="Patients seen this month" :icon="patientsIcon"></info_card>\n' +
+                '<info_card id="info_card3" :value="currNumPatientsSeen" title="Patients seen this month" :icon="patientsIcon" :subtitle="getSubtitle(currNumPatientsSeen, prevNumPatientsSeen)"></info_card>\n' +
             '</v-col>\n' +
             '<v-col cols="12">\n' +
                 '<v-spacer class="pt-5"></v-spacer>' +
@@ -109,7 +110,7 @@ Vue.component('admin_dashboard', {
         '</v-row>',
     created() {
         this.setAllValsForTesting(); //remove this after api endpoint is set up
-        //axios.get('/api/admin/info').then(response => {
+        //axios.get('/api/stats/overview').then(response => {
         //@TODO: Determine trends, fix text sizing, fix subtitles
         this.readingsIcon = this.getIcons(this.currNumReadings, this.prevNumReadings);
         this.referralsIcon = this.getIcons(this.currNumReferrals, this.prevNumReferrals);
@@ -148,6 +149,16 @@ Vue.component('admin_dashboard', {
         },
         prevChartValues() {
             return [this.prevNumGreens, this.prevNumYellows, this.prevNumReds];
+        },
+        getSubtitle(currVal, prevVal) {
+            if (currVal > prevVal) {
+                let percentage = Math.round((prevVal / currVal) * 100);
+                return percentage + "% increase from last month.";
+            }
+            else {
+                let percentage = Math.round((currVal / prevVal) * 100);
+                return percentage + "% decrease from last month.";
+            }
         }
     }
 });
