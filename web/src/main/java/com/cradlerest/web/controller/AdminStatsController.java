@@ -139,12 +139,33 @@ public class AdminStatsController {
         }
     }
 
+    private void gatherAllReferralsForVHT(
+            List<ReferralView> thisMonthReferrals,
+            List<ReferralView> lastMonthReferrals,
+            int vhtId) {
+        Instant oneMonthAgo = Instant.now();
+        Instant twoMonthsAgo = Instant.now();
+        oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
+        twoMonthsAgo = twoMonthsAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS * 2, ChronoUnit.DAYS);
+        List<ReferralView> allReferrals = referralManagerService.findAllByOrderByTimestampDesc();
+
+        for (ReferralView referral : allReferrals) {
+            Instant referralDate = referral.getTimestamp().toInstant();
+            if(referralDate.isAfter(oneMonthAgo) && referral.getVhtId() == vhtId){
+                thisMonthReferrals.add(referral);
+            }else if (referralDate.isAfter(twoMonthsAgo)){
+                lastMonthReferrals.add(referral);
+            }else {
+                break;
+            }
+        }
+    }
 
 
     private void gatherAllReadingsForVHT(
             List<Reading> thisMonthReadings,
             List<Reading> lastMonthReadings,
-            int VHTID) {
+            int vhtId) {
         List<Patient> allPatients = patientManagerService.getAllPatients();
 
         Instant oneMonthAgo = Instant.now();
@@ -158,9 +179,9 @@ public class AdminStatsController {
                 List<ReadingView> allReadings = readingManager.getAllReadingViewsForPatient(patient.getId());
                 for( ReadingView reading : allReadings){
                     Instant readingDate = reading.getTimestamp().toInstant();
-                    if(readingDate.isAfter(oneMonthAgo) && reading.getCreatedBy() == VHTID){
+                    if(readingDate.isAfter(oneMonthAgo) && reading.getCreatedBy() == vhtId){
                         thisMonthReadings.add(reading);
-                    }else if(readingDate.isAfter(twoMonthsAgo) && reading.getCreatedBy() == VHTID){
+                    }else if(readingDate.isAfter(twoMonthsAgo) && reading.getCreatedBy() == vhtId){
                         lastMonthReadings.add(reading);
                     }
                 }
@@ -169,5 +190,7 @@ public class AdminStatsController {
             }
         }
     }
+
+
 
 }
