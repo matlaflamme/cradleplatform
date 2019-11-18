@@ -42,12 +42,12 @@ public class HealthCentreController {
 
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public HealthCentre create(@Valid @RequestBody HealthCentre healthCentre) {
+	public HealthCentre createHealthCentre(@Valid @RequestBody HealthCentre healthCentre) {
 		return healthCentreRepository.save(healthCentre);
 	}
 
 	@PutMapping("/{id}")
-	public HealthCentre create(@PathVariable Integer id, @Valid @RequestBody HealthCentre healthCentre) throws EntityNotFoundException {
+	public HealthCentre updateHealthCentre(@PathVariable Integer id, @Valid @RequestBody HealthCentre healthCentre) throws EntityNotFoundException {
 		Optional<HealthCentre> healthCentreToUpdate = healthCentreRepository.findById(id);
 		if (!healthCentreToUpdate.isPresent()) {
 			throw new EntityNotFoundException("No health centre with id: " + id);
