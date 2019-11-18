@@ -170,7 +170,7 @@ public class AdminStatsController {
             Instant referralDate = referral.getTimestamp().toInstant();
             if(referralDate.isAfter(oneMonthAgo) && referral.getVhtId() == vhtId){
                 thisMonthReferrals.add(referral);
-            }else if (referralDate.isAfter(twoMonthsAgo)){
+            }else if (referralDate.isAfter(twoMonthsAgo) && referral.getVhtId() == vhtId){
                 lastMonthReferrals.add(referral);
             }else {
                 break;
