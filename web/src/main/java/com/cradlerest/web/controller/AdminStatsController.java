@@ -45,8 +45,8 @@ public class AdminStatsController {
         List<ReferralView> referralsTrend = new ArrayList<>();
         int VHTID = 0;
 
-        gatherAllReferrals(referrals, referralsTrend, VHTID);
-        gatherAllReadings(readings, readingsTrend, VHTID);
+        gatherAllReferrals(referrals, referralsTrend);
+        gatherAllReadings(readings, readingsTrend);
 
         Stat thisMonth = GenerateStats(readings, referrals);
         Stat lastMonth = GenerateStats(readingsTrend, referralsTrend);
@@ -92,8 +92,7 @@ public class AdminStatsController {
 
     private void gatherAllReferrals(
             List<ReferralView> thisMonthReferrals,
-            List<ReferralView> lastMonthReferrals,
-            int VHTID) {
+            List<ReferralView> lastMonthReferrals) {
         Instant oneMonthAgo = Instant.now();
         Instant twoMonthsAgo = Instant.now();
         oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
@@ -113,6 +112,36 @@ public class AdminStatsController {
     }
 
     private void gatherAllReadings(
+            List<Reading> thisMonthReadings,
+            List<Reading> lastMonthReadings) {
+        List<Patient> allPatients = patientManagerService.getAllPatients();
+
+        Instant oneMonthAgo = Instant.now();
+        Instant twoMonthsAgo = Instant.now();
+        oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
+        twoMonthsAgo = twoMonthsAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS * 2, ChronoUnit.DAYS);
+
+        // gathersAllReadings
+        for (Patient patient : allPatients) {
+            try {
+                List<ReadingView> allReadings = readingManager.getAllReadingViewsForPatient(patient.getId());
+                for( ReadingView reading : allReadings){
+                    Instant readingDate = reading.getTimestamp().toInstant();
+                    if(readingDate.isAfter(oneMonthAgo)){
+                        thisMonthReadings.add(reading);
+                    }else if(readingDate.isAfter(twoMonthsAgo)){
+                        lastMonthReadings.add(reading);
+                    }
+                }
+            } catch (EntityNotFoundException e) { // should never happen since patients are bing read from Database first
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    private void gatherAllReadingsForVHT(
             List<Reading> thisMonthReadings,
             List<Reading> lastMonthReadings,
             int VHTID) {
@@ -140,5 +169,5 @@ public class AdminStatsController {
             }
         }
     }
-}
 
+}
