@@ -5,8 +5,8 @@ Vue.component('new_account_form', {
 
     },
     data: () => ({
-		selected: null,
-		healthCentreList: ['list', 'of', 'options'],
+		selectedHealthCentre: null,
+		healthCentreList: ['Empty'],
         snackbar: false,
         valid: true,
         name: '',
@@ -39,6 +39,9 @@ Vue.component('new_account_form', {
             v => !!v || 'Role is required'
         ]
     }),
+	mounted() {
+    	this.getAllHealthCentreOptions();
+	},
     methods: {
 		validate() {
 			if (this.$refs.newAccountForm.validate()) {
@@ -52,16 +55,25 @@ Vue.component('new_account_form', {
 			this.$refs.newAccountForm.resetValidation()
 		},
 		submit() {
+			console.log("selected: " + this.selectedHealthCentre.id);
 			axios.post('/api/user/add',
 				{
 					username: this.username,
 					password: this.password,
-					roles: this.row
+					roles: this.row,
+					worksAtHealthCentreId: this.selectedHealthCentre.id
 				}
 			).then(response => {
-				console.log(response)
+				console.log(response) // this makes the password public
 			});
 			this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
+		},
+		getAllHealthCentreOptions() {
+			axios.get('/api/hc/all').then(res => {
+				this.healthCentreList = res.data;
+			}).catch(error => {
+				console.error(error);
+			})
 		},
     },
     template:
@@ -84,8 +96,16 @@ Vue.component('new_account_form', {
 			<v-layout wrap align-center id="new">
 				<v-flex xs12 sm6 d-flex>
 					<v-select 
+						v-model="selectedHealthCentre"
 						:items="healthCentreList"
-						label="Select Health Centre">
+						label="Select Health Centre"
+						return-object> 
+						<template v-slot:selection="data">
+							{{data.item.id}} - {{data.item.name}}
+						</template>
+						<template v-slot:item="data">
+							{{data.item.id}} - {{data.item.name}}
+						</template>
 					</v-select>
 				</v-flex>
 		  	</v-layout>
