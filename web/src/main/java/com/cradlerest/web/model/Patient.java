@@ -1,6 +1,7 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.*;
+import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,7 @@ import java.util.*;
 @Table(name = "patient")
 public class Patient {
 
+	private static final int NUM_ELEMENTS_IN_MEDICATION = 3;
 	@Id
 	@Column(name = "id", nullable = false, unique = true)
 	@DataGenStringParams(length = 14, charset = StringGenerator.DECIMAL_CHARSET)
@@ -156,17 +158,43 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 	}
 
-	public ArrayList<String> medicationAsList(){
+	public ArrayList<Medication> medicationAsList(){
 		if(this.medication == null){
-			return new ArrayList<String>();
+			return new ArrayList<Medication>();
 		}
-		return new ArrayList<String>(Arrays.asList(medication.split("\t")));
+
+		ArrayList<String> listOfMedications = new ArrayList<String>(Arrays.asList(medication.split("\t")));
+		ArrayList<Medication> medicationAsList = new ArrayList<>();
+
+		// throw an error if the arrayList is broken by some value not being included
+		if(listOfMedications.size() % NUM_ELEMENTS_IN_MEDICATION != 0 ){
+			throw new ExceptionInInitializerError();
+		}
+
+		// initialize
+		String medication = null;
+		String dosage = null;
+		String usageFrequency = null;
+
+		for(int index = 0; index<listOfMedications.size(); index++){
+			if(index % NUM_ELEMENTS_IN_MEDICATION == 0){
+				medication = listOfMedications.get(index);
+			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 1){
+				dosage = listOfMedications.get(index);
+			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 2){
+				usageFrequency = listOfMedications.get(index);
+				Medication med = new Medication(medicationAsList.size(), medication, dosage, usageFrequency);
+				medicationAsList.add(med);
+			}
+		}
+		return medicationAsList;
 	}
 
 	public String getMedication() {
 		return medication;
 	}
 
+	// only the controller should use this method
 	public void setMedication(String medication) {
 		this.medication = medication;
 	}
@@ -197,27 +225,31 @@ public class Patient {
 		this.generalNotes = generalNotes;
 	}
 
-	public void addMedication(String medication){
+	public void addMedication(Medication medication){
 		if(this.medication == null){
 			this.medication = "";
 		}
-		if(this.medication.length() > 0 ) {
-			this.medication = this.medication + "\t" + (medication.replaceAll("\t", "    "));
-		}else {
-			this.medication = (medication.replaceAll("\t", "    "));
+		ConvertMedicationToString(medication);
+	}
+
+	public void addMedication(List<Medication> medication){
+		if(this.medication == null){
+			this.medication = "";
+		}
+		for (Medication newMedication : medication) {
+			ConvertMedicationToString(newMedication);
 		}
 	}
 
-	public void addMedication(List<String> medication){
-		if(this.medication == null){
-			this.medication = "";
-		}
-		for (String newMedication : medication) {
-			if (this.medication.length() > 0 ) {
-				this.medication = this.medication + "\t" + (newMedication.replaceAll("\t", "    "));
-			} else {
-				this.medication = (newMedication.replaceAll("\t", "    "));
-			}
+	private void ConvertMedicationToString(Medication newMedication) {
+		if(this.medication.length() > 0 ) {
+			this.medication = this.medication + "\t" + (newMedication.getMedication().replaceAll("\t", "    "));
+			this.medication = this.medication + "\t" + (newMedication.getDosage().replaceAll("\t", "    "));
+			this.medication = this.medication + "\t" + (newMedication.getUsageFrequency().replaceAll("\t", "    "));
+		}else {
+			this.medication = (newMedication.getMedication().replaceAll("\t", "    "));
+			this.medication = this.medication + "\t" + (newMedication.getDosage().replaceAll("\t", "    "));
+			this.medication = this.medication + "\t" + (newMedication.getUsageFrequency().replaceAll("\t", "    "));
 		}
 	}
 
@@ -242,7 +274,39 @@ public class Patient {
 		return Objects.hash(id);
 	}
 
-	public void removeMedication(String medication) {
+	public void removeMedication(Medication medication) {
+
+
+
+		ArrayList<String> listOfMedications = new ArrayList<String>(Arrays.asList(medication.split("\t")));
+		ArrayList<Medication> medicationAsList = new ArrayList<>();
+
+		// throw an error if the arrayList is broken by some value not being included
+		if(listOfMedications.size() % NUM_ELEMENTS_IN_MEDICATION != 0 ){
+			throw new ExceptionInInitializerError();
+		}
+
+		// initialize
+		String medication = null;
+		String dosage = null;
+		String usageFrequency = null;
+
+		for(int index = 0; index<listOfMedications.size(); index++){
+			if(index % NUM_ELEMENTS_IN_MEDICATION == 0){
+				medication = listOfMedications.get(index);
+			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 1){
+				dosage = listOfMedications.get(index);
+			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 2){
+				usageFrequency = listOfMedications.get(index);
+
+				Medication med = new Medication(medicationAsList.size(), medication, dosage, usageFrequency);
+				medicationAsList.add(med);
+			}
+		}
+
+
+
+
 		String currentMedications = this.getMedication();
 
 		List<String> medicationList =
