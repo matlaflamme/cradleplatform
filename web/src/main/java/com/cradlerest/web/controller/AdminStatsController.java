@@ -37,6 +37,23 @@ public class AdminStatsController {
 
     }
 
+    @GetMapping("/overview/{id}")
+    public DualMonthStats overviews(@PathVariable("id") Integer vhtId) {
+        List<Reading> readings = new ArrayList<>();
+        List<Reading> readingsTrend = new ArrayList<>();
+        List<ReferralView> referrals = new ArrayList<>();
+        List<ReferralView> referralsTrend = new ArrayList<>();
+
+        gatherAllReferralsForVHT(referrals, referralsTrend, vhtId);
+        gatherAllReadingsForVHT(readings, readingsTrend, vhtId);
+
+        Stat thisMonth = GenerateStats(readings, referrals);
+        Stat lastMonth = GenerateStats(readingsTrend, referralsTrend);
+
+        return new DualMonthStats(thisMonth,lastMonth);
+    }
+
+
     @GetMapping("/overview")
     public DualMonthStats overview() {
         List<Reading> readings = new ArrayList<>();
