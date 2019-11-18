@@ -81,16 +81,12 @@ public class PatientController {
 
 	@PostMapping("/{id}/addMedication")
 	public Patient addMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
-		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
-		personToAddMedicationTo.addMedication(medication);
-		return patientManagerService.savePatient(personToAddMedicationTo);
+		return null;
 	}
 
 	@PostMapping("/{id}/removeMedication")
 	public Patient removeMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
-		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
-		personToAddMedicationTo.removeMedication(medication);
-		return patientManagerService.savePatient(personToAddMedicationTo);
+		return null;
 	}
 
 	@Deprecated

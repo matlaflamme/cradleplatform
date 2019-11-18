@@ -88,15 +88,6 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder medication(@Nullable String text) {
-		patient.addMedication(text);
-		return this;
-	}
-	public PatientBuilder medication(@Nullable ArrayList<String> text) {
-		patient.addMedication(text);
-		return this;
-	}
-
 	public PatientBuilder drugHistory(@Nullable String text) {
 		patient.setDrugHistory(text);
 		return this;

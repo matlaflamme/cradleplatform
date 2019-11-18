@@ -67,6 +67,10 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String generalNotes;
 
+//	// not part of the database
+//	@Transient
+//	private ArrayList<Medication> medications;
+
 	public Patient() {
 	}
 
