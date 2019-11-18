@@ -5,6 +5,8 @@ Vue.component('new_account_form', {
 
     },
     data: () => ({
+		selected: null,
+		healthCentreList: ['list', 'of', 'options'],
         snackbar: false,
         valid: true,
         name: '',
@@ -79,7 +81,14 @@ Vue.component('new_account_form', {
 			<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>
 			<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>
 			</v-radio-group>
-	
+			<v-layout wrap align-center id="new">
+				<v-flex xs12 sm6 d-flex>
+					<v-select 
+						:items="healthCentreList"
+						label="Select Health Centre">
+					</v-select>
+				</v-flex>
+		  	</v-layout>
 			<v-text-field
 				v-model="name"
 				:counter="10"
