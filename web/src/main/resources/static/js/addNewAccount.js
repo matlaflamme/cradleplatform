@@ -67,7 +67,7 @@ Vue.component('new_account_form', {
     template:
 	`
     <div> 
-    <v-card class="overflow-hidden" raised min-width="550" max-height="600"> 
+    <v-card class="overflow-hidden" raised min-width="550"> 
         <v-card-title>
             <span class="title">Create a new account</span>
         </v-card-title>
