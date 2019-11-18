@@ -53,17 +53,17 @@ Vue.component('new_patient_form', {
             this.$refs.newPatientForm.resetValidation()
         },
         submit () {
-            console.log(this);
+            console.log(this.sex.value);
             axios.post('/api/patient',
                 {
-                    id: "003",
-                    name: "PN",
-                    villageNumber: "1",
-                    birthYear: 1995,
-                    sex: 1,
-                    medicalHistory: null,
-                    drugHistory: null,
-                    lastUpdated: "2019-09-20 13:12:32"
+                    id: this.id,
+                    name: this.initials,
+                    villageNumber: this.village,
+                    birthYear: parseInt(this.birthYear),
+                    sex: parseInt(this.sex.value),
+                    zoneNumber: this.zone
+
+
                 }
             ).then(response => {console.log(response)});
             this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
@@ -156,11 +156,3 @@ new Vue({
         drawer: null
     })
 });
-
-function getCurrentDate() {
-    let now = new Date(); //new date object
-    let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
-    let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
-    console.log(date + ' ' + time);
-    return date + ' ' + time; //date and time string returned
-}
