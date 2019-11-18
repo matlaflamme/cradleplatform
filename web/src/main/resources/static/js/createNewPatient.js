@@ -26,7 +26,7 @@ Vue.component('new_patient_form', {
         zoneRules: [
             v => !!v || 'Zone is required',
         ],
-        select: {},
+        sex: {},
         items: [
             { sex: 'Male', value: 0 },
             { sex: 'Female', value: 1 },
@@ -53,16 +53,17 @@ Vue.component('new_patient_form', {
             this.$refs.newPatientForm.resetValidation()
         },
         submit () {
+            console.log(this);
             axios.post('/api/patient',
                 {
-                    id: "090",
-                    name: "pn",
-                    villageNumber: "89",
+                    id: "003",
+                    name: "PN",
+                    villageNumber: "1",
                     birthYear: 1995,
                     sex: 1,
                     medicalHistory: null,
                     drugHistory: null,
-                    lastUpdated: "2019-10-20 13:12:72"
+                    lastUpdated: "2019-09-20 13:12:32"
                 }
             ).then(response => {console.log(response)});
             this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
@@ -104,7 +105,7 @@ Vue.component('new_patient_form', {
       ></v-text-field>` +
         `
       <v-select
-            v-model="select"
+            v-model="sex"
             :items="items"
             item-text="sex"
             item-value="value"
@@ -155,3 +156,11 @@ new Vue({
         drawer: null
     })
 });
+
+function getCurrentDate() {
+    let now = new Date(); //new date object
+    let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
+    let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
+    console.log(date + ' ' + time);
+    return date + ' ' + time; //date and time string returned
+}
