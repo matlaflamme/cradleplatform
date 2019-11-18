@@ -2,7 +2,6 @@
   "name": "cradleplatform",
   "version": "1.0.0",
   "dependencies": {
-    "vue": "latest",
-    "vue-dropdowns": "^1.1.1"
+    "vue": "latest"
   }
 }
