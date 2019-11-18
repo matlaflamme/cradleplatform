@@ -38,27 +38,29 @@ Vue.component('new_account_form', {
         ]
     }),
     methods: {
-      validate () {
-          if (this.$refs.newAccountForm.validate()) {
-              this.submit();
-          }
-      },
-        reset () {
-          this.$refs.newAccountForm.reset();
-        },
-        resetValidation () {
-          this.$refs.newAccountForm.resetValidation()
-        },
-        submit () {
-            axios.post('/api/user/add',
-                {
-                    username: this.username,
-                    password: this.password,
-                    roles: this.row
-                }
-            ).then(response => {console.log(response)});
-            this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
-        }
+		validate() {
+			if (this.$refs.newAccountForm.validate()) {
+				this.submit();
+			}
+		},
+		reset() {
+			this.$refs.newAccountForm.reset();
+		},
+		resetValidation() {
+			this.$refs.newAccountForm.resetValidation()
+		},
+		submit() {
+			axios.post('/api/user/add',
+				{
+					username: this.username,
+					password: this.password,
+					roles: this.row
+				}
+			).then(response => {
+				console.log(response)
+			});
+			this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
+		},
     },
     template:
     '<div>' +
@@ -77,6 +79,7 @@ Vue.component('new_account_form', {
         '<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>' +
         '<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>' +
         '</v-radio-group>' +
+
      ` <v-text-field
         v-model="name"
         :counter="10"
