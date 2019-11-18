@@ -158,9 +158,9 @@ public class AdminStatsController {
                 List<ReadingView> allReadings = readingManager.getAllReadingViewsForPatient(patient.getId());
                 for( ReadingView reading : allReadings){
                     Instant readingDate = reading.getTimestamp().toInstant();
-                    if(readingDate.isAfter(oneMonthAgo)){
+                    if(readingDate.isAfter(oneMonthAgo) && reading.getCreatedBy() == VHTID){
                         thisMonthReadings.add(reading);
-                    }else if(readingDate.isAfter(twoMonthsAgo)){
+                    }else if(readingDate.isAfter(twoMonthsAgo) && reading.getCreatedBy() == VHTID){
                         lastMonthReadings.add(reading);
                     }
                 }
