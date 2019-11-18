@@ -49,11 +49,6 @@ public class Patient {
 	@Enumerated(EnumType.ORDINAL)
 	private Sex sex;
 
-	@Column(name = "medication")
-	@Generator(GibberishSentenceGenerator.class)
-	@DataGenNullChance(0.5)
-	private String medication;
-
 	@Column(name = "medical_history")
 	@Generator(GibberishSentenceGenerator.class)
 	@DataGenNullChance(0.5)
@@ -83,7 +78,6 @@ public class Patient {
 			String name,
 			Integer birthYear,
 			Sex sex,
-			String medication,
 			String medicalHistory,
 			String drugHistory,
 			@NotNull Date lastUpdated,
@@ -95,7 +89,6 @@ public class Patient {
 		this.zoneNumber = zoneNumber;
 		this.birthYear = birthYear;
 		this.sex = sex;
-		this.medication = medication;
 		this.medicalHistory = medicalHistory;
 		this.drugHistory = drugHistory;
 		this.lastUpdated = lastUpdated;
@@ -158,47 +151,6 @@ public class Patient {
 		this.medicalHistory = medicalHistory;
 	}
 
-	public ArrayList<Medication> medicationAsList(){
-		if(this.medication == null){
-			return new ArrayList<Medication>();
-		}
-
-		ArrayList<String> listOfMedications = new ArrayList<String>(Arrays.asList(medication.split("\t")));
-		ArrayList<Medication> medicationAsList = new ArrayList<>();
-
-		// throw an error if the arrayList is broken by some value not being included
-		if(listOfMedications.size() % NUM_ELEMENTS_IN_MEDICATION != 0 ){
-			throw new ExceptionInInitializerError();
-		}
-
-		// initialize
-		String medication = null;
-		String dosage = null;
-		String usageFrequency = null;
-
-		for(int index = 0; index<listOfMedications.size(); index++){
-			if(index % NUM_ELEMENTS_IN_MEDICATION == 0){
-				medication = listOfMedications.get(index);
-			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 1){
-				dosage = listOfMedications.get(index);
-			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 2){
-				usageFrequency = listOfMedications.get(index);
-				Medication med = new Medication(medicationAsList.size(), medication, dosage, usageFrequency);
-				medicationAsList.add(med);
-			}
-		}
-		return medicationAsList;
-	}
-
-	public String getMedication() {
-		return medication;
-	}
-
-	// only the controller should use this method
-	public void setMedication(String medication) {
-		this.medication = medication;
-	}
-
 	public String getDrugHistory() {
 		return drugHistory;
 	}
@@ -225,34 +177,6 @@ public class Patient {
 		this.generalNotes = generalNotes;
 	}
 
-	public void addMedication(Medication medication){
-		if(this.medication == null){
-			this.medication = "";
-		}
-		ConvertMedicationToString(medication);
-	}
-
-	public void addMedication(List<Medication> medication){
-		if(this.medication == null){
-			this.medication = "";
-		}
-		for (Medication newMedication : medication) {
-			ConvertMedicationToString(newMedication);
-		}
-	}
-
-	private void ConvertMedicationToString(Medication newMedication) {
-		if(this.medication.length() > 0 ) {
-			this.medication = this.medication + "\t" + (newMedication.getMedication().replaceAll("\t", "    "));
-			this.medication = this.medication + "\t" + (newMedication.getDosage().replaceAll("\t", "    "));
-			this.medication = this.medication + "\t" + (newMedication.getUsageFrequency().replaceAll("\t", "    "));
-		}else {
-			this.medication = (newMedication.getMedication().replaceAll("\t", "    "));
-			this.medication = this.medication + "\t" + (newMedication.getDosage().replaceAll("\t", "    "));
-			this.medication = this.medication + "\t" + (newMedication.getUsageFrequency().replaceAll("\t", "    "));
-		}
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -263,7 +187,6 @@ public class Patient {
 				villageNumber.equals(patient.villageNumber) &&
 				birthYear.equals(patient.birthYear) &&
 				sex == patient.sex &&
-				Objects.equals(medication, patient.medication) &&
 				Objects.equals(medicalHistory, patient.medicalHistory) &&
 				Objects.equals(drugHistory, patient.drugHistory) &&
 				lastUpdated.equals(patient.lastUpdated);
@@ -274,52 +197,5 @@ public class Patient {
 		return Objects.hash(id);
 	}
 
-	public void removeMedication(Medication medication) {
 
-
-
-		ArrayList<String> listOfMedications = new ArrayList<String>(Arrays.asList(medication.split("\t")));
-		ArrayList<Medication> medicationAsList = new ArrayList<>();
-
-		// throw an error if the arrayList is broken by some value not being included
-		if(listOfMedications.size() % NUM_ELEMENTS_IN_MEDICATION != 0 ){
-			throw new ExceptionInInitializerError();
-		}
-
-		// initialize
-		String medication = null;
-		String dosage = null;
-		String usageFrequency = null;
-
-		for(int index = 0; index<listOfMedications.size(); index++){
-			if(index % NUM_ELEMENTS_IN_MEDICATION == 0){
-				medication = listOfMedications.get(index);
-			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 1){
-				dosage = listOfMedications.get(index);
-			}else if(index % NUM_ELEMENTS_IN_MEDICATION == 2){
-				usageFrequency = listOfMedications.get(index);
-
-				Medication med = new Medication(medicationAsList.size(), medication, dosage, usageFrequency);
-				medicationAsList.add(med);
-			}
-		}
-
-
-
-
-		String currentMedications = this.getMedication();
-
-		List<String> medicationList =
-				Arrays.asList(
-						currentMedications.split("\t")
-				);
-
-		setMedication("");
-		for (String item : medicationList) {
-			if (!item.equals(medication)) {
-				addMedication(item);
-			}
-		}
-
-	}
 }
