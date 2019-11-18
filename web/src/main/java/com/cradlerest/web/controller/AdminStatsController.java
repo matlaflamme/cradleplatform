@@ -43,9 +43,10 @@ public class AdminStatsController {
         List<Reading> readingsTrend = new ArrayList<>();
         List<ReferralView> referrals = new ArrayList<>();
         List<ReferralView> referralsTrend = new ArrayList<>();
+        int VHTID = 0;
 
-        gatherAllReferrals(referrals, referralsTrend);
-        gatherAllReadings(readings, readingsTrend);
+        gatherAllReferrals(referrals, referralsTrend, VHTID);
+        gatherAllReadings(readings, readingsTrend, VHTID);
 
         Stats thisMonth = GenerateStats(readings, referrals);
         Stats lastMonth = GenerateStats(readingsTrend, referralsTrend);
@@ -89,7 +90,10 @@ public class AdminStatsController {
         return stats;
     }
 
-    private void gatherAllReferrals(List<ReferralView> thisMonthReferrals, List<ReferralView> lastMonthReferrals) {
+    private void gatherAllReferrals(
+            List<ReferralView> thisMonthReferrals,
+            List<ReferralView> lastMonthReferrals,
+            int VHTID) {
         Instant oneMonthAgo = Instant.now();
         Instant twoMonthsAgo = Instant.now();
         oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
@@ -102,14 +106,16 @@ public class AdminStatsController {
                 thisMonthReferrals.add(referral);
             }else if (referralDate.isAfter(twoMonthsAgo)){
                 lastMonthReferrals.add(referral);
+            }else {
+                break;
             }
         }
     }
 
     private void gatherAllReadings(
             List<Reading> thisMonthReadings,
-            List<Reading> lastMonthReadings
-    ) {
+            List<Reading> lastMonthReadings,
+            int VHTID) {
         List<Patient> allPatients = patientManagerService.getAllPatients();
 
         Instant oneMonthAgo = Instant.now();
