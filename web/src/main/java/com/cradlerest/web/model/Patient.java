@@ -22,7 +22,6 @@ import java.util.*;
 @Table(name = "patient")
 public class Patient {
 
-	private static final int NUM_ELEMENTS_IN_MEDICATION = 3;
 	@Id
 	@Column(name = "id", nullable = false, unique = true)
 	@DataGenStringParams(length = 14, charset = StringGenerator.DECIMAL_CHARSET)
@@ -67,9 +66,11 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String generalNotes;
 
-//	// not part of the database
-//	@Transient
-//	private ArrayList<Medication> medications;
+
+
+	// not part of the database
+	@Transient
+	private ArrayList<Medication> medications;
 
 	public Patient() {
 	}
@@ -96,6 +97,7 @@ public class Patient {
 		this.drugHistory = drugHistory;
 		this.lastUpdated = lastUpdated;
 		this.generalNotes = generalNotes;
+		this.medications = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -178,6 +180,14 @@ public class Patient {
 
 	public void setGeneralNotes(String generalNotes) {
 		this.generalNotes = generalNotes;
+	}
+
+	public ArrayList<Medication> getMedications() {
+		return medications;
+	}
+
+	public void setMedications(ArrayList<Medication> medications) {
+		this.medications = medications;
 	}
 
 	@Override
