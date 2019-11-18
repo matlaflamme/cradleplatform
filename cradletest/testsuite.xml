@@ -313,7 +313,7 @@
     </TestCase>
 
     <TestCase name="Update health centre: Id not found">
-      <Request method="PUT" uri="/api/hc/1111111">
+      <Request method="POST" uri="/api/hc/1111111">
         <![CDATA[
         {
           "name": "JY",
