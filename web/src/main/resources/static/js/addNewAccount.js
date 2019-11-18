@@ -63,79 +63,77 @@ Vue.component('new_account_form', {
 		},
     },
     template:
-    '<div>' +
-    '<v-card class="overflow-hidden" raised min-width="550" max-height="600"> ' +
-        `<v-card-title>
-            <span class="title">Create a new account</span>`+
-        '</v-card-title> ' +
-    `<v-form
-      ref="newAccountForm"
-      v-model="valid"
-      lazy-validation
-      class="ma-5 px-3"
-    >` +
-        '<v-radio-group v-model="row" row required :rules="rowRules">' +
-        '<v-radio label="VHT" value="ROLE_VHT"></v-radio>' +
-        '<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>' +
-        '<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>' +
-        '</v-radio-group>' +
-
-     ` <v-text-field
-        v-model="name"
-        :counter="10"
-        label="Name"
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="username"
-        :rules="usernameRules"
-        label="Username"
-        required
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="password"
-        :rules="passwordRules"
-        label="Password"
-        :append-icon="showPassword ? 'visibility' : 'visibility_off'"
-        :type="showPassword ? 'text' : 'password'"
-        @click:append="showPassword = !showPassword"
-        required
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="region"
-        label="Region"
-      ></v-text-field>` +
-        `<v-text-field
-        v-model="zone"
-        label="Zone"
-      ></v-text-field>` +
-      `<v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="validate"
-      >
-        Submit
-      </v-btn>` +
-      
-      `<v-btn
-        color="error"
-        class="mr-4"
-        @click="reset"
-      >
-        Clear Form
-      </v-btn>
-    </v-form>` +
-        '</v-card>' +
-        '<v-snackbar v-model="snackbar">' +
-            'New user successfully created' +
-            `<v-btn
+	`
+    <div> 
+    <v-card class="overflow-hidden" raised min-width="550" max-height="600"> 
+        <v-card-title>
+            <span class="title">Create a new account</span>
+        </v-card-title>
+		<v-form
+			  ref="newAccountForm"
+			  v-model="valid"
+			  lazy-validation
+			  class="ma-5 px-3">
+			<v-radio-group v-model="row" row required :rules="rowRules">
+			<v-radio label="VHT" value="ROLE_VHT"></v-radio>
+			<v-radio label="Health Clinic Worker" value="ROLE_HEALTHWORKER"></v-radio>
+			<v-radio label="Admin" value="ROLE_ADMIN"></v-radio>
+			</v-radio-group>
+	
+			<v-text-field
+				v-model="name"
+				:counter="10"
+				label="Name">
+				
+				</v-text-field>
+					<v-text-field
+						v-model="username"
+						:rules="usernameRules"
+						label="Username"
+						required>
+				</v-text-field>
+			<v-text-field
+				v-model="password"
+				:rules="passwordRules"
+				label="Password"
+				:append-icon="showPassword ? 'visibility' : 'visibility_off'"
+				:type="showPassword ? 'text' : 'password'"
+				@click:append="showPassword = !showPassword"
+				required>
+			</v-text-field>
+			<v-text-field
+				v-model="region"
+				label="Region">
+			</v-text-field>
+			<v-text-field
+				v-model="zone"
+				label="Zone">	
+			</v-text-field>
+			<v-btn
+				:disabled="!valid"
+				color="success"
+				class="mr-4"
+				@click="validate">
+			Submit
+			</v-btn>
+			<v-btn
+				color="error"
+				class="mr-4"
+				@click="reset">
+			Clear Form
+			</v-btn>
+		</v-form>
+    </v-card>
+        <v-snackbar v-model="snackbar">
+            New user successfully created
+            <v-btn
                 color="pink"
-                @click="snackbar = false"
-            >` +
-                'Close' +
-            '</v-btn>' +
-        '</v-snackbar>' +
-    '</div>'
+                @click="snackbar = false">
+                Close
+            </v-btn>
+        </v-snackbar>
+    </div>
+	`
 })
 
 new Vue({
