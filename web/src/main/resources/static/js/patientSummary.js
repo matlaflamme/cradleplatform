@@ -39,7 +39,18 @@ Vue.component('basic_info', {
         let id = urlQuery.get('id');
         axios.get('/api/patient/' + id).then(response => {
             this.patientInformation = response.data;
+            this.getSexValueAsString();
         });
+    },
+    methods: {
+        getSexValueAsString() {
+            if (this.patientInformation.sex === 0) {
+                this.patientInformation.sex = "Male";
+            }
+            else {
+                this.patientInformation.sex = "Female";
+            }
+        }
     },
     template:
         '<div>' +
@@ -54,7 +65,7 @@ Vue.component('basic_info', {
                     '<span id="header-content" class="headline">Initials: <span class="font-weight-light">{{patientInformation.name}}</span></span>' +
                 '</v-col>' +
                 '<v-col md="2" cols="12" id="header">' +
-                    '<span id="header-content" class="headline">Sex: <span class="font-weight-light">Female</span></span>' +
+                    '<span id="header-content" class="headline">Sex: <span class="font-weight-light">{{patientInformation.sex}}</span></span>' +
                 '</v-col>' +
                 '<v-col md="2" cols="12" id="header">' +
                     '<span id="header-content" class="headline">Birth Year: <span class="font-weight-light">{{patientInformation.birthYear}}</span></span>' +
