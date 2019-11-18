@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 public class Medication {
