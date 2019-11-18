@@ -87,12 +87,12 @@ Vue.component('admin_dashboard', {
         currNumReferrals: 0,
         prevNumReferrals: 0,
         currNumVHTs: 0,
-        prevNumVHT: 0,
+        prevNumVHTs: 0,
         referralsIcon: "",
         readingsIcon: "",
         patientsIcon: "",
     }),
-    template:
+    template: //this is the main window
         '<v-row>\n' +
             '<v-col cols="12" md="4">\n' +
                 '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" :icon="referralsIcon" :subtitle="getSubtitle(currNumReferrals, prevNumReferrals)"></info_card>\n' +
@@ -110,14 +110,31 @@ Vue.component('admin_dashboard', {
         '</v-row>',
     created() {
         this.setAllValsForTesting(); //remove this after api endpoint is set up
-        //axios.get('/api/stats/overview').then(response => {
-        //@TODO: Determine trends, fix text sizing, fix subtitles
+        /* //this axios request is ready for the api endpoint
+        axios.get('/api/stats/overview').then(response => {
+            this.currNumGreens = response.data.stat.numberOfGreens;
+            this.currNumYellows = response.data.stat.numberOfYellows;
+            this.currNumReds = response.data.stat.numberOfReds;
+            this.currNumReadings = response.data.stat.numberOfReadings;
+            this.currNumPatientsSeen = response.data.stat.numberOfPatientsSeen;
+            this.currNumVHTs = response.data.stat.numberOfVHTs;
+            this.currNumReferrals = response.data.stat.numberOfReferrals;
+
+            this.prevNumGreens = response.data.statTrend.numberOfGreens;
+            this.prevNumYellows = response.data.statTrend.numberOfYellows;
+            this.prevNumReds = response.data.statTrend.numberOfReds;
+            this.prevNumReadings = response.data.statTrend.numberOfReadings;
+            this.prevNumPatientsSeen = response.data.statTrend.numberOfPatientsSeen;
+            this.prevNumVHTs = response.data.statTrend.numberOfVHTs;
+            this.prevNumReferrals = response.data.statTrend.numberOfReferrals;
+        });
+*/
         this.readingsIcon = this.getIcons(this.currNumReadings, this.prevNumReadings);
         this.referralsIcon = this.getIcons(this.currNumReferrals, this.prevNumReferrals);
         this.patientsIcon = this.getIcons(this.currNumPatientsSeen, this.prevNumPatientsSeen);
     },
     methods: {
-        setAllValsForTesting() {
+        setAllValsForTesting() { //dummy data used for testing the layout. To be removed once api endpoint is implemented
             this.currNumReds = 17;
             this.prevNumReds = 23;
             this.currNumYellows = 37;
@@ -131,7 +148,7 @@ Vue.component('admin_dashboard', {
             this.currNumReferrals = 35;
             this.prevNumReferrals = 54;
             this.currNumVHTs = 26;
-            this.prevNumVHT = 12;
+            this.prevNumVHTs = 12;
         },
         getIcons(currVal, prevVal) {
             let up = "trending_up";
@@ -143,7 +160,7 @@ Vue.component('admin_dashboard', {
                 return up;
             }
         },
-        currChartValues() {
+        currChartValues() { //sets up arrays for the data needed in the graph
             console.log(this.currNumReds);
            return [this.currNumGreens, this.currNumYellows, this.currNumReds];
         },
