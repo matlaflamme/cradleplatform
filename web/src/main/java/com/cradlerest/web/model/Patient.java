@@ -1,7 +1,6 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.*;
-import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
 import com.cradlerest.web.util.datagen.impl.StringGenerator;
 import org.jetbrains.annotations.NotNull;

@@ -106,3 +106,18 @@ CREATE TABLE symptom_reading_relation
         REFERENCES reading (id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE medication
+(
+    pid             VARCHAR(255)    NOT NULL,
+    med_id          INT             NOT NULL,
+    medication      VARCHAR(255),
+    dosage          VARCHAR(255),
+    usage_frequency VARCHAR(255),
+
+    PRIMARY KEY (pid, med_id),
+
+    FOREIGN KEY (pid)
+        REFERENCES patient(id)
+
+)
