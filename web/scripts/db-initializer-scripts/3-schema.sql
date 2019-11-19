@@ -72,7 +72,7 @@ CREATE TABLE referral
     id          INT PRIMARY KEY AUTO_INCREMENT,
     referred_by INT          NOT NULL,
     reading_id  INT          NOT NULL,
-    referred_to VARCHAR(255) NOT NULL,
+    referred_to VARCHAR(255) NOT NULL, -- Phone number of health clinic
     patient     VARCHAR(255) NOT NULL,
     timestamp   DATETIME     NOT NULL,
     closed_by   INT,
