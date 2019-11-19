@@ -30,8 +30,8 @@ public class Referral {
 	private Integer id;
 
 	@Column(name = "referred_by", nullable = false)
-	@DataGenRange(min = 3, max = 4)
-	private Integer referrerUserId;
+	@ForeignKey(User.class)
+	private String referrerUserName;
 
 	@Column(name = "referred_to", nullable = false)
 	@ForeignKey(HealthCentre.class)
@@ -65,12 +65,12 @@ public class Referral {
 
 	public void setId(Integer id) { this.id = id; }
 
-	public Integer getReferredByUserId() {
-		return referrerUserId;
+	public String getReferrerByUserName() {
+		return referrerUserName;
 	}
 
-	public void setReferredByUserId(Integer referredByUserId) {
-		this.referrerUserId = referredByUserId;
+	public void setReferrerByUserName(String referrerUserName) {
+		this.referrerUserName = referrerUserName;
 	}
 
 	public String getHealthCentrePhoneNumber() {

@@ -124,7 +124,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		Reading currentReading = readingManager.saveReadingView(readingView);
 
 		Referral currentReferral = new ReferralBuilder()
-				.referredByUserId(currentVHT.get().getId())
+				.referredByUsername(currentVHT.get().getUsername())
 				.referredToHealthCentrePhoneNumber(currentHealthCentre.get().getPhoneNumber())
 				.readingId(currentReading.getId())
 				.timestamp(referralTimestamp)

@@ -82,8 +82,8 @@ CREATE TABLE diagnosis
 CREATE TABLE referral
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
-    referred_by INT          NOT NULL,
     reading_id  INT          NOT NULL,
+    referred_by VARCHAR(255) NOT NULL,
     referred_to VARCHAR(255) NOT NULL, -- Phone number of health clinic
     patient     VARCHAR(255) NOT NULL,
     timestamp   DATETIME     NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE referral
     closed      DATETIME,
 
     FOREIGN KEY (referred_by)
-        REFERENCES user (id),
+        REFERENCES user (username),
 
     FOREIGN KEY (referred_to)
         REFERENCES health_centre (phone_number)

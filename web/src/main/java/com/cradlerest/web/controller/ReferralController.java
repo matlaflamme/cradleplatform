@@ -39,19 +39,22 @@ public class ReferralController {
 	 * It's kinda bugged? Enabling it renders the endpoint inaccessible (always 403-forbidden)
 	 *
 	 * Example of a valid request "Body":
+	 *
+	 *
 	 * {
-	 *     "patientName": "HY",
-	 *     "patientId": "001",
-	 *     "patientAge": 15,
-	 *     "gestationAge": 60,
-	 *     "systolic": 25,
-	 *     "diastolic": 20,
-	 *     "heartRate": 30,
-	 *     "readingColour": 1,
-	 *     "timestamp": "2019-10-23T02:25:43.453",
-	 *     "healthCentre": "Twilio",
-	 * 	   "VHT": "vht",
-	 *     "comments": ""
+	 *	 "referrerUserId": "",
+	 *   "healthCentrePhoneNumber": ""
+	 * 	 "reading": {
+	 * 	 	 "patientId": "001",
+	 * 	     "systolic": 25,
+	 * 	     "diastolic": 20,
+	 * 	     "heartRate": 30,
+	 * 	     "colour":0,
+	 *       "pregnant":true,
+	 *       "gestationalAge":90,
+	 *       "symptoms":["Headache"],
+	 *       "timestamp":"2019-10-24 09:32:10"
+	 * 	 }
 	 * }
 	 *
 	 *  For each referral the VHT has made, they can see:
