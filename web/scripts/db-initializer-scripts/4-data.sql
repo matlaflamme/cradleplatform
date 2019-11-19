@@ -85,6 +85,10 @@ VALUES (3, 1, '+12053465536', '001', '2019-09-24 12:31:34');
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
 VALUES (3, 3, '+12053465536', '002','2019-09-24 12:31:34');
 
+
+INSERT INTO diagnosis (patient, description, resolved)
+VALUES ('002', 'Is really sick', FALSE);
+
 -- Statically Defined Data
 INSERT INTO symptom VALUES (0, 'Headache');
 INSERT INTO symptom VALUES (1, 'Blurred Vision');

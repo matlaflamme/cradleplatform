@@ -67,6 +67,18 @@ CREATE TABLE reading
         REFERENCES user (id)
 );
 
+CREATE TABLE diagnosis
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    patient     VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    resolved    BOOLEAN NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (patient)
+        REFERENCES patient (id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE referral
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
@@ -76,6 +88,7 @@ CREATE TABLE referral
     patient     VARCHAR(255) NOT NULL,
     timestamp   DATETIME     NOT NULL,
     closed_by   INT,
+    diagnosis   INT,
     closed      DATETIME,
 
     FOREIGN KEY (referred_by)
@@ -94,6 +107,10 @@ CREATE TABLE referral
 
     FOREIGN KEY (patient)
         REFERENCES patient (id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (diagnosis)
+        REFERENCES diagnosis (id)
         ON DELETE CASCADE
 );
 
