@@ -19,12 +19,10 @@ public interface ReferralView {
 	int getReadingId();
 	String getHealthCentre();
 	String getHealthCentreNumber();
-	String getComments();
 	@JsonSerialize(using = DateSerializer.class)
 	Date getTimestamp();
 	@JsonSerialize(using = DateSerializer.class)
 	Date getClosed();
-	String getAccepter();
 
 	static ReferralView fromReferral(Referral referral, String hcName, String hcNumber, String pid) {
 		return new ReferralView() {
@@ -59,11 +57,6 @@ public interface ReferralView {
 			}
 
 			@Override
-			public String getComments() {
-				return referral.getComments();
-			}
-
-			@Override
 			public Date getTimestamp() {
 				return referral.getTimestamp();
 			}
@@ -71,11 +64,6 @@ public interface ReferralView {
 			@Override
 			public Date getClosed() {
 				return referral.getClosed();
-			}
-
-			@Override
-			public String getAccepter() {
-				return referral.getAccepter();
 			}
 		};
 	}

@@ -29,22 +29,21 @@ public class Referral {
 	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
-	// TODO: Update to foreign key once VHT models are created
 	@Column(name = "referred_by", nullable = false)
 	@DataGenRange(min = 3, max = 4)
-	private Integer referredByUserId;
+	private Integer referrerUserId;
 
 	@Column(name = "referred_to", nullable = false)
 	@ForeignKey(HealthCentre.class)
-	private Integer referredToHealthCenterId;
+	private String healthCentrePhoneNumber;
 
 	@Column(name = "reading_id", nullable = false)
 	@ForeignKey(Reading.class)
 	private Integer readingId;
 
-	@Column(name = "comments", nullable = false)
-	@Generator(GibberishSentenceGenerator.class)
-	private String comments;
+	@Column(name = "patient", nullable = false)
+	@ForeignKey(Patient.class)
+	private String patientId;
 
 	@Column(name = "timestamp", nullable = false)
 	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
@@ -54,11 +53,9 @@ public class Referral {
 	@DataGenDateRange(min = "2017-01-01", max = "2019-12-31")
 	private Date closed;
 
-	// TODO: User instaed of String
-	@Column(name = "accepter")
-	@Generator(NameGenerator.class)
-	@DataGenNullChance(0.5)
-	private String accepter;
+	@Column(name = "closed_by")
+	@DataGenRange(min = 3, max = 4)
+	private Integer reviewerUserId;
 
 	public Referral() {}
 
@@ -69,19 +66,19 @@ public class Referral {
 	public void setId(Integer id) { this.id = id; }
 
 	public Integer getReferredByUserId() {
-		return referredByUserId;
+		return referrerUserId;
 	}
 
 	public void setReferredByUserId(Integer referredByUserId) {
-		this.referredByUserId = referredByUserId;
+		this.referrerUserId = referredByUserId;
 	}
 
-	public Integer getReferredToHealthCenterId() {
-		return referredToHealthCenterId;
+	public String getHealthCentrePhoneNumber() {
+		return healthCentrePhoneNumber;
 	}
 
-	public void setReferredToHealthCenterId(Integer referredToHealthCenterId) {
-		this.referredToHealthCenterId = referredToHealthCenterId;
+	public void setHealthCentrePhoneNumber(String healthCentrePhoneNumber) {
+		this.healthCentrePhoneNumber = healthCentrePhoneNumber;
 	}
 
 	public Integer getReadingId() {
@@ -90,14 +87,6 @@ public class Referral {
 
 	public void setReadingId(Integer readingId) {
 		this.readingId = readingId;
-	}
-
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
@@ -120,11 +109,20 @@ public class Referral {
 		this.closed = timestamp;
 	}
 
-	public String getAccepter() {
-		return this.accepter;
+	public String getPatientId() {
+		return patientId;
 	}
 
-	public void setAccepter(String accepter) {
-		this.accepter = accepter;
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
 	}
+
+	public Integer getClosedByUserId() {
+		return reviewerUserId;
+	}
+
+	public void setClosedByUserId(Integer userId) {
+		this.reviewerUserId = userId;
+	}
+
 }

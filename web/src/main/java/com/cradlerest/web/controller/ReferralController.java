@@ -73,7 +73,7 @@ public class ReferralController {
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
-					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
+					"Health centre referred: " + savedReferral.getHealthCentrePhoneNumber();
 		} catch (Exception exception) {
 			return "There was an error processing your referral: " + exception.getMessage();
 		}
@@ -95,7 +95,7 @@ public class ReferralController {
 		try {
 			savedReferral = referralManagerService.saveReferral(requestBody);
 			return "Success:\n " +
-					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
+					"Health centre referred: " + savedReferral.getHealthCentrePhoneNumber();
 		} catch (Exception exception) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return exception.getMessage();

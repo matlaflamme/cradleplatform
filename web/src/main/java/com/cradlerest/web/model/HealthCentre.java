@@ -27,28 +27,27 @@ public class HealthCentre {
 	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
+	@Column(name = "phone_number", nullable = false, unique = true)
+	@Generator(PhoneNumberGenerator.class)
+	private String phoneNumber;
+
 	@Column(name = "name", nullable = false)
 	@Generator(NameGenerator.class)
 	private String name;
 
-	@Column(name = "zone", nullable = false)
-	@DataGenRange(min = 1, max = 16)
-	private Integer zone;
+	@Column(name = "location", nullable = false)
+	@Generator(NameGenerator.class)
+	private String location;
 
 	@Email(message = "invalid email")
-	@Column(name = "email", nullable = false)
+	@Column(name = "email")
 	@Generator(EmailGenerator.class)
 	private String email;
 
-	// Phone number for the health centre
-	@Column(name = "health_centre_number", nullable = false)
-	@Generator(PhoneNumberGenerator.class)
-	private String healthCentreNumber;
-
 	// Person in charge at this health centre
-	@Column(name = "manager_phone_number", nullable = false)
+	@Column(name = "alternate_phone_number")
 	@Generator(PhoneNumberGenerator.class)
-	private String managerPhoneNumber;
+	private String alternatePhoneNumber;
 
 	HealthCentre() {}
 
@@ -68,12 +67,20 @@ public class HealthCentre {
 		this.name = name;
 	}
 
-	public Integer getZone() {
-		return zone;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setZone(Integer zone) {
-		this.zone = zone;
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -84,20 +91,12 @@ public class HealthCentre {
 		this.email = email;
 	}
 
-	public String getHealthCentreNumber() {
-		return healthCentreNumber;
+	public String getAlternatePhoneNumber() {
+		return alternatePhoneNumber;
 	}
 
-	public void setHealthCentreNumber(String triagePhoneNumber) {
-		this.healthCentreNumber = triagePhoneNumber;
-	}
-
-	public String getManagerPhoneNumber() {
-		return managerPhoneNumber;
-	}
-
-	public void setManagerPhoneNumber(String managerPhoneNumber) {
-		this.managerPhoneNumber = managerPhoneNumber;
+	public void setAlternatePhoneNumber(String managerPhoneNumber) {
+		this.alternatePhoneNumber = managerPhoneNumber;
 	}
 
 }

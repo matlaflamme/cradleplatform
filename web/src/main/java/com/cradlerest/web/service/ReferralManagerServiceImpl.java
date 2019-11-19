@@ -96,7 +96,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		Patient currentPatient = patientManagerService.getPatientWithId(patientId);
 
 		Optional<User> currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
-		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
+		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByPhoneNumber(healthCentreName);
 		if (currentVHT.isEmpty()) {
 			throw new EntityNotFoundException("VHT username not found: " + requestBody.get("VHT").textValue());
 		}
@@ -125,9 +125,8 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		Referral currentReferral = new ReferralBuilder()
 				.referredByUserId(currentVHT.get().getId())
-				.referredToHealthCenterId(currentHealthCentre.get().getId())
+				.referredToHealthCentrePhoneNumber(currentHealthCentre.get().getPhoneNumber())
 				.readingId(currentReading.getId())
-				.comments(comments)
 				.timestamp(referralTimestamp)
 				.build();
 
@@ -144,7 +143,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
-		return Vec.copy(referralRepository.findAllByReferredToHealthCenterId(healthCentre.get().getId()))
+		return Vec.copy(referralRepository.findAllByHealthCentrePhoneNumber(healthCentre.get().getPhoneNumber()))
 				.map(this::computeReferralView)
 				.toList();
 	}
@@ -157,15 +156,12 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	private ReferralView computeReferralView(@NotNull Referral r) {
-		var optHc = healthCentreRepository.findById(r.getReferredToHealthCenterId());
+		var optHc = healthCentreRepository.findByPhoneNumber(r.getHealthCentrePhoneNumber());
 		if (optHc.isEmpty()) {
 			throw new RuntimeException("unable to find health center: constraint violation");
 		}
 		var hc = optHc.get();
 
-		var pid = readingRepository.findPatientIdOfReadingWithId(r.getReadingId());
-		assert pid != null; // constraint violation if it is
-
-		return ReferralView.fromReferral(r, hc.getName(), hc.getHealthCentreNumber(), pid);
+		return ReferralView.fromReferral(r, hc.getName(), hc.getPhoneNumber(), r.getPatientId());
 	}
 }
