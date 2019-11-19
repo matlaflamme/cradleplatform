@@ -2,8 +2,6 @@
   "name": "cradleplatform",
   "version": "1.0.0",
   "dependencies": {
-    "vue": "latest",
-    "vue": "latest",
     "vue": "latest"
   }
 }
