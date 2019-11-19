@@ -62,6 +62,9 @@ Vue.component('sidebar_item', {
             else if (clicked === "help") {
                 window.location.assign("/help")
             }
+            else if (clicked === "createNewPatient") {
+                window.location.assign("/createNewPatient")
+            }
         },
     }
 });
