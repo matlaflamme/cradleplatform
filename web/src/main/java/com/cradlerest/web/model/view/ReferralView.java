@@ -15,7 +15,7 @@ import java.util.Date;
 public interface ReferralView {
 	int getId();
 	String getPatientId();
-	String getReferrerByUserName();
+	String getReferrerUserName();
 	int getReadingId();
 	String getHealthCentre();
 	String getHealthCentreNumber();
@@ -37,13 +37,13 @@ public interface ReferralView {
 			}
 
 			@Override
-			public String getReferrerByUserName() {
-				return referral.getReferrerByUserName();
+			public String getReferrerUserName() {
+				return referral.getReferrerUserName();
 			}
 
 			@Override
 			public int getReadingId() {
-				return referral.getReadingId();
+				return referral.getReading().getId();
 			}
 
 			@Override

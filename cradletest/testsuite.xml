@@ -116,7 +116,30 @@
       ]]>
     </Response>
   </TestCase>
-
+  <TestCase name="Create New Referral">
+      <Request method="POST" uri="/api/referral/new">
+          <![CDATA[
+            {
+                "referrerUserName": "vht",
+                "healthCentrePhoneNumber": "+12053465538",
+                "reading": {
+                    "patientId": "001",
+                    "systolic": 25,
+                    "diastolic": 20,
+                    "heartRate": 30,
+                    "gestationalAge": 90,
+                    "colour": 0,
+                    "timestamp": "2019-10-24 09:32:10",
+                    "otherSymptoms": null,
+                    "readingNotes": null,
+                    "createdBy": 3,
+                    "pregnant": true
+                }
+            }
+            ]]>
+        </Request>
+      <Response status="200"/>
+  </TestCase>
   <TestCase name="Create New Reading">
     <Request method="POST" uri="/api/reading/save">
       <![CDATA[
@@ -154,30 +177,6 @@
     <Response status="400"/>
   </TestCase>
 
-    <TestCase name="Create New Referral">
-        <Request method="POST" uri="/api/referral/send">
-            <![CDATA[
-            {
-              "patientName": "HY",
-              "patientId": "001",
-              "patientAge": 15,
-              "gestationAge": 60,
-              "systolic": 25,
-              "diastolic": 20,
-              "heartRate": 30,
-              "readingColour": 1,
-              "symptoms": "[Blurred vision, Abdominal pain]",
-              "isPregnant": false,
-              "readingTimestamp": "2019-10-24 00:24:21.022",
-              "referralTimestamp": "2019-10-24 00:27:14.317",
-              "healthCentre": "Twilio",
-              "VHT": "vht",
-              "comments": ""
-            }
-            ]]>
-        </Request>
-        <Response status="200"/>
-    </TestCase>
     <TestCase name="Create New Referral - Bad Patient Id">
         <Request method="POST" uri="/api/referral/send">
             <![CDATA[
@@ -279,7 +278,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 4,
+              "id": 5,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -326,7 +325,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 4,
+              "id": 5,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,

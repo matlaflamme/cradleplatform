@@ -20,6 +20,7 @@ public interface ReferralManagerService {
 	 * @return Referral object saved
 	 */
 	Referral saveReferral(JsonNode requestBody) throws Exception;
+	Referral saveReferral(Referral referral) throws Exception;
 
 	List<ReferralView> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
 	List<ReferralView> findAllByOrderByTimestampDesc();

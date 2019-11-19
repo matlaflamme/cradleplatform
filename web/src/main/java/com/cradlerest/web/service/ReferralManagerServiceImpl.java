@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.ReferralController;
+import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.builder.ReadingViewBuilder;
@@ -12,11 +13,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static com.cradlerest.web.util.CopyFields.copyFields;
 
 /**
  * Implements ReferralManagerService
@@ -126,7 +130,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		Referral currentReferral = new ReferralBuilder()
 				.referredByUsername(currentVHT.get().getUsername())
 				.referredToHealthCentrePhoneNumber(currentHealthCentre.get().getPhoneNumber())
-				.readingId(currentReading.getId())
+//				.readingId(currentReading.getId())
 				.timestamp(referralTimestamp)
 				.build();
 
@@ -163,5 +167,33 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		var hc = optHc.get();
 
 		return ReferralView.fromReferral(r, hc.getName(), hc.getPhoneNumber(), r.getPatientId());
+	}
+
+	@Override
+	public Referral saveReferral(@Nullable Referral referral) throws BadRequestException, EntityNotFoundException {
+		validateReferral(referral);
+
+		ReadingView readingView = new ReadingView();
+		copyFields(referral.getReading(), readingView);
+		Reading reading = readingManager.saveReadingView(readingView);
+
+		referral.setTimestamp(reading.getTimestamp());
+		referral.setPatientId(reading.getPatientId());
+		referral.setReading(reading);
+
+		return referralRepository.save(referral);
+	}
+
+	private void validateReferral(@NotNull Referral referral) throws BadRequestException {
+		assertNotNull(referral, "referral");
+		assertNotNull(referral.getReading(), "reading");
+		assertNotNull(referral.getReferrerUserName(), "referral");
+		assertNotNull(referral.getHealthCentrePhoneNumber(), "reading");
+	}
+
+	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {
+		if (field == null) {
+			throw BadRequestException.missingField(fieldName);
+		}
 	}
 }

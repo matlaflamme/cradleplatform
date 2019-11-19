@@ -40,7 +40,7 @@ public class ReferralBuilder {
 	}
 
 	public ReferralBuilder referredByUsername(@NotNull String username) {
-		referral.setReferrerByUserName(username);
+		referral.setReferrerUserName(username);
 		return this;
 	}
 
@@ -49,10 +49,10 @@ public class ReferralBuilder {
 		return this;
 	}
 
-	public ReferralBuilder readingId(@NotNull Integer readingId) {
-		referral.setReadingId(readingId);
-		return this;
-	}
+//	public ReferralBuilder readingId(@NotNull Integer readingId) {
+//		referral.setReadingId(readingId);
+//		return this;
+//	}
 
 
 	public ReferralBuilder timestamp(@NotNull Date timestamp) {
@@ -66,9 +66,9 @@ public class ReferralBuilder {
 	}
 
 	private void validate() throws InstantiationError {
-		assertFieldNotNull(referral.getReferrerByUserName(), "referrerUserName");
+		assertFieldNotNull(referral.getReferrerUserName(), "referrerUserName");
 		assertFieldNotNull(referral.getHealthCentrePhoneNumber(), "healthCentrePhoneNumber");
-		assertFieldNotNull(referral.getReadingId(), "readingId");
+//		assertFieldNotNull(referral.getReadingId(), "readingId");
 		assertFieldNotNull(referral.getPatientId(), "patientId");
 		assertFieldNotNull(referral.getTimestamp(), "timestamp");
 	}

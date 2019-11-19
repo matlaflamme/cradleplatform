@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.*;
@@ -37,10 +38,6 @@ public class Referral {
 	@ForeignKey(HealthCentre.class)
 	private String healthCentrePhoneNumber;
 
-	@Column(name = "reading_id", nullable = false)
-	@ForeignKey(Reading.class)
-	private Integer readingId;
-
 	@Column(name = "patient", nullable = false)
 	@ForeignKey(Patient.class)
 	private String patientId;
@@ -57,6 +54,9 @@ public class Referral {
 	@DataGenRange(min = 3, max = 4)
 	private Integer reviewerUserId;
 
+	@OneToOne
+	private Reading reading;
+
 	public Referral() {}
 
 	public Integer getId() {
@@ -65,11 +65,11 @@ public class Referral {
 
 	public void setId(Integer id) { this.id = id; }
 
-	public String getReferrerByUserName() {
+	public String getReferrerUserName() {
 		return referrerUserName;
 	}
 
-	public void setReferrerByUserName(String referrerUserName) {
+	public void setReferrerUserName(String referrerUserName) {
 		this.referrerUserName = referrerUserName;
 	}
 
@@ -81,13 +81,13 @@ public class Referral {
 		this.healthCentrePhoneNumber = healthCentrePhoneNumber;
 	}
 
-	public Integer getReadingId() {
-		return readingId;
-	}
+//	public Integer getReadingId() {
+//		return readingId;
+//	}
 
-	public void setReadingId(Integer readingId) {
-		this.readingId = readingId;
-	}
+//	public void setReadingId(Integer readingId) {
+//		this.readingId = readingId;
+//	}
 
 	@JsonSerialize(using = DateSerializer.class)
 	public Date getTimestamp() {
@@ -117,12 +117,19 @@ public class Referral {
 		this.patientId = patientId;
 	}
 
-	public Integer getClosedByUserId() {
+	public Integer getReviewerUserId() {
 		return reviewerUserId;
 	}
 
-	public void setClosedByUserId(Integer userId) {
+	public void setReviewerUserId(Integer userId) {
 		this.reviewerUserId = userId;
 	}
 
+	public Reading getReading() {
+		return reading;
+	}
+
+	public void setReading(Reading reading) {
+		this.reading = reading;
+	}
 }

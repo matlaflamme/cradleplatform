@@ -73,6 +73,9 @@ public class Reading {
 	@DataGenRange(min = 3, max = 4) // always generate as the id for the `vht` user
 	private Integer createdBy;
 
+	@OneToOne(mappedBy="reading")
+	private Referral referral;
+
 	public Reading() {}
 
 	public Integer getId() {

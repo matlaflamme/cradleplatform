@@ -83,7 +83,7 @@ INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
 VALUES ('vht', 1, '+12053465536', '001', '2019-09-24 12:31:34');
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES ('vht', 3, '+12053465536', '001','2019-09-24 12:31:34');
+VALUES ('vht', 2, '+12053465536', '001','2019-09-24 12:31:34');
 
 
 INSERT INTO diagnosis (patient, description, resolved)

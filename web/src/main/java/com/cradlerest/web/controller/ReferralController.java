@@ -1,5 +1,6 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.view.ReferralView;
@@ -12,8 +13,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 
 /**
@@ -35,37 +34,37 @@ public class ReferralController {
 	/**
 	 * Handles Twilio post request (VHT has no internet)
 	 * TODO: Request validator. Right now, anyone can post to this url
-	 * @see com.twilio.security.RequestValidator
-	 * It's kinda bugged? Enabling it renders the endpoint inaccessible (always 403-forbidden)
-	 *
-	 * Example of a valid request "Body":
-	 *
-	 *
-	 * {
-	 *	 "referrerUserName": "",
-	 *   "healthCentrePhoneNumber": ""
-	 * 	 "reading": {
-	 * 	 	 "patientId": "001",
-	 * 	     "systolic": 25,
-	 * 	     "diastolic": 20,
-	 * 	     "heartRate": 30,
-	 * 	     "colour":0,
-	 *       "pregnant":true,
-	 *       "gestationalAge":90,
-	 *       "symptoms":["Headache"],
-	 *       "timestamp":"2019-10-24 09:32:10"
-	 * 	 }
-	 * }
-	 *
-	 *  For each referral the VHT has made, they can see:
-	 *  Health centre referred to,
-	 *  TODO: Distance from health centre,
-	 *  TODO: Mode of transport to reach health centre
-	 *  TODO: Repository exception handling
 	 *
 	 * @param request Twilio post response body: https://www.twilio.com/docs/sms/twiml#twilios-request-to-your-application
-	 * @throws Exception
 	 * @return A SMS from Twilio number to whoever sent the text.
+	 * @throws Exception
+	 * @see com.twilio.security.RequestValidator
+	 * It's kinda bugged? Enabling it renders the endpoint inaccessible (always 403-forbidden)
+	 * <p>
+	 * Example of a valid request "Body":
+	 * <p>
+	 * <p>
+	 *  {
+	 *   "referrerUserName": "",
+	 *   "healthCentrePhoneNumber": ""
+	 *   "reading": {
+	 *      "patientId": "001",
+	 *      "systolic": 25,
+	 *      "diastolic": 20,
+	 *      "heartRate": 30,
+	 *      "colour":0,
+	 *      "pregnant":true,
+	 *      "gestationalAge":90,
+	 *      "symptoms":["Headache"],
+	 *      "timestamp":"2019-10-24 09:32:10"
+	 *    }
+	 *  }
+	 * <p>
+	 * For each referral the VHT has made, they can see:
+	 * Health centre referred to,
+	 * TODO: Distance from health centre,
+	 * TODO: Mode of transport to reach health centre
+	 * TODO: Repository exception handling
 	 */
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
 	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws Exception {
@@ -107,16 +106,25 @@ public class ReferralController {
 
 	/**
 	 * Returns all referrals sorted by timestamp in descending order
+	 *
 	 * @return
 	 */
 	@GetMapping("/all")
-	public @ResponseBody List<ReferralView> allReferralsSortByTimestamp() {
+	public @ResponseBody
+	List<ReferralView> allReferralsSortByTimestamp() {
 		return referralManagerService.findAllByOrderByTimestampDesc();
 	}
 
 	@GetMapping("/{healthCentreName}/all")
-	public @ResponseBody List<ReferralView> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
+	public @ResponseBody
+	List<ReferralView> healthCentreReferrals(@PathVariable("healthCentreName") String healthCentreName) throws EntityNotFoundException {
 		return referralManagerService.findAllByHealthCentre(healthCentreName);
 	}
 
+
+	@PostMapping("/new")
+	public Referral saveReferral(@RequestBody Referral referral) throws Exception {
+		return referralManagerService.saveReferral(referral);
+
+	}
 }
