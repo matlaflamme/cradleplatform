@@ -8,6 +8,8 @@ import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -71,9 +73,24 @@ public class PatientController {
 		return readingManager.getAllReadingViewsForPatient(id);
 	}
 
+
 	@PostMapping("")
 	public Patient createPatient(@RequestBody Patient patient) throws Exception {
 		return patientManagerService.savePatient(patient);
+	}
+
+		@PostMapping("/{id}/addMedication")
+	public Patient addMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
+		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
+		personToAddMedicationTo.addMedication(medication);
+		return patientManagerService.savePatient(personToAddMedicationTo);
+	}
+
+	@PostMapping("/{id}/removeMedication")
+	public Patient removeMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
+		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
+		personToAddMedicationTo.removeMedication(medication);
+		return patientManagerService.savePatient(personToAddMedicationTo);
 	}
 
 	@Deprecated
