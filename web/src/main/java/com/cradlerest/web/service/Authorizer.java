@@ -1,5 +1,6 @@
 package com.cradlerest.web.service;
 
+import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -41,4 +42,60 @@ public interface Authorizer {
 	 * @return {@code true} if access is granted, otherwise {@code false}
 	 */
 	boolean canAccessReading(int id);
+
+	/**
+	 * Method reference interface for an {@code Authorizer} method which
+	 * takes no parameters.
+	 */
+	interface AccessRequest {
+		boolean call(Authorizer a);
+	}
+
+	/**
+	 * Method reference interface for an {@code Authorizer} method which
+	 * takes a single parameter.
+	 */
+	interface SingletonAccessRequest<T> {
+		boolean call(Authorizer a, T t);
+	}
+
+	/**
+	 * Invokes the given access request and throws an exception if it returns
+	 * {@code false}.
+	 *
+	 * Usage example:
+	 * <code>
+	 *     authorizerFactory.construct(auth)
+	 *         .check(Authorizer::canListPatients);
+	 * </code>
+	 *
+	 * @param r An access request method. Should be passed as a method reference
+	 *          to one of {@code Authorizer}'s methods.
+	 * @throws AccessDeniedException If the access request was denied.
+	 */
+	default void check(AccessRequest r) throws AccessDeniedException {
+		if (!r.call(this)) {
+			throw new AccessDeniedException("Permission denied");
+		}
+	}
+
+	/**
+	 * Invokes the given access request and throws an exception if it returns
+	 * {@code false}.
+	 *
+	 * Usage example:
+	 * <code>
+	 *     authorizerFactory.construct(auth)
+	 *         .check(Authorizer::canAccessPatient, somePatientId);
+	 * </code>
+	 *
+	 * @param r An access request method. Should be passed as a method reference
+	 *          to one of {@code Authorizer}'s methods.
+	 * @throws AccessDeniedException If the access request was denied.
+	 */
+	default <T> void check(SingletonAccessRequest<T> r, T t) throws AccessDeniedException {
+		if (!r.call(this, t)) {
+			throw new AccessDeniedException("Permission denied: entity " + t.toString());
+		}
+	}
 }

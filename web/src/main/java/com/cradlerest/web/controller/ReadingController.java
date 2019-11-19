@@ -1,11 +1,11 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
+import com.cradlerest.web.service.Authorizer;
 import com.cradlerest.web.service.AuthorizerFactory;
 import com.cradlerest.web.service.ReadingManager;
 import org.springframework.security.core.Authentication;
@@ -35,13 +35,8 @@ public class ReadingController {
 			throw BadRequestException.missingField("patientId");
 		}
 
-		var authorizer = authorizerFactory.construct(auth);
-		var patientId = readingView.getPatientId();
-		if (!authorizer.canAccessPatient(patientId)) {
-			var errMsg = String.format("Access denied: Patient %s", patientId);
-			throw new AccessDeniedException(errMsg);
-		}
-
+		authorizerFactory.construct(auth)
+				.check(Authorizer::canAccessPatient, readingView.getPatientId());
 		try {
 			return readingManager.saveReadingView(readingView);
 		} catch (InstantiationError | EntityNotFoundException e) {
@@ -58,12 +53,8 @@ public class ReadingController {
 	 */
 	@GetMapping("{id}")
 	public ReadingView get(Authentication auth, @PathVariable("id") Integer readingId) throws Exception {
-		var authorizer = authorizerFactory.construct(auth);
-		if (!authorizer.canAccessReading(readingId)) {
-			var errMsg = String.format("Access denied: Reading %d", readingId);
-			throw new AccessDeniedException(errMsg);
-		}
-
+		authorizerFactory.construct(auth)
+				.check(Authorizer::canAccessReading, readingId);
 		return readingManager.getReadingView(readingId);
 	}
 
