@@ -42,7 +42,7 @@ public class ReferralController {
 	 *
 	 *
 	 * {
-	 *	 "referrerUserId": "",
+	 *	 "referrerUserName": "",
 	 *   "healthCentrePhoneNumber": ""
 	 * 	 "reading": {
 	 * 	 	 "patientId": "001",
