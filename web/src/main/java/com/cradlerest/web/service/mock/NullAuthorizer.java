@@ -9,17 +9,22 @@ import org.jetbrains.annotations.NotNull;
 public class NullAuthorizer implements Authorizer {
 
 	@Override
+	public boolean canListPatients() {
+		return true;
+	}
+
+	@Override
 	public boolean canAccessPatient(@NotNull String id) {
 		return true;
 	}
 
 	@Override
-	public boolean canAccessReading(int id) {
+	public boolean canCreatePatient() {
 		return true;
 	}
 
 	@Override
-	public boolean canCreatePatient() {
+	public boolean canAccessReading(int id) {
 		return true;
 	}
 }

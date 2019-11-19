@@ -54,12 +54,20 @@ public class PatientController {
 	}
 
 	@GetMapping("/all")
-	public List<Patient> all() {
+	public List<Patient> all(Authentication auth) throws Exception {
+		var authorizer = authorizerFactory.construct(auth);
+		if (!authorizer.canListPatients()) {
+			throw new AccessDeniedException("Permission denied");
+		}
 		return patientManagerService.getAllPatients();
 	}
 
 	@GetMapping("/all_with_latest_reading")
-	public List<?> allSummary() {
+	public List<?> allSummary(Authentication auth) throws Exception {
+		var authorizer = authorizerFactory.construct(auth);
+		if (!authorizer.canListPatients()) {
+			throw new AccessDeniedException("Permission denied");
+		}
 		return patientManagerService.getAllPatientsWithLastReading();
 	}
 
