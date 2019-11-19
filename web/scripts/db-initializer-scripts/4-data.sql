@@ -77,17 +77,17 @@ VALUES ('FSU',  '+12053465530', 'burnaby', '+12053465531');
 
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES (3, 3, '+12053465536', '001','2019-09-24 12:31:34');
+VALUES ('vht', 3, '+12053465536', '001','2019-09-24 12:31:34');
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES (3, 1, '+12053465536', '001', '2019-09-24 12:31:34');
+VALUES ('vht', 1, '+12053465536', '001', '2019-09-24 12:31:34');
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES (3, 3, '+12053465536', '001','2019-09-24 12:31:34');
+VALUES ('vht', 3, '+12053465536', '001','2019-09-24 12:31:34');
 
 
 INSERT INTO diagnosis (patient, description, resolved)
-VALUES ('002', 'Is really sick', FALSE);
+VALUES ('002', 'Is really sick', FALSE );
 
 -- Statically Defined Data
 INSERT INTO symptom VALUES (0, 'Headache');
@@ -96,3 +96,4 @@ INSERT INTO symptom VALUES (2, 'Abdominal Pain');
 INSERT INTO symptom VALUES (3, 'Bleeding');
 INSERT INTO symptom VALUES (4, 'Feverish');
 INSERT INTO symptom VALUES (5, 'Unwell');
+
