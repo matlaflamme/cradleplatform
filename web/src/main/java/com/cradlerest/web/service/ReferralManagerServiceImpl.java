@@ -118,7 +118,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
-				.symptoms(symptomsArrNoTrailingWhiteSpace) // TODO: Symptoms are not saved! BUG
+				.symptoms(symptomsArrNoTrailingWhiteSpace)
 				.build();
 
 		Reading currentReading = readingManager.saveReadingView(readingView);
@@ -140,6 +140,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 */
 	@Override
 	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException {
+		// TODO: findByName will throw a NonUniqueResultException if there are >1 health centre with same name.
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
