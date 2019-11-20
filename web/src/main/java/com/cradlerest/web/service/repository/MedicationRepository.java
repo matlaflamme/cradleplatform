@@ -1,8 +1,6 @@
 package com.cradlerest.web.service.repository;
 
 import com.cradlerest.web.model.Medication;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.User;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -70,7 +70,7 @@ public class Patient {
 
 	// not part of the database
 	@Transient
-	private ArrayList<Medication> medications;
+	private List<Medication> medications;
 
 	public Patient() {
 	}
@@ -182,11 +182,11 @@ public class Patient {
 		this.generalNotes = generalNotes;
 	}
 
-	public ArrayList<Medication> getMedications() {
+	public List<Medication> getMedications() {
 		return medications;
 	}
 
-	public void setMedications(ArrayList<Medication> medications) {
+	public void setMedications(List<Medication> medications) {
 		this.medications = medications;
 	}
 

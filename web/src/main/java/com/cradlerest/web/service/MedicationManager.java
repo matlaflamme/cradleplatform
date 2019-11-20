@@ -25,7 +25,7 @@ public interface MedicationManager {
     List<Medication> getAllMedicationsForPatient(@NotNull String patientId) throws EntityNotFoundException;
 
     /**
-     * Deconstructs and persists a given reading view.
+     * Deconstructs and persists a given medication.
      * @param medication A Medication.
      * @return The saved medication.
      */

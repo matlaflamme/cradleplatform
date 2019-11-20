@@ -1,48 +1,50 @@
 package com.cradlerest.web.model;
 
-import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 
+
+
+@Entity
+
+@IdClass(Medication.IdType.class)
+@Table(name = "medication")
 public class Medication {
 
     public static class IdType implements Serializable {
-        private Integer patientId;
-
-        private Integer medicationId;
+        private String patientId;
+        private Integer medId;
 
         public IdType() {
         }
 
-        public IdType(Integer patientId, Integer medicationId) {
+        public IdType(String patientId, Integer medId) {
             this.patientId = patientId;
-            this.medicationId = medicationId;
+            this.medId = medId;
         }
 
-        public Integer getPatientId() {
+        public String getPatientId() {
             return patientId;
         }
 
-        public void setPatientId(Integer patientId) {
+        public void setPatientId(String patientId) {
             this.patientId = patientId;
         }
 
-        public Integer getMedicationId() {
-            return medicationId;
+        public Integer getMedId() {
+            return medId;
         }
 
-        public void setMedicationId(Integer medicationId) {
-            this.medicationId = medicationId;
+        public void setMedId(Integer medId) {
+            this.medId = medId;
         }
 
         @Override
         public int hashCode() {
-            return (patientId << 1) ^ medicationId;
+            return patientId.hashCode() * medId * 7;
         }
 
         @Override
@@ -50,7 +52,7 @@ public class Medication {
             // this is a composite primary key,
             // neither of these fields should be null
             assert patientId != null;
-            assert medicationId != null;
+            assert medId != null;
 
             var validComp = obj != null
                     && obj.hashCode() == hashCode()
@@ -60,14 +62,14 @@ public class Medication {
             }
 
             var other = (IdType) obj;
-            return patientId.equals(other.patientId) && medicationId.equals(other.medicationId);
+            return patientId.equals(other.patientId) && medId.equals(other.medId);
         }
     }
 
     @Id
     @Column(name = "pid", nullable = false)
     @ForeignKey(Patient.class)
-    private Integer patientId;
+    private String patientId;
 
     @Id
     @Column(name = "med_id")
@@ -83,7 +85,7 @@ public class Medication {
     private String usageFrequency;
 
     public Medication(
-            Integer patientId,
+            String patientId,
             Integer medId,
             String medication,
             String dosage,
@@ -95,14 +97,23 @@ public class Medication {
         this.dosage = dosage;
         this.usageFrequency = usageFrequency;
     }
+    public Medication(
+            String medication,
+            String dosage,
+            String usageFrequency
+    ) {
+        this.medication = medication;
+        this.dosage = dosage;
+        this.usageFrequency = usageFrequency;
+    }
 
     public Medication(){}
 
-    public Integer getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Integer patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 

@@ -8,6 +8,7 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.MedicationManager;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
+import com.cradlerest.web.service.config.MedicationManagerConfig;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -44,10 +45,12 @@ public class PatientController {
 
 	public PatientController(
 			PatientManagerService patientManagerService,
-			ReadingManager readingManager
+			ReadingManager readingManager,
+			MedicationManager medicationManager
 	) {
 		this.patientManagerService = patientManagerService;
 		this.readingManager = readingManager;
+		this.medicationManager = medicationManager;
 	}
 
 	@GetMapping("/all")
@@ -67,7 +70,9 @@ public class PatientController {
 
 	@GetMapping("/{id}/info")
 	public Patient info(@PathVariable("id") String id) throws Exception {
-		return patientManagerService.getPatientWithId(id);
+		Patient AddMedicationsTo = patientManagerService.getPatientWithId(id);
+		AddMedicationsTo.setMedications(medicationManager.getAllMedicationsForPatient(id));
+		return AddMedicationsTo;
 	}
 
 	@GetMapping("/{id}/readings")
@@ -82,12 +87,15 @@ public class PatientController {
 	}
 
 	@PostMapping("/{id}/addMedication")
-	public Patient addMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
-		return null;
+	public Medication addMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
+		Integer medId = medicationManager.getAllMedicationsForPatient(id).size();
+		medication.setPatientId(id);
+		medication.setMedId(medId);
+		return medicationManager.saveMedication(medication);
 	}
 
 	@PostMapping("/{id}/removeMedication")
-	public Patient removeMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
+	public Medication removeMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
 		return null;
 	}
 
