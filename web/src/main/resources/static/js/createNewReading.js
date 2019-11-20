@@ -5,6 +5,7 @@ Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
         e1: 0,
+        snackbar: false,
         symptoms: [],
         medications:[],
         //For input validation. @TODO rules refuse to recognize these.
@@ -60,11 +61,15 @@ Vue.component('new_reading',{
                     // medications: this.medications //Not implemented in the server yet
                 }).catch(error => {
                     console.error(error);
+                    this.snackbar = true;
                 }
                 ).then(response => {
                     console.log(response)
                     if (response.status == 200) {
                         window.location.assign("/patientSummary?id=" + this.patientID);
+                    }
+                    else {
+                        this.snackbar = true;
                     }
                 });
 
@@ -100,6 +105,7 @@ Vue.component('new_reading',{
         }
     },
     template: //@TODO Fix indentation
+    '<div>' +
     '    <v-stepper v-model="e1">\n' +
         '      <v-stepper-header>\n' +
         '        <v-stepper-step :complete="e1 > 1" step="1" editable>Vitals</v-stepper-step>\n' +
@@ -214,7 +220,17 @@ Vue.component('new_reading',{
         '          </v-btn>\n' +
         '        </v-stepper-content>\n' +
         '      </v-stepper-items>\n' +
-        '    </v-stepper>'
+        '    </v-stepper>' +
+        '<v-snackbar v-model="snackbar">' +
+            'Patient ID does not exist' +
+            `<v-btn
+                color="pink"
+                @click="snackbar = false"
+            >` +
+            'Close' +
+            '</v-btn>' +
+        '</v-snackbar>' +
+    '</div>'
 
 });
 
