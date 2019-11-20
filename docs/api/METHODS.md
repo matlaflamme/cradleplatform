@@ -485,3 +485,31 @@ Returns a JSON object like the following with a single `id` field for the health
 
 Returns a 404-NotFound error if unable to find the requested user.
 
+
+### `POST /api/user/check-password`
+
+Checks that a plain text password, sent in the request body matches the password
+of the requesting user.
+
+#### Request Body
+
+A string containing the password to check against the current password.
+
+#### Returns
+
+A JSON boolean (i.e., literal `true` or `false`), **not a string** denoting wether
+the sent string matches the current password or not.
+
+
+### `POST /api/user/update-password`
+
+Changes the password for the requesting user to one supplied in the request body.
+
+#### Request Body
+
+A string containing a plain text password to use as the requesting user's new 
+password. The password must be longer than 8 characters in length.
+
+#### Errors
+
+Throws an exception if the new password does not meet complexity requirements.
