@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -85,11 +87,26 @@ public class PatientController {
 		return readingManager.getAllReadingViewsForPatient(id);
 	}
 
+
 	@PostMapping("")
 	public Patient createPatient(Authentication auth, @RequestBody Patient patient) throws Exception {
 		authorizerFactory.construct(auth)
 				.check(Authorizer::canCreatePatient);
 		return patientManagerService.savePatient(patient);
+	}
+
+		@PostMapping("/{id}/addMedication")
+	public Patient addMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
+		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
+		personToAddMedicationTo.addMedication(medication);
+		return patientManagerService.savePatient(personToAddMedicationTo);
+	}
+
+	@PostMapping("/{id}/removeMedication")
+	public Patient removeMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
+		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
+		personToAddMedicationTo.removeMedication(medication);
+		return patientManagerService.savePatient(personToAddMedicationTo);
 	}
 
 	@Deprecated
