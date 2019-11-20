@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Medication;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
+import com.cradlerest.web.service.MedicationManager;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ import java.util.List;
 public class PatientController {
 
 	private PatientManagerService patientManagerService;
-
+	private MedicationManager medicationManager;
 	private ReadingManager readingManager;
 
 	public PatientController(
