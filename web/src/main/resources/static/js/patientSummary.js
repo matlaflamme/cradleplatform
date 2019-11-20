@@ -164,13 +164,6 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
                         text: 'Date of reading'
                     }
                 },
-                //   yaxis: {
-                //       title: {
-                //           text: 'Temperature'
-                //        },
-                //        min: 5,
-                //        max: 40
-                //    },
                 legend: {
                     position: 'top',
                     horizontalAlign: 'right',
@@ -299,7 +292,11 @@ Vue.component('patient_info', {
                 '<v-list-item-content>' +
                     '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
                     '<ul v-if="takingMedication" className="list-group" v-for="medication in medications">\n'+
-                        '<li className="list-group-item" class="pb-1">{{medication}}</li>\n'+
+                        '<li className="list-group-item" class="pb-1">{{medication}}        '+
+                            '<v-btn small outlined color="red">' +
+                                '<v-icon>delete</v-icon>' +
+                            '</v-btn>' +
+                        '</li>' +
                     '</ul>\n'+
                     '<ul v-if="!takingMedication" className="list-group">' +
                         '<li className="list-group-item" class="pb-1">Not currently taking any medications</li>' +
