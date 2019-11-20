@@ -1,6 +1,6 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.service.repository.ReferralRepository;
+import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 
@@ -9,11 +9,11 @@ import org.springframework.security.core.Authentication;
  */
 public class HealthWorkerAuthorizer extends Authorizer {
 
-	private ReferralRepository referralRepository;
+	private PatientManagerService patientManager;
 
-	public HealthWorkerAuthorizer(Authentication auth, ReferralRepository referralRepository) {
+	public HealthWorkerAuthorizer(Authentication auth, PatientManagerService patientManager) {
 		super(auth);
-		this.referralRepository = referralRepository;
+		this.patientManager = patientManager;
 	}
 
 	@Override
@@ -21,9 +21,27 @@ public class HealthWorkerAuthorizer extends Authorizer {
 		return true;
 	}
 
+	/**
+	 * Determines whether a health worker user can access a patient with a given
+	 * identifier. This is true iff the patient has been referred to the health
+	 * centre that the worker works at.
+	 * @param id The identifier of the patient to request access to.
+	 * @return {@code true} or {@code false} whether a health worker can access
+	 * 	a patient with a given id;
+	 */
 	@Override
 	public boolean canAccessPatient(@NotNull String id) {
-		return false;
+		var details = getUserDetails();
+		var healthCentreId = details.getWorksAtHealthCentreId();
+
+		// If this health worker is not part of a health centre, then it cannot
+		// access any patients.
+		if (healthCentreId == null) {
+			return false;
+		}
+
+		var patients = Vec.copy(patientManager.getPatientsReferredToHealthCenter(healthCentreId));
+		return patients.any(p -> p.getPatient().getId().equals(id));
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.AccessDeniedException;
+import com.cradlerest.web.model.UserDetailsImpl;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 
@@ -16,12 +17,8 @@ public abstract class Authorizer {
 
 	private Authentication auth;
 
-	protected Authorizer(Authentication auth) {
+	protected Authorizer(@NotNull Authentication auth) {
 		this.auth = auth;
-	}
-
-	protected Authentication getAuth() {
-		return auth;
 	}
 
 	/**
@@ -108,5 +105,14 @@ public abstract class Authorizer {
 		if (!r.call(this, t)) {
 			throw new AccessDeniedException("Permission denied: entity " + t.toString());
 		}
+	}
+
+	Authentication getAuth() {
+		return auth;
+	}
+
+	UserDetailsImpl getUserDetails() {
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		return (UserDetailsImpl) auth.getPrincipal();
 	}
 }
