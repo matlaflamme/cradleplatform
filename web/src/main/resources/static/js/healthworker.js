@@ -13,6 +13,7 @@ let test = new Vue({
                 { text: 'Add', value: 'add', sortable: false },
             ],
             rows: [], //empty to start
+            search: ''
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
