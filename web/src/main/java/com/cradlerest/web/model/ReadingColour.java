@@ -64,6 +64,18 @@ public enum ReadingColour {
 		return analysis;
 	}
 
+	public boolean isRed(){
+		return this == RED_DOWN || this == RED_UP;
+	}
+
+	public boolean isYellow(){
+		return this == YELLOW_DOWN || this == YELLOW_UP;
+	}
+
+	public boolean isGreen(){
+		return this == GREEN;
+	}
+
 	private static double getShockIndex(int systolic, int heartRate) {
 		// Div-zero guard:
 		if (systolic == 0) {

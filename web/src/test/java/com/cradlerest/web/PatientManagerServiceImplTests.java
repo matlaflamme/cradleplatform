@@ -22,9 +22,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Optional;
+import javax.validation.constraints.AssertTrue;
+import java.math.BigInteger;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -67,6 +67,7 @@ public class PatientManagerServiceImplTests {
 				.zoneNumber("1")
 				.birthYear(1998)
 				.sex(Sex.MALE)
+				.medication("Tylenol")
 				.lastUpdated(date)
 				.build();
 
@@ -93,6 +94,8 @@ public class PatientManagerServiceImplTests {
                 .isEqualTo("1");
 		assertThat(result.getLastUpdated())
 				.isEqualTo(new GregorianCalendar(2014, 10, 11).getTime());
+		assertThat(result.getMedication())
+				.isEqualTo("Tylenol");
 	}
 
 	@Test(expected = EntityNotFoundException.class)

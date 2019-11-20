@@ -34,6 +34,7 @@ VALUES ('001',          -- id
         '1',            -- zone number
         1995,           -- date of birth
         1,              -- sex
+        NULL,           -- medication
         NULL,           -- medical history
         NULL,           -- drug history
         '2019-09-20 20:12:32',  -- last updated
@@ -47,6 +48,7 @@ VALUES ('002',          -- id
         '3',            -- zone number
         1984,           -- date of birth
         0,              -- sex
+        'Medication Z for Y', -- medication
         'hospitalized for X, taking medication for Y', -- medical history
         'there is some history with some drugs', -- drug history
         '2019-09-20 20:12:32',
