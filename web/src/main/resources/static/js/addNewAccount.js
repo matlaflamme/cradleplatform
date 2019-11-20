@@ -6,6 +6,7 @@ Vue.component('new_account_form', {
     },
     data: () => ({
         snackbar: false,
+        errSnackbar: false,
         valid: true,
         name: '',
         nameRules: [
@@ -56,8 +57,13 @@ Vue.component('new_account_form', {
                     password: this.password,
                     roles: this.row
                 }
-            ).then(response => {console.log(response)});
-            this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
+            ).catch( error => {
+                console.log(error);
+                this.errSnackbar = true; //error message
+                }
+                ).then(response => {
+                    this.snackbar = true; //success message
+            });
         }
     },
     template:
@@ -132,8 +138,17 @@ Vue.component('new_account_form', {
                 'Close' +
             '</v-btn>' +
         '</v-snackbar>' +
+        '<v-snackbar v-model="errSnackbar">' +
+        'Username already exists' +
+        `<v-btn
+                color="pink"
+                @click="snackbar = false"
+            >` +
+        'Close' +
+        '</v-btn>' +
+        '</v-snackbar>' +
     '</div>'
-})
+});
 
 new Vue({
     el: '#app',
