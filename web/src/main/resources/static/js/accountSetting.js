@@ -25,9 +25,14 @@ Vue.component('change_password', {
     }),
     methods: {
         validate () {
+            // checking if the new password is entered correctly
             if (this.newPass != this.confirmPass){
                 this.failSnackbar = true;
             }
+            // checking whether the old password is correct
+            console.log(this.oldPass);
+            axios.post('/api/user/check-password', this.oldPass).then(response => {console.log(response)});
+
             if (this.$refs.change_password.validate()) {
                 this.submit();
             }
@@ -39,14 +44,13 @@ Vue.component('change_password', {
             this.$refs.newPatchange_passwordientForm.resetValidation()
         },
         submit () {
-            console.log(this);
-            axios.post('/api/user/',
-                {
-
-
-                }
-            ).then(response => {console.log(response)});
-            this.successSnackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
+            // console.log(this);
+            // axios.post('/api/user/',
+            //     {
+            //
+            //     }
+            // ).then(response => {console.log(response)});
+            // this.successSnackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
         }
     },
     template:
@@ -62,7 +66,7 @@ Vue.component('change_password', {
                     :type="showPassword ? 'text' : 'password'"
                     @click:append="showPassword = !showPassword"required></v-text-field>
                     <v-text-field v-model="confirmPass" :rules="newPassRules" label="Confirm new password" :append-icon="showConfirmPassword ? 'visibility' : 'visibility_off'"
-                    :type="showPassword ? 'text' : 'password'"
+                    :type="showConfirmPassword ? 'text' : 'password'"
                     @click:append="showConfirmPassword = !showConfirmPassword"required></v-text-field>
                     <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Change Password</v-btn>
                     <v-btn color="error" class="mr-4" @click="reset"> Clear Form</v-btn>
