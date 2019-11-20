@@ -220,12 +220,16 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
             '</template>' +
             '<template v-slot:expanded-item="{ headers, item }">' + //this section is for what shows in the expanded row
                 '<td :colspan="headers.length">' +
-                    '<v-list-item three-line>' +
+                    '<v-list-item>' +
                         '<v-list-item-content>' +
-                            '<ul className="list-group">\n'+
-                                '<li className="list-group-item" class="pb-1">Gestational Age: {{item.gestationalAge}}</li>\n'+
-                                '<li className="list-group-item" class="pb-1">Symptoms: {{item.symptoms}}</li>\n'+
-                                '<li className="list-group-item" class="pb-1">Other Notes: {{item.readingNotes}}</li>\n'+
+                            '<ul >\n'+
+                                '<li >Gestational Age: {{item.gestationalAge}}</li>\n'+
+                                '<li>Symptoms'+
+                                    '<ul v-for="symptom in item.symptoms">\n'+
+                                        '<li>{{symptom}}</li>\n'+
+                                    '</ul>\n'+
+                                '</li>' +
+                                '<li>Other Notes: {{item.readingNotes}}</li>\n'+
                             '</ul>\n' +
                         '</v-list-item-content>' +
                     '</v-list-item>' +
