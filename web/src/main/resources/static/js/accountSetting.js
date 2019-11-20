@@ -11,7 +11,7 @@ Vue.component('change_password', {
         oldPass: '',
         showOldPassword: false,
         oldPassRules: [
-            v => !!v || 'old password is required'
+            v => !!v || 'current password is required'
         ],
         newPass: '',
         showPassword: false,
