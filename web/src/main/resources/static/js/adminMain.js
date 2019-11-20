@@ -74,6 +74,7 @@ Vue.component('mychart', {
 
 Vue.component('admin_dashboard', {
     data: () => ({
+        stats: null, //initially null so that v-if statement will return false
         currNumReds: 0,
         prevNumReds: 0,
         currNumYellows: 0,
@@ -93,6 +94,7 @@ Vue.component('admin_dashboard', {
         patientsIcon: "",
     }),
     template: //this is the main window
+    '<div v-if="stats">' + //v-if is there so the component only renders once the axios request has returned
         '<v-row>\n' +
             '<v-col cols="12" md="4">\n' +
                 '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" :icon="referralsIcon" :subtitle="getSubtitle(currNumReferrals, prevNumReferrals)"></info_card>\n' +
@@ -107,31 +109,18 @@ Vue.component('admin_dashboard', {
                 '<v-spacer class="pt-5"></v-spacer>' +
                 '<mychart :prevChartValues="prevChartValues()" :currChartValues="currChartValues()"></mychart>\n' +
             '</v-col>\n' +
-        '</v-row>',
-    created() {
-        this.setAllValsForTesting(); //remove this after api endpoint is set up
-        /* //this axios request is ready for the api endpoint
-        axios.get('/api/stats/overview').then(response => {
-            this.currNumGreens = response.data.stat.numberOfGreens;
-            this.currNumYellows = response.data.stat.numberOfYellows;
-            this.currNumReds = response.data.stat.numberOfReds;
-            this.currNumReadings = response.data.stat.numberOfReadings;
-            this.currNumPatientsSeen = response.data.stat.numberOfPatientsSeen;
-            this.currNumVHTs = response.data.stat.numberOfVHTs;
-            this.currNumReferrals = response.data.stat.numberOfReferrals;
+        '</v-row>' +
+    '</div>',
+    mounted() {
+        //this.setAllValsForTesting(); //remove this after api endpoint is set up only used for testing
+        axios.get('/api/stats/overview').then((response) => {
+            this.stats = response.data;
+            this.getValuesFromDB();
 
-            this.prevNumGreens = response.data.statTrend.numberOfGreens;
-            this.prevNumYellows = response.data.statTrend.numberOfYellows;
-            this.prevNumReds = response.data.statTrend.numberOfReds;
-            this.prevNumReadings = response.data.statTrend.numberOfReadings;
-            this.prevNumPatientsSeen = response.data.statTrend.numberOfPatientsSeen;
-            this.prevNumVHTs = response.data.statTrend.numberOfVHTs;
-            this.prevNumReferrals = response.data.statTrend.numberOfReferrals;
+            this.readingsIcon = this.getIcons(this.currNumReadings, this.prevNumReadings);
+            this.referralsIcon = this.getIcons(this.currNumReferrals, this.prevNumReferrals);
+            this.patientsIcon = this.getIcons(this.currNumPatientsSeen, this.prevNumPatientsSeen);
         });
-*/
-        this.readingsIcon = this.getIcons(this.currNumReadings, this.prevNumReadings);
-        this.referralsIcon = this.getIcons(this.currNumReferrals, this.prevNumReferrals);
-        this.patientsIcon = this.getIcons(this.currNumPatientsSeen, this.prevNumPatientsSeen);
     },
     methods: {
         setAllValsForTesting() { //dummy data used for testing the layout. To be removed once api endpoint is implemented
@@ -149,6 +138,24 @@ Vue.component('admin_dashboard', {
             this.prevNumReferrals = 54;
             this.currNumVHTs = 26;
             this.prevNumVHTs = 12;
+        },
+        getValuesFromDB() {
+                this.currNumGreens = this.stats.stat.numberOfGreens;
+                this.currNumYellows = this.stats.stat.numberOfYellows;
+                this.currNumReds = this.stats.stat.numberOfReds;
+                this.currNumReadings = this.stats.stat.numberOfReadings;
+                this.currNumPatientsSeen = this.stats.stat.numberOfPatientsSeen;
+                this.currNumVHTs = this.stats.stat.numberOfVHTs;
+                this.currNumReferrals = this.stats.stat.numberOfReferrals;
+
+                this.prevNumGreens = this.stats.statTrend.numberOfGreens;
+                this.prevNumYellows = this.stats.statTrend.numberOfYellows;
+                this.prevNumReds = this.stats.statTrend.numberOfReds;
+                this.prevNumReadings = this.stats.statTrend.numberOfReadings;
+                this.prevNumPatientsSeen = this.stats.statTrend.numberOfPatientsSeen;
+                this.prevNumVHTs = this.stats.statTrend.numberOfVHTs;
+                this.prevNumReferrals = this.stats.statTrend.numberOfReferrals;
+
         },
         getIcons(currVal, prevVal) {
             let up = "trending_up";
@@ -168,8 +175,11 @@ Vue.component('admin_dashboard', {
             return [this.prevNumGreens, this.prevNumYellows, this.prevNumReds];
         },
         getSubtitle(currVal, prevVal) {
-            if (currVal > prevVal) {
-                let percentage = Math.round((prevVal / currVal) * 100);
+            if (currVal === prevVal) {
+                return "No change from last month."
+            }
+            else if (currVal > prevVal) {
+                let percentage = Math.round(((currVal / prevVal) - 1) * 100);
                 return percentage + "% increase from last month.";
             }
             else {
