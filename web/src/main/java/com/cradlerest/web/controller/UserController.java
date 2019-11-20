@@ -246,4 +246,30 @@ public class UserController {
 		var details = (UserDetailsImpl) principal;
 		return passwordEncoder.matches(password, details.getPassword());
 	}
+
+	/**
+	 * Changes a user's password with a string sent in the request body.
+	 * @param auth Authentication for the requesting user.
+	 * @param password The new password to update to.
+	 * @throws Exception If an attempt is made to access this API method without
+	 * 	authentication.
+	 */
+	@PostMapping("/update-password")
+	public void updatePassword(Authentication auth, @RequestBody String password) throws Exception {
+		if (auth == null) {
+			// TODO: switch to AccessDeniedException once issue-118 branch is merged
+			throw new Exception("Permission denied");
+		}
+
+		var principal = auth.getPrincipal();
+		// Programming error if this is not true
+		assert principal instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) principal;
+
+		assert details.getId() != null;
+		var user = get(details.getId());
+		var encodedPassword = passwordEncoder.encode(password);
+		user.setPassword(encodedPassword);
+		userRepository.save(user);
+	}
 }
