@@ -6,6 +6,7 @@ Vue.component('new_reading',{
     data: () => ({
 
         e1: 0,
+        sex: 0,
         symptoms: [],
         medications:[],
         pregnant: false,
@@ -158,9 +159,8 @@ Vue.component('new_reading',{
         '        label="Heart Rate"\n' +
         '        required\n' +
         '      ></v-text-field>\n' +
-        '        <template v-if="{{this.sex}} != 0"\n' + // If patient is not a man show the pregnant option
+        '        <template v-if=" sex == 1 || sex == 2 ">\n' + // If patient is not a man show the pregnant option
         '            <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>' +
-        '<p>{{this.sex}}</p>' +
         '        </template>' +
         '        <template v-if= "pregnant === true">\n' +
         '        <v-text-field\n' +
