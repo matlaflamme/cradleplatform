@@ -8,11 +8,11 @@ public class AuthorizerFactory {
 
 	/**
 	 * Constructs an {@code Authorizer} instance for a given user authentication.
-	 * @param authentication The user authentication to wrap in an {@code Authorizer}.
+	 * @param auth The user authentication to wrap in an {@code Authorizer}.
 	 * @return A new {@code Authorizer}
 	 */
-	public Authorizer construct(@NotNull Authentication authentication) {
+	public Authorizer construct(@NotNull Authentication auth) {
 		// TODO: implement me
-		return new NullAuthorizer();
+		return new NullAuthorizer(auth);
 	}
 }

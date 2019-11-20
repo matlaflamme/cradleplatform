@@ -2,11 +2,16 @@ package com.cradlerest.web.service.mock;
 
 import com.cradlerest.web.service.Authorizer;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
 
 /**
  * A null object for the {@code Authorizer} interface.
  */
-public class NullAuthorizer implements Authorizer {
+public class NullAuthorizer extends Authorizer {
+
+	public NullAuthorizer(Authentication auth) {
+		super(auth);
+	}
 
 	@Override
 	public boolean canListPatients() {
