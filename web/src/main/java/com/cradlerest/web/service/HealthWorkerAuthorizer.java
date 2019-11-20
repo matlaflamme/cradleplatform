@@ -10,10 +10,14 @@ import org.springframework.security.core.Authentication;
 public class HealthWorkerAuthorizer extends Authorizer {
 
 	private PatientManagerService patientManager;
+	private ReadingManager readingManager;
 
-	public HealthWorkerAuthorizer(Authentication auth, PatientManagerService patientManager) {
+	public HealthWorkerAuthorizer(Authentication auth,
+								  PatientManagerService patientManager,
+								  ReadingManager readingManager) {
 		super(auth);
 		this.patientManager = patientManager;
+		this.readingManager = readingManager;
 	}
 
 	@Override
@@ -49,8 +53,22 @@ public class HealthWorkerAuthorizer extends Authorizer {
 		return true;
 	}
 
+	/**
+	 * Determines whether a health worker user can access a reading with a
+	 * given identifier. This is true iff the reading belongs to a patient
+	 * that the worker also has access to.
+	 * @param id The id of the reading to request access to.
+	 * @return {@code true} of {@code false} whether a health worker can access
+	 * 	a patient with a given id.
+	 */
 	@Override
 	public boolean canAccessReading(int id) {
-		return false;
+		try {
+			var reading = readingManager.getReadingView(id);
+			var patientId = reading.getPatientId();
+			return canAccessPatient(patientId);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
