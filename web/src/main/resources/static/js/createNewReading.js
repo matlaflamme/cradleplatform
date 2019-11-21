@@ -27,8 +27,8 @@ Vue.component('new_reading',{
         heartRate: '',
         heartRateRules: [
             v => !!v || 'Heart Rate is required',
-            v => (v && v <= 200) || 'Heart Rate is invalid: low',
-            v => (v && v >= 40) || 'Heart Rate is invalid: high'
+            v => (v && v <= 200) || 'Heart Rate is invalid',
+            v => (v && v >= 40) || 'Heart Rate is invalid'
         ],
         systolic: '',
         systolicRules: [
