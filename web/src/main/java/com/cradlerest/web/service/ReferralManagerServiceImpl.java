@@ -12,8 +12,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -59,7 +61,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 * @throws Exception
 	 */
 	@Override
-	public Referral saveReferral(JsonNode requestBody) throws Exception {
+	public Referral saveReferral(@Nullable Authentication auth, JsonNode requestBody) throws Exception {
 		System.out.println(requestBody.toString());
 		ObjectMapper objectMapper = new ObjectMapper();
 		String patientId = requestBody.get("patientId").textValue();
@@ -118,10 +120,10 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 				.systolic(systolic)
 				.heartRate(heartRate)
 				.timestamp(readingTimestamp)
-				.symptoms(symptomsArrNoTrailingWhiteSpace) // TODO: Symptoms are not saved! BUG
+				.symptoms(symptomsArrNoTrailingWhiteSpace)
 				.build();
 
-		Reading currentReading = readingManager.saveReadingView(readingView);
+		Reading currentReading = readingManager.saveReadingView(auth, readingView);
 
 		Referral currentReferral = new ReferralBuilder()
 				.referredByUserId(currentVHT.get().getId())
@@ -140,6 +142,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 */
 	@Override
 	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException {
+		// TODO: findByName will throw a NonUniqueResultException if there are >1 health centre with same name.
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);

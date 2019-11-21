@@ -9,6 +9,8 @@ import com.cradlerest.web.util.datagen.annotations.Omit;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.jetbrains.annotations.Nullable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -54,6 +56,9 @@ public class User {
 	@Column(name = "modified")
 	private Date modified;
 
+	@Column(name = "works_at")
+	private Integer worksAtHealthCentreId;
+
 	public User() {}
 
 	public User(Integer id, String username, String password, String roles) {
@@ -70,6 +75,9 @@ public class User {
 		this.password = user.getPassword();
 		this.roles = user.getRoles();
 		this.active = user.getActive();
+		this.created = user.getCreated();
+		this.modified = user.getModified();
+		this.worksAtHealthCentreId = user.getWorksAtHealthCentreId();
 	}
 
 	public User(String username, String password, String roles) {
@@ -126,5 +134,12 @@ public class User {
 		return modified;
 	}
 
+	@Nullable
+	public Integer getWorksAtHealthCentreId() {
+		return worksAtHealthCentreId;
+	}
 
+	public void setWorksAtHealthCentreId(@Nullable Integer worksAtHealthCentreId) {
+		this.worksAtHealthCentreId = worksAtHealthCentreId;
+	}
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,13 +66,13 @@ public class ReferralController {
 	 * @return A SMS from Twilio number to whoever sent the text.
 	 */
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
-	public String saveReferralSMS(WebRequest request, HttpServletResponse response) throws Exception {
+	public String saveReferralSMS(Authentication auth, WebRequest request, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(request.getParameter("Body"));
 		Referral savedReferral = null;
 		try {
-			savedReferral = referralManagerService.saveReferral(requestBody);
+			savedReferral = referralManagerService.saveReferral(auth, requestBody);
 			return "Success:\n " +
 					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
 		} catch (Exception exception) {
@@ -87,13 +88,13 @@ public class ReferralController {
 	 * @throws Exception
 	 */
 	@PostMapping("/send")
-	public String saveReferral(HttpEntity<String> httpEntity, HttpServletResponse response) throws Exception {
+	public String saveReferral(Authentication auth, HttpEntity<String> httpEntity, HttpServletResponse response) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		// TODO: Handle exceptions, validate etc..
 		JsonNode requestBody = mapper.readTree(httpEntity.getBody());
 		Referral savedReferral = null;
 		try {
-			savedReferral = referralManagerService.saveReferral(requestBody);
+			savedReferral = referralManagerService.saveReferral(auth, requestBody);
 			return "Success:\n " +
 					"Health centre referred: " + savedReferral.getReferredToHealthCenterId();
 		} catch (Exception exception) {

@@ -7,18 +7,6 @@ information about the entities returned by these methods see
 > Note: Any method marked with "Not yet implemented" is an active API method 
 > which may be called, but it will always return a `NotImplementedException`.
 
-* [User Methods](#user-methods)
-    * [`GET /api/user/all`]() - Get all users
-    * [`GET /api/user/{id}`]() - Get all users with id
-    * [`POST /api/user/add`]() - Create a new user
-    * ```json
-      {
-          "username": "john",
-          "password": "doe",
-          "roles:": "ROLE_HEALTHWORKER"
-      }  
-      ```
-    * [`DELETE /api/user/{id}`]() - Deletes user by id
 
 * [Referral Methods](#referral-methods)
     * [`GET /api/referral/all`]() - Get all referrals 
@@ -58,6 +46,15 @@ information about the entities returned by these methods see
     * [`GET /api/hc/{id}/patients`](#get-apihcidpatients)
     * [`GET /api/user/{id}/patients`](#get-apiuseridpatients)
     * [`GET /api/user/{id}/readings`](#get-apiuseridreadings)
+* [User Methods](#user-methods)
+    * [`GET /api/user/all`](get-apiuserall)
+    * [`GET /api/user/{id}`](get-apiuserid)
+    * [`POST /api/user/add`](post-apiuseradd)
+    * [`DELETE /api/user/{id}`](delete-apiuserid)
+    * [`POST /api/user/{username}/change-active`](post-apiuserusernamechange-active)
+    * [`POST /api/user/{username}/set-health-centre`](post-apiuserusernameset-health-centre)
+    * [`POST /api/user/{username}/remove-health-centre`](post-apiuserusernameremove-health-centre)
+    * [`GET /api/user/{username}/health-centre`](get-apiuserusernamehealth-centre)
 
 ## Patient Methods
 
@@ -343,3 +340,187 @@ A list of all readings created by the user with a given id.
 #### Returns
 
 A list of [reading views](ENTITIES.md#reading-view). Returns an empty array in the event that `id` is invalid.
+
+
+## User Methods
+
+### `GET /api/user/all`
+
+Returns a list of all users registered in the system.
+
+
+### `GET /api/user/{id}`
+
+Returns information about the user with a given `id`.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `number` | User Identifier |
+
+#### Errors
+
+Returns a 404-NotFound error if unable to find a user with a given `id`.
+
+
+### `POST /api/user/add`
+
+Creates a new user.
+
+#### Example Request
+
+```json
+{
+    "username": "john",
+    "password": "doe",
+    "roles:": "ROLE_HEALTHWORKER"
+}  
+```
+
+#### Errors
+
+Returns a 409-Conflict error if a user with the username already exists.
+
+
+### `DELETE /api/user/{id}`
+
+Deletes the user with a given `id`.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `id` | `number` | User Identifier |
+
+#### Errors
+
+Returns a 404-NotFound error if unable to find a user with the given `id`.
+
+
+### `POST /api/user/{username}/change-active`
+
+Toggles a user's `active` state.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `username` | `string` | A Username |
+
+#### Errors
+
+Returns a 404-NotFound error if unable to find a user with the given `username`.
+
+
+### `POST /api/user/{username}/set-health-centre`
+
+Affiliates the user with a given `username` with a requested health centre.
+A user may only be affilated with a single health centre. This method may also
+be used to update a user's affiliation to a new health centre. Use `remove-health-centre`
+to remove an affiliation all together.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `username` | `string` | A Username |
+
+#### Query Parameters
+
+| Variable | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `hcid` | `number` | `true` | A Health Centre Identifier |
+
+#### Errors
+
+Returns a 404-NotFound error if unable to find the requested user or health centre.
+
+#### Example Query
+
+```
+POST: /api/user/health/set-health-centre?hcid=2
+```
+
+
+### `POST /api/user/{username}/remove-health-centre`
+
+Removes a health centre affiliation from a given user.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `username` | `string` | A Username |
+
+
+#### Errors
+
+Returns a 404-NotFound error if unable to find the requested user.
+
+
+### `GET /api/user/{username}/health-centre`
+
+Queries the health centre affiliation for a given user. This information is also
+returned by `GET: /api/user/{id}` so this endpoint is redundant and is mainly
+meant to ease testing.
+
+#### Path Variables
+
+| Variable | Type | Description |
+|:-:|:-:|:-|
+| `username` | `string` | A Username |
+
+#### Returns
+
+Returns a JSON object like the following with a single `id` field for the health centre id.
+
+``` json
+{
+    "id": 2
+}
+```
+
+#### Errors
+
+Returns a 404-NotFound error if unable to find the requested user.
+
+
+### `POST /api/user/check-password`
+
+Checks that a plain text password, sent in the request body matches the password
+of the requesting user.
+
+#### Request Body
+
+``` json
+{
+    "password": "<password>"
+}
+```
+
+Where `<password>` is the password to check against the current one.
+
+#### Returns
+
+A JSON boolean (i.e., literal `true` or `false`), **not a string** denoting wether
+the sent string matches the current password or not.
+
+
+### `POST /api/user/update-password`
+
+Changes the password for the requesting user to one supplied in the request body.
+
+#### Request Body
+
+``` json
+{
+    "password": "<password>"
+}
+```
+
+Where `<password>` is the new password for the user.
+
+#### Errors
+
+Throws an exception if the new password does not meet complexity requirements.

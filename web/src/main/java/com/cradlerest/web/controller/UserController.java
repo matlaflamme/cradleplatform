@@ -12,7 +12,7 @@ import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -108,6 +108,65 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * Associates a specified user with a given health centre. This method may
+	 * be used to update or add a new association. Use "remove-health-centre"
+	 * to delete an existing association.
+	 * @param username The username of the user to update.
+	 * @param healthCentreId The id of the health centre to associate with.
+	 * @throws EntityNotFoundException If unable to find the requested user or
+	 * 	health centre.
+	 */
+	@PostMapping("/{username}/set-health-centre")
+	public void updateWorksAtHealthCentreId(@PathVariable("username") String username,
+											@RequestParam("hcid") int healthCentreId)
+			throws EntityNotFoundException {
+		try {
+			userRepository.updateWorksAtByUsername(username, healthCentreId);
+		} catch (Exception e) {
+			throw new EntityNotFoundException("unable to find user or health centre", e);
+		}
+	}
+
+	/**
+	 * Removes a health centre association for a given user.
+	 * @param username The username of the user to update.
+	 * @throws EntityNotFoundException If unable to find the user.
+	 */
+	@PostMapping("/{username}/remove-health-centre")
+	public void deleteWorksAtHealthCentreId(@PathVariable("username") String username) throws EntityNotFoundException {
+		try {
+			userRepository.updateWorksAtByUsername(username, null);
+		} catch (Exception e) {
+			throw new EntityNotFoundException("unable to find user", e);
+		}
+	}
+
+	/**
+	 * Returns the id of the health centre that a given user is associated with.
+	 * May be {@code null}.
+	 * @param username The username of the user to look for.
+	 * @return The id of the health centre the user is associated with, or
+	 * 	{@code null} if the user is not affiliated with any centre.
+	 * @throws EntityNotFoundException If unable to find the user.
+	 */
+	@GetMapping("/{username}/health-centre")
+	public Object getHealthCentre(@PathVariable("username") String username) throws EntityNotFoundException {
+		class Result {
+			public Integer id;
+
+			private Result(Integer id) {
+				this.id = id;
+			}
+		}
+		Optional<User> optUser = userRepository.findByUsername(username);
+		if (optUser.isEmpty()) {
+			throw new EntityNotFoundException("unable to find user with username: " + username);
+		}
+		var id = optUser.get().getWorksAtHealthCentreId();
+		return new Result(id);
+	}
+
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") int id) throws DatabaseException {
@@ -161,5 +220,64 @@ public class UserController {
 		} else {
 			return principal;
 		}
+	}
+
+	/**
+	 * Container class to hold a single password value. Used as the request
+	 * body for the `check-password` and `update-password` API methods.
+	 */
+	private static class Password {
+		public String password;
+	}
+
+	/**
+	 * Checks if {@code password} sent as a request body matches the current
+	 * password for the requesting user. Returns {@code true} if they match
+	 * or {@code false} if they don't. If a request is made to this endpoint
+	 * without authentication, then a a permission denied exception is thrown.
+	 * @param auth Authentication of the requesting user.
+	 * @param password The password the check with.
+	 * @return {@code true} if the password matches the current one.
+	 * @throws Exception If an attempt is made to access this API method without
+	 * 	authentication.
+	 */
+	@PostMapping("/check-password")
+	public boolean checkPassword(Authentication auth, @RequestBody Password password) throws Exception {
+		if (auth == null) {
+			// TODO: switch to AccessDeniedException once issue-118 branch is merged
+			throw new Exception("Permission denied");
+		}
+
+		var principal = auth.getPrincipal();
+		// Programming error if this is not true
+		assert principal instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) principal;
+		return passwordEncoder.matches(password.password, details.getPassword());
+	}
+
+	/**
+	 * Changes a user's password with a string sent in the request body.
+	 * @param auth Authentication for the requesting user.
+	 * @param password The new password to update to.
+	 * @throws Exception If an attempt is made to access this API method without
+	 * 	authentication.
+	 */
+	@PostMapping("/update-password")
+	public void updatePassword(Authentication auth, @RequestBody Password password) throws Exception {
+		if (auth == null) {
+			// TODO: switch to AccessDeniedException once issue-118 branch is merged
+			throw new Exception("Permission denied");
+		}
+
+		var principal = auth.getPrincipal();
+		// Programming error if this is not true
+		assert principal instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) principal;
+
+		assert details.getId() != null;
+		var user = get(details.getId());
+		var encodedPassword = passwordEncoder.encode(password.password);
+		user.setPassword(encodedPassword);
+		userRepository.save(user);
 	}
 }

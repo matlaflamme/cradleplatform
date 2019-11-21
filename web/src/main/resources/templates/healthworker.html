@@ -17,27 +17,41 @@
             <v-container>
                 <v-layout justify-center>
                     <v-container>
-                        <v-data-table
-                            :headers="headers"
-                            :items="rows"
-                            :items-per-page="10"
-                            class="elevation-1"
-                        >
-                            <template slot="items" slot-scope="props">
-                                <td>{{props.item.patient.id}}</td>
-                                <td>{{props.item.patient.name}}</td>
-                                <td>{{tester(props.item.reading.timestamp)}}</td>
-                            </template>
-                            <template v-slot:item.colour="{ item }">
-                                <span class="dot" :style="item.reading.colorstyle"></span>
-                            </template>
-                            <template v-slot:item.view="{ item }">
-                                <button v-on:click="viewPatientData(item.patient.id)" class="btn btn-outline-info">View Patient Data</button>
-                            </template>
-                            <template v-slot:item.add="{ item }">
-                                <button v-on:click="addNewReading(item.patient.id)" class="btn btn-outline-secondary">Add New Reading</button>
-                            </template>
-                        </v-data-table>
+                        <v-card>
+                            <v-card-title>
+                                Patients
+                                <v-spacer></v-spacer>
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="search"
+                                    label="search"
+                                    single-line
+                                    hide-details
+                                    ></v-text-field>
+                            </v-card-title>
+                            <v-data-table
+                                :headers="headers"
+                                :items="rows"
+                                :items-per-page="10"
+                                :search="search"
+                                class="elevation-1"
+                            >
+                                <template slot="items" slot-scope="props">
+                                    <td>{{props.item.patient.id}}</td>
+                                    <td>{{props.item.patient.name}}</td>
+                                    <td>{{tester(props.item.reading.timestamp)}}</td>
+                                </template>
+                                <template v-slot:item.colour="{ item }">
+                                    <td><img id="light" ref="light" :src=item.reading.colorstyle height="50" width="60" style="margin-bottom: 12px"></td> <!-- The td tags center the light, but add a weird line below it -->
+                                </template>
+                                <template v-slot:item.view="{ item }">
+                                    <button v-on:click="viewPatientData(item.patient.id)" class="btn btn-outline-info">View Patient Data</button>
+                                </template>
+                                <template v-slot:item.add="{ item }">
+                                    <button v-on:click="addNewReading(item.patient.id)" class="btn btn-outline-secondary">Add New Reading</button>
+                                </template>
+                            </v-data-table>
+                        </v-card>
                     </v-container>
                 </v-layout>
             </v-container>

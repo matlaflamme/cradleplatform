@@ -7,6 +7,7 @@ import com.cradlerest.web.model.builder.SymptomBuilder;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,7 +67,7 @@ public class MockReadingManager implements ReadingManager {
 	}
 
 	@Override
-	public Reading saveReadingView(@NotNull ReadingView readingView) throws InstantiationError {
+	public Reading saveReadingView(Authentication auth, @NotNull ReadingView readingView) throws InstantiationError {
 		assertFieldNotNull(readingView.getPatientId(), "patientId");
 		assertFieldNotNull(readingView.getSystolic(), "systolic");
 		assertFieldNotNull(readingView.getDiastolic(), "diastolic");

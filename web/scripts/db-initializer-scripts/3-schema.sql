@@ -4,6 +4,16 @@
 
 USE cradlerest;
 
+CREATE TABLE health_centre
+(
+    id                   INT PRIMARY KEY AUTO_INCREMENT,
+    name                 VARCHAR(255) NOT NULL,
+    zone                 INT          NOT NULL,
+    email                VARCHAR(255) NOT NULL,
+    health_centre_number VARCHAR(255) NOT NULL,
+    manager_phone_number VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE user
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
@@ -12,7 +22,12 @@ CREATE TABLE user
     role     VARCHAR(255)        NOT NULL,
     active   BOOLEAN             NOT NULL DEFAULT 1,
     created  DATETIME            NOT NULL DEFAULT current_timestamp,
-    modified DATETIME ON UPDATE current_timestamp
+    modified DATETIME ON UPDATE current_timestamp,
+    works_at INT,
+
+    FOREIGN KEY (works_at)
+        REFERENCES health_centre (id)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE patient
@@ -50,16 +65,6 @@ CREATE TABLE reading
 
     FOREIGN KEY (created_by)
         REFERENCES user (id)
-);
-
-CREATE TABLE health_centre
-(
-    id                   INT PRIMARY KEY AUTO_INCREMENT,
-    name                 VARCHAR(255) NOT NULL,
-    zone                 INT          NOT NULL,
-    email                VARCHAR(255) NOT NULL,
-    health_centre_number VARCHAR(255) NOT NULL,
-    manager_phone_number VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE referral

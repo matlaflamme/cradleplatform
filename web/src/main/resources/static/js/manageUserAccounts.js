@@ -97,8 +97,8 @@ Vue.component('users_table' , {
                         <td>{{item.created}}</td>
                         <td>{{item.modified}}</td>
                         <td>
-                            <v-btn v-if="item.active == false" color="green" v-on:click="updateActive(item)" >Enable</v-btn>
-                            <v-btn v-if="item.active == true" color="red" v-on:click="updateActive(item)" >Disable</v-btn>
+                            <v-btn v-if="item.active == false" dark color="green" v-on:click="updateActive(item)" >Enable</v-btn>
+                            <v-btn v-if="item.active == true" dark color="red" v-on:click="updateActive(item)" >Disable</v-btn>
                         </td>
                     </tr>
                 </tbody>
