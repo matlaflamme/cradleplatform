@@ -25,11 +25,11 @@ Vue.component('vht_details', {
         '<div v-if="stats">' +
             '<v-row>' +
                 '<v-col md="6" cols="6">' +
-                    '<strong class="font-weight-thin display-2">VHT Performance</strong>' +
+                    '<strong class="font-weight-light display-2">VHT Performance</strong>' +
                     //'<span class="font-weight-light">{{username}}</span>' +
                 '</v-col>' +
                 '<v-col md="6" cols="6">' +
-                    '<span id="header-content" class="display-1">Username: ' +
+                    '<span id="header-content" class="display-1 font-weight-regular">Username: ' +
                     '<span class="font-weight-light display-1">{{username}}</span></span>' +
                 '</v-col>' +
             '</v-row>' +
@@ -92,11 +92,15 @@ Vue.component('vht_details', {
         getIcons(currVal, prevVal) {
             let up = "trending_up";
             let down = "trending_down";
+            let flat = "trending_flat";
             if (currVal < prevVal) {
                 return down;
             }
-            else {
+            else if (currVal > prevVal) {
                 return up;
+            }
+            else {
+                return flat;
             }
         },
         currChartValues() { //sets up arrays for the data needed in the graph
@@ -108,7 +112,13 @@ Vue.component('vht_details', {
         },
         getSubtitle(currVal, prevVal) {
             if (currVal === prevVal) {
-                return "No change from last month."
+                return "No change from last month.";
+            }
+            else if (prevVal === 0) {
+                return currVal + " more than last month.";
+            }
+            else if (currVal === 0) {
+                return prevVal + " less than last month.";
             }
             else if (currVal > prevVal) {
                 let percentage = Math.round(((currVal / prevVal) - 1) * 100);
