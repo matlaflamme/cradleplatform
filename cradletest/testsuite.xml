@@ -273,7 +273,7 @@
       }
       ]]>
     </Request>
-    <Response status="404"/>
+    <Response status="500"/>
   </TestCase>
 
   
