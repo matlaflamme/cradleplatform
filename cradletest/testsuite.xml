@@ -353,7 +353,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 4,
+              "id": 70002,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -401,7 +401,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 4,
+              "id": 70002,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -478,4 +478,31 @@
         </Request>
         <Response status="200"/>
     </TestCase>
+
+
+  <!-- Authentication Tests -->
+  <TestCase name="Valid Request For Patient">
+    <Request method="GET" uri="/api/patient/60001/info" username="test-user-a" password="test"/>
+    <Response status="200">
+      <![CDATA[
+        {
+          "birthYear": 1990,
+          "drugHistory": null,
+          "generalNotes": null,
+          "id": "60001",
+          "lastUpdated": "2019-01-01 00:00:00",
+          "medicalHistory": null,
+          "medication": null,
+          "name": "TPA",
+          "sex": 1,
+          "villageNumber": "0",
+          "zoneNumber": "0"
+        }
+      ]]>
+    </Response>
+  </TestCase>
+  <TestCase name="Invalid Request For Patient">
+    <Request method="GET" uri="/api/patient/60001/info" username="test-user-b" password="test"/>
+    <Response status="403"/>
+  </TestCase>
 </TestSuite>
