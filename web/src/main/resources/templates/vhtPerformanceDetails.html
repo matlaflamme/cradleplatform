@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-	<meta charset="UTF-8">
-	<title>Title</title>
+	<div th:replace="fragments/head :: headerFragment"></div>
+	<title id="pageTitle">Home</title>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-apexcharts"></script>
+
+	<link type="text/css" rel="stylesheet" href="/css/patientSummary.css">
 </head>
 <body>
+<div id="app">
+	<v-app id="inspire">
+		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+		<div th:replace="fragments/navbar :: navbarFragment"></div>
+		<v-content>
+			<v-container>
+				<v-layout justify-center>
+					<vht_details></vht_details>
+				</v-layout>
+			</v-container>
+		</v-content>
+	</v-app>
+</div>
 
+<script src="/js/mainMenuTemplate.js"></script>
+<script src="/js/vhtPerformanceDetails.js"></script>
+<script src="/js/adminMain.js"></script>
 </body>
 </html>

@@ -31,6 +31,9 @@ Vue.component('vht_table' , {
             }).catch(error => {
                 console.log(error);
             })
+        },
+        goToDetailsPage(username, id) {
+            window.location.assign('/vhtPerformanceDetails?username=' + username + "&id=" + id);
         }
         },
     template:
@@ -58,7 +61,7 @@ Vue.component('vht_table' , {
                         <td>{{item.created}}</td>
                         <td>{{item.active}}</td>
                         <td>
-                            <v-btn outlined color="green" >View Details</v-btn>
+                            <v-btn outlined color="green" v-on:click="goToDetailsPage(item.username, item.id)">View Details</v-btn>
                         </td>
                     </tr>
                 </tbody>
