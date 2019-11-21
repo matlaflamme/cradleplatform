@@ -66,12 +66,6 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String generalNotes;
 
-
-
-	// not part of the database
-	@Transient
-	private List<Medication> medications;
-
 	public Patient() {
 	}
 
@@ -97,7 +91,6 @@ public class Patient {
 		this.drugHistory = drugHistory;
 		this.lastUpdated = lastUpdated;
 		this.generalNotes = generalNotes;
-		this.medications = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -180,14 +173,6 @@ public class Patient {
 
 	public void setGeneralNotes(String generalNotes) {
 		this.generalNotes = generalNotes;
-	}
-
-	public List<Medication> getMedications() {
-		return medications;
-	}
-
-	public void setMedications(List<Medication> medications) {
-		this.medications = medications;
 	}
 
 	@Override
