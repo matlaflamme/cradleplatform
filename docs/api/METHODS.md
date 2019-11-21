@@ -493,7 +493,13 @@ of the requesting user.
 
 #### Request Body
 
-A string containing the password to check against the current password.
+``` json
+{
+    "password": "<password>"
+}
+```
+
+Where `<password>` is the password to check against the current one.
 
 #### Returns
 
@@ -507,8 +513,13 @@ Changes the password for the requesting user to one supplied in the request body
 
 #### Request Body
 
-A string containing a plain text password to use as the requesting user's new 
-password. The password must be longer than 8 characters in length.
+``` json
+{
+    "password": "<password>"
+}
+```
+
+Where `<password>` is the new password for the user.
 
 #### Errors
 
