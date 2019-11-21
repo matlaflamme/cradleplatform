@@ -2,12 +2,15 @@ package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Reading;
+import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.model.builder.ReadingViewBuilder;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.repository.ReadingRepository;
 import com.cradlerest.web.service.repository.SymptomReadingRelationRepository;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +63,16 @@ public class ReadingManagerImpl implements ReadingManager {
 	}
 
 	@Override
-	public Reading saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException {
-		// TODO: set `createdBy` to the id of the user who posted the reading
+	public Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws Exception {
+		if (auth == null) {
+			// TODO: change to AccessDeniedException once that is merged
+			throw new Exception("Permission Denied");
+		}
+
 		if (readingView.getCreatedBy() == null) {
-			readingView.setCreatedBy(3);
+			assert auth.getPrincipal() instanceof UserDetailsImpl;
+			var details = (UserDetailsImpl) auth.getPrincipal();
+			readingView.setCreatedBy(details.getId());
 		}
 
 		// use copyFields to extract the reading and persist it
