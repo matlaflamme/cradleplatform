@@ -17,12 +17,13 @@ Vue.component('change_password', {
         newPass: '',
         showPassword: false,
         newPassRules: [
-            v => !!v || 'new password is required',
-            v => (v && v.length < 20) || 'new password must be less than 20 characters', //an example to show we can limit characters
-            v => (v && v.length >= 6) || 'new password must be at least 6 characters'
+            v => !!v || 'Password is required',
+            v => (v && v.length < 20) || 'Password must be less than 20 characters', //an example to show we can limit characters
+            v => (v && v.length >= 6) || 'Password must be at least 6 characters'
         ],
         confirmPass: '',
         showConfirmPassword: false,
+
     }),
     methods: {
         validate () {
