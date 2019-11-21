@@ -105,6 +105,8 @@ public class Medication {
         this.medication = medication;
         this.dosage = dosage;
         this.usageFrequency = usageFrequency;
+        this.patientId = "";
+        this.setMedId(-1);
     }
 
     public Medication(){}

@@ -116,7 +116,6 @@ public class PatientController {
 		} catch (Exception e){
 			throw new EntityNotFoundException("Could not find requested Medication");
 		}
-		//return null;
 	}
 
 	@Deprecated
