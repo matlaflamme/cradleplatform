@@ -22,7 +22,6 @@
         "birthYear":1995,
         "sex":1,
         "medicalHistory":null,
-        "medication": null,
         "drugHistory":null,
         "lastUpdated":"2019-09-20 20:12:32",
         "generalNotes":null
@@ -245,6 +244,65 @@
         <Response status="404"/>
     </TestCase>
 
+
+
+  <TestCase name="Add Medication to Valid Patient">
+    <Request method="POST" uri="/api/patient/001/addMedication">
+      <![CDATA[
+      {
+        "patientId":"001",
+        "medId":5,
+        "medication":"Tylenol",
+        "dosage":"1 Extra Strength Pill",
+        "usageFrequency":"Morning and Evening"
+      }
+      ]]>
+    </Request>
+    <Response status="200"/>
+  </TestCase>
+  
+  <TestCase name="Add Medication to Invalid Patient">
+    <Request method="POST" uri="/api/patient/1001/addMedication">
+      <![CDATA[
+      {
+        "patientId":"001",
+        "medId":5,
+        "medication":"Tylenol",
+        "dosage":"1 Extra Strength Pill",
+        "usageFrequency":"Morning and Evening"
+      }
+      ]]>
+    </Request>
+    <Response status="500"/>
+  </TestCase>
+
+  
+  <TestCase name="Get Medication from Valid Patient">
+    <Request method="GET" uri="/api/patient/001/getMedications">
+      <![CDATA[
+      {
+        [
+          "patientId":"001",
+          "medId":5,
+          "medication":"Tylenol",
+          "dosage":"1 Extra Strength Pill",
+          "usageFrequency":"Morning and Evening"
+        ]
+      }
+      ]]>
+    </Request>
+    <Response status="200"/>
+  </TestCase>
+  
+  <TestCase name="Get Medication from Invalid Patient">
+    <Request method="GET" uri="/api/patient/1001/getMedications">
+      <![CDATA[]]>
+    </Request>
+    <Response status="404"/>
+  </TestCase>
+
+
+
     <TestCase name="Create new user">
         <Request method="POST" uri="/api/user/add">
             <![CDATA[
@@ -341,7 +399,6 @@
               "id": "001",
               "lastUpdated": "2019-09-20 20:12:32",
               "medicalHistory": null,
-              "medication": null,
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
@@ -389,7 +446,6 @@
               "id": "001",
               "lastUpdated": "2019-09-20 20:12:32",
               "medicalHistory": null,
-              "medication": null,
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
