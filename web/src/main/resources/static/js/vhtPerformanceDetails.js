@@ -24,17 +24,17 @@ Vue.component('vht_details', {
     template: //this is the main window
         '<div v-if="stats">' +
             '<v-row>' +
-                '<v-col md="6" cols="6">' +
+                '<v-col md="6" cols="12">' +
                     '<strong class="font-weight-light display-2">VHT Performance</strong>' +
                     //'<span class="font-weight-light">{{username}}</span>' +
                 '</v-col>' +
-                '<v-col md="6" cols="6">' +
+                '<v-col md="6" cols="12">' +
                     '<span id="header-content" class="display-1 font-weight-regular">Username: ' +
                     '<span class="font-weight-light display-1">{{username}}</span></span>' +
                 '</v-col>' +
             '</v-row>' +
             '<v-row>' + //v-if is there so the component only renders once the axios request has returned
-                '<v-col md="4">' +
+                '<v-col md="4" cols="12">' +
                     '<v-row>\n' +
                         '<v-col cols="12" md="12">\n' +
                             '<info_card id="info_card" :value="currNumReferrals" title="Referrals this month" :icon="referralsIcon" :subtitle="getSubtitle(currNumReferrals, prevNumReferrals)"></info_card>\n' +
@@ -47,7 +47,7 @@ Vue.component('vht_details', {
                         '</v-col>\n' +
                     '</v-row>' +
                 '</v-col>' +
-                '<v-col md="8">\n' +
+                '<v-col md="8" cols="12">\n' +
                     '<v-spacer class="pt-5"></v-spacer>' +
                     '<mychart :prevChartValues="prevChartValues()" :currChartValues="currChartValues()"></mychart>\n' +
                 '</v-col>\n' +

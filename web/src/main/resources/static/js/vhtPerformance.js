@@ -11,7 +11,7 @@ Vue.component('vht_table' , {
             headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
                 { text: 'Username', align: 'left', value: 'username'},
                 { text: 'Created', value: 'created'},
-                { text: 'Active', value: 'active', sortable: false},
+                { text: 'Status', value: 'status', sortable: false},
                 { text: 'View', value: 'view', sortable: false}
             ],
             rows: [] //empty to start
@@ -23,10 +23,16 @@ Vue.component('vht_table' , {
     methods: {
         getUsers: function() {
             axios.get('/api/user/all').then(response => {
-                console.log(response.data[0].roles.replace("ROLE_", ""));
+                console.log(response.data[0]);
                 this.rows = response.data;
                 for (let i = 0; i < this.rows.length; i++) {
                     this.rows[i].roles = this.rows[i].roles.replace("ROLE_", "");
+                    if (this.rows[i].active) {
+                        this.rows[i].active = "Active";
+                    }
+                    else {
+                        this.rows[i].active = "Deactivated";
+                    }
                 }
             }).catch(error => {
                 console.log(error);
@@ -38,9 +44,9 @@ Vue.component('vht_table' , {
         },
     template:
         `
-    <template>
-    <v-card>
-    <v-card-title>All Users<v-spacer></v-spacer>
+
+    <v-card class="mt-3" width="850">
+    <v-card-title>All VHT Users<v-spacer></v-spacer>
         <v-text-field
         v-model="search"
         append-icon="search"
@@ -68,7 +74,7 @@ Vue.component('vht_table' , {
             </template>
         </v-data-table>
         </v-card>
-        </template>
+        
         `
     ,
 });
