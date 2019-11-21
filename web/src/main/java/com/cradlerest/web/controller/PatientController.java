@@ -85,6 +85,7 @@ public class PatientController {
 		return patientManagerService.savePatient(patient);
 	}
 
+	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
 	@PostMapping("/{id}/addMedication")
 	public Medication addMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
 	    List <Medication> pateintMedications =  medicationManager.getAllMedicationsForPatient(id);
