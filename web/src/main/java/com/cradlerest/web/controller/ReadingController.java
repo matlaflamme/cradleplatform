@@ -38,7 +38,7 @@ public class ReadingController {
 		authorizerFactory.construct(auth)
 				.check(Authorizer::canAccessPatient, readingView.getPatientId());
 		try {
-			return readingManager.saveReadingView(readingView);
+			return readingManager.saveReadingView(auth, readingView);
 		} catch (InstantiationError | EntityNotFoundException e) {
 			throw new BadRequestException("invalid request body", e);
 		}

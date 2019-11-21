@@ -119,7 +119,7 @@
   </TestCase>
 
   <TestCase name="Create New Reading">
-    <Request method="POST" uri="/api/reading/save" username="health" password="health">
+    <Request method="POST" uri="/api/reading/save" username="vht" password="vht">
       <![CDATA[
       {
         "patientId":"001",
@@ -137,8 +137,8 @@
     <Response status="200"/>
   </TestCase>
 
-  <TestCase name="Create New Reading With Missing Symptoms" username="health" password="health">
-    <Request method="POST" uri="/api/reading/save">
+  <TestCase name="Create New Reading With Missing Symptoms">
+    <Request method="POST" uri="/api/reading/save" username="vht" password="vht">
       <![CDATA[
       {
         "patientId":"001",
@@ -156,7 +156,7 @@
   </TestCase>
 
     <TestCase name="Create New Referral">
-        <Request method="POST" uri="/api/referral/send">
+        <Request method="POST" uri="/api/referral/send" username="vht" password="vht">
             <![CDATA[
             {
               "patientName": "HY",
@@ -181,7 +181,7 @@
     </TestCase>
 
     <TestCase name="Create New Referral - Bad Patient Id">
-        <Request method="POST" uri="/api/referral/send">
+        <Request method="POST" uri="/api/referral/send" username="vht" password="vht">
             <![CDATA[
             {
               "patientName": "HY",
@@ -206,7 +206,7 @@
     </TestCase>
 
     <TestCase name="Create New Referral - Bad Health Centre Name">
-        <Request method="POST" uri="/api/referral/send">
+        <Request method="POST" uri="/api/referral/send" username="vht" password="vht">
             <![CDATA[
             {
               "patientName": "HY",
