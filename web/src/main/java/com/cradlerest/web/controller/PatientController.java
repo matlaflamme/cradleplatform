@@ -88,14 +88,32 @@ public class PatientController {
 	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
 	@PostMapping("/{id}/addMedication")
 	public Medication addMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
-	    List <Medication> pateintMedications =  medicationManager.getAllMedicationsForPatient(id);
-	    if(pateintMedications.size() == 0){
-            medication.setMedId(0);
-        }else {
-            medication.setMedId(pateintMedications.get(pateintMedications.size() - 1).getMedId() + 1);
-        }
+		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
+		if(patientMedications.size() == 0){
+			medication.setMedId(0);
+		}else {
+			medication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + 1);
+		}
 		medication.setPatientId(id);
 		return medicationManager.saveMedication(medication);
+	}
+
+
+	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
+	@PostMapping("/{id}/addMedications")
+	public void addMedications(@PathVariable("id") String id, @RequestBody List<Medication> medications) throws Exception {
+		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
+
+		for (Medication newMedication: medications) {
+			if(patientMedications.size() == 0){
+				newMedication.setMedId(0);
+			}else {
+				newMedication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + 1);
+			}
+			newMedication.setPatientId(id);
+			 medicationManager.saveMedication(newMedication);
+		}
+
 	}
 
 	@GetMapping("/{id}/getMedications")
