@@ -1,5 +1,6 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Medication;
 import com.cradlerest.web.model.Patient;
@@ -70,9 +71,7 @@ public class PatientController {
 
 	@GetMapping("/{id}/info")
 	public Patient info(@PathVariable("id") String id) throws Exception {
-		Patient AddMedicationsTo = patientManagerService.getPatientWithId(id);
-		AddMedicationsTo.setMedications(medicationManager.getAllMedicationsForPatient(id));
-		return AddMedicationsTo;
+		return patientManagerService.getPatientWithId(id);
 	}
 
 	@GetMapping("/{id}/readings")
@@ -94,8 +93,24 @@ public class PatientController {
 		return medicationManager.saveMedication(medication);
 	}
 
-	@PostMapping("/{id}/removeMedication")
-	public Medication removeMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
+	@GetMapping("/{id}/getMedications")
+	public List<Medication> getMedication(@PathVariable("id") String id) throws Exception {
+		return medicationManager.getAllMedicationsForPatient(id);
+	}
+
+	@DeleteMapping("/{id}/removeMedication/{medId}")
+	public Medication removeMedication(@PathVariable("id") String id, @PathVariable String medId) throws Exception {
+		int medIdAsInt = 0;
+		try {
+			medIdAsInt = Integer.parseInt(medId);
+		} catch (Exception e){
+			throw new BadRequestException("The Id: '"+medId+"' is not a valid integer");
+		}
+		try{
+			medicationManager.remove(id,medIdAsInt);
+		} catch (Exception e){
+			throw new EntityNotFoundException("Could not find requested Medication");
+		}
 		return null;
 	}
 
