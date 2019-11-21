@@ -224,6 +224,14 @@ public class UserController {
 	}
 
 	/**
+	 * Container class to hold a single password value. Used as the request
+	 * body for the `check-password` and `update-password` API methods.
+	 */
+	private static class Password {
+		public String password;
+	}
+
+	/**
 	 * Checks if {@code password} sent as a request body matches the current
 	 * password for the requesting user. Returns {@code true} if they match
 	 * or {@code false} if they don't. If a request is made to this endpoint
@@ -235,7 +243,7 @@ public class UserController {
 	 * 	authentication.
 	 */
 	@PostMapping("/check-password")
-	public boolean checkPassword(Authentication auth, @RequestBody String password) throws Exception {
+	public boolean checkPassword(Authentication auth, @RequestBody Password password) throws Exception {
 		if (auth == null) {
 			// TODO: switch to AccessDeniedException once issue-118 branch is merged
 			throw new Exception("Permission denied");
@@ -245,7 +253,7 @@ public class UserController {
 		// Programming error if this is not true
 		assert principal instanceof UserDetailsImpl;
 		var details = (UserDetailsImpl) principal;
-		return passwordEncoder.matches(password, details.getPassword());
+		return passwordEncoder.matches(password.password, details.getPassword());
 	}
 
 	/**
@@ -256,7 +264,7 @@ public class UserController {
 	 * 	authentication.
 	 */
 	@PostMapping("/update-password")
-	public void updatePassword(Authentication auth, @RequestBody String password) throws Exception {
+	public void updatePassword(Authentication auth, @RequestBody Password password) throws Exception {
 		if (auth == null) {
 			// TODO: switch to AccessDeniedException once issue-118 branch is merged
 			throw new Exception("Permission denied");
@@ -269,7 +277,7 @@ public class UserController {
 
 		assert details.getId() != null;
 		var user = get(details.getId());
-		var encodedPassword = passwordEncoder.encode(password);
+		var encodedPassword = passwordEncoder.encode(password.password);
 		user.setPassword(encodedPassword);
 		userRepository.save(user);
 	}
