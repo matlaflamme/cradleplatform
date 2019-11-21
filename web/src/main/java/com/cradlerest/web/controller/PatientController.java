@@ -87,9 +87,13 @@ public class PatientController {
 
 	@PostMapping("/{id}/addMedication")
 	public Medication addMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
-		Integer medId = medicationManager.getAllMedicationsForPatient(id).size();
+	    List <Medication> pateintMedications =  medicationManager.getAllMedicationsForPatient(id);
+	    if(pateintMedications.size() == 0){
+            medication.setMedId(0);
+        }else {
+            medication.setMedId(pateintMedications.get(pateintMedications.size() - 1).getMedId() + 1);
+        }
 		medication.setPatientId(id);
-		medication.setMedId(medId);
 		return medicationManager.saveMedication(medication);
 	}
 
@@ -107,11 +111,11 @@ public class PatientController {
 			throw new BadRequestException("The Id: '"+medId+"' is not a valid integer");
 		}
 		try{
-			medicationManager.remove(id,medIdAsInt);
+			return medicationManager.remove(id,medIdAsInt);
 		} catch (Exception e){
 			throw new EntityNotFoundException("Could not find requested Medication");
 		}
-		return null;
+		//return null;
 	}
 
 	@Deprecated

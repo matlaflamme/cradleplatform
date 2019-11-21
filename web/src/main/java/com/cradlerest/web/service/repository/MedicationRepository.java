@@ -22,6 +22,7 @@ public interface MedicationRepository extends JpaRepository<Medication, Integer>
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM Medication med WHERE med.pid = ?1", nativeQuery = true)
-    void deleteMedicationByPatientId(@NotNull String pid);
+    @Query(value = "DELETE FROM medication med WHERE med.pid = ?1 AND med.med_id = ?2", nativeQuery = true)
+//    @Query("SELECT r FROM Medication r WHERE r.patientId = ?1")
+    void deleteMedicationByPatientId(@NotNull String pid, int medId);
 }

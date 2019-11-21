@@ -2,8 +2,6 @@ package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Medication;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.view.ReadingView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -46,6 +44,7 @@ public interface MedicationManager {
      * @param pid is the medication object's PatientId to delete
      * @param medId is the medication object's MedicationId to delete
      * @throws EntityNotFoundException if it could not find the medication
+     * @return
      */
-    void remove(String pid, int medId) throws EntityNotFoundException;
+    Medication remove(String pid, int medId) throws EntityNotFoundException;
 }

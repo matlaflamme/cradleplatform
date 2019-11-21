@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Medication;
 import com.cradlerest.web.service.repository.MedicationRepository;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MedicationManagerImpl implements MedicationManager {
@@ -33,19 +34,10 @@ public class MedicationManagerImpl implements MedicationManager {
     }
 
     @Override
-    public void remove(String pid, int medId) throws EntityNotFoundException {
-        List<Medication> allMedsPatientIsOn = medicationRepository.findAllByPatientId(pid);
+    public Medication remove(String pid, int medId) throws EntityNotFoundException {
+        List<Medication> allMedsPatientIsOn = getAllMedicationsForPatient(pid);
+        medicationRepository.deleteMedicationByPatientId(pid, medId);
 
-        medicationRepository.deleteMedicationByPatientId(pid);
-        for (Medication med : allMedsPatientIsOn) {
-
-            if(medId == med.getMedId()){}
-            else{
-                Integer newMedId = getAllMedicationsForPatient(pid).size();
-                med.setPatientId(pid);
-                med.setMedId(newMedId);
-                medicationRepository.save(med);
-            }
-        }
+        return allMedsPatientIsOn.get(medId);
     }
 }
