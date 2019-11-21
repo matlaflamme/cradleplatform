@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestSuite>
   <TestCase name="Get All Patients">
-    <Request method="GET" uri="/api/patient/all"/>
+    <Request method="GET" uri="/api/patient/all" username="health" password="health"/>
     <Response status="200"/>
     <!--
       TODO: Find a way to ensure the state of the database so that the body of
@@ -11,7 +11,7 @@
   </TestCase>
 
   <TestCase name="Valid Get Patient Info">
-    <Request method="GET" uri="/api/patient/001/info" username="health" password="health"/>
+    <Request method="GET" uri="/api/patient/001/info" username="vht" password="vht"/>
     <Response status="200">
       <![CDATA[
       {
@@ -32,7 +32,7 @@
   </TestCase>
 
   <TestCase name="Request For Non-existant Patient">
-    <Request method="GET" uri="/api/patient/X/info" username="health" password="health"/>
+    <Request method="GET" uri="/api/patient/X/info" username="vht" password="vht"/>
     <Response status="404">
       <![CDATA[
       {
@@ -96,7 +96,7 @@
   </TestCase>
 
   <TestCase name="Get Reading View">
-    <Request method="GET" uri="/api/reading/1" username="health" password="health"/>
+    <Request method="GET" uri="/api/reading/1" username="vht" password="vht"/>
     <Response status="200">
       <![CDATA[
       {
