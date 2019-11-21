@@ -118,6 +118,9 @@ public class PatientController {
 
 	@GetMapping("/{id}/getMedications")
 	public List<Medication> getMedication(@PathVariable("id") String id) throws Exception {
+		if(patientManagerService.getFullPatientProfile(id) == null){
+			throw new EntityNotFoundException("Patient "+id+" does not exist");
+		}
 		return medicationManager.getAllMedicationsForPatient(id);
 	}
 
