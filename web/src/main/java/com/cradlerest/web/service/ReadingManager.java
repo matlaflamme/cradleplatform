@@ -58,5 +58,5 @@ public interface ReadingManager {
 	 * @param readingView A reading view.
 	 * @return The saved reading.
 	 */
-	Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws EntityNotFoundException;
+	Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws Exception;
 }

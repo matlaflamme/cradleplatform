@@ -26,7 +26,7 @@ public class ReadingController {
 	 * @param readingView The reading view to save.
 	 */
 	@PostMapping("save")
-	public Reading save(Authentication auth, @RequestBody ReadingView readingView) throws BadRequestException {
+	public Reading save(Authentication auth, @RequestBody ReadingView readingView) throws Exception {
 		try {
 			return readingManager.saveReadingView(auth, readingView);
 		} catch (InstantiationError | EntityNotFoundException e) {

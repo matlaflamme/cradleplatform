@@ -63,8 +63,13 @@ public class ReadingManagerImpl implements ReadingManager {
 	}
 
 	@Override
-	public Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws EntityNotFoundException {
-		if (readingView.getCreatedBy() == null && auth != null) {
+	public Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws Exception {
+		if (auth == null) {
+			// TODO: change to AccessDeniedException once that is merged
+			throw new Exception("Permission Denied");
+		}
+
+		if (readingView.getCreatedBy() == null) {
 			assert auth.getPrincipal() instanceof UserDetailsImpl;
 			var details = (UserDetailsImpl) auth.getPrincipal();
 			readingView.setCreatedBy(details.getId());
