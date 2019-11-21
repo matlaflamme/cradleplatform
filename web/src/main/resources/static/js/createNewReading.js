@@ -4,10 +4,13 @@ Vue.prototype.$http = axios;
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
+
         e1: 0,
+        sex: 0,
         snackbar: false,
         symptoms: [],
         medications:[],
+        pregnant: false,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
         MIN_SYSTOLIC: 10,
@@ -15,7 +18,6 @@ Vue.component('new_reading',{
         MIN_DIASTOLIC: 10,
         MAX_HEART_RATE: 200,
         MIN_HEART_RATE: 40,
-
         valid: true,
         colour: '',
         timestamp: '',
@@ -41,12 +43,19 @@ Vue.component('new_reading',{
             v => !!v || 'Diastolic is required',
             v => (v && v <= 300) || 'Diastolic is invalid',
             v => (v && v >= 10) || 'Diastolic is invalid'
+        ],
+        gestationalAge: null,
+        gestationalAgeRules: [
+            v => !!v || 'Diastolic is required',
+            v => (v && v <= 42) || 'gestational age is invalid',
+            v => (v && v >= 0) || 'gestational age is invalid'
         ]
     }),
     methods: {
         submit: function() {
             console.log(new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate));
             //do input validation in a different function
+            let NUMBER_OF_DAYS_IN_WEEK = 7;
             axios.post('/api/reading/save',
                 {
                     patientId: this.patientID,
@@ -54,8 +63,8 @@ Vue.component('new_reading',{
                     systolic: parseInt(this.systolic),
                     diastolic: parseInt(this.diastolic),
                     colour: new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate),
-                    pregnant: false,
-                    gestationalAge: null,
+                    pregnant: this.pregnant,
+                    gestationalAge: parseInt(this.gestationalAge) * NUMBER_OF_DAYS_IN_WEEK, //convert weeks to days
                     timestamp: getCurrentDate(),
                     symptoms: this.symptoms,
                     // medications: this.medications //Not implemented in the server yet
@@ -103,6 +112,11 @@ Vue.component('new_reading',{
         if (id !== "null") {
             this.patientID = id;
         }
+        axios.get('/api/patient/'+ id).then(response => {
+            this.sex = response.data.sex;
+            console.log(this.sex);
+
+        })
     },
     template: //@TODO Fix indentation
     '<div>' +
@@ -151,6 +165,16 @@ Vue.component('new_reading',{
         '        label="Heart Rate"\n' +
         '        required\n' +
         '      ></v-text-field>\n' +
+        '        <template v-if=" sex == 1 || sex == 2 ">\n' + // If patient is not a man show the pregnant option
+        '            <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>' +
+        '        </template>' +
+        '        <template v-if= "pregnant === true">\n' +
+        '        <v-text-field\n' +
+        '        v-model="gestationalAge"\n' +
+        '        label="Pregnancy week"\n' +
+        '        :rules="gestationalAgeRules"\n' +
+        '      ></v-text-field>\n' +
+        '        </template>' +
         '          </v-card>\n' +
         '          <v-btn\n' +
         '            color="primary"\n' +
