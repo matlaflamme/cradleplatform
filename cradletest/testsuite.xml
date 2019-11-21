@@ -11,7 +11,7 @@
   </TestCase>
 
   <TestCase name="Valid Get Patient Info">
-    <Request method="GET" uri="/api/patient/001/info"/>
+    <Request method="GET" uri="/api/patient/001/info" username="health" password="health"/>
     <Response status="200">
       <![CDATA[
       {
@@ -32,7 +32,7 @@
   </TestCase>
 
   <TestCase name="Request For Non-existant Patient">
-    <Request method="GET" uri="/api/patient/X/info"/>
+    <Request method="GET" uri="/api/patient/X/info" username="health" password="health"/>
     <Response status="404">
       <![CDATA[
       {
@@ -45,7 +45,7 @@
   </TestCase>
 
   <TestCase name="Add Male Patient">
-    <Request method="POST" uri="/api/patient">
+    <Request method="POST" uri="/api/patient" username="health" password="health">
       <![CDATA[
       {
         "id":"X",
@@ -62,7 +62,7 @@
   </TestCase>
 
   <TestCase name="Add Female Patient">
-    <Request method="POST" uri="/api/patient">
+    <Request method="POST" uri="/api/patient" username="health" password="health">
       <![CDATA[
       {
         "id":"1000",
@@ -79,7 +79,7 @@
   </TestCase>
 
   <TestCase name="Add Unkown Gender Patient">
-    <Request method="POST" uri="/api/patient">
+    <Request method="POST" uri="/api/patient" username="health" password="health">
       <![CDATA[
       {
         "id":"1000",
@@ -96,7 +96,7 @@
   </TestCase>
 
   <TestCase name="Get Reading View">
-    <Request method="GET" uri="/api/reading/1"/>
+    <Request method="GET" uri="/api/reading/1" username="health" password="health"/>
     <Response status="200">
       <![CDATA[
       {
@@ -119,7 +119,7 @@
   </TestCase>
 
   <TestCase name="Create New Reading">
-    <Request method="POST" uri="/api/reading/save">
+    <Request method="POST" uri="/api/reading/save" username="health" password="health">
       <![CDATA[
       {
         "patientId":"001",
@@ -137,7 +137,7 @@
     <Response status="200"/>
   </TestCase>
 
-  <TestCase name="Create New Reading With Missing Symptoms">
+  <TestCase name="Create New Reading With Missing Symptoms" username="health" password="health">
     <Request method="POST" uri="/api/reading/save">
       <![CDATA[
       {
@@ -329,7 +329,7 @@
     </TestCase>
 
     <TestCase name="Get Patients at Health Center">
-      <Request method="GET" uri="/api/hc/1/patients"/>
+      <Request method="GET" uri="/api/hc/1/patients" username="health" password="health"/>
       <Response status="200">
         <![CDATA[
         [
@@ -368,7 +368,7 @@
     </TestCase>
 
     <TestCase name="Get Patients at Invalid Health Center">
-      <Request method="GET" uri="/api/hc/10/patients"/>
+      <Request method="GET" uri="/api/hc/10/patients" username="health" password="health"/>
       <Response status="200">
         <![CDATA[
         []
@@ -464,7 +464,7 @@
     </Batch>
 
     <TestCase name="New Patient Test">
-        <Request method="POST" uri="/api/patient">
+        <Request method="POST" uri="/api/patient" username="health" password="health">
             <![CDATA[
               {
                   "id": "090",

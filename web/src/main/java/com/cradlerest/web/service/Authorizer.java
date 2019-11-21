@@ -17,7 +17,7 @@ public abstract class Authorizer {
 
 	private Authentication auth;
 
-	protected Authorizer(@NotNull Authentication auth) {
+	protected Authorizer(Authentication auth) {
 		this.auth = auth;
 	}
 
