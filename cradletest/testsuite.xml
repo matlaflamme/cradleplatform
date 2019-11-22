@@ -116,30 +116,6 @@
       ]]>
     </Response>
   </TestCase>
-  <TestCase name="Create New Referral">
-      <Request method="POST" uri="/api/referral/new">
-          <![CDATA[
-            {
-                "referrerUserName": "vht",
-                "healthCentrePhoneNumber": "+12053465538",
-                "reading": {
-                    "patientId": "001",
-                    "systolic": 25,
-                    "diastolic": 20,
-                    "heartRate": 30,
-                    "gestationalAge": 90,
-                    "colour": 0,
-                    "timestamp": "2019-10-24 09:32:10",
-                    "otherSymptoms": null,
-                    "readingNotes": null,
-                    "createdBy": 3,
-                    "pregnant": true
-                }
-            }
-            ]]>
-        </Request>
-      <Response status="200"/>
-  </TestCase>
   <TestCase name="Create New Reading">
     <Request method="POST" uri="/api/reading/save">
       <![CDATA[
@@ -278,7 +254,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 5,
+              "id": 4,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -325,7 +301,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 5,
+              "id": 4,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -365,6 +341,36 @@
         <Response status="200">
             <![CDATA[{"username":"vht"}]]>
         </Response>
+    </TestCase>
+    <TestCase name="Create New Referral">
+        <Request method="POST" uri="/api/referral/send">
+            <![CDATA[
+              {
+                  "u":"health",
+                  "h":"+12053465536",
+                  "i":"003",
+                  "p": {
+                      "sex":0,
+                      "birthYear":1995,
+                      "name":"Harumi Youko"
+                  },
+                  "r": {
+                      "systolic": 25,
+                      "diastolic": 20,
+                      "heartRate": 30,
+                      "gestationalAge": 90,
+                      "colour": 0,
+                      "timestamp": "2019-10-24 09:32:10",
+                      "otherSymptoms": null,
+                      "readingNotes": null,
+                      "symptoms": [],
+                      "createdBy": 3,
+                      "pregnant": true
+                  }
+              }
+              ]]>
+          </Request>
+        <Response status="200"/>
     </TestCase>
 
     <Batch>
