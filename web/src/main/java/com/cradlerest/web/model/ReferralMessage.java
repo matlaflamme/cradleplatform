@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Defines a referral message that is received by the client
+ * Defines a referral message that is received from the client
  *
  * A referral is a special reading
  */

@@ -54,8 +54,9 @@ public class Referral {
 	@DataGenRange(min = 3, max = 4)
 	private Integer reviewerUserId;
 
-	@OneToOne
-	private Reading reading;
+	@Column(name = "reading_id", nullable = false)
+	@ForeignKey(Reading.class)
+	private Integer readingId;
 
 	public Referral() {}
 
@@ -80,14 +81,6 @@ public class Referral {
 	public void setHealthCentrePhoneNumber(String healthCentrePhoneNumber) {
 		this.healthCentrePhoneNumber = healthCentrePhoneNumber;
 	}
-
-//	public Integer getReadingId() {
-//		return readingId;
-//	}
-
-//	public void setReadingId(Integer readingId) {
-//		this.readingId = readingId;
-//	}
 
 	@JsonSerialize(using = DateSerializer.class)
 	public Date getTimestamp() {
@@ -125,11 +118,11 @@ public class Referral {
 		this.reviewerUserId = userId;
 	}
 
-	public Reading getReading() {
-		return reading;
+	public Integer getReadingId() {
+		return readingId;
 	}
 
-	public void setReading(Reading reading) {
-		this.reading = reading;
+	public void setReadingId(Integer readingId) {
+		this.readingId = readingId;
 	}
 }

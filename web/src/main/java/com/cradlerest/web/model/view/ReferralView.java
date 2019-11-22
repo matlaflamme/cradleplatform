@@ -43,7 +43,7 @@ public interface ReferralView {
 
 			@Override
 			public int getReadingId() {
-				return referral.getReading().getId();
+				return referral.getId();
 			}
 
 			@Override

@@ -1,6 +1,7 @@
 package com.cradlerest.web.model.builder;
 
 import com.cradlerest.web.model.Referral;
+import com.cradlerest.web.model.ReferralMessage;
 import com.cradlerest.web.util.DateParser;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,11 +50,15 @@ public class ReferralBuilder {
 		return this;
 	}
 
-//	public ReferralBuilder readingId(@NotNull Integer readingId) {
-//		referral.setReadingId(readingId);
-//		return this;
-//	}
+	public ReferralBuilder readingId(@NotNull Integer readingId) {
+		referral.setReadingId(readingId);
+		return this;
+	}
 
+	public ReferralBuilder patientId(@NotNull String patientId) {
+		referral.setPatientId(patientId);
+		return this;
+	}
 
 	public ReferralBuilder timestamp(@NotNull Date timestamp) {
 		referral.setTimestamp(timestamp);
@@ -68,7 +73,7 @@ public class ReferralBuilder {
 	private void validate() throws InstantiationError {
 		assertFieldNotNull(referral.getReferrerUserName(), "referrerUserName");
 		assertFieldNotNull(referral.getHealthCentrePhoneNumber(), "healthCentrePhoneNumber");
-//		assertFieldNotNull(referral.getReadingId(), "readingId");
+		assertFieldNotNull(referral.getReadingId(), "readingId");
 		assertFieldNotNull(referral.getPatientId(), "patientId");
 		assertFieldNotNull(referral.getTimestamp(), "timestamp");
 	}
