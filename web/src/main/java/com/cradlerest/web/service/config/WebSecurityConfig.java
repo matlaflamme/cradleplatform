@@ -71,10 +71,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.and()
 
+				//
 				// API endpoint authentication
+				//
+
 				.authorizeRequests()
-				// Disabling security on the following...
-                .antMatchers("/api/**").permitAll()
+
+				// Open endpoints
+				.antMatchers("/api/user/whoami").authenticated()
+
+				// Admin only endpoints
+				.antMatchers("/api/hc/**").hasRole("ADMIN")
+				.antMatchers("/api/internal/**").hasRole("ADMIN")
+				.antMatchers("/api/stats/**").hasRole("ADMIN")
+				.antMatchers("/api/twillio/**").hasRole("ADMIN")
+				.antMatchers("/api/user/**").hasRole("ADMIN")
+
+				// VHT/Health Worker endpoints
+				.antMatchers("/api/patient/**").hasAnyRole("HEALTHWORKER", "VHT")
+				.antMatchers("/api/reading/**").hasAnyRole("HEALTHWORKER", "VHT")
+
+				// VHT only endpoints
+				.antMatchers("/api/referral/send/**").hasRole("VHT")
+
+				// Health worker only endpoints
+				.regexMatchers("/api/referral(?:/.+)?/all").hasRole("HEALTHWORKER")
+
+				// Deny any other request
+				.antMatchers("/api/**").denyAll()
 				.and()
 
 				// Exception handling
