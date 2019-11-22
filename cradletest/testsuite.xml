@@ -273,12 +273,12 @@
       }
       ]]>
     </Request>
-    <Response status="500"/>
+    <Response status="404"/>
   </TestCase>
 
-  
   <TestCase name="Get Medication from Valid Patient">
     <Request method="GET" uri="/api/patient/001/getMedications">
+    <Response status="200"/>
       <![CDATA[
       {
         [
@@ -290,8 +290,7 @@
         ]
       }
       ]]>
-    </Request>
-    <Response status="200"/>
+    </Response>
   </TestCase>
   
   <TestCase name="Get Medication from Invalid Patient">
