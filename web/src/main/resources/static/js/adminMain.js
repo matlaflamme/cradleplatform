@@ -160,11 +160,15 @@ Vue.component('admin_dashboard', {
         getIcons(currVal, prevVal) {
             let up = "trending_up";
             let down = "trending_down";
+            let flat = "trending_flat";
             if (currVal < prevVal) {
                 return down;
             }
-            else {
+            else if (currVal > prevVal) {
                 return up;
+            }
+            else {
+                return flat;
             }
         },
         currChartValues() { //sets up arrays for the data needed in the graph
@@ -176,7 +180,13 @@ Vue.component('admin_dashboard', {
         },
         getSubtitle(currVal, prevVal) {
             if (currVal === prevVal) {
-                return "No change from last month."
+                return "No change from last month.";
+            }
+            else if (prevVal === 0) {
+                return currVal + " more than last month.";
+            }
+            else if (currVal === 0) {
+                return prevVal + " less than last month.";
             }
             else if (currVal > prevVal) {
                 let percentage = Math.round(((currVal / prevVal) - 1) * 100);
