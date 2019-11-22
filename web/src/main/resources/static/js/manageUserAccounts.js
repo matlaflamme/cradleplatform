@@ -15,7 +15,7 @@ Vue.component('users_table' , {
                 { text: 'Modified', value: 'modified'},
                 { text: 'Active', value: 'active', sortable: false},
             ],
-            rows: [] //empty to start
+            rows: [] //empty to start+
         }
     },
     mounted() { //sends request to server. Puts response into the rows variable
