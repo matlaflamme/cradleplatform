@@ -97,13 +97,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new CustomAuthenticationSuccessHandler();
 	}
 
-//	@Bean
-//	public FilterRegistrationBean twilioRequestValidatorFilter() {
-//		FilterRegistrationBean  registration = new FilterRegistrationBean();
-//		registration.setFilter(new TwilioRequestValidatorFilter());
-//		registration.addUrlPatterns("/api/referral/send_referral_sms");
-//		registration.setName("twilioFilter");
-//		return registration;
-//	}
-
 }
