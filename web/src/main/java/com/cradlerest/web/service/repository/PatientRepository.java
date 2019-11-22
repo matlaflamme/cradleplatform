@@ -41,4 +41,11 @@ public interface PatientRepository extends JpaRepository<Patient, String>, Patie
 			"FROM Patient  p JOIN Reading r ON r.patientId = p.id " +
 			"WHERE r.createdBy = ?1")
 	List<Patient> getAllWithReadingsBy(int userId);
+
+	/**
+	 * Returns all of the patients created by a given user.
+	 * @param userId The id of the user to find patients for.
+	 * @return A list of patients.
+	 */
+	List<Patient> findAllByCreatedBy(int userId);
 }

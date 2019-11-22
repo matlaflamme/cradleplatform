@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestSuite>
   <TestCase name="Get All Patients">
-    <Request method="GET" uri="/api/patient/all"/>
+    <Request method="GET" uri="/api/patient/all" username="health" password="health"/>
     <Response status="200"/>
     <!--
       TODO: Find a way to ensure the state of the database so that the body of
@@ -11,7 +11,7 @@
   </TestCase>
 
   <TestCase name="Valid Get Patient Info">
-    <Request method="GET" uri="/api/patient/001/info"/>
+    <Request method="GET" uri="/api/patient/001/info" username="vht" password="vht"/>
     <Response status="200">
       <![CDATA[
       {
@@ -25,27 +25,20 @@
         "medication": null,
         "drugHistory":null,
         "lastUpdated":"2019-09-20 20:12:32",
-        "generalNotes":null
+        "generalNotes":null,
+        "createdBy": 3
       }
       ]]>
     </Response>
   </TestCase>
 
   <TestCase name="Request For Non-existant Patient">
-    <Request method="GET" uri="/api/patient/X/info"/>
-    <Response status="404">
-      <![CDATA[
-      {
-        "code":404,
-        "error":"Not Found",
-        "message":"entity with id 'X' not found"
-      }
-      ]]>
-    </Response>
+    <Request method="GET" uri="/api/patient/X/info" username="vht" password="vht"/>
+    <Response status="403"/>
   </TestCase>
 
   <TestCase name="Add Male Patient">
-    <Request method="POST" uri="/api/patient">
+    <Request method="POST" uri="/api/patient" username="health" password="health">
       <![CDATA[
       {
         "id":"X",
@@ -62,7 +55,7 @@
   </TestCase>
 
   <TestCase name="Add Female Patient">
-    <Request method="POST" uri="/api/patient">
+    <Request method="POST" uri="/api/patient" username="health" password="health">
       <![CDATA[
       {
         "id":"1000",
@@ -79,7 +72,7 @@
   </TestCase>
 
   <TestCase name="Add Unkown Gender Patient">
-    <Request method="POST" uri="/api/patient">
+    <Request method="POST" uri="/api/patient" username="health" password="health">
       <![CDATA[
       {
         "id":"1000",
@@ -96,7 +89,7 @@
   </TestCase>
 
   <TestCase name="Get Reading View">
-    <Request method="GET" uri="/api/reading/1"/>
+    <Request method="GET" uri="/api/reading/1" username="vht" password="vht"/>
     <Response status="200">
       <![CDATA[
       {
@@ -302,7 +295,7 @@
     </TestCase>
 
     <TestCase name="Get Patients at Health Center">
-      <Request method="GET" uri="/api/hc/1/patients"/>
+      <Request method="GET" uri="/api/hc/1/patients" username="health" password="health"/>
       <Response status="200">
         <![CDATA[
         [
@@ -318,7 +311,8 @@
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
-              "zoneNumber": "1"
+              "zoneNumber": "1",
+              "createdBy": 3
             },
             "reading": {
               "colour": 0,
@@ -326,7 +320,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 4,
+              "id": 70002,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -341,7 +335,7 @@
     </TestCase>
 
     <TestCase name="Get Patients at Invalid Health Center">
-      <Request method="GET" uri="/api/hc/10/patients"/>
+      <Request method="GET" uri="/api/hc/10/patients" username="health" password="health"/>
       <Response status="200">
         <![CDATA[
         []
@@ -366,7 +360,8 @@
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
-              "zoneNumber": "1"
+              "zoneNumber": "1",
+              "createdBy": 3
             },
             "reading": {
               "colour": 0,
@@ -374,7 +369,7 @@
               "diastolic": 80,
               "gestationalAge": 90,
               "heartRate": 70,
-              "id": 4,
+              "id": 70002,
               "otherSymptoms": null,
               "patientId": "001",
               "pregnant": true,
@@ -467,7 +462,7 @@
     </Batch>
 
     <TestCase name="New Patient Test">
-        <Request method="POST" uri="/api/patient">
+        <Request method="POST" uri="/api/patient" username="health" password="health">
             <![CDATA[
               {
                   "id": "090",
@@ -481,4 +476,32 @@
         </Request>
         <Response status="200"/>
     </TestCase>
+
+
+  <!-- Authentication Tests -->
+  <TestCase name="Valid Request For Patient">
+    <Request method="GET" uri="/api/patient/60001/info" username="test-user-a" password="test"/>
+    <Response status="200">
+      <![CDATA[
+        {
+          "birthYear": 1990,
+          "drugHistory": null,
+          "generalNotes": null,
+          "id": "60001",
+          "lastUpdated": "2019-01-01 00:00:00",
+          "medicalHistory": null,
+          "medication": null,
+          "name": "TPA",
+          "sex": 1,
+          "villageNumber": "0",
+          "zoneNumber": "0",
+          "createdBy": null
+        }
+      ]]>
+    </Response>
+  </TestCase>
+  <TestCase name="Invalid Request For Patient">
+    <Request method="GET" uri="/api/patient/60001/info" username="test-user-b" password="test"/>
+    <Response status="403"/>
+  </TestCase>
 </TestSuite>
