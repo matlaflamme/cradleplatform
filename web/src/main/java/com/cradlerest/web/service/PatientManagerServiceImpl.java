@@ -145,6 +145,11 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.toList();
 	}
 
+	@Override
+	public List<Patient> getPatientsCreatedBy(int userId) {
+		return patientRepository.findAllByCreatedBy(userId);
+	}
+
 	/**
 	 * Takes a patient and pairs it with its latest reading.
 	 * @param patient The patient to pair with.

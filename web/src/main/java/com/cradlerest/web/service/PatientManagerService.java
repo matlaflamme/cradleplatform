@@ -76,6 +76,13 @@ public interface PatientManagerService {
 	List<PatientWithLatestReadingView> getPatientsWithReadingsCreatedBy(int userId);
 
 	/**
+	 * Returns all of the patients created by the user with a given id.
+	 * @param userId The id of the user to get patients for.
+	 * @return A list of patients.
+	 */
+	List<Patient> getPatientsCreatedBy(int userId);
+
+	/**
 	 * Takes a patient and pairs it with its latest reading.
 	 * @param patient The patient to pair with.
 	 * @return The patient along with its latest reading.

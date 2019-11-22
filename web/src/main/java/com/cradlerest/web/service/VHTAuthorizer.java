@@ -1,5 +1,6 @@
 package com.cradlerest.web.service;
 
+import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
@@ -27,11 +28,21 @@ public class VHTAuthorizer extends Authorizer {
 		return true;
 	}
 
+	/**
+	 * A VHT can access any patient that it has readings created for or that it
+	 * created itself.
+	 * @param id The identifier of the patient to request access to.
+	 * @return Whether the VHT can access a given patient or not.
+	 */
 	@Override
 	public boolean canAccessPatient(@NotNull String id) {
 		var details = getUserDetails();
-		var patients = Vec.copy(patientManager.getPatientsWithReadingsCreatedBy(details.getId()));
-		return patients.any(p -> p.getPatient().getId().equals(id));
+		var a = Vec.copy(patientManager.getPatientsWithReadingsCreatedBy(details.getId()))
+				.map(PatientWithLatestReadingView::getPatient)
+				.any(p -> p.getId().equals(id));
+		var b = Vec.copy(patientManager.getPatientsCreatedBy(details.getId()))
+				.any(p -> p.getId().equals(id));
+		return a || b;
 	}
 
 	@Override
