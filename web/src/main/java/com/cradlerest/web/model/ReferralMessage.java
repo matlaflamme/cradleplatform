@@ -39,6 +39,11 @@ public class ReferralMessage {
 	 */
 	public ReadingView r;
 
+	/**
+	 * timestamp - ( can be null )
+	 */
+	public String t;
+
 	public ReferralMessage() {}
 
 	public String getReferrerUserName() {
@@ -79,5 +84,13 @@ public class ReferralMessage {
 
 	public void setPatientId(String patientId) {
 		this.i = patientId;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.t = timestamp;
+	}
+
+	public String getTimestamp() {
+		return t;
 	}
 }

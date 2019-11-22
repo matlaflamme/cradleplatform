@@ -10,7 +10,6 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
 import com.cradlerest.web.util.BitmapEncoder;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
 import org.apache.http.HttpResponse;
@@ -28,7 +27,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.sql.Ref;
 import java.util.*;
 
 import static com.cradlerest.web.util.CopyFields.copyFields;
@@ -129,6 +127,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		return new ReferralBuilder()
 				.referredByUsername(referralMessage.getReferrerUserName())
 				.referredToHealthCentrePhoneNumber(referralMessage.getHealthCentrePhoneNumber())
+				.timestamp(referralMessage.getTimestamp())
 				.readingId(reading.getId())
 				.patientId(patient.getId())
 				.build();

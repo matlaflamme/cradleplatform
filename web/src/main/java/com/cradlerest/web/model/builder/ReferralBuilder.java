@@ -1,7 +1,6 @@
 package com.cradlerest.web.model.builder;
 
 import com.cradlerest.web.model.Referral;
-import com.cradlerest.web.model.ReferralMessage;
 import com.cradlerest.web.util.DateParser;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +69,10 @@ public class ReferralBuilder {
 		return this;
 	}
 
-	public ReferralBuilder timestamp(@NotNull String timestampText) {
+	public ReferralBuilder timestamp(String timestampText) {
+		if (timestampText == null) {
+			return this;
+		}
 		referral.setTimestamp(DateParser.parseDateTime(timestampText));
 		return this;
 	}

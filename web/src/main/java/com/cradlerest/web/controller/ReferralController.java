@@ -1,25 +1,15 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.ReferralManagerService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.LaxRedirectStrategy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.net.URL;
+
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +24,6 @@ import java.util.Map;
 public class ReferralController {
 	private Logger logger = LoggerFactory.getLogger(ReferralController.class);
 	private ReferralManagerService referralManagerService;
-	private static final String TWILIO_SID = "";
-	private static final String TWILIO_PWD = "";
-
 
 	public ReferralController(ReferralManagerService referralManagerService) {
 		this.referralManagerService = referralManagerService;
@@ -56,19 +43,15 @@ public class ReferralController {
 	 * <p>
 	 * <p>
 	 *  {
-	 *   "referrerUserName": "vht",
-	 *   "healthCentrePhoneNumber": "555555555",
-	 *   "timestamp":"2019-10-24 09:32:10",
-	 *   "patient": {
-	 *       "id":"001",
+	 *   "u": "vht",			- user name of referrer
+	 *   "h": "555555555",      - health centre phone number
+	 *   "i": "001"				- patient id
+	 *   "p": {					- patient
 	 * 	     "sex":0,
-	 * 	     "zoneNumber":0,
-	 * 	     "villageNumber":8,
 	 *       "birthYear":1995,
 	 * 	     "name":"sdd"
 	 *   }
-	 *   "reading": {
-	 *      "patientId": "001",
+	 *   "r": {					- reading
 	 *      "systolic": 25,
 	 *      "diastolic": 20,
 	 *      "heartRate": 30,
@@ -84,7 +67,6 @@ public class ReferralController {
 	 * Health centre referred to,
 	 * TODO: Distance from health centre,
 	 * TODO: Mode of transport to reach health centre
-	 * TODO: Repository exception handling
 	 */
 	@PostMapping(path = "/send/sms", consumes = "application/x-www-form-urlencoded")
 	public Referral saveReferralSMS(WebRequest request) throws Exception {
@@ -95,7 +77,6 @@ public class ReferralController {
 	@PostMapping("/send")
 	public Referral saveReferral(@RequestBody ReferralMessage referral) throws Exception {
 		return referralManagerService.saveReferral(referral);
-
 	}
 		/**
 		 * Returns all referrals sorted by timestamp in descending order
