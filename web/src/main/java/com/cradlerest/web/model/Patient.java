@@ -66,6 +66,10 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String generalNotes;
 
+	@Column(name = "created_by")
+	@Omit
+	private Integer createdBy;
+
 	public Patient() {
 	}
 
@@ -174,6 +178,15 @@ public class Patient {
 	public void setGeneralNotes(String generalNotes) {
 		this.generalNotes = generalNotes;
 	}
+
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
 
 	@Override
 	public boolean equals(Object o) {

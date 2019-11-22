@@ -41,7 +41,11 @@ CREATE TABLE patient
     medical_history TEXT,
     drug_history    TEXT,
     last_updated    DATETIME     NOT NULL,
-    notes           TEXT
+    notes           TEXT,
+    created_by      INT,
+
+    FOREIGN KEY (created_by)
+        REFERENCES user (id)
 );
 
 CREATE TABLE reading

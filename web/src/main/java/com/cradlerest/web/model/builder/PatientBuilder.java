@@ -98,6 +98,11 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder createdBy(@Nullable Integer userId) {
+		patient.setCreatedBy(userId);
+		return this;
+	}
+
 	private void validate() throws InstantiationError {
 		assertFieldNotNull(patient.getId(), "id");
 		assertFieldNotNull(patient.getName(), "name");
