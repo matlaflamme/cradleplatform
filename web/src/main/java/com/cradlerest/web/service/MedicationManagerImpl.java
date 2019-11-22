@@ -4,8 +4,6 @@ import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Medication;
 import com.cradlerest.web.service.repository.MedicationRepository;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MedicationManagerImpl implements MedicationManager {

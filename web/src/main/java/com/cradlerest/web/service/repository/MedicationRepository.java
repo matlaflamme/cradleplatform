@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Repository for {@code Medication} entities.
@@ -27,6 +26,5 @@ public interface MedicationRepository extends JpaRepository<Medication, Integer>
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM medication med WHERE med.pid = ?1 AND med.med_id = ?2", nativeQuery = true)
-//    @Query("SELECT r FROM Medication r WHERE r.patientId = ?1")
     void deleteMedicationByPatientId(@NotNull String pid, int medId);
 }
