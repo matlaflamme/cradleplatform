@@ -3,7 +3,8 @@ package com.cradlerest.web.service;
 import com.cradlerest.web.model.UserRole;
 import com.cradlerest.web.service.mock.NullAuthorizer;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
+
+import static com.cradlerest.web.util.AuthenticationExt.hasRole;
 
 public class AuthorizerFactory {
 
@@ -25,10 +26,9 @@ public class AuthorizerFactory {
 			return new DenyAllAuthorizer(null);
 		}
 
-		var roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
-		if (roles.contains(UserRole.HEALTH_WORKER.getRoleString())) {
+		if (hasRole(auth, UserRole.HEALTH_WORKER)) {
 			return new HealthWorkerAuthorizer(auth, patientManager, readingManager);
-		} else if (roles.contains(UserRole.VHT.getRoleString())) {
+		} else if (hasRole(auth, UserRole.VHT)) {
 			return new VHTAuthorizer(auth, patientManager, readingManager);
 		} else {
 			return new NullAuthorizer(auth);
