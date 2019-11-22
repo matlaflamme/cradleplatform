@@ -117,15 +117,12 @@ public class PatientController {
 	}
 
 	@GetMapping("/{id}/getMedications")
-	public List<Medication> getMedication(@PathVariable("id") String id) throws Exception {
-		if(patientManagerService.getFullPatientProfile(id) == null){
-			throw new EntityNotFoundException("Patient "+id+" does not exist");
-		}
+	public List<Medication> getMedication(@PathVariable("id") String id) throws EntityNotFoundException {
 		return medicationManager.getAllMedicationsForPatient(id);
 	}
 
 	@DeleteMapping("/{id}/removeMedication/{medId}")
-	public Medication removeMedication(@PathVariable("id") String id, @PathVariable String medId) throws Exception {
+	public Medication removeMedication(@PathVariable("id") String id, @PathVariable String medId) throws EntityNotFoundException, BadRequestException {
 		int medIdAsInt = 0;
 		try {
 			medIdAsInt = Integer.parseInt(medId);

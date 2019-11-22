@@ -37,7 +37,7 @@ public interface MedicationManager {
      * @param medication A Medication.
      * @return The saved medication.
      */
-    Medication saveMedication(@NotNull Medication medication) throws EntityNotFoundException;
+    Medication saveMedication(@NotNull Medication medication);
 
     /**
      *
