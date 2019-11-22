@@ -68,6 +68,9 @@ Vue.component('sidebar_item', {
             else if (clicked === "vht-performance") {
                 window.location.assign("/vhtPerformance")
             }
+            else if (clicked === "accountSetting") {
+                window.location.assign("/accountSetting")
+            }
         },
     }
 });
