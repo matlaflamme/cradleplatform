@@ -1,13 +1,9 @@
 package com.cradlerest.web.controller;
 
-import com.cradlerest.web.controller.exceptions.AlreadyExistsException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.HealthCentre;
-import com.cradlerest.web.model.PatientWithLatestReadingView;
-import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.repository.HealthCentreRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,16 +19,8 @@ public class HealthCentreController {
 
 	private HealthCentreRepository healthCentreRepository;
 
-	private PatientManagerService patientManagerService;
-
-	public HealthCentreController(PatientManagerService patientManagerService, HealthCentreRepository healthCentreRepository) {
-		this.patientManagerService = patientManagerService;
+	public HealthCentreController(HealthCentreRepository healthCentreRepository) {
 		this.healthCentreRepository = healthCentreRepository;
-	}
-
-	@GetMapping("/{id}/patients")
-	public List<PatientWithLatestReadingView> patients(@PathVariable("id") int id) {
-		return patientManagerService.getPatientsReferredToHealthCenter(id);
 	}
 
 	@GetMapping("/all")
