@@ -34,15 +34,7 @@
 
   <TestCase name="Request For Non-existant Patient">
     <Request method="GET" uri="/api/patient/X/info" username="vht" password="vht"/>
-    <Response status="404">
-      <![CDATA[
-      {
-        "code":404,
-        "error":"Not Found",
-        "message":"entity with id 'X' not found"
-      }
-      ]]>
-    </Response>
+    <Response status="403"/>
   </TestCase>
 
   <TestCase name="Add Male Patient">

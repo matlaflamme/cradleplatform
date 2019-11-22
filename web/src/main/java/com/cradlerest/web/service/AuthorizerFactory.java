@@ -28,6 +28,8 @@ public class AuthorizerFactory {
 		var roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
 		if (roles.contains(UserRole.HEALTH_WORKER.getRoleString())) {
 			return new HealthWorkerAuthorizer(auth, patientManager, readingManager);
+		} else if (roles.contains(UserRole.VHT.getRoleString())) {
+			return new VHTAuthorizer(auth, patientManager, readingManager);
 		} else {
 			return new NullAuthorizer(auth);
 		}
