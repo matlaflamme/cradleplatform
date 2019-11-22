@@ -276,7 +276,7 @@
         [
           {
             "patientId":"001",
-            "medId":5,
+            "medId":0,
             "medication":"Tylenol",
             "dosage":"1 Extra Strength Pill",
             "usageFrequency":"Morning and Evening"
