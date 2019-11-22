@@ -41,6 +41,7 @@ public class VHTAuthorizer extends Authorizer {
 				.map(PatientWithLatestReadingView::getPatient)
 				.any(p -> p.getId().equals(id));
 		var b = Vec.copy(patientManager.getPatientsCreatedBy(details.getId()))
+				.map(PatientWithLatestReadingView::getPatient)
 				.any(p -> p.getId().equals(id));
 		return a || b;
 	}

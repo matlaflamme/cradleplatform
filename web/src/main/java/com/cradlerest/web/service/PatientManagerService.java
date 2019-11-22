@@ -42,7 +42,14 @@ public interface PatientManagerService {
 	 * returned in place of one.
 	 * @return A list of patient/reading pairs.
 	 */
-	List<PatientWithLatestReadingView> getAllPatientsWithLastReading();
+	List<PatientWithLatestReadingView> getAllPatientsWithLastReading(Authentication auth);
+
+	/**
+	 * Returns all available patients for a given user.
+	 * @param auth The authentication object for a user.
+	 * @return A list of all users available to a user.
+	 */
+	List<Patient> getAllPatientsUsingAuth(Authentication auth);
 
 	/**
 	 * Returns the list of all patients in the database.
@@ -80,7 +87,7 @@ public interface PatientManagerService {
 	 * @param userId The id of the user to get patients for.
 	 * @return A list of patients.
 	 */
-	List<Patient> getPatientsCreatedBy(int userId);
+	List<PatientWithLatestReadingView> getPatientsCreatedBy(int userId);
 
 	/**
 	 * Takes a patient and pairs it with its latest reading.

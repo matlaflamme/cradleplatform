@@ -15,9 +15,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.cradlerest.web.util.AuthenticationExt.hasRole;
 
 /**
  * Class {@code PatientManagerService} implements the logic for managing
@@ -92,6 +95,13 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @return All patients.
 	 */
 	@Override
+	public List<Patient> getAllPatientsUsingAuth(Authentication auth) {
+		return Vec.copy(getAllPatientsWithLastReading(auth))
+				.map(PatientWithLatestReadingView::getPatient)
+				.toList();
+	}
+
+	@Override
 	public List<Patient> getAllPatients() {
 		return patientRepository.findAll();
 	}
@@ -103,8 +113,21 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @return A list of patient/reading pairs.
 	 */
 	@Override
-	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading() {
-		return patientRepository.getAllPatientsAndLatestReadings();
+	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading(Authentication auth) {
+		assert auth != null;
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+
+		var details = (UserDetailsImpl) auth.getPrincipal();
+		if (hasRole(auth, UserRole.HEALTH_WORKER)) {
+			if (details.getWorksAtHealthCentreId() == null) {
+				return new ArrayList<>();
+			}
+			return getPatientsReferredToHealthCenter(details.getWorksAtHealthCentreId());
+		} else if (hasRole(auth, UserRole.VHT)) {
+			return getPatientsCreatedBy(details.getId());
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	/**
@@ -146,8 +169,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	}
 
 	@Override
-	public List<Patient> getPatientsCreatedBy(int userId) {
-		return patientRepository.findAllByCreatedBy(userId);
+	public List<PatientWithLatestReadingView> getPatientsCreatedBy(int userId) {
+		return Vec.copy(patientRepository.findAllByCreatedBy(userId))
+				.map(this::pairWithLatestReading)
+				.toList();
 	}
 
 	/**

@@ -59,14 +59,14 @@ public class PatientController {
 	public List<Patient> all(Authentication auth) throws Exception {
 		authorizerFactory.construct(auth)
 				.check(Authorizer::canListPatients);
-		return patientManagerService.getAllPatients();
+		return patientManagerService.getAllPatientsUsingAuth(auth);
 	}
 
 	@GetMapping("/all_with_latest_reading")
 	public List<?> allSummary(Authentication auth) throws Exception {
 		authorizerFactory.construct(auth)
 				.check(Authorizer::canListPatients);
-		return patientManagerService.getAllPatientsWithLastReading();
+		return patientManagerService.getAllPatientsWithLastReading(auth);
 	}
 
 	@GetMapping("/{id}")
