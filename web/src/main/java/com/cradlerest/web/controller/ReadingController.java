@@ -6,6 +6,7 @@ import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.ReadingManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,9 +26,14 @@ public class ReadingController {
 	 * @param readingView The reading view to save.
 	 */
 	@PostMapping("save")
-	public Reading save(@RequestBody ReadingView readingView) throws BadRequestException {
+	public Reading save(Authentication auth, @RequestBody ReadingView readingView) throws Exception {
+		if (auth == null) {
+			// TODO: change to AccessDeniedException once that is merged
+			throw new Exception("Permission Denied");
+		}
+
 		try {
-			return readingManager.saveReadingView(readingView);
+			return readingManager.saveReadingView(auth, readingView);
 		} catch (InstantiationError | EntityNotFoundException e) {
 			throw new BadRequestException("invalid request body", e);
 		}

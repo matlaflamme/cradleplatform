@@ -36,7 +36,7 @@ public class Referral {
 
 	@Column(name = "referred_to", nullable = false)
 	@ForeignKey(HealthCentre.class)
-	private String healthCentrePhoneNumber;
+	private Integer healthCentreId;
 
 	@Column(name = "patient", nullable = false)
 	@ForeignKey(Patient.class)
@@ -74,12 +74,12 @@ public class Referral {
 		this.referrerUserName = referrerUserName;
 	}
 
-	public String getHealthCentrePhoneNumber() {
-		return healthCentrePhoneNumber;
+	public Integer getHealthCentreId() {
+		return healthCentreId;
 	}
 
-	public void setHealthCentrePhoneNumber(String healthCentrePhoneNumber) {
-		this.healthCentrePhoneNumber = healthCentrePhoneNumber;
+	public void setHealthCentreId(Integer healthCentreId) {
+		this.healthCentreId = healthCentreId;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)

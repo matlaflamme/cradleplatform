@@ -7,6 +7,10 @@ import com.cradlerest.web.service.ReferralManagerService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
+import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -75,14 +79,15 @@ public class ReferralController {
 	}
 
 	@PostMapping("/send")
-	public Referral saveReferral(@RequestBody ReferralMessage referral) throws Exception {
+	public Referral saveReferral(Authentication auth, @RequestBody ReferralMessage referral) throws Exception {
 		return referralManagerService.saveReferral(referral);
 	}
-		/**
-		 * Returns all referrals sorted by timestamp in descending order
-		 *
-		 * @return
-		 */
+
+	/**
+	 * Returns all referrals sorted by timestamp in descending order
+	 *
+	 * @return
+	 */
 	@GetMapping("/all")
 	public @ResponseBody
 	List<ReferralView> allReferralsSortByTimestamp() {

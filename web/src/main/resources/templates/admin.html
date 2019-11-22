@@ -3,6 +3,8 @@
 <head>
     <div th:replace="fragments/head :: headerFragment"></div>
     <title id="pageTitle">Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-apexcharts"></script>
     <link type="text/css" rel="stylesheet" href="/css/adminMain.css">
 </head>
 <body>
@@ -13,17 +15,7 @@
         <v-content>
             <v-container>
                 <v-layout justify-center>
-                        <v-row>
-                            <v-col cols="12" md="4">
-                                <info_card id="info_card" title="76"></info_card>
-                            </v-col>
-                            <v-col cols="12" md="4">
-                                <info_card id="info_card2" title="92"></info_card>
-                            </v-col>
-                            <v-col cols="12" md="4">
-                                <info_card id="info_card3" title="48"></info_card>
-                            </v-col>
-                        </v-row>
+                    <admin_dashboard></admin_dashboard>
                 </v-layout>
             </v-container>
         </v-content>
@@ -31,6 +23,6 @@
 </div>
 
 <script src="/js/mainMenuTemplate.js"></script>
-<script src="/js/adminMain.js"></script>
+<script src="/js/adminMain.js" type="module"></script>
 </body>
 </html>

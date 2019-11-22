@@ -22,6 +22,7 @@
         "birthYear":1995,
         "sex":1,
         "medicalHistory":null,
+        "medication": null,
         "drugHistory":null,
         "lastUpdated":"2019-09-20 20:12:32",
         "generalNotes":null
@@ -117,7 +118,7 @@
     </Response>
   </TestCase>
   <TestCase name="Create New Reading">
-    <Request method="POST" uri="/api/reading/save">
+    <Request method="POST" uri="/api/reading/save" username="vht" password="vht">
       <![CDATA[
       {
         "patientId":"001",
@@ -136,7 +137,7 @@
   </TestCase>
 
   <TestCase name="Create New Reading With Missing Symptoms">
-    <Request method="POST" uri="/api/reading/save">
+    <Request method="POST" uri="/api/reading/save" username="vht" password="vht">
       <![CDATA[
       {
         "patientId":"001",
@@ -152,9 +153,8 @@
     </Request>
     <Response status="400"/>
   </TestCase>
-
     <TestCase name="Create New Referral - Bad Patient Id">
-        <Request method="POST" uri="/api/referral/send">
+        <Request method="POST" uri="/api/referral/send" username="vht" password="vht">
             <![CDATA[
             {
               "patientName": "HY",
@@ -177,8 +177,9 @@
         </Request>
         <Response status="400"/>
     </TestCase>
+
     <TestCase name="Create New Referral - Bad Health Centre Name">
-        <Request method="POST" uri="/api/referral/send">
+        <Request method="POST" uri="/api/referral/send" username="vht" password="vht">
             <![CDATA[
             {
               "patientName": "HY",
@@ -201,18 +202,22 @@
         </Request>
         <Response status="400"/>
     </TestCase>
+
     <TestCase name="Get all referrals">
         <Request method="GET" uri="/api/referral/all"/>
         <Response status="200"/>
     </TestCase>
+
     <TestCase name="Get all referrals from Twilio health centre">
         <Request method="GET" uri="/api/referral/twilio/all"/>
         <Response status="200"/>
     </TestCase>
+
     <TestCase name="Get all referrals from Twilio health centre - Bad health centre name">
         <Request method="GET" uri="/api/referral/fasdfasdfasdfasdf/all"/>
         <Response status="404"/>
     </TestCase>
+
     <TestCase name="Create new user">
         <Request method="POST" uri="/api/user/add">
             <![CDATA[
@@ -225,9 +230,75 @@
         </Request>
         <Response status="201"/>
     </TestCase>
+
     <TestCase name="Disabling user100001241241">
         <Request method="POST" uri="/api/user/user100001241241/change-active"/>
         <Response status="200"/>
+    </TestCase>
+
+    <TestCase name="Retrieve all health centres">
+      <Request method="GET" uri="/api/hc/all"/>
+      <Response status="200"/>
+    </TestCase>
+
+    <TestCase name="Create a health centre">
+      <Request method="POST" uri="/api/hc/create">
+        <![CDATA[
+        {
+          "name": "JY",
+          "location":"places",
+          "email": "1234@gmail.com",
+          "phoneNumber": "21503912",
+          "alternatePhoneNumber": "123123"
+        }
+        ]]>
+      </Request>
+      <Response status="201"/>
+    </TestCase>
+
+    <TestCase name="Create a health centre: Bad email">
+      <Request method="POST" uri="/api/hc/create">
+        <![CDATA[
+        {
+          "name": "JY",
+          "location":"places",
+          "email": "1234mail.com",
+          "phoneNumber": "21503912",
+          "alternatePhoneNumber": "123123"
+        }
+        ]]>
+      </Request>
+      <Response status="400"/>
+    </TestCase>
+
+    <TestCase name="Update health centre">
+      <Request method="POST" uri="/api/hc/2">
+        <![CDATA[
+        {
+          "name": "Y",
+          "location":"laces",
+          "email": "1234@gmail.com",
+          "phoneNumber": "123",
+          "alternatePhoneNumber": "12123"
+        }
+        ]]>
+      </Request>
+      <Response status="200"/>
+    </TestCase>
+
+    <TestCase name="Update health centre: Id not found">
+      <Request method="POST" uri="/api/hc/1111111">
+        <![CDATA[
+        {
+          "name": "JY",
+          "location":"places",
+          "email": "1234@gmail.com",
+          "phoneNumber": "23103912",
+          "alternatePhoneNumber": "123123"
+        }
+        ]]>
+      </Request>
+      <Response status="404"/>
     </TestCase>
 
     <TestCase name="Get Patients at Health Center">
@@ -243,6 +314,7 @@
               "id": "001",
               "lastUpdated": "2019-09-20 20:12:32",
               "medicalHistory": null,
+              "medication": null,
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
@@ -290,6 +362,7 @@
               "id": "001",
               "lastUpdated": "2019-09-20 20:12:32",
               "medicalHistory": null,
+              "medication": null,
               "name": "Harumi Youko",
               "sex": 1,
               "villageNumber": "1",
@@ -343,7 +416,7 @@
         </Response>
     </TestCase>
     <TestCase name="Create New Referral">
-        <Request method="POST" uri="/api/referral/send">
+        <Request method="POST" uri="/api/referral/send" username="vht" password="vht">
             <![CDATA[
               {
                   "u":"health",

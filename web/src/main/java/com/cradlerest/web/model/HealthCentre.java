@@ -1,12 +1,12 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
-import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.Generator;
 import com.cradlerest.web.util.datagen.impl.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 /**
  * Defines a health centre
@@ -29,24 +29,29 @@ public class HealthCentre {
 
 	@Column(name = "phone_number", nullable = false, unique = true)
 	@Generator(PhoneNumberGenerator.class)
+	@NotNull(message = "Missing health centre number")
 	private String phoneNumber;
 
 	@Column(name = "name", nullable = false)
 	@Generator(NameGenerator.class)
+	@NotNull(message = "Missing name")
 	private String name;
 
 	@Column(name = "location", nullable = false)
 	@Generator(NameGenerator.class)
+	@NotNull(message = "Missing location")
 	private String location;
 
 	@Email(message = "invalid email")
 	@Column(name = "email")
 	@Generator(EmailGenerator.class)
+	@NotNull(message = "Missing email")
 	private String email;
 
 	// Person in charge at this health centre
 	@Column(name = "alternate_phone_number")
 	@Generator(PhoneNumberGenerator.class)
+	@NotNull(message = "Missing manager phone number")
 	private String alternatePhoneNumber;
 
 	HealthCentre() {}

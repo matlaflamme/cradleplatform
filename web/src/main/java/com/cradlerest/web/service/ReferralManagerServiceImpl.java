@@ -10,6 +10,7 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
 import com.cradlerest.web.util.BitmapEncoder;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
 import org.apache.http.HttpResponse;
@@ -21,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -45,15 +48,18 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private HealthCentreRepository healthCentreRepository;
 	private ReadingManager readingManager;
 	private PatientManagerService patientManagerService;
+	private UserRepository userRepository;
 
 	public ReferralManagerServiceImpl(ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
 									  ReadingManager readingManager,
-									  PatientManagerService patientManagerService) {
+									  PatientManagerService patientManagerService,
+									  UserRepository userRepository) {
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
 		this.readingManager = readingManager;
 		this.patientManagerService = patientManagerService;
+		this.userRepository = userRepository;
 	}
 
 	/**
@@ -62,11 +68,12 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 */
 	@Override
 	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException {
+		// TODO: findByName will throw a NonUniqueResultException if there are >1 health centre with same name.
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
-		return Vec.copy(referralRepository.findAllByHealthCentrePhoneNumber(healthCentre.get().getPhoneNumber()))
+		return Vec.copy(referralRepository.findAllByHealthCentreId(healthCentre.get().getId()))
 				.map(this::computeReferralView)
 				.toList();
 	}
@@ -79,7 +86,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	private ReferralView computeReferralView(@NotNull Referral r) {
-		var optHc = healthCentreRepository.findByPhoneNumber(r.getHealthCentrePhoneNumber());
+		var optHc = healthCentreRepository.findById(r.getHealthCentreId());
 		if (optHc.isEmpty()) {
 			throw new RuntimeException("unable to find health center: constraint violation");
 		}
@@ -118,15 +125,29 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		patient.setId(referralMessage.getPatientId());
 		patient = patientManagerService.savePatient(patient);
 
+		// Get user
+		Optional<User> userDetails = userRepository.findByUsername(referralMessage.getReferrerUserName());
+		if (userDetails.isEmpty()){
+			throw new EntityNotFoundException("User is invalid");
+		}
+
+		// Get Health Centre
+		Optional<HealthCentre> healthCentre = healthCentreRepository.findByPhoneNumber(
+				referralMessage.getHealthCentrePhoneNumber());
+		if (healthCentre.isEmpty()){
+			throw new EntityNotFoundException("Health centre is invalid!");
+		}
+
 		// Create Reading
 		ReadingView readingView = referralMessage.getReadingView();
+		readingView.setCreatedBy(userDetails.get().getId());
 		readingView.setPatientId(referralMessage.getPatientId());
-		Reading reading = readingManager.saveReadingView(readingView);
+		Reading reading = readingManager.saveReadingView(null, readingView);
 
 		// Create Referral object
 		return new ReferralBuilder()
 				.referredByUsername(referralMessage.getReferrerUserName())
-				.referredToHealthCentrePhoneNumber(referralMessage.getHealthCentrePhoneNumber())
+				.referredToHealthCentreId(healthCentre.get().getId())
 				.timestamp(referralMessage.getTimestamp())
 				.readingId(reading.getId())
 				.patientId(patient.getId())

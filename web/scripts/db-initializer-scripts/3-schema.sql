@@ -38,6 +38,7 @@ CREATE TABLE patient
     zone            VARCHAR(255),
     birth_year      INT          NOT NULL,
     sex             INT          NOT NULL, -- enumerated {male, female, unknown}
+    medication      TEXT,
     medical_history TEXT,
     drug_history    TEXT,
     last_updated    DATETIME     NOT NULL,
@@ -83,8 +84,8 @@ CREATE TABLE referral
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
     reading_id  INT          NOT NULL,
+    referred_to Int NOT NULL,
     referred_by VARCHAR(255) NOT NULL,
-    referred_to VARCHAR(255) NOT NULL, -- Phone number of health clinic
     patient     VARCHAR(255) NOT NULL,
     timestamp   DATETIME     NOT NULL,
     closed_by   INT,
@@ -95,7 +96,7 @@ CREATE TABLE referral
         REFERENCES user (username),
 
     FOREIGN KEY (referred_to)
-        REFERENCES health_centre (phone_number)
+        REFERENCES health_centre(id)
         ON DELETE CASCADE,
 
     FOREIGN KEY (reading_id)

@@ -24,9 +24,8 @@ public interface PatientRepository extends JpaRepository<Patient, String>, Patie
 	 * @return A list of patients.
 	 */
 	@Query("SELECT DISTINCT p " +
-			"FROM Patient p JOIN Referral r2 ON r2.patientId = p.id " +
-			"WHERE r2.healthCentrePhoneNumber = (SELECT hc.phoneNumber " +
-			"FROM HealthCentre hc WHERE hc.id = ?1)")
+			"FROM Patient p JOIN Referral r ON r.patientId = p.id " +
+			"WHERE r.healthCentreId = ?1")
 	List<Patient> getAllReferredToHealthCenter(int healthCentreId);
 
 	/**

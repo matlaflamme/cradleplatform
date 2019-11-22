@@ -49,8 +49,8 @@ public class ReferralBuilder {
 		return this;
 	}
 
-	public ReferralBuilder referredToHealthCentrePhoneNumber(@NotNull String healthCenterPhoneNumber) {
-		referral.setHealthCentrePhoneNumber(healthCenterPhoneNumber);
+	public ReferralBuilder referredToHealthCentreId(@NotNull Integer healthCenterId) {
+		referral.setHealthCentreId(healthCenterId);
 		return this;
 	}
 
@@ -79,7 +79,7 @@ public class ReferralBuilder {
 
 	private void validate() throws InstantiationError {
 		assertFieldNotNull(referral.getReferrerUserName(), "referrerUserName");
-		assertFieldNotNull(referral.getHealthCentrePhoneNumber(), "healthCentrePhoneNumber");
+		assertFieldNotNull(referral.getHealthCentreId(), "healthCentrePhoneNumber");
 		assertFieldNotNull(referral.getReadingId(), "readingId");
 		assertFieldNotNull(referral.getPatientId(), "patientId");
 	}

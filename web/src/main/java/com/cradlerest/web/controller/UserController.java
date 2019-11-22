@@ -12,6 +12,7 @@ import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.model.UserDetailsImpl;
 import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -219,5 +220,64 @@ public class UserController {
 		} else {
 			return principal;
 		}
+	}
+
+	/**
+	 * Container class to hold a single password value. Used as the request
+	 * body for the `check-password` and `update-password` API methods.
+	 */
+	private static class Password {
+		public String password;
+	}
+
+	/**
+	 * Checks if {@code password} sent as a request body matches the current
+	 * password for the requesting user. Returns {@code true} if they match
+	 * or {@code false} if they don't. If a request is made to this endpoint
+	 * without authentication, then a a permission denied exception is thrown.
+	 * @param auth Authentication of the requesting user.
+	 * @param password The password the check with.
+	 * @return {@code true} if the password matches the current one.
+	 * @throws Exception If an attempt is made to access this API method without
+	 * 	authentication.
+	 */
+	@PostMapping("/check-password")
+	public boolean checkPassword(Authentication auth, @RequestBody Password password) throws Exception {
+		if (auth == null) {
+			// TODO: switch to AccessDeniedException once issue-118 branch is merged
+			throw new Exception("Permission denied");
+		}
+
+		var principal = auth.getPrincipal();
+		// Programming error if this is not true
+		assert principal instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) principal;
+		return passwordEncoder.matches(password.password, details.getPassword());
+	}
+
+	/**
+	 * Changes a user's password with a string sent in the request body.
+	 * @param auth Authentication for the requesting user.
+	 * @param password The new password to update to.
+	 * @throws Exception If an attempt is made to access this API method without
+	 * 	authentication.
+	 */
+	@PostMapping("/update-password")
+	public void updatePassword(Authentication auth, @RequestBody Password password) throws Exception {
+		if (auth == null) {
+			// TODO: switch to AccessDeniedException once issue-118 branch is merged
+			throw new Exception("Permission denied");
+		}
+
+		var principal = auth.getPrincipal();
+		// Programming error if this is not true
+		assert principal instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) principal;
+
+		assert details.getId() != null;
+		var user = get(details.getId());
+		var encodedPassword = passwordEncoder.encode(password.password);
+		user.setPassword(encodedPassword);
+		userRepository.save(user);
 	}
 }

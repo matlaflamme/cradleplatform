@@ -34,6 +34,7 @@ VALUES ('001',          -- id
         '1',            -- zone number
         1995,           -- date of birth
         1,              -- sex
+        NULL,           -- medication
         NULL,           -- medical history
         NULL,           -- drug history
         '2019-09-20 20:12:32',  -- last updated
@@ -47,6 +48,7 @@ VALUES ('002',          -- id
         '3',            -- zone number
         1984,           -- date of birth
         0,              -- sex
+        'Medication Z for Y', -- medication
         'hospitalized for X, taking medication for Y', -- medical history
         'there is some history with some drugs', -- drug history
         '2019-09-20 20:12:32',
@@ -77,13 +79,13 @@ VALUES ('FSU',  '+12053465530', 'burnaby', '+12053465531');
 
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES ('vht', 3, '+12053465536', '001','2019-09-24 12:31:34');
+VALUES ('vht', 3, 1, '001','2019-09-24 12:31:34');
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES ('vht', 1, '+12053465536', '001', '2019-09-24 12:31:34');
+VALUES ('vht', 1, 2, '001', '2019-09-24 12:31:34');
 
 INSERT INTO referral (referred_by, reading_id, referred_to, patient, timestamp)
-VALUES ('vht', 2, '+12053465536', '001','2019-09-24 12:31:34');
+VALUES ('vht', 2, 1, '001','2019-09-24 12:31:34');
 
 
 INSERT INTO diagnosis (patient, description, resolved)

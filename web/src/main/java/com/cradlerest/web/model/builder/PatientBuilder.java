@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Sex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import static com.cradlerest.web.util.Validation.assertFieldNotNull;
@@ -84,6 +85,15 @@ public class PatientBuilder {
 
 	public PatientBuilder medicalHistory(@Nullable String text) {
 		patient.setMedicalHistory(text);
+		return this;
+	}
+
+	public PatientBuilder medication(@Nullable String text) {
+		patient.addMedication(text);
+		return this;
+	}
+	public PatientBuilder medication(@Nullable ArrayList<String> text) {
+		patient.addMedication(text);
 		return this;
 	}
 

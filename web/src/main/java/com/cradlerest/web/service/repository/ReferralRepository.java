@@ -14,6 +14,6 @@ import java.util.NoSuchElementException;
  * @see com.cradlerest.web.model.Referral
  */
 public interface ReferralRepository extends JpaRepository<Referral, Integer> {
-	List<Referral> findAllByHealthCentrePhoneNumber(@NotNull String healthCentrePhoneNumber) throws NoSuchElementException;
 	List<Referral> findAllByOrderByTimestampDesc();
+	List<Referral> findAllByHealthCentreId(Integer id);
 }
