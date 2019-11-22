@@ -296,13 +296,13 @@ Vue.component('patient_info', {
                 '<v-list-item-content>' +
                     '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
                     '<ul v-if="takingMedication" className="list-group" v-for="(medication, index) in medications">\n'+
-                        '<li className="list-group-item" class="pb-1">{{medication.medicine}}'+
-                            '<v-btn small outlined color="red" @click="deleteMedicine(index)">' +
+                        '<li className="list-group-item" class="pb-1">{{medication.medication}}'+
+                            '<v-btn class="removebtn" small outlined color="red" @click="deleteMedicine(index)" style=" display: table-cell;">' +
                                 '<v-icon>delete</v-icon>' +
                             '</v-btn>' +
                             '<ul>\n' +
-                                '<li className="list-group-item" class="pb-1">Dosage: {{medication.dose}}\n</li>' +
-                                '<li className="list-group-item" class="pb-1">Frequency: {{medication.frequency}}\n</li>\n' +
+                                '<li className="list-group-item" class="pb-1">Dosage: {{medication.dosage}}\n</li>' +
+                                '<li className="list-group-item" class="pb-1">Frequency: {{medication.usageFrequency}}\n</li>\n' +
                             '</ul>' +
 
                         '</li>' +
@@ -338,7 +338,7 @@ Vue.component('patient_info', {
         checkMedications() {
             //this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //For testing only
             // if (this.patientData.drugHistory !== null) {
-                this.medications= [{medicine: "hello", dose:"120 mg", frequency:"every night"},{medicine: "hello", dose:"120 mg", frequency:"every night"}];
+                this.medications= [{patientId:"001",medId:7,medication:"Tylenol",dosage:"1 Extra Strength Pill",usageFrequency:"Morning and Evening"}];
                 // this.medications = this.patientData.drugHistory;
                 this.takingMedication = true;
             // }

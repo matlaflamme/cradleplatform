@@ -42,9 +42,6 @@ ul {
     list-style: none;
 }
 
-ul {
-    list-style: none;
-}
 li {
     margin: 0.25rem;
 }
@@ -62,4 +59,7 @@ ul ul li::before {
 }
 ul ul ul li::before {
     background: #0dcdcd;
+}
+.removebtn {
+    margin-left: 120px;
 }
