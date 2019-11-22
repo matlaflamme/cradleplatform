@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
 
 import java.util.Date;
 import java.util.List;
@@ -169,7 +170,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @throws BadRequestException If an error occurred.
 	 */
 	@Override
-	public Patient savePatient(@Nullable Patient patient) throws BadRequestException {
+	public Patient savePatient(@Nullable Authentication auth, @Nullable Patient patient) throws BadRequestException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
 		}
@@ -180,6 +181,12 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		}
 
 		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
+
+		if (checkPatient.isEmpty() && auth != null) {
+			assert auth.getPrincipal() instanceof UserDetailsImpl;
+			var details = (UserDetailsImpl) auth.getPrincipal();
+			patient.setCreatedBy(details.getId());
+		}
 
 		if (checkPatient.isPresent()) {
 			Patient existingPatient = checkPatient.get();

@@ -38,7 +38,8 @@ VALUES ('001',          -- id
         NULL,           -- medical history
         NULL,           -- drug history
         '2019-09-20 20:12:32',  -- last updated
-        NULL            -- notes
+        NULL,            -- notes
+        3
         );
 
 INSERT INTO patient
@@ -52,7 +53,8 @@ VALUES ('002',          -- id
         'hospitalized for X, taking medication for Y', -- medical history
         'there is some history with some drugs', -- drug history
         '2019-09-20 20:12:32',
-        NULL            -- notes
+        NULL,            -- notes
+        3
         );  -- last updated
 
 

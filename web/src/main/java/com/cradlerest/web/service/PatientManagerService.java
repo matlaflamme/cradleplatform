@@ -5,6 +5,7 @@ import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -94,7 +95,12 @@ public interface PatientManagerService {
 	 * @return The saved patient.
 	 * @throws Exception If an error occurred.
 	 */
-	Patient savePatient(@Nullable Patient patient) throws Exception;
+	Patient savePatient(@Nullable Authentication auth, @Nullable Patient patient) throws Exception;
+
+	@Deprecated
+	default Patient savePatient(@Nullable Patient patient) throws Exception {
+		return savePatient(null, patient);
+	}
 
 	/**
 	 * Creates a new, or updates an existing, reading in the system. If a reading

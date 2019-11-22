@@ -92,7 +92,7 @@ public class PatientController {
 	public Patient createPatient(Authentication auth, @RequestBody Patient patient) throws Exception {
 		authorizerFactory.construct(auth)
 				.check(Authorizer::canCreatePatient);
-		return patientManagerService.savePatient(patient);
+		return patientManagerService.savePatient(auth, patient);
 	}
 
 		@PostMapping("/{id}/addMedication")
