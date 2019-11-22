@@ -12,9 +12,11 @@ public class HealthWorkerAuthorizer extends Authorizer {
 	private PatientManagerService patientManager;
 	private ReadingManager readingManager;
 
-	public HealthWorkerAuthorizer(Authentication auth,
-								  PatientManagerService patientManager,
-								  ReadingManager readingManager) {
+	HealthWorkerAuthorizer(
+			Authentication auth,
+			PatientManagerService patientManager,
+			ReadingManager readingManager
+	) {
 		super(auth);
 		this.patientManager = patientManager;
 		this.readingManager = readingManager;
