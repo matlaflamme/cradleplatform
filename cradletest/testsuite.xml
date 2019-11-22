@@ -280,7 +280,6 @@
     <Request method="GET" uri="/api/patient/001/getMedications"/>
     <Response status="200">
       <![CDATA[
-      {
         [
           {
             "patientId":"001",
@@ -290,7 +289,6 @@
             "usageFrequency":"Morning and Evening"
           }
         ]
-      }
       ]]>
     </Response>
   </TestCase>
