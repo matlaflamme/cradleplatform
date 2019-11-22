@@ -282,11 +282,13 @@
       <![CDATA[
       {
         [
-          "patientId":"001",
-          "medId":5,
-          "medication":"Tylenol",
-          "dosage":"1 Extra Strength Pill",
-          "usageFrequency":"Morning and Evening"
+          {
+            "patientId":"001",
+            "medId":5,
+            "medication":"Tylenol",
+            "dosage":"1 Extra Strength Pill",
+            "usageFrequency":"Morning and Evening"
+          }
         ]
       }
       ]]>
