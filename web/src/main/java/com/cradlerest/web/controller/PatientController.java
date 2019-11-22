@@ -2,6 +2,7 @@ package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Medication;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
@@ -51,8 +52,7 @@ public class PatientController {
 	public PatientController(
 			PatientManagerService patientManagerService,
 			ReadingManager readingManager,
-			MedicationManager medicationManager
-			ReadingManager readingManager,
+			MedicationManager medicationManager,
 			AuthorizerFactory authorizerFactory
 	) {
 		this.patientManagerService = patientManagerService;
@@ -103,7 +103,8 @@ public class PatientController {
 
 	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
 	@PostMapping("/{id}/addMedication")
-	public Medication addMedication(@PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
+	public Medication addMedication(Authentication auth, @PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
+		requestAccessToPatient(auth, id);
 		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
 		if(patientMedications.size() == 0){
 			medication.setMedId(0);
@@ -117,7 +118,9 @@ public class PatientController {
 
 	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
 	@PostMapping("/{id}/addMedications")
-	public void addMedications(@PathVariable("id") String id, @RequestBody List<Medication> medications) throws Exception {
+	public void addMedications(Authentication auth, @PathVariable("id") String id, @RequestBody List<Medication> medications) throws Exception {
+
+		requestAccessToPatient(auth, id);
 		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
 
 		for (Medication newMedication: medications) {
@@ -133,12 +136,14 @@ public class PatientController {
 	}
 
 	@GetMapping("/{id}/getMedications")
-	public List<Medication> getMedication(@PathVariable("id") String id) throws EntityNotFoundException {
+	public List<Medication> getMedication(Authentication auth, @PathVariable("id") String id) throws EntityNotFoundException, AccessDeniedException {
+		requestAccessToPatient(auth, id);
 		return medicationManager.getAllMedicationsForPatient(id);
 	}
 
 	@DeleteMapping("/{id}/removeMedication/{medId}")
-	public Medication removeMedication(@PathVariable("id") String id, @PathVariable String medId) throws EntityNotFoundException, BadRequestException {
+	public Medication removeMedication(Authentication auth, @PathVariable("id") String id, @PathVariable String medId) throws EntityNotFoundException, BadRequestException, AccessDeniedException {
+		requestAccessToPatient(auth, id);
 		int medIdAsInt = 0;
 		try {
 			medIdAsInt = Integer.parseInt(medId);
