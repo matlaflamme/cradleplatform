@@ -40,6 +40,10 @@ information about the entities returned by these methods see
     * [`GET /api/patient/{id}/info`](#get-apipatientidinfo)
     * [`GET /api/patient/{id}/readings`](#get-apipatientidreadings)
     * [`POST /api/patient`](#post-apipatient)
+    * [`POST /api/patient/{id}/addMedications`](#post-apipatientmedications)
+    * [`POST /api/patient/{id}/addMedication`](#post-apipatientmedication)
+    * [`GET /api/patient/{id}/getMedications`](#get-apipatientmedications)
+    * [`DELETE /api/patient/{id}/deleteMedication/{medId}`](#delete-apipatientmedication)
     * [`POST /api/reading`](#post-apireading)
     * [`GET /api/reading/{id}`](#get-apireadingid)
     * [`POST /api/reading/save`](#post-apireadingsave)
@@ -218,6 +222,76 @@ is valid).
 | `drugHistory` | `string` | `no` | Patient's drug history |
 | `otherSympotoms` | `string` | `no` | Any other symptoms the patient has |
 | `lastUpdated` | `string` | `false` | Timestamp of when the patient info was last updated in the format "yyyy-MM-dd HH:mm:ss" (24 hour clock) |
+
+
+
+###  `POST /api/patient/{id}/addMedications`
+
+Inserts a list of new medications into the database
+
+
+#### Request Body
+
+* Format: `JSON`
+  * i.e., `Content-Type: application/json` in the request header
+  | Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+
+| `any` | `list` | `yes` | A list of an object containing the following fields |
+
+| `medication` | `string` | `yes` | The name of the medication the patient is on |
+| `doseage` | `string` | `yes` | The quantity of medication the patient recieves per dose |
+| `usageFrequency` | `string` | `yes` | How often the Pateint recieves doses |
+
+###  `POST /api/patient/{id}/addMedication`
+
+Inserts a new medication into the database
+
+
+#### Request Body
+
+* Format: `JSON`
+  * i.e., `Content-Type: application/json` in the request header
+  | Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `medication` | `string` | `yes` | The name of the medication the patient is on |
+| `doseage` | `string` | `yes` | The quantity of medication the patient recieves per dose |
+| `usageFrequency` | `string` | `yes` | How often the Pateint recieves doses |
+
+
+###  `GET /api/patient/{id}/getMedications`]
+
+Recieves the lit of medications a patient is on
+
+#### Return
+
+A list of an objects of the following type
+
+* Format: `JSON`
+  * i.e., `Content-Type: application/json` in the request header
+  | Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `medication` | `string` | `yes` | The name of the medication the patient is on |
+| `doseage` | `string` | `yes` | The quantity of medication the patient recieves per dose |
+| `usageFrequency` | `string` | `yes` | How often the Pateint recieves doses |
+
+
+
+###   `DELETE /api/patient/{id}/deleteMedication/{medId}`]
+
+Deletes the specified medication on a patient
+#### Return
+
+A copy of the object deleted
+
+* Format: `JSON`
+  * i.e., `Content-Type: application/json` in the request header
+  | Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `medication` | `string` | `yes` | The name of the medication the patient is on |
+| `doseage` | `string` | `yes` | The quantity of medication the patient recieves per dose |
+| `usageFrequency` | `string` | `yes` | How often the Pateint recieves doses |
+
 
 
 ### `POST /api/patient/reading`
