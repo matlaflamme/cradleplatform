@@ -28,9 +28,7 @@ public class MedicationManagerImpl implements MedicationManager {
 
     @Override
     public Medication saveMedication(@NotNull Medication medication) throws EntityNotFoundException {
-        // use copyFields to extract the reading and persist it
-        var persistedMedication = medicationRepository.save(medication);
-        return persistedMedication;
+        return medicationRepository.save(medication);
     }
 
     @Override
