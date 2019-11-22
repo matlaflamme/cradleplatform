@@ -3,66 +3,81 @@ package com.cradlerest.web.model;
 
 import com.cradlerest.web.model.view.ReadingView;
 
-import javax.persistence.*;
-import java.util.Date;
 
 /**
- * Defines a referral message that is received from the client
+ * Defines a referral message that is received from the client either through POST or SMS
  *
- * A referral is a special reading
+ * Members are minified to reduce character length of JSON
+ *
+ * Members are made public to avoid the need of additionally obscure Setters and Getters
  */
 
 public class ReferralMessage {
 
-	private String referrerUserName;
+	/**
+	 * referrerUserName
+	 */
+	public String u;
 
-	private String healthCentrePhoneNumber;
+	/**
+	 * healthCentrePhoneNumber
+	*/
+	public String h;
 
-	private String timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
+	/**
+	 * patientID
+	 */
+	public String i;
 
-	private Patient patient;
+	/**
+	 * patient
+	 */
+	public Patient p;
 
-	private ReadingView readingView;
+	/**
+	 * reading
+	 */
+	public ReadingView r;
 
 	public ReferralMessage() {}
 
 	public String getReferrerUserName() {
-		return referrerUserName;
+		return u;
 	}
 
 	public void setReferrerUserName(String referrerUserName) {
-		this.referrerUserName = referrerUserName;
+		this.u = referrerUserName;
 	}
 
 	public String getHealthCentrePhoneNumber() {
-		return healthCentrePhoneNumber;
+		return h;
 	}
 
 	public void setHealthCentrePhoneNumber(String healthCentrePhoneNumber) {
-		this.healthCentrePhoneNumber = healthCentrePhoneNumber;
-	}
-
-	public String getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
+		this.h = healthCentrePhoneNumber;
 	}
 
 	public Patient getPatient() {
-		return patient;
+		return p;
 	}
 
 	public void setPatient(Patient patient) {
-		this.patient = patient;
+		this.p = patient;
 	}
 
 	public ReadingView getReadingView() {
-		return readingView;
+		return r;
 	}
 
 	public void setReadingView(ReadingView readingView) {
-		this.readingView = readingView;
+		this.r = readingView;
+	}
+
+	public String getPatientId() {
+		return i;
+	}
+
+	public void setPatientId(String patientId) {
+		this.i = patientId;
 	}
 }

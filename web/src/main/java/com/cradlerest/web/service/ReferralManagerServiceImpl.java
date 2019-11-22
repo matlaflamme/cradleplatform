@@ -24,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Ref;
 import java.util.*;
 
@@ -94,7 +96,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		String numMediaStr = parameters.get("NumMedia")[0];
 		int numMedia = Integer.parseInt(numMediaStr);
 
-		InputStream source;
 		if (numMedia > 0) {
 			numMedia = numMedia - 1;
 			String mediaUrl = parameters.get(String.format("MediaUrl%d", numMedia))[0];
@@ -113,14 +114,21 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 	private Referral getReferralFromMessage(ReferralMessage referralMessage) throws Exception {
 		validateReferralMessage(referralMessage);
-		Patient patient = patientManagerService.savePatient(referralMessage.getPatient());
-		Reading reading = readingManager.saveReadingView(referralMessage.getReadingView());
+
+		// Create or update patient information
+		Patient patient = referralMessage.getPatient();
+		patient.setId(referralMessage.getPatientId());
+		patient = patientManagerService.savePatient(patient);
+
+		// Create Reading
+		ReadingView readingView = referralMessage.getReadingView();
+		readingView.setPatientId(referralMessage.getPatientId());
+		Reading reading = readingManager.saveReadingView(readingView);
 
 		// Create Referral object
 		return new ReferralBuilder()
 				.referredByUsername(referralMessage.getReferrerUserName())
 				.referredToHealthCentrePhoneNumber(referralMessage.getHealthCentrePhoneNumber())
-				.timestamp(referralMessage.getTimestamp())
 				.readingId(reading.getId())
 				.patientId(patient.getId())
 				.build();
@@ -134,7 +142,10 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	public Referral saveReferral(Map<String, String[]> parameters) throws Exception {
 
 		InputStream referralBytes = retrieveMediaFromTwilio(parameters);
-		String referralString = new String(BitmapEncoder.decodeFromBitmap(referralBytes));
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		BitmapEncoder.decodeFromBitmap(referralBytes, bos );
+		String referralString = bos.toString(StandardCharsets.UTF_8);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReferralMessage referralMessage = objectMapper.readValue(referralString, ReferralMessage.class);
@@ -160,7 +171,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		assertNotNull(referral.getPatient(), "patient");
 		assertNotNull(referral.getReferrerUserName(), "userName");
 		assertNotNull(referral.getHealthCentrePhoneNumber(), "healthCentrePhoneNumber");
-		assertNotNull(referral.getTimestamp(),"timestamp");
 	}
 
 	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {

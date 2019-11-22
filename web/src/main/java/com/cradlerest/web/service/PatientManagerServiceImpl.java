@@ -223,11 +223,9 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	private void validatePatient(@NotNull Patient patient) throws BadRequestException {
 		assertNotNull(patient.getId(), "id");
 		assertNotNull(patient.getName(), "name");
-		assertNotNull(patient.getVillageNumber(), "villageNumber");
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated");
-		assertNotNull(patient.getZoneNumber(), "zoneNumber");
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {

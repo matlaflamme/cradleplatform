@@ -48,18 +48,18 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder villageNumber(@NotNull String number) {
+	public PatientBuilder villageNumber(@Nullable String number) {
 		patient.setVillageNumber(number);
 		return this;
 	}
 
-	public PatientBuilder zoneNumber(@NotNull String number) {
+	public PatientBuilder zoneNumber(@Nullable String number) {
 		patient.setZoneNumber(number);
 		return this;
 	}
 
 
-	public PatientBuilder birthYear(int year) {
+	public PatientBuilder birthYear(@NotNull int year) {
 		patient.setBirthYear(year);
 		return this;
 	}
@@ -100,7 +100,6 @@ public class PatientBuilder {
 	private void validate() throws InstantiationError {
 		assertFieldNotNull(patient.getId(), "id");
 		assertFieldNotNull(patient.getName(), "name");
-		assertFieldNotNull(patient.getVillageNumber(), "villageNumber");
 		assertFieldNotNull(patient.getBirthYear(), "birthYear");
 		assertFieldNotNull(patient.getSex(), "sex");
 		assertFieldNotNull(patient.getLastUpdated(), "lastUpdated" );

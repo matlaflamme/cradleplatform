@@ -34,8 +34,8 @@ CREATE TABLE patient
 (
     id              VARCHAR(255) PRIMARY KEY,
     name            VARCHAR(255) NOT NULL,
-    village         VARCHAR(255) NOT NULL,
-    zone            VARCHAR(255) NOT NULL,
+    village         VARCHAR(255),
+    zone            VARCHAR(255),
     birth_year      INT          NOT NULL,
     sex             INT          NOT NULL, -- enumerated {male, female, unknown}
     medical_history TEXT,
