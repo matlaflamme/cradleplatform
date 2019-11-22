@@ -295,9 +295,9 @@ Vue.component('patient_info', {
             '<v-list-item three-line>' +
                 '<v-list-item-content>' +
                     '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
-                    '<ul v-if="takingMedication" className="list-group" v-for="medication in medications">\n'+
+                    '<ul v-if="takingMedication" className="list-group" v-for="(medication, index) in medications">\n'+
                         '<li className="list-group-item" class="pb-1">{{medication.medicine}}'+
-                            '<v-btn small outlined color="red">' +
+                            '<v-btn small outlined color="red" @click="deleteMedicine(index)">' +
                                 '<v-icon>delete</v-icon>' +
                             '</v-btn>' +
                             '<ul>\n' +
@@ -358,6 +358,10 @@ Vue.component('patient_info', {
                 return "Male";
             }
         },
+        deleteMedicine: function(index) {
+            this.medications.splice(index,1)
+
+        }
     }
 });
 
