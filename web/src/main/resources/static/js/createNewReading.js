@@ -4,7 +4,9 @@ Vue.prototype.$http = axios;
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
-
+        enabled: false,
+        noSymptoms: true,
+        customSymptom: "",
         e1: 0,
         sex: 0,
         snackbar: false,
@@ -67,6 +69,7 @@ Vue.component('new_reading',{
                     gestationalAge: parseInt(this.gestationalAge) * NUMBER_OF_DAYS_IN_WEEK, //convert weeks to days
                     timestamp: getCurrentDate(),
                     symptoms: this.symptoms,
+                    otherSymptoms: this.checkCustomSymptoms()
                     // medications: this.medications //Not implemented in the server yet
                 }).catch(error => {
                     console.error(error);
@@ -74,6 +77,7 @@ Vue.component('new_reading',{
                 }
                 ).then(response => {
                     console.log(response)
+                console.log(this.medications)
                     if (response.status == 200) {
                         window.location.assign("/patientSummary?id=" + this.patientID);
                     }
@@ -103,8 +107,13 @@ Vue.component('new_reading',{
         },
         deleteRow(index) {
             this.medications.splice(index,1)
+        },
+        checkCustomSymptoms() {
+            if (this.customSymptom !== "") {
+                return this.customSymptom;
+            }
+            return null;
         }
-
     },
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
@@ -193,14 +202,16 @@ Vue.component('new_reading',{
         '        <v-stepper-content step="2">\n' +
         '           <v-card  :elevation= "0" min-width="500">\n' +
         '    <v-container>\n' +
-        '      <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
-        '      <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>' +
-        '    </v-container>\n' +
+        '      <v-checkbox v-model="noSymptoms" label="No Symptoms"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Bleeding" :disabled="noSymptoms" value="Bleeding"></v-checkbox> \n' +
+        '      <v-checkbox v-model="symptoms" label="Feverish" :disabled="noSymptoms" value="Feverish"></v-checkbox>\n' +
+        '      <v-checkbox v-model="symptoms" label="Unwell" :disabled="noSymptoms" value="Unwell"></v-checkbox>' +
+        '      <v-checkbox v-model="enabled" :disabled="noSymptoms" label="Other:"></v-checkbox>' +
+        '      <v-text-field :disabled="!enabled" label="Other symptoms" v-model="customSymptom"></v-text-field>' +
+        '</v-container>\n' +
         '          </v-card>\n' +
         '          <v-btn\n' +
         '            color="primary"\n' +
@@ -215,10 +226,10 @@ Vue.component('new_reading',{
         '    <ul>\n' +
         '      <li v-for="(input, index) in medications">\n' +
         '        <v-text-field\n' +
-        '        v-model="input.medicince"\n' +
+        '        v-model="input.medication"\n' +
         '        label="Medication"\n' +
         '        required\n' +
-        '      >{{input.dose }}  </v-text-field>\n' +
+        '      >{{input.medication }}  </v-text-field>\n' +
         '        <v-text-field\n' +
         '        v-model="input.dose"\n' +
         '        label="Dose"\n' +
@@ -228,7 +239,7 @@ Vue.component('new_reading',{
         '        v-model="input.frequency"\n' +
         '        label="Usage frequency"\n' +
         '        required\n' +
-        '      >- {{ input.frequency}}  </v-text-field>\n' +
+        '      >{{ input.frequency}}  </v-text-field>\n' +
         '      <v-btn color="error" small @click="deleteRow(index)">\n' +
         '      delete</v-btn>' +
         '      </li>\n' +
