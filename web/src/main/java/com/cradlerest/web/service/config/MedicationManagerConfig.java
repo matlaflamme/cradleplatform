@@ -12,10 +12,6 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class MedicationManagerConfig {
 
-//    @Bean
-//    MedicationManager mock() {
-//        return new MockReadingManager();
-//    }
 
     @Bean
     @Primary
