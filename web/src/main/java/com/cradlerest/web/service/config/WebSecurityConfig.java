@@ -55,35 +55,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic()
 				.and()
-				.authorizeRequests()
-				.antMatchers("/admin")
-					.hasRole("ADMIN")
-				.antMatchers("/healthworker")
-					.hasRole("HEALTHWORKER")
-				.antMatchers("/vht")
-					.hasRole("VHT")
-//				// Disabling security on the following...
-                .antMatchers("/api/**").permitAll()
-				.antMatchers("/login*").permitAll()
-				.antMatchers("/files/**").permitAll()
-				.antMatchers("/home*").permitAll()
-				.and()
-				.formLogin()
-					.loginPage("/login")
-					.defaultSuccessUrl("/")
-					.failureUrl("/login?error")
-					.successHandler(customAuthenticationSuccessHandler())
-					.permitAll()
-				.and()
-				.logout()
-					.logoutSuccessUrl("/")
-					.permitAll()
-				.and()
-				.exceptionHandling()
-					.accessDeniedPage("/error")
-				// Enable POST and DELETE methods
-				.and().csrf().disable();
 
+				// Login configuration
+				.formLogin()
+				.loginPage("/login")
+				.defaultSuccessUrl("/")
+				.failureUrl("/login?error")
+				.successHandler(customAuthenticationSuccessHandler())
+				.permitAll()
+				.and()
+
+				// Logout configuration
+				.logout()
+				.logoutSuccessUrl("/")
+				.permitAll()
+				.and()
+
+				// API endpoint authentication
+				.authorizeRequests()
+				// Disabling security on the following...
+                .antMatchers("/api/**").permitAll()
+				.and()
+
+				// Exception handling
+				.exceptionHandling()
+				.accessDeniedPage("/error")
+				.and()
+
+				// Enable POST and DELETE methods
+				.csrf()
+				.disable();
 	}
 
 	@Bean
