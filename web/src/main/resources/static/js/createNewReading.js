@@ -13,7 +13,7 @@ Vue.component('new_reading',{
         sex: 0,
         snackbar: false,
         symptoms: [],
-        medications:[],
+        medications: [],
         pregnant: false,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
@@ -81,11 +81,13 @@ Vue.component('new_reading',{
                     console.log(response);
                     let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
                     let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-                    axios.post('/api/patient/' + id + '/addMedications',
-                        this.medications //array of medication objects
-                    ).then(response => {
-                        console.log(response)
-                });
+                    if (this.medications !== null) {
+                        axios.post('/api/patient/' + id + '/addMedications',
+                            this.medications //array of medication objects
+                        ).then(response => {
+                            console.log(response)
+                        });
+                    }
                 console.log(this.medications);
                     if (response.status == 200) {
                         window.location.assign("/patientSummary?id=" + this.patientID);
@@ -124,15 +126,18 @@ Vue.component('new_reading',{
             return null;
         },
         getAllHealthCentreOptions() {
-            /* waiting for merge of updated permissions for this api
-            axios.get('/api/hc/all').then(res => {
-                this.healthCentreList = res.data;
+            //waiting for merge of updated permissions for this api
+            axios.get('/api/hc/all').then(response => {
+                this.healthCentreList = response.data;
             }).catch(error => {
                 console.error(error);
-            })
+            });
 
-             */
-            this.healthCentreList = [{id: "002", name: "SFU"}, {id: "001", name: "MyCenter"}]
+            //this.healthCentreList = [{id: "002", name: "SFU"}, {id: "001", name: "MyCenter"}]
+        },
+        hasMedications() {
+            console.log(this.medications.length);
+            return this.medications.length !== 0;
         }
     },
     mounted() {
@@ -146,6 +151,7 @@ Vue.component('new_reading',{
             console.log(this.sex);
 
         });
+        console.log(this.medications)
         this.getAllHealthCentreOptions();
     },
     template: //@TODO Fix indentation
@@ -274,28 +280,93 @@ Vue.component('new_reading',{
         '            color="primary"\n' +
         '            @click="e1 = 4"\n' +
         '          >\n' +
-        '            Save reading\n' +
+        '            Continue\n' +
         '          </v-btn>\n' +
         '        </v-stepper-content>\n' +
         //This is the 4th step
         '<v-stepper-content step="4">\n' +
             '<v-card  :elevation= "0" min-width="500">\n' +
-                '<v-layout wrap align-center id="new">\n' +
-                    '<v-flex xs12 sm6 d-flex>\n' +
-                        '<v-select \n' +
-                        ' v-model="selectedHealthCentre"\n' +
-                        ' :items="healthCentreList"\n' +
-                        ' label="Select Health Centre"\n' +
-                        ' return-object> \n' +
-                            '<template v-slot:selection="data">\n' +
-                                '{{data.item.id}} - {{data.item.name}}\n' +
-                            '</template>\n' +
-                            '<template v-slot:item="data">\n' +
-                                '{{data.item.id}} - {{data.item.name}}\n' +
-                            '</template>\n' +
-                        '</v-select>\n' +
-                    '</v-flex>\n' +
-                '</v-layout>' +
+                //review items go here
+                '<v-list-item>' +
+                    '<v-list-content>' +
+                        '<v-list-item-title>Heart Rate</v-list-item-title>' +
+                        '<v-list-item-subtitle>{{heartRate}}</v-list-item-subtitle>' +
+                    '</v-list-content>' +
+                '</v-list-item>' +
+                '<v-list-item>' +
+                    '<v-list-content>' +
+                        '<v-list-item-title>Systolic</v-list-item-title>' +
+                        '<v-list-item-subtitle>{{systolic}}</v-list-item-subtitle>' +
+                    '</v-list-content>' +
+                '</v-list-item>' +
+                '<v-list-item>' +
+                    '<v-list-content>' +
+                        '<v-list-item-title>Diastolic</v-list-item-title>' +
+                        '<v-list-item-subtitle>{{diastolic}}</v-list-item-subtitle>' +
+                    '</v-list-content>' +
+                '</v-list-item>' +
+                '<v-list-item>' +
+                    '<v-list-content>' +
+                        '<v-list-item-title>Gestational Age</v-list-item-title>' +
+                        '<v-list-item-subtitle v-if="pregnant">{{gestationalAge}} weeks</v-list-item-subtitle>' +
+                        '<v-list-item-subtitle v-if="!pregnant">Not pregnant</v-list-item-subtitle>' +
+                    '</v-list-content>' +
+                '</v-list-item>' +
+        '<v-spacer></v-spacer>' +
+                '<v-list-item>' +
+                    '<v-list-content dense>' +
+                        '<v-list-item-title>Symptoms</v-list-item-title>' +
+                        '<ul v-if="!noSymptoms">\n'+
+                            '<li v-for="symptom in symptoms">{{symptom}}</li>\n'+
+                            '<li v-if="enabled">{{customSymptom}}</li>' +
+                        '</ul>\n'+
+                        '<ul v-if="noSymptoms">' +
+                            '<li>No symptoms recorded</li>' +
+                        '</ul>' +
+                    '</v-list-content>' +
+                '</v-list-item>' +
+                '<v-list-item>' +
+                    '<v-list-content>' +
+                        '<v-list-item-title>Medications</v-list-item-title>' +
+                        '<ul v-if="hasMedications" className="list-group">\n'+
+                            '<li className="list-group-item" class="pb-1" v-for="medication in medications">' +
+                                '<v-list-item dense>' +
+                                    '<v-list-content dense>' +
+                                        '<v-list-item-title>{{medication.medication}}</v-list-item-title>' +
+                                        '<v-list-item-subtitle>{{medication.dosage}}</v-list-item-subtitle>' +
+                                        '<v-list-item-subtitle>{{medication.usageFrequency}}</v-list-item-subtitle>' +
+                                    '</v-list-content>' +
+                                '</v-list-item>' +
+                            '</li>' +
+                        '</ul>\n'+
+                        '<ul v-if="!hasMedications" className="list-group">' +
+                            '<li className="list-group-item" class="pb-1">No medications</li>' +
+                        '</ul>' +
+                    '</v-list-content>' +
+                '</v-list-item>' +
+                //referral stuff here
+                '<v-divider></v-divider>' +
+                '<v-list-item>' +
+                    '<v-list-item-content>' +
+                        '<v-list-item-title>Make a referral (optional)</v-list-item-title>' +
+                            '<v-layout wrap align-center id="new">\n' +
+                                '<v-flex xs12 sm6 d-flex>\n' +
+                                    '<v-select \n' +
+                                    ' v-model="selectedHealthCentre"\n' +
+                                    ' :items="healthCentreList"\n' +
+                                    ' label="Select Health Centre"\n' +
+                                    ' return-object> \n' +
+                                        '<template v-slot:selection="data">\n' +
+                                            '{{data.item.id}} - {{data.item.name}}\n' +
+                                        '</template>\n' +
+                                        '<template v-slot:item="data">\n' +
+                                            '{{data.item.id}} - {{data.item.name}}\n' +
+                                        '</template>\n' +
+                                    '</v-select>\n' +
+                                '</v-flex>\n' +
+                            '</v-layout>' +
+                        '</v-list-item-content>' +
+                    '</v-list-item>' +
 '          </v-card>\n' +
 '          <v-btn\n' +
 '            color="primary"\n' +
