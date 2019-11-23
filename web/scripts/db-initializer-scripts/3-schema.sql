@@ -38,7 +38,6 @@ CREATE TABLE patient
     zone            VARCHAR(255),
     birth_year      INT          NOT NULL,
     sex             INT          NOT NULL, -- enumerated {male, female, unknown}
-    medication      TEXT,
     medical_history TEXT,
     drug_history    TEXT,
     last_updated    DATETIME     NOT NULL,
@@ -138,4 +137,19 @@ CREATE TABLE symptom_reading_relation
     FOREIGN KEY (rid)
         REFERENCES reading (id)
         ON DELETE CASCADE
+);
+
+CREATE TABLE medication
+(
+    pid             VARCHAR(255)    NOT NULL,
+    med_id          INT             NOT NULL,
+    medication      VARCHAR(255),
+    dosage          VARCHAR(255),
+    usage_frequency VARCHAR(255),
+
+    PRIMARY KEY (pid, med_id),
+
+    FOREIGN KEY (pid)
+        REFERENCES patient(id)
+
 );

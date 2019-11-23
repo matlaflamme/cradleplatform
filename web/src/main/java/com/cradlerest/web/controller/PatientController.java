@@ -2,11 +2,14 @@ package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
+import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.Medication;
 import com.cradlerest.web.model.Patient;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.Authorizer;
 import com.cradlerest.web.service.AuthorizerFactory;
+import com.cradlerest.web.service.MedicationManager;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
 import org.jetbrains.annotations.NotNull;
@@ -42,16 +45,19 @@ import java.util.List;
 public class PatientController {
 
 	private PatientManagerService patientManagerService;
+	private MedicationManager medicationManager;
 	private ReadingManager readingManager;
 	private AuthorizerFactory authorizerFactory;
 
 	public PatientController(
 			PatientManagerService patientManagerService,
 			ReadingManager readingManager,
+			MedicationManager medicationManager,
 			AuthorizerFactory authorizerFactory
 	) {
 		this.patientManagerService = patientManagerService;
 		this.readingManager = readingManager;
+		this.medicationManager = medicationManager;
 		this.authorizerFactory = authorizerFactory;
 	}
 
@@ -95,28 +101,65 @@ public class PatientController {
 		return patientManagerService.savePatient(auth, patient);
 	}
 
-		@PostMapping("/{id}/addMedication")
-	public Patient addMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
-		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
-		personToAddMedicationTo.addMedication(medication);
-		return patientManagerService.savePatient(personToAddMedicationTo);
+	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
+	@PostMapping("/{id}/addMedication")
+	public Medication addMedication(Authentication auth, @PathVariable("id") String id, @RequestBody Medication medication) throws Exception {
+		requestAccessToPatient(auth, id);
+		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
+		if(patientMedications.size() == 0){
+			medication.setMedId(0);
+		}else {
+			medication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + 1);
+		}
+		medication.setPatientId(id);
+		return medicationManager.saveMedication(medication);
 	}
 
-	@PostMapping("/{id}/removeMedication")
-	public Patient removeMedication(@PathVariable("id") String id, @RequestBody String medication) throws Exception {
-		Patient personToAddMedicationTo = patientManagerService.getPatientWithId(id);
-		personToAddMedicationTo.removeMedication(medication);
-		return patientManagerService.savePatient(personToAddMedicationTo);
+
+	// feature will stop working if a patient is ever given more than 2 billion medications ever this is unlikely since they would need to be given over 5000 medications per day for a 100 years
+	@PostMapping("/{id}/addMedications")
+	public void addMedications(Authentication auth, @PathVariable("id") String id, @RequestBody List<Medication> medications) throws Exception {
+
+		requestAccessToPatient(auth, id);
+		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
+
+		for (Medication newMedication: medications) {
+			if(patientMedications.size() == 0){
+				newMedication.setMedId(0);
+			}else {
+				newMedication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + 1);
+			}
+			newMedication.setPatientId(id);
+			 medicationManager.saveMedication(newMedication);
+		}
+
+	}
+
+	@GetMapping("/{id}/getMedications")
+	public List<Medication> getMedication(Authentication auth, @PathVariable("id") String id) throws EntityNotFoundException, AccessDeniedException {
+		requestAccessToPatient(auth, id);
+		return medicationManager.getAllMedicationsForPatient(id);
+	}
+
+	@DeleteMapping("/{id}/removeMedication/{medId}")
+	public Medication removeMedication(Authentication auth, @PathVariable("id") String id, @PathVariable String medId) throws EntityNotFoundException, BadRequestException, AccessDeniedException {
+		requestAccessToPatient(auth, id);
+		int medIdAsInt = 0;
+		try {
+			medIdAsInt = Integer.parseInt(medId);
+		} catch (Exception e){
+			throw new BadRequestException("The Id: '"+medId+"' is not a valid integer");
+		}
+		try{
+			return medicationManager.remove(id,medIdAsInt);
+		} catch (Exception e){
+			throw new EntityNotFoundException("Could not find requested Medication");
+		}
 	}
 
 	@Deprecated
 	@PostMapping("/reading")
-	public Reading createReading(Authentication auth, @RequestBody Reading reading) throws Exception {
-		if (reading.getPatientId() == null) {
-			throw BadRequestException.missingField("patientId");
-		}
-
-		requestAccessToPatient(auth, reading.getPatientId());
+	public Reading createReading(@RequestBody Reading reading) throws Exception {
 		return patientManagerService.saveReading(reading);
 	}
 
