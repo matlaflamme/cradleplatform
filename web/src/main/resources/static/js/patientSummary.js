@@ -297,7 +297,7 @@ Vue.component('patient_info', {
                     '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
                     '<ul v-if="takingMedication" className="list-group" v-for="(medication, index) in medications">\n'+
                         '<li className="list-group-item" class="pb-1">{{medication.medication}}'+
-                            '<v-btn class="removebtn" small outlined color="red" @click="deleteMedicine(index)" style=" display: table-cell;">' +
+                            '<v-btn class="removebtn" small outlined color="red" @click="deleteMedicine(index, medication.medId)" style=" display: table-cell;">' +
                                 '<v-icon>delete</v-icon>' +
                             '</v-btn>' +
                             '<ul>\n' +
@@ -307,7 +307,7 @@ Vue.component('patient_info', {
 
                         '</li>' +
                     '</ul>\n'+
-                    '<ul v-if="!takingMedication" className="list-group">' +
+                    '<ul v-if="medications.length == 0" className="list-group">' +
                         '<li className="list-group-item" class="pb-1">Not currently taking any medications</li>' +
                     '</ul>' +
                 '</v-list-item-content>' +
@@ -322,7 +322,7 @@ Vue.component('patient_info', {
             console.log(response.data);
             this.light = getReadingColorIcon(response.data.readings[0].colour);
             this.checkSymptoms();
-            this.checkMedications();
+            this.checkMedications(id);
             this.checkPregnant();
         });
 
@@ -335,12 +335,19 @@ Vue.component('patient_info', {
                 this.hasSymptoms = true;
            }
         },
-        checkMedications() {
-            // if (this.patientData.drugHistory !== null) {
-                this.medications= [{patientId:"001",medId:7,medication:"Tylenol",dosage:"1 Extra Strength Pill",usageFrequency:"Morning and Evening"}];
-                // this.medications = this.patientData.drugHistory;
+        checkMedications(id) {
+            axios.get('/api/patient/' + id + "/getMedications").then(response => {
+                console.log("HIIIII");
+                this.medications= response.data;
                 this.takingMedication = true;
-            // }
+                console.log(this.medications);
+            });
+
+            // // if (this.patientData.drugHistory !== null) {
+            //     this.medications= [{patientId:"001",medId:7,medication:"Tylenol",dosage:"1 Extra Strength Pill",usageFrequency:"Morning and Evening"}];
+            //     // this.medications = this.patientData.drugHistory;
+            //     this.takingMedication = true;
+            // // }
         },
         checkPregnant() {
             //this.patientData.readings[0].gestationalAge = 130; //For testing only
@@ -357,9 +364,11 @@ Vue.component('patient_info', {
                 return "Male";
             }
         },
-        deleteMedicine: function(index) {
-            this.medications.splice(index,1)
-
+        deleteMedicine: function(index,medID) {
+                axios.delete('/api/patient/' + id + "/deleteMedication/" + medID)
+                    .then(response => {
+                        this.medications.splice(index,1)
+                    });
         }
     }
 });
