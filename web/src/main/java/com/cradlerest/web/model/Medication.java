@@ -1,10 +1,13 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenFixedString;
 import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Generator;
 import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
+import com.cradlerest.web.util.datagen.impl.FixedStringGenerator;
 import com.cradlerest.web.util.datagen.impl.MedicationNameGenerator;
+import com.cradlerest.web.util.datagen.impl.UsageFrequencyGenerator;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -85,9 +88,12 @@ public class Medication {
     private String medication;
 
     @Column(name = "dosage", nullable = false)
+    @Generator(FixedStringGenerator.class)
+    @DataGenFixedString("200 mg")
     private String dosage;
 
     @Column(name = "usage_frequency", nullable = false)
+    @Generator(UsageFrequencyGenerator.class)
     private String usageFrequency;
 
     public Medication(
