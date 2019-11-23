@@ -151,5 +151,5 @@ CREATE TABLE medication
 
     FOREIGN KEY (pid)
         REFERENCES patient(id)
-
+        ON DELETE CASCADE
 );
