@@ -266,7 +266,7 @@
       }
       ]]>
     </Request>
-    <Response status="404"/>
+    <Response status="403"/>
   </TestCase>
 
   <TestCase name="Get Medication from Valid Patient">
@@ -290,7 +290,7 @@
         <Request method="GET" uri="/api/patient/1001/getMedications" username="vht" password="vht">
             <![CDATA[]]>
         </Request>
-        <Response status="404"/>
+        <Response status="403"/>
     </TestCase>
 
 
