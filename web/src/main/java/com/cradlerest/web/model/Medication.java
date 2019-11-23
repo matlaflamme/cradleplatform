@@ -1,6 +1,10 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.annotations.Generator;
+import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
+import com.cradlerest.web.util.datagen.impl.MedicationNameGenerator;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -9,9 +13,9 @@ import java.io.Serializable;
 
 
 @Entity
-
 @IdClass(Medication.IdType.class)
 @Table(name = "medication")
+@DataGenRelativeAmount(base = Patient.class, multiplier = 0.7)
 public class Medication {
 
     public static class IdType implements Serializable {
@@ -72,16 +76,18 @@ public class Medication {
     private String patientId;
 
     @Id
-    @Column(name = "med_id")
+    @Column(name = "med_id", nullable = false)
+    @Generator(AutoIncrementGenerator.class)
     private Integer medId;
 
-    @Column(name = "medication")
+    @Column(name = "medication", nullable = false)
+    @Generator(MedicationNameGenerator.class)
     private String medication;
 
-    @Column(name = "dosage")
+    @Column(name = "dosage", nullable = false)
     private String dosage;
 
-    @Column(name = "usage_frequency")
+    @Column(name = "usage_frequency", nullable = false)
     private String usageFrequency;
 
     public Medication(

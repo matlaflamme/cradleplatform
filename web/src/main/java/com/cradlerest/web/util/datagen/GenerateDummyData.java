@@ -133,6 +133,7 @@ public class GenerateDummyData {
 		factory.registerCustomGenerator(new EmailGenerator(noise));
 		factory.registerCustomGenerator(new NameGenerator(noise));
 		factory.registerCustomGenerator(new FixedStringGenerator());
+		factory.registerCustomGenerator(new MedicationNameGenerator(noise));
 
 		Vec<Data> dataVec = Vec.of();
 		var amountMap = new HashMap<Class<?>, Integer>();
