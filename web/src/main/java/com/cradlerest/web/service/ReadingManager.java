@@ -59,4 +59,5 @@ public interface ReadingManager {
 	 * @return The saved reading.
 	 */
 	Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws Exception;
+
 }

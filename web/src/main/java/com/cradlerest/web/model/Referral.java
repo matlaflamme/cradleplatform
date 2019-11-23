@@ -1,5 +1,6 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.*;
@@ -29,22 +30,17 @@ public class Referral {
 	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
-	// TODO: Update to foreign key once VHT models are created
 	@Column(name = "referred_by", nullable = false)
-	@DataGenRange(min = 3, max = 4)
-	private Integer referredByUserId;
+	@ForeignKey(User.class)
+	private String referrerUserName;
 
 	@Column(name = "referred_to", nullable = false)
 	@ForeignKey(HealthCentre.class)
-	private Integer referredToHealthCenterId;
+	private Integer healthCentreId;
 
-	@Column(name = "reading_id", nullable = false)
-	@ForeignKey(Reading.class)
-	private Integer readingId;
-
-	@Column(name = "comments", nullable = false)
-	@Generator(GibberishSentenceGenerator.class)
-	private String comments;
+	@Column(name = "patient", nullable = false)
+	@ForeignKey(Patient.class)
+	private String patientId;
 
 	@Column(name = "timestamp", nullable = false)
 	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
@@ -54,11 +50,13 @@ public class Referral {
 	@DataGenDateRange(min = "2017-01-01", max = "2019-12-31")
 	private Date closed;
 
-	// TODO: User instaed of String
-	@Column(name = "accepter")
-	@Generator(NameGenerator.class)
-	@DataGenNullChance(0.5)
-	private String accepter;
+	@Column(name = "closed_by")
+	@DataGenRange(min = 3, max = 4)
+	private Integer reviewerUserId;
+
+	@Column(name = "reading_id", nullable = false)
+	@ForeignKey(Reading.class)
+	private Integer readingId;
 
 	public Referral() {}
 
@@ -68,36 +66,20 @@ public class Referral {
 
 	public void setId(Integer id) { this.id = id; }
 
-	public Integer getReferredByUserId() {
-		return referredByUserId;
+	public String getReferrerUserName() {
+		return referrerUserName;
 	}
 
-	public void setReferredByUserId(Integer referredByUserId) {
-		this.referredByUserId = referredByUserId;
+	public void setReferrerUserName(String referrerUserName) {
+		this.referrerUserName = referrerUserName;
 	}
 
-	public Integer getReferredToHealthCenterId() {
-		return referredToHealthCenterId;
+	public Integer getHealthCentreId() {
+		return healthCentreId;
 	}
 
-	public void setReferredToHealthCenterId(Integer referredToHealthCenterId) {
-		this.referredToHealthCenterId = referredToHealthCenterId;
-	}
-
-	public Integer getReadingId() {
-		return readingId;
-	}
-
-	public void setReadingId(Integer readingId) {
-		this.readingId = readingId;
-	}
-
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setHealthCentreId(Integer healthCentreId) {
+		this.healthCentreId = healthCentreId;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
@@ -120,11 +102,27 @@ public class Referral {
 		this.closed = timestamp;
 	}
 
-	public String getAccepter() {
-		return this.accepter;
+	public String getPatientId() {
+		return patientId;
 	}
 
-	public void setAccepter(String accepter) {
-		this.accepter = accepter;
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
+	}
+
+	public Integer getReviewerUserId() {
+		return reviewerUserId;
+	}
+
+	public void setReviewerUserId(Integer userId) {
+		this.reviewerUserId = userId;
+	}
+
+	public Integer getReadingId() {
+		return readingId;
+	}
+
+	public void setReadingId(Integer readingId) {
+		this.readingId = readingId;
 	}
 }
