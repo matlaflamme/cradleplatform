@@ -56,7 +56,7 @@ public class Reading {
 	private ReadingColour colour; // Use *INTEGER* values {0..4}
 
 	@Column(name = "timestamp", nullable = false)
-	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	@Column(name = "other_symptoms")

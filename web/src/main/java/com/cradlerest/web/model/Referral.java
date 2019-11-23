@@ -42,11 +42,11 @@ public class Referral {
 	private String patientId;
 
 	@Column(name = "timestamp", nullable = false)
-	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	@Column(name = "closed")
-	@DataGenDateRange(min = "2017-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date closed;
 
 	@Column(name = "closed_by")
