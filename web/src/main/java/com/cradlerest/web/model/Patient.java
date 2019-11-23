@@ -66,7 +66,7 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String generalNotes;
 
-	@Column(name = "created_by")
+	@Column(name = "created_by", nullable = false)
 	@DataGenRange(min = 3, max = 4) // always generate as the id for the `vht` user
 	private Integer createdBy;
 
