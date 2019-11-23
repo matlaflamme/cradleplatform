@@ -4,7 +4,11 @@ Vue.prototype.$http = axios;
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
-
+		StepIndex: {
+			Green: 0,
+			Yellow: 1,
+			Red: 2
+		},
         e1: 0,
         sex: 0,
         snackbar: false,
@@ -103,7 +107,28 @@ Vue.component('new_reading',{
         },
         deleteRow(index) {
             this.medications.splice(index,1)
-        }
+        },
+		// Saves / Updates patient state for creating a new reading
+		saveCreateNewReadingState(patientId, step, colour) {
+        	// build patient object
+			let patient = {
+				pid: patientId,
+				step: step,
+				colour: colour
+			};
+			localStorage.setItem(patientId + "createNewReadingState", JSON.stringify(patient));
+		},
+		// Returns patient state object for creating a new reading
+		// if green (retrieve, step1
+		retrieveCreateNewReadingState(patientId) {
+			return JSON.parse(localStorage.getItem(patientId + "createNewReadingState"));
+		}
+		// retest(patientId, step, colour) {
+        // 	let patient = this.retrieveCreateNewReadingState(patientId);
+        // 	if (patient.step == 2) {
+		//
+		// 	}
+		// }
 
     },
     mounted() {
@@ -119,152 +144,153 @@ Vue.component('new_reading',{
         })
     },
     template: //@TODO Fix indentation
-    '<div>' +
-    '    <v-stepper v-model="e1">\n' +
-        '      <v-stepper-header>\n' +
-        '        <v-stepper-step :complete="e1 > 1" step="1" editable>Vitals</v-stepper-step>\n' +
-        '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step :complete="e1 > 2" step="2" editable>Symptoms</v-stepper-step>\n' +
-        '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step step="3" editable>Medications</v-stepper-step>\n' +
-        '      </v-stepper-header>\n' +
-        '      <v-stepper-items>\n' +
-        //This part is the first tab
-        '        <v-stepper-content step="1">\n' +
-        '          <v-card\n' +
-        '        <v-card  :elevation= "0" min-width="500">\n' +
-        '        <v-card-title>\n' +
-        '        </v-card-title>' +
-        '        <v-form\n' +
-        '            ref="newReadingForm"\n' +
-        '            v-model="valid"\n' +
-        '            lazy-validation\n' +
-        '            class="ma-5 px-3"\n' +
-        '            >' +
-        '        <v-text-field\n' +
-        '        v-model="patientID"\n' +
-        '        :rules="patientIDRules"\n' +
-        '        label="Patient ID"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="systolic"\n' +
-        '        :rules="systolicRules"\n' +
-        '        label="Systolic"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="diastolic"\n' +
-        '        :rules="diastolicRules"\n' +
-        '        label="Diastolic"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="heartRate"\n' +
-        '        :rules="heartRateRules"\n' +
-        '        label="Heart Rate"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <template v-if=" sex == 1 || sex == 2 ">\n' + // If patient is not a man show the pregnant option
-        '            <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>' +
-        '        </template>' +
-        '        <template v-if= "pregnant === true">\n' +
-        '        <v-text-field\n' +
-        '        v-model="gestationalAge"\n' +
-        '        label="Pregnancy week"\n' +
-        '        :rules="gestationalAgeRules"\n' +
-        '      ></v-text-field>\n' +
-        '        </template>' +
-        '          </v-card>\n' +
-        '          <v-btn\n' +
-        '            color="primary"\n' +
-        '            @click="e1 = 2"\n' +
-        '          >\n' +
-        '            Continue\n' +
-        '          </v-btn>\n' +
-        '          <v-btn\n' +
-        '            color="error"'+
-        '            @click="reset"\n' +
-        '          >\n' +
-        '            reset\n' +
-        '          </v-btn>\n' +
-        //This part is the second tab
-        '        </v-stepper-content>\n' +
-        '        <v-stepper-content step="2">\n' +
-        '           <v-card  :elevation= "0" min-width="500">\n' +
-        '    <v-container>\n' +
-        '      <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> \n' +
-        '      <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>' +
-        '    </v-container>\n' +
-        '          </v-card>\n' +
-        '          <v-btn\n' +
-        '            color="primary"\n' +
-        '            @click="e1 = 3"\n' +
-        '          >\n' +
-        '            Continue\n' +
-        '          </v-btn>\n' +
-        //This part is the third tab
-        '        </v-stepper-content>\n' +
-        '        <v-stepper-content step="3">\n' +
-        '          <v-card  :elevation= "0" min-width="500">\n' +
-        '    <ul>\n' +
-        '      <li v-for="(input, index) in medications">\n' +
-        '        <v-text-field\n' +
-        '        v-model="input.medicince"\n' +
-        '        label="Medication"\n' +
-        '        required\n' +
-        '      >{{input.dose }}  </v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="input.dose"\n' +
-        '        label="Dose"\n' +
-        '        required\n' +
-        '      >{{input.dose}}  </v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="input.frequency"\n' +
-        '        label="Usage frequency"\n' +
-        '        required\n' +
-        '      >- {{ input.frequency}}  </v-text-field>\n' +
-        '      <v-btn color="error" small @click="deleteRow(index)">\n' +
-        '      delete</v-btn>' +
-        '      </li>\n' +
-        '    </ul>\n' +
-        '          </v-card>\n' +
-        '      <v-btn @click="addRow">\n' +
-        '      Add new medication</v-btn>' +
-        '          <v-btn\n' +
-        '            color="primary"\n' +
-        '            @click="validate"\n' +
-        '          >\n' +
-        '            Save reading\n' +
-        '          </v-btn>\n' +
-        '        </v-stepper-content>\n' +
-        '      </v-stepper-items>\n' +
-        '    </v-stepper>' +
-        '<v-snackbar v-model="snackbar">' +
-            'Patient ID does not exist' +
-            `<v-btn
+	`
+    <div>
+        <v-stepper v-model="e1">
+        	<v-stepper-header>
+        		<v-stepper-step :complete="e1 > 1" step="1" editable>Vitals</v-stepper-step>
+               	<v-divider></v-divider>
+              	<v-stepper-step :complete="e1 > 2" step="2" editable>Symptoms</v-stepper-step>
+               	<v-divider></v-divider>
+            	<v-stepper-step step="3" editable>Medications</v-stepper-step>
+            </v-stepper-header>
+            <v-stepper-items>
+<!--        //This part is the first tab-->
+            <v-stepper-content step="1">
+                <v-card
+                <v-card  :elevation= "0" min-width="500">
+                <v-card-title>
+                </v-card-title>
+                <v-form
+                    ref="newReadingForm"
+                    v-model="valid"
+                    lazy-validation
+                    class="ma-5 px-3"
+                    >
+                <v-text-field
+                v-model="patientID"
+                :rules="patientIDRules"
+                label="Patient ID"
+                required
+              ></v-text-field>
+                <v-text-field
+                v-model="systolic"
+                :rules="systolicRules"
+                label="Systolic"
+                required
+              ></v-text-field>
+                <v-text-field
+                v-model="diastolic"
+                :rules="diastolicRules"
+                label="Diastolic"
+                required
+              ></v-text-field>
+                <v-text-field
+                v-model="heartRate"
+               :rules="heartRateRules"
+               label="Heart Rate"
+                required
+             ></v-text-field>
+               <template v-if=" sex == 1 || sex == 2 "> <!-- if woman >-->
+                    <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>
+                </template>
+                <template v-if= "pregnant === true">
+                <v-text-field
+                v-model="gestationalAge"
+                label="Pregnancy week"
+                :rules="gestationalAgeRules"
+              ></v-text-field>
+                </template>
+                 </v-card>
+                 <v-btn
+                    color="primary"
+                   @click="e1 = 2"
+                  >
+                    Continue
+                  </v-btn>
+                  <v-btn
+                    color="error"
+                    @click="reset"
+                  >
+                    reset
+                  </v-btn>
+<!--        This part is the second tab-->
+                </v-stepper-content>
+                <v-stepper-content step="2">
+                   <v-card  :elevation= "0" min-width="500">
+            <v-container>
+              <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
+              <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>
+              <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>
+              <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>
+              <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> 
+              <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>
+             <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>
+            </v-container>
+                 </v-card>
+                 <v-btn
+                   color="primary"
+                    @click="e1 = 3"
+                  >
+                    Continue
+                  </v-btn>
+        // This part is the third tab
+                </v-stepper-content>
+                <v-stepper-content step="3">
+                  <v-card  :elevation= "0" min-width="500">
+            <ul>
+              <li v-for="(input, index) in medications">
+                <v-text-field
+                v-model="input.medicince"
+                label="Medication"
+                required
+              >{{input.dose }}  </v-text-field>
+                <v-text-field
+               v-model="input.dose"
+               label="Dose"
+               required
+              >{{input.dose}}  </v-text-field>
+                <v-text-field
+                v-model="input.frequency"
+                label="Usage frequency"
+                required
+              >- {{ input.frequency}}  </v-text-field>
+              <v-btn color="error" small @click="deleteRow(index)">
+              delete</v-btn>
+              </li>
+            </ul>
+                  </v-card>
+              <v-btn @click="addRow">
+              Add new medication</v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="validate"
+                  >\n
+                    Save reading\n
+                  </v-btn>\n
+                </v-stepper-content>
+              </v-stepper-items>
+            </v-stepper>
+        <v-snackbar v-model="snackbar">
+            'Patient ID does not exist
+            <v-btn
                 color="pink"
                 @click="snackbar = false"
-            >` +
-            'Close' +
-            '</v-btn>' +
-        '</v-snackbar>' +
-    '</div>'
-
+            >
+            'Close' 
+            </v-btn>
+        </v-snackbar>
+    </div>
+	`
 });
 
 
 function getCurrentDate() {
-    let now = new Date(); //new date object
-    let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
-    let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
-    console.log(date + ' ' + time);
-    return date + ' ' + time; //date and time string returned
+	let now = new Date(); //new date object
+	let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
+	let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
+	console.log(date + ' ' + time);
+	return date + ' ' + time; //date and time string returned
 }
 
 new Vue({
