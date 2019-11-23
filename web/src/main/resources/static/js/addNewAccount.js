@@ -8,6 +8,7 @@ Vue.component('new_account_form', {
 		selectedHealthCentre: null,
 		healthCentreList: ['Empty'],
         snackbar: false,
+        errSnackbar: false,
         valid: true,
         name: '',
         nameRules: [
@@ -64,9 +65,11 @@ Vue.component('new_account_form', {
 					worksAtHealthCentreId: this.selectedHealthCentre.id
 				}
 			).then(response => {
-				console.log(response) // this makes the password public
+				this.snackbar = true;
+				// console.log(response) // this makes the password public
+			}).catch(error => {
+				this.errSnackbar = true;
 			});
-			this.snackbar = true; //@TODO handle error messages (call a function, pass response, create snackbar)
 		},
 		getAllHealthCentreOptions() {
 			axios.get('/api/hc/all').then(res => {
@@ -153,17 +156,25 @@ Vue.component('new_account_form', {
 			</v-btn>
 		</v-form>
     </v-card>
-        <v-snackbar v-model="snackbar">
-            New user successfully created
+    <v-snackbar v-model="snackbar">
+		New user successfully created
             <v-btn
                 color="pink"
-                @click="snackbar = false">
-                Close
+                @click="snackbar = false"> 
+                Close 
             </v-btn>
-        </v-snackbar>
+    </v-snackbar>
+    <v-snackbar v-model="errSnackbar">
+        Username already exists
+			<v-btn
+					color="pink"
+					@click="snackbar = false">
+			Close
+			</v-btn>
+    </v-snackbar>
     </div>
-	`
-})
+    `
+});
 
 new Vue({
     el: '#app',

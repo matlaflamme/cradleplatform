@@ -1,15 +1,13 @@
 package com.cradlerest.web.controller;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
-import com.cradlerest.web.model.DualMonthStats;
-import com.cradlerest.web.model.Patient;
-import com.cradlerest.web.model.Reading;
-import com.cradlerest.web.model.Stat;
+import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
 import com.cradlerest.web.service.ReferralManagerService;
+import com.cradlerest.web.service.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -26,26 +24,33 @@ public class AdminStatsController {
     private PatientManagerService patientManagerService;
     private ReadingManager readingManager;
     private ReferralManagerService referralManagerService;
+    private UserRepository userRepository;
 
     public AdminStatsController(PatientManagerService patientManagerService,
                                 ReadingManager readingManager,
-                                ReferralManagerService referralManagerService
+                                ReferralManagerService referralManagerService,
+                                UserRepository userRepository
     ) {
         this.patientManagerService = patientManagerService;
         this.readingManager = readingManager;
         this.referralManagerService = referralManagerService;
-
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/overview/{id}")
-    public DualMonthStats overviews(@PathVariable("id") Integer vhtId) {
+    public DualMonthStats overviews(@PathVariable("id") String vhtName) throws EntityNotFoundException {
         List<Reading> readings = new ArrayList<>();
         List<Reading> readingsTrend = new ArrayList<>();
         List<ReferralView> referrals = new ArrayList<>();
         List<ReferralView> referralsTrend = new ArrayList<>();
 
-        gatherAllReferralsForVHT(referrals, referralsTrend, vhtId);
-        gatherAllReadingsForVHT(readings, readingsTrend, vhtId);
+        Optional<User> user = userRepository.findByUsername(vhtName);
+        if (user.isEmpty()){
+            throw new EntityNotFoundException("Username is invalid");
+        }
+
+        gatherAllReferralsForVHT(referrals, referralsTrend, vhtName);
+        gatherAllReadingsForVHT(readings, readingsTrend, user.get().getId());
 
         Stat thisMonth = GenerateStats(readings, referrals);
         Stat lastMonth = GenerateStats(readingsTrend, referralsTrend);
@@ -159,7 +164,7 @@ public class AdminStatsController {
     private void gatherAllReferralsForVHT(
             List<ReferralView> thisMonthReferrals,
             List<ReferralView> lastMonthReferrals,
-            int vhtId) {
+            String vhtName) {
         Instant oneMonthAgo = Instant.now();
         Instant twoMonthsAgo = Instant.now();
         oneMonthAgo = oneMonthAgo.minus(STATISTICAL_TIME_PERIOD_IN_DAYS, ChronoUnit.DAYS);
@@ -168,9 +173,9 @@ public class AdminStatsController {
 
         for (ReferralView referral : allReferrals) {
             Instant referralDate = referral.getTimestamp().toInstant();
-            if(referralDate.isAfter(oneMonthAgo) && referral.getVhtId() == vhtId){
+            if(referralDate.isAfter(oneMonthAgo) && referral.getReferrerUserName() == vhtName){
                 thisMonthReferrals.add(referral);
-            }else if (referralDate.isAfter(twoMonthsAgo) && referral.getVhtId() == vhtId){
+            }else if (referralDate.isAfter(twoMonthsAgo) && referral.getReferrerUserName() == vhtName){
                 lastMonthReferrals.add(referral);
             }else {
                 break;

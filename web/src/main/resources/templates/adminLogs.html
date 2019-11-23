@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<head>
+	<div th:replace="fragments/head :: headerFragment"></div>
+	<title id="pageTitle">Logs</title>
+</head>
+<body>
+<div id="app">
+	<v-app id="inspire">
+		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+		<div th:replace="fragments/navbar :: navbarFragment"></div>
+		<v-content>
+			<v-container>
+				<v-layout justify-center>
+					<admin_logs></admin_logs>
+				</v-layout>
+			</v-container>
+		</v-content>
+	</v-app>
+</div>
+
+<script src="/js/mainMenuTemplate.js"></script>
+<script src="/js/adminLogs.js"></script>
+</body>

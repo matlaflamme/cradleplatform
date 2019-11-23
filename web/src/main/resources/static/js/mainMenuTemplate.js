@@ -59,11 +59,17 @@ Vue.component('sidebar_item', {
             else if (clicked === "all-patients") {
                 window.location.assign("/")
             }
+            else if (clicked == 'admin-logs') {
+                window.location.assign("/adminLogs")
+            }
             else if (clicked === "help") {
                 window.location.assign("/help")
             }
             else if (clicked === "createNewPatient") {
                 window.location.assign("/createNewPatient")
+            }
+            else if (clicked === "vht-performance") {
+                window.location.assign("/vhtPerformance")
             }
             else if (clicked === "accountSetting") {
                 window.location.assign("/accountSetting")

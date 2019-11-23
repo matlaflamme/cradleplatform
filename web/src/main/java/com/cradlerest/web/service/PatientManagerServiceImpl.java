@@ -13,10 +13,14 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.cradlerest.web.util.AuthenticationExt.hasRole;
 
 /**
  * Class {@code PatientManagerService} implements the logic for managing
@@ -91,6 +95,13 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @return All patients.
 	 */
 	@Override
+	public List<Patient> getAllPatientsUsingAuth(Authentication auth) {
+		return Vec.copy(getAllPatientsWithLastReading(auth))
+				.map(PatientWithLatestReadingView::getPatient)
+				.toList();
+	}
+
+	@Override
 	public List<Patient> getAllPatients() {
 		return patientRepository.findAll();
 	}
@@ -102,8 +113,21 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @return A list of patient/reading pairs.
 	 */
 	@Override
-	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading() {
-		return patientRepository.getAllPatientsAndLatestReadings();
+	public List<PatientWithLatestReadingView> getAllPatientsWithLastReading(Authentication auth) {
+		assert auth != null;
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+
+		var details = (UserDetailsImpl) auth.getPrincipal();
+		if (hasRole(auth, UserRole.HEALTH_WORKER)) {
+			if (details.getWorksAtHealthCentreId() == null) {
+				return new ArrayList<>();
+			}
+			return getPatientsReferredToHealthCenter(details.getWorksAtHealthCentreId());
+		} else if (hasRole(auth, UserRole.VHT)) {
+			return getPatientsCreatedBy(details.getId());
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	/**
@@ -144,6 +168,13 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				.toList();
 	}
 
+	@Override
+	public List<PatientWithLatestReadingView> getPatientsCreatedBy(int userId) {
+		return Vec.copy(patientRepository.findAllByCreatedBy(userId))
+				.map(this::pairWithLatestReading)
+				.toList();
+	}
+
 	/**
 	 * Takes a patient and pairs it with its latest reading.
 	 * @param patient The patient to pair with.
@@ -169,7 +200,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @throws BadRequestException If an error occurred.
 	 */
 	@Override
-	public Patient savePatient(@Nullable Patient patient) throws BadRequestException {
+	public Patient savePatient(@Nullable Authentication auth, @Nullable Patient patient) throws BadRequestException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
 		}
@@ -180,6 +211,12 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		}
 
 		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
+
+		if (checkPatient.isEmpty() && auth != null) {
+			assert auth.getPrincipal() instanceof UserDetailsImpl;
+			var details = (UserDetailsImpl) auth.getPrincipal();
+			patient.setCreatedBy(details.getId());
+		}
 
 		if (checkPatient.isPresent()) {
 			Patient existingPatient = checkPatient.get();
@@ -223,11 +260,9 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	private void validatePatient(@NotNull Patient patient) throws BadRequestException {
 		assertNotNull(patient.getId(), "id");
 		assertNotNull(patient.getName(), "name");
-		assertNotNull(patient.getVillageNumber(), "villageNumber");
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated");
-		assertNotNull(patient.getZoneNumber(), "zoneNumber");
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {
