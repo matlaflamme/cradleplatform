@@ -401,6 +401,17 @@
         <Response status="200"/>
     </TestCase>
 
+    <!-- Twilio Logs Endpoints  -->
+    <TestCase name="Twilio SMS Logs">
+        <Request method="GET" uri="/api/twilio/logs"/>
+        <Response status="200"/>
+    </TestCase>
+
+    <TestCase name="Twilio General Alerts">
+        <Request method="GET" uri="/api/twilio/alerts"/>
+        <Response status="200"/>
+    </TestCase>
+
     <Batch>
         <!-- Ensure that we execute these tests together -->
         <TestCase name="Set Health Centre Association">
