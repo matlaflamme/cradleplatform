@@ -84,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/hc/**").hasRole("ADMIN")
 				.antMatchers("/api/internal/**").hasRole("ADMIN")
 				.antMatchers("/api/stats/**").hasRole("ADMIN")
-				.antMatchers("/api/twillio/**").hasRole("ADMIN")
+				.antMatchers("/api/twilio/**").hasRole("ADMIN")
 				.antMatchers("/api/user/**").hasRole("ADMIN")
 
 				// VHT/Health Worker endpoints
