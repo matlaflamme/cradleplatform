@@ -1,5 +1,6 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.model.UserRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
@@ -23,13 +24,13 @@ public class ViewController {
 			return "login";
 		}
 
-		if (roles.contains("ROLE_ADMIN")) {
+		if (roles.contains(UserRole.ADMIN.getRoleString())) {
 			return "admin";
 		}
-		else if (roles.contains("ROLE_HEALTHWORKER")) {
+		else if (roles.contains(UserRole.HEALTH_WORKER.getRoleString())) {
 			return "healthworker";
 		}
-		else if (roles.contains("ROLE_VHT")) {
+		else if (roles.contains(UserRole.VHT.getRoleString())) {
 			return "vht";
 		}
 
