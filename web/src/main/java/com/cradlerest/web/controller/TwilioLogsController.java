@@ -25,10 +25,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/twilio")
 public class TwilioLogsController {
-	@Value("$ {twilio.account_sid}")
+	@Value("${twilio.account_sid}")
 	private String account_sid;
 
-	@Value("$ {twilio.auth_token}")
+	@Value("${twilio.auth_token}")
 	private String auth_token;
 
 	/**
