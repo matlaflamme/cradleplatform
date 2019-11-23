@@ -6,6 +6,8 @@ Vue.component('new_reading',{
     data: () => ({
         enabled: false,
         noSymptoms: true,
+        selectedHealthCentre: null,
+        healthCentreList: ['Empty'],
         customSymptom: "",
         e1: 0,
         sex: 0,
@@ -120,6 +122,17 @@ Vue.component('new_reading',{
                 return this.customSymptom;
             }
             return null;
+        },
+        getAllHealthCentreOptions() {
+            /* waiting for merge of updated permissions for this api
+            axios.get('/api/hc/all').then(res => {
+                this.healthCentreList = res.data;
+            }).catch(error => {
+                console.error(error);
+            })
+
+             */
+            this.healthCentreList = [{id: "002", name: "SFU"}, {id: "001", name: "MyCenter"}]
         }
     },
     mounted() {
@@ -132,7 +145,8 @@ Vue.component('new_reading',{
             this.sex = response.data.sex;
             console.log(this.sex);
 
-        })
+        });
+        this.getAllHealthCentreOptions();
     },
     template: //@TODO Fix indentation
     '<div>' +
@@ -142,7 +156,9 @@ Vue.component('new_reading',{
         '        <v-divider></v-divider>\n' +
         '        <v-stepper-step :complete="e1 > 2" step="2" editable>Symptoms</v-stepper-step>\n' +
         '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step step="3" editable>Medications</v-stepper-step>\n' +
+        '        <v-stepper-step :complete="e1 > 3" step="3" editable>Medications</v-stepper-step>\n' +
+        '        <v-divider></v-divider>\n' +
+        '        <v-stepper-step step="4" editable>Review</v-stepper-step>\n' +
         '      </v-stepper-header>\n' +
         '      <v-stepper-items>\n' +
         //This part is the first tab
@@ -256,13 +272,41 @@ Vue.component('new_reading',{
         '      Add new medication</v-btn>' +
         '          <v-btn\n' +
         '            color="primary"\n' +
-        '            @click="validate"\n' +
+        '            @click="e1 = 4"\n' +
         '          >\n' +
         '            Save reading\n' +
         '          </v-btn>\n' +
         '        </v-stepper-content>\n' +
-        '      </v-stepper-items>\n' +
-        '    </v-stepper>' +
+        //This is the 4th step
+        '<v-stepper-content step="4">\n' +
+            '<v-card  :elevation= "0" min-width="500">\n' +
+                '<v-layout wrap align-center id="new">\n' +
+                    '<v-flex xs12 sm6 d-flex>\n' +
+                        '<v-select \n' +
+                        ' v-model="selectedHealthCentre"\n' +
+                        ' :items="healthCentreList"\n' +
+                        ' label="Select Health Centre"\n' +
+                        ' return-object> \n' +
+                            '<template v-slot:selection="data">\n' +
+                                '{{data.item.id}} - {{data.item.name}}\n' +
+                            '</template>\n' +
+                            '<template v-slot:item="data">\n' +
+                                '{{data.item.id}} - {{data.item.name}}\n' +
+                            '</template>\n' +
+                        '</v-select>\n' +
+                    '</v-flex>\n' +
+                '</v-layout>' +
+'          </v-card>\n' +
+'          <v-btn\n' +
+'            color="primary"\n' +
+'            @click="validate"\n' +
+'          >\n' +
+'            Save reading\n' +
+'          </v-btn>\n' +
+'        </v-stepper-content>\n' +
+'      </v-stepper-items>\n' +
+'    </v-stepper>' +
+        //stepper is finished, snackbars start here
         '<v-snackbar v-model="snackbar">' +
             'Please check your entries, patient id may not exist' +
             `<v-btn
