@@ -10,8 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -32,11 +31,11 @@ public class Patient {
 	@DataGenStringParams(length = 2, charset = StringGenerator.UPPER_ALPHA_CHARSET)
 	private String name;
 
-	@Column(name = "village", nullable = false)
+	@Column(name = "village")
 	@DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
 	private String villageNumber;
 
-    @Column(name = "zone", nullable = false)
+    @Column(name = "zone")
     @DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
     private String zoneNumber;
 
@@ -66,6 +65,10 @@ public class Patient {
 	@Generator(GibberishSentenceGenerator.class)
 	@DataGenNullChance(0.7)
 	private String generalNotes;
+
+	@Column(name = "created_by")
+	@Omit
+	private Integer createdBy;
 
 	public Patient() {
 	}
@@ -176,6 +179,15 @@ public class Patient {
 		this.generalNotes = generalNotes;
 	}
 
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -195,4 +207,6 @@ public class Patient {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+
 }

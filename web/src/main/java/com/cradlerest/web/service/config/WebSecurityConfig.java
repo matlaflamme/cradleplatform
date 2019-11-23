@@ -1,27 +1,15 @@
 package com.cradlerest.web.service.config;
 
-import com.twilio.Twilio;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 
 /*
@@ -38,8 +26,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	UserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;
+
+	public WebSecurityConfig(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 
 	@Bean
 	public UserDetailsService userDetailsService() {
@@ -64,35 +55,61 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic()
 				.and()
-				.authorizeRequests()
-				.antMatchers("/admin")
-					.hasRole("ADMIN")
-				.antMatchers("/healthworker")
-					.hasRole("HEALTHWORKER")
-				.antMatchers("/vht")
-					.hasRole("VHT")
-//				// Disabling security on the following...
-                .antMatchers("/api/**").permitAll()
-				.antMatchers("/login*").permitAll()
-				.antMatchers("/files/**").permitAll()
-				.antMatchers("/home*").permitAll()
-				.and()
-				.formLogin()
-					.loginPage("/login")
-					.defaultSuccessUrl("/")
-					.failureUrl("/login?error")
-					.successHandler(customAuthenticationSuccessHandler())
-					.permitAll()
-				.and()
-				.logout()
-					.logoutSuccessUrl("/")
-					.permitAll()
-				.and()
-				.exceptionHandling()
-					.accessDeniedPage("/error")
-				// Enable POST and DELETE methods
-				.and().csrf().disable();
 
+				// Login configuration
+				.formLogin()
+				.loginPage("/login")
+				.defaultSuccessUrl("/")
+				.failureUrl("/login?error")
+				.successHandler(customAuthenticationSuccessHandler())
+				.permitAll()
+				.and()
+
+				// Logout configuration
+				.logout()
+				.logoutSuccessUrl("/")
+				.permitAll()
+				.and()
+
+				//
+				// API endpoint authentication
+				//
+
+				.authorizeRequests()
+
+				// Open endpoints
+				.antMatchers("/api/user/whoami").authenticated()
+				.antMatchers("/api/hc/all").authenticated()
+
+				// Admin only endpoints
+				.antMatchers("/api/hc/**").hasRole("ADMIN")
+				.antMatchers("/api/internal/**").hasRole("ADMIN")
+				.antMatchers("/api/stats/**").hasRole("ADMIN")
+				.antMatchers("/api/twilio/**").hasRole("ADMIN")
+				.antMatchers("/api/user/**").hasRole("ADMIN")
+
+				// VHT/Health Worker endpoints
+				.antMatchers("/api/patient/**").hasAnyRole("HEALTHWORKER", "VHT")
+				.antMatchers("/api/reading/**").hasAnyRole("HEALTHWORKER", "VHT")
+
+				// VHT only endpoints
+				.antMatchers("/api/referral/send/**").hasRole("VHT")
+
+				// Health worker only endpoints
+				.regexMatchers("/api/referral(?:/.+)?/all").hasRole("HEALTHWORKER")
+
+				// Deny any other request
+				.antMatchers("/api/**").denyAll()
+				.and()
+
+				// Exception handling
+				.exceptionHandling()
+				.accessDeniedPage("/error")
+				.and()
+
+				// Enable POST and DELETE methods
+				.csrf()
+				.disable();
 	}
 
 	@Bean
@@ -104,14 +121,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
 		return new CustomAuthenticationSuccessHandler();
 	}
-
-//	@Bean
-//	public FilterRegistrationBean twilioRequestValidatorFilter() {
-//		FilterRegistrationBean  registration = new FilterRegistrationBean();
-//		registration.setFilter(new TwilioRequestValidatorFilter());
-//		registration.addUrlPatterns("/api/referral/send_referral_sms");
-//		registration.setName("twilioFilter");
-//		return registration;
-//	}
 
 }

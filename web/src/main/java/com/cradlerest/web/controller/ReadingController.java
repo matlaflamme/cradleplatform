@@ -5,7 +5,10 @@ import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.ReadingColour;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
+import com.cradlerest.web.service.Authorizer;
+import com.cradlerest.web.service.AuthorizerFactory;
 import com.cradlerest.web.service.ReadingManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/reading")
 public class ReadingController {
     private ReadingManager readingManager;
+    private AuthorizerFactory authorizerFactory;
 
-	public ReadingController(ReadingManager readingManager) {
+	public ReadingController(ReadingManager readingManager, AuthorizerFactory authorizerFactory) {
 		this.readingManager = readingManager;
+		this.authorizerFactory = authorizerFactory;
 	}
 
 	/**
@@ -25,9 +30,15 @@ public class ReadingController {
 	 * @param readingView The reading view to save.
 	 */
 	@PostMapping("save")
-	public Reading save(@RequestBody ReadingView readingView) throws BadRequestException {
+	public Reading save(Authentication auth, @RequestBody ReadingView readingView) throws Exception {
+		if (readingView.getPatientId() == null) {
+			throw BadRequestException.missingField("patientId");
+		}
+
+		authorizerFactory.construct(auth)
+				.check(Authorizer::canAccessPatient, readingView.getPatientId());
 		try {
-			return readingManager.saveReadingView(readingView);
+			return readingManager.saveReadingView(auth, readingView);
 		} catch (InstantiationError | EntityNotFoundException e) {
 			throw new BadRequestException("invalid request body", e);
 		}
@@ -41,7 +52,9 @@ public class ReadingController {
 	 * 	given identifier.
 	 */
 	@GetMapping("{id}")
-	public ReadingView get(@PathVariable("id") Integer readingId) throws EntityNotFoundException {
+	public ReadingView get(Authentication auth, @PathVariable("id") Integer readingId) throws Exception {
+		authorizerFactory.construct(auth)
+				.check(Authorizer::canAccessReading, readingId);
 		return readingManager.getReadingView(readingId);
 	}
 

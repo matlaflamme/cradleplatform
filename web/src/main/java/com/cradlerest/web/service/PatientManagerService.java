@@ -5,6 +5,7 @@ import com.cradlerest.web.model.PatientWithLatestReadingView;
 import com.cradlerest.web.model.Reading;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -41,7 +42,14 @@ public interface PatientManagerService {
 	 * returned in place of one.
 	 * @return A list of patient/reading pairs.
 	 */
-	List<PatientWithLatestReadingView> getAllPatientsWithLastReading();
+	List<PatientWithLatestReadingView> getAllPatientsWithLastReading(Authentication auth);
+
+	/**
+	 * Returns all available patients for a given user.
+	 * @param auth The authentication object for a user.
+	 * @return A list of all users available to a user.
+	 */
+	List<Patient> getAllPatientsUsingAuth(Authentication auth);
 
 	/**
 	 * Returns the list of all patients in the database.
@@ -75,6 +83,13 @@ public interface PatientManagerService {
 	List<PatientWithLatestReadingView> getPatientsWithReadingsCreatedBy(int userId);
 
 	/**
+	 * Returns all of the patients created by the user with a given id.
+	 * @param userId The id of the user to get patients for.
+	 * @return A list of patients.
+	 */
+	List<PatientWithLatestReadingView> getPatientsCreatedBy(int userId);
+
+	/**
 	 * Takes a patient and pairs it with its latest reading.
 	 * @param patient The patient to pair with.
 	 * @return The patient along with its latest reading.
@@ -94,7 +109,12 @@ public interface PatientManagerService {
 	 * @return The saved patient.
 	 * @throws Exception If an error occurred.
 	 */
-	Patient savePatient(@Nullable Patient patient) throws Exception;
+	Patient savePatient(@Nullable Authentication auth, @Nullable Patient patient) throws Exception;
+
+	@Deprecated
+	default Patient savePatient(@Nullable Patient patient) throws Exception {
+		return savePatient(null, patient);
+	}
 
 	/**
 	 * Creates a new, or updates an existing, reading in the system. If a reading

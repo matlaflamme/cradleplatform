@@ -1,12 +1,12 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
-import com.cradlerest.web.util.datagen.annotations.DataGenRange;
 import com.cradlerest.web.util.datagen.annotations.Generator;
 import com.cradlerest.web.util.datagen.impl.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 /**
  * Defines a health centre
@@ -27,27 +27,31 @@ public class HealthCentre {
 	@Generator(AutoIncrementGenerator.class)
 	private Integer id;
 
+	@Column(name = "phone_number", nullable = false, unique = true)
+	@Generator(PhoneNumberGenerator.class)
+	@NotNull(message = "Missing health centre number")
+	private String phoneNumber;
+
 	@Column(name = "name", nullable = false)
 	@Generator(NameGenerator.class)
+	@NotNull(message = "Missing name")
 	private String name;
 
-	@Column(name = "zone", nullable = false)
-	@DataGenRange(min = 1, max = 16)
-	private Integer zone;
+	@Column(name = "location", nullable = false)
+	@Generator(NameGenerator.class)
+	@NotNull(message = "Missing location")
+	private String location;
 
 	@Email(message = "invalid email")
-	@Column(name = "email", nullable = false)
+	@Column(name = "email")
 	@Generator(EmailGenerator.class)
+	@NotNull(message = "Missing email")
 	private String email;
 
-	// Phone number for the health centre
-	@Column(name = "health_centre_number", nullable = false)
-	@Generator(PhoneNumberGenerator.class)
-	private String healthCentreNumber;
-
 	// Person in charge at this health centre
-	@Column(name = "manager_phone_number", nullable = false)
+	@Column(name = "manager_phone_number")
 	@Generator(PhoneNumberGenerator.class)
+	@NotNull(message = "Missing manager phone number")
 	private String managerPhoneNumber;
 
 	HealthCentre() {}
@@ -68,12 +72,20 @@ public class HealthCentre {
 		this.name = name;
 	}
 
-	public Integer getZone() {
-		return zone;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setZone(Integer zone) {
-		this.zone = zone;
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -82,14 +94,6 @@ public class HealthCentre {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getHealthCentreNumber() {
-		return healthCentreNumber;
-	}
-
-	public void setHealthCentreNumber(String triagePhoneNumber) {
-		this.healthCentreNumber = triagePhoneNumber;
 	}
 
 	public String getManagerPhoneNumber() {

@@ -15,6 +15,7 @@
                 <sidebar_item title="New Health Center" icon="add_circle" clickable="new-health-center"></sidebar_item>
                 <sidebar_item title="New Account" icon="person_add" clickable="new-vht"></sidebar_item>
                 <sidebar_item title="Manage Accounts" icon="supervisor_account" clickable="manage-accounts"></sidebar_item>
+				<sidebar_item title="Logs" icon="assessment" clickable="admin-logs"></sidebar_item>
             </div>
 
             <div sec:authorize="hasRole('ROLE_HEALTHWORKER')">
@@ -33,7 +34,7 @@
             </div>
 
             <v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>
-            <sidebar_item title="Account Settings" icon="settings" clickable="account-settings"></sidebar_item>
+            <sidebar_item title="Account Settings" icon="settings" clickable="accountSetting"></sidebar_item>
             <div sec:authorize="hasRole('ROLE_VHT')">
                 <sidebar_item title="Help" icon="help" clickable="help"></sidebar_item>
             </div>

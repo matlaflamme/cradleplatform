@@ -20,13 +20,13 @@ public interface PatientRepository extends JpaRepository<Patient, String>, Patie
 	 *
 	 * Since it is possible that a patient was referred multiple times to the
 	 * same health center, we use the {@code DISTINCT} quantifier.
-	 * @param healthCenterId The id of the health center to get patients for.
+	 * @param healthCentreId The id of the health center to get patients for.
 	 * @return A list of patients.
 	 */
 	@Query("SELECT DISTINCT p " +
-			"FROM Patient p JOIN Reading r ON r.patientId = p.id JOIN Referral r2 ON r2.readingId = r.id " +
-			"WHERE r2.referredToHealthCenterId = ?1")
-	List<Patient> getAllReferredToHealthCenter(int healthCenterId);
+			"FROM Patient p JOIN Referral r ON r.patientId = p.id " +
+			"WHERE r.healthCentreId = ?1")
+	List<Patient> getAllReferredToHealthCenter(int healthCentreId);
 
 	/**
 	 * Returns all patients who have a reading which was created by a specified
@@ -41,4 +41,11 @@ public interface PatientRepository extends JpaRepository<Patient, String>, Patie
 			"FROM Patient  p JOIN Reading r ON r.patientId = p.id " +
 			"WHERE r.createdBy = ?1")
 	List<Patient> getAllWithReadingsBy(int userId);
+
+	/**
+	 * Returns all of the patients created by a given user.
+	 * @param userId The id of the user to find patients for.
+	 * @return A list of patients.
+	 */
+	List<Patient> findAllByCreatedBy(int userId);
 }

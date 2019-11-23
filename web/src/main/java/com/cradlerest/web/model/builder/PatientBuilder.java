@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Sex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import static com.cradlerest.web.util.Validation.assertFieldNotNull;
@@ -48,18 +49,18 @@ public class PatientBuilder {
 		return this;
 	}
 
-	public PatientBuilder villageNumber(@NotNull String number) {
+	public PatientBuilder villageNumber(@Nullable String number) {
 		patient.setVillageNumber(number);
 		return this;
 	}
 
-	public PatientBuilder zoneNumber(@NotNull String number) {
+	public PatientBuilder zoneNumber(@Nullable String number) {
 		patient.setZoneNumber(number);
 		return this;
 	}
 
 
-	public PatientBuilder birthYear(int year) {
+	public PatientBuilder birthYear(@NotNull int year) {
 		patient.setBirthYear(year);
 		return this;
 	}
@@ -97,10 +98,14 @@ public class PatientBuilder {
 		return this;
 	}
 
+	public PatientBuilder createdBy(@Nullable Integer userId) {
+		patient.setCreatedBy(userId);
+		return this;
+	}
+
 	private void validate() throws InstantiationError {
 		assertFieldNotNull(patient.getId(), "id");
 		assertFieldNotNull(patient.getName(), "name");
-		assertFieldNotNull(patient.getVillageNumber(), "villageNumber");
 		assertFieldNotNull(patient.getBirthYear(), "birthYear");
 		assertFieldNotNull(patient.getSex(), "sex");
 		assertFieldNotNull(patient.getLastUpdated(), "lastUpdated" );

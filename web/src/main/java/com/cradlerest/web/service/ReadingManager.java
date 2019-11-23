@@ -5,6 +5,8 @@ import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.view.ReadingView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -56,5 +58,6 @@ public interface ReadingManager {
 	 * @param readingView A reading view.
 	 * @return The saved reading.
 	 */
-	Reading saveReadingView(@NotNull ReadingView readingView) throws EntityNotFoundException;
+	Reading saveReadingView(@Nullable Authentication auth, @NotNull ReadingView readingView) throws Exception;
+
 }

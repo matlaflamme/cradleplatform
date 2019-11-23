@@ -1,22 +1,38 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.ReferralController;
+import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
-import com.cradlerest.web.model.builder.ReadingViewBuilder;
+
 import com.cradlerest.web.model.builder.ReferralBuilder;
 import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
+import com.cradlerest.web.util.BitmapEncoder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static com.cradlerest.web.util.CopyFields.copyFields;
 
 /**
  * Implements ReferralManagerService
@@ -28,110 +44,22 @@ import java.util.*;
 public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 	private Logger logger = LoggerFactory.getLogger(ReferralManagerServiceImpl.class);
-	private UserRepository userRepository; // VHT INFO
 	private ReferralRepository referralRepository; // Saving referrals
 	private HealthCentreRepository healthCentreRepository;
-	private PatientManagerService patientManagerService; // Patients, Readings
 	private ReadingManager readingManager;
-	private ReadingRepository readingRepository;
+	private PatientManagerService patientManagerService;
+	private UserRepository userRepository;
 
-	public ReferralManagerServiceImpl(PatientManagerService patientManagerService,
-									  UserRepository userRepository,
-									  ReferralRepository referralRepository,
+	public ReferralManagerServiceImpl(ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
 									  ReadingManager readingManager,
-									  ReadingRepository readingRepository
-	) {
-		this.patientManagerService = patientManagerService;
-		this.userRepository = userRepository;
+									  PatientManagerService patientManagerService,
+									  UserRepository userRepository) {
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
 		this.readingManager = readingManager;
-		this.readingRepository = readingRepository;
-	}
-
-	/**
-	 * Saves a referral
-	 * Corresponding reading is saved to Reading table
-	 *
-	 * @param requestBody IS IMMUTABLE
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	public Referral saveReferral(JsonNode requestBody) throws Exception {
-		System.out.println(requestBody.toString());
-		ObjectMapper objectMapper = new ObjectMapper();
-		String patientId = requestBody.get("patientId").textValue();
-		// String patientName = requestBody.get("patientName").textValue();
-		// int patientAge = requestBody.get("patientAge").intValue();
-		int systolic = requestBody.get("systolic").intValue();
-		int diastolic = requestBody.get("diastolic").intValue();
-		int heartRate = requestBody.get("heartRate").intValue();
-		int readingColourKey = requestBody.get("readingColour").intValue();
-
-		//https://stackoverflow.com/questions/39237835/jackson-jsonnode-to-typed-collection
-		String symptoms = requestBody.get("symptoms").textValue();
-		// "2019-10-19T23:20:11" => "2019-10-19 23:20:11",
-		String readingTimestamp = requestBody.get("readingTimestamp").textValue();
-		String referralTimestamp = requestBody.get("referralTimestamp").textValue();
-		String healthCentreName = requestBody.get("healthCentre").textValue();
-		String comments = requestBody.get("comments").textValue();
-		logger.info("Referral data \n" +
-				"patientId: " + patientId + "\n" +
-				"systolic: " + systolic + "\n" +
-				"diastolic: " + diastolic + "\n" +
-				"heartRate: " + heartRate + "\n" +
-				"readingColourKey: " + readingColourKey + "\n" +
-				"symptoms: " + symptoms + " \n" +
-				"readingTimestamp: " + readingTimestamp + "\n" +
-				"referralTimestamp: " + referralTimestamp + "\n" +
-				"healthCentreName: " + healthCentreName + "\n" +
-				"comments: " + comments);
-
-		// TODO: No patient found, create new patient
-		// We can either send another text message requesting more information
-		// OR
-		// request all necessary information from initial referral
-		Patient currentPatient = patientManagerService.getPatientWithId(patientId);
-
-		Optional<User> currentVHT = userRepository.findByUsername(requestBody.get("VHT").textValue());
-		Optional<HealthCentre> currentHealthCentre = healthCentreRepository.findByName(healthCentreName);
-		if (currentVHT.isEmpty()) {
-			throw new EntityNotFoundException("VHT username not found: " + requestBody.get("VHT").textValue());
-		}
-
-		if (currentHealthCentre.isEmpty()) {
-			throw new EntityNotFoundException("Health centre not found: " + healthCentreName);
-		}
-
-
-		String[] symptomsArr = symptoms.replace("[", "").replace("]", "").split(",");
-
-		String[] symptomsArrNoTrailingWhiteSpace = Arrays.stream(symptomsArr).map(String::trim).toArray(String[]::new);
-
-		ReadingView readingView = new ReadingViewBuilder()
-				.pid(currentPatient.getId())
-				.pregnant(false) // TODO: Info not sent through referral at the moment
-				.colour(ReadingColour.valueOf(readingColourKey))
-				.diastolic(diastolic)
-				.systolic(systolic)
-				.heartRate(heartRate)
-				.timestamp(readingTimestamp)
-				.symptoms(symptomsArrNoTrailingWhiteSpace) // TODO: Symptoms are not saved! BUG
-				.build();
-
-		Reading currentReading = readingManager.saveReadingView(readingView);
-
-		Referral currentReferral = new ReferralBuilder()
-				.referredByUserId(currentVHT.get().getId())
-				.referredToHealthCenterId(currentHealthCentre.get().getId())
-				.readingId(currentReading.getId())
-				.comments(comments)
-				.timestamp(referralTimestamp)
-				.build();
-
-		return referralRepository.save(currentReferral);
+		this.patientManagerService = patientManagerService;
+		this.userRepository = userRepository;
 	}
 
 	/**
@@ -140,11 +68,12 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 */
 	@Override
 	public List<ReferralView> findAllByHealthCentre(String healthCentreName) throws EntityNotFoundException {
+		// TODO: findByName will throw a NonUniqueResultException if there are >1 health centre with same name.
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByName(healthCentreName);
 		if (healthCentre.isEmpty()) {
 			throw new EntityNotFoundException("No health centre with name: " + healthCentreName);
 		}
-		return Vec.copy(referralRepository.findAllByReferredToHealthCenterId(healthCentre.get().getId()))
+		return Vec.copy(referralRepository.findAllByHealthCentreId(healthCentre.get().getId()))
 				.map(this::computeReferralView)
 				.toList();
 	}
@@ -157,15 +86,116 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	private ReferralView computeReferralView(@NotNull Referral r) {
-		var optHc = healthCentreRepository.findById(r.getReferredToHealthCenterId());
+		var optHc = healthCentreRepository.findById(r.getHealthCentreId());
 		if (optHc.isEmpty()) {
 			throw new RuntimeException("unable to find health center: constraint violation");
 		}
 		var hc = optHc.get();
 
-		var pid = readingRepository.findPatientIdOfReadingWithId(r.getReadingId());
-		assert pid != null; // constraint violation if it is
+		return ReferralView.fromReferral(r, hc.getName(), hc.getPhoneNumber(), r.getPatientId());
+	}
 
-		return ReferralView.fromReferral(r, hc.getName(), hc.getHealthCentreNumber(), pid);
+
+
+	private InputStream retrieveMediaFromTwilio(Map<String, String[]> parameters) throws Exception {
+		String numMediaStr = parameters.get("NumMedia")[0];
+		int numMedia = Integer.parseInt(numMediaStr);
+
+		if (numMedia > 0) {
+			numMedia = numMedia - 1;
+			String mediaUrl = parameters.get(String.format("MediaUrl%d", numMedia))[0];
+			URL url = new URL(mediaUrl);
+			CloseableHttpClient httpclient = HttpClients.custom()
+					.setRedirectStrategy(new LaxRedirectStrategy())
+					.build();
+			HttpGet get = new HttpGet(url.toURI());
+			HttpResponse twilioResponse = httpclient.execute(get);
+			return twilioResponse.getEntity().getContent();
+		}
+		else {
+			throw new BadRequestException("No media found in message");
+		}
+	}
+
+	private Referral getReferralFromMessage(ReferralMessage referralMessage) throws Exception {
+		validateReferralMessage(referralMessage);
+
+		// Create or update patient information
+		Patient patient = referralMessage.getPatient();
+		patient.setId(referralMessage.getPatientId());
+		patient = patientManagerService.savePatient(patient);
+
+		// Get user
+		Optional<User> userDetails = userRepository.findByUsername(referralMessage.getReferrerUserName());
+		if (userDetails.isEmpty()){
+			throw new EntityNotFoundException("User is invalid");
+		}
+
+		// Get Health Centre
+		Optional<HealthCentre> healthCentre = healthCentreRepository.findByPhoneNumber(
+				referralMessage.getHealthCentrePhoneNumber());
+		if (healthCentre.isEmpty()){
+			throw new EntityNotFoundException("Health centre is invalid!");
+		}
+
+		// Create Reading
+		ReadingView readingView = referralMessage.getReadingView();
+		readingView.setCreatedBy(userDetails.get().getId());
+		readingView.setPatientId(referralMessage.getPatientId());
+		Reading reading = readingManager.saveReadingView(null, readingView);
+
+		// Create Referral object
+		return new ReferralBuilder()
+				.referredByUsername(referralMessage.getReferrerUserName())
+				.referredToHealthCentreId(healthCentre.get().getId())
+				.timestamp(referralMessage.getTimestamp())
+				.readingId(reading.getId())
+				.patientId(patient.getId())
+				.build();
+	}
+
+	/**
+	 * Saves a referral sent from Twilio
+	 * Corresponding reading and patient is saved in their own tables
+	 */
+	@Override
+	public Referral saveReferral(Map<String, String[]> parameters) throws Exception {
+
+		InputStream referralBytes = retrieveMediaFromTwilio(parameters);
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		BitmapEncoder.decodeFromBitmap(referralBytes, bos );
+		String referralString = bos.toString(StandardCharsets.UTF_8);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReferralMessage referralMessage = objectMapper.readValue(referralString, ReferralMessage.class);
+
+		Referral referral = getReferralFromMessage(referralMessage);
+		return referralRepository.save(referral);
+	}
+
+	/**
+	 * Saves a referral sent with JSON request
+	 * Corresponding reading and patient is saved in their own tables
+	 */
+	@Override
+	public Referral saveReferral(@Nullable ReferralMessage referralMessage) throws Exception {
+		// Create Referral object
+		Referral referral = getReferralFromMessage(referralMessage);
+		return referralRepository.save(referral);
+	}
+
+	private void validateReferralMessage(@NotNull ReferralMessage referral) throws BadRequestException {
+		assertNotNull(referral, "referral");
+		assertNotNull(referral.getReadingView(), "reading");
+		assertNotNull(referral.getPatient(), "patient");
+		assertNotNull(referral.getReferrerUserName(), "userName");
+		assertNotNull(referral.getHealthCentrePhoneNumber(), "healthCentrePhoneNumber");
+	}
+
+	private void assertNotNull(@Nullable Object field, @NotNull String fieldName) throws BadRequestException {
+		if (field == null) {
+			throw BadRequestException.missingField(fieldName);
+		}
 	}
 }
