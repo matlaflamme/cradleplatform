@@ -80,10 +80,11 @@ public class User {
 		this.worksAtHealthCentreId = user.getWorksAtHealthCentreId();
 	}
 
-	public User(String username, String password, String roles) {
+	public User(String username, String password, String roles, Integer healthCentreId) {
 		this.username = username;
 		this.password = password;
 		this.roles = roles;
+		this.worksAtHealthCentreId = healthCentreId;
 		this.active = true;
 	}
 
