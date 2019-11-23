@@ -15,7 +15,7 @@ let test = new Vue({
                 { text: 'Accept', value: 'accept', sortable: false },
                 { text: 'Time', value: 'timestamp' },
                 { text: 'Assigned To', value: 'accepter' },
-                { text: 'Closed', value: 'closed' },
+                { text: 'Status', value: 'status' },
             ],
             rows: [] //empty to start
         }
@@ -41,6 +41,7 @@ let test = new Vue({
             axios.get('/api/referral/all').then(response => {
                 console.log(response);
                 this.rows = response.data;
+                this.rows.forEach(row => row.status = row.closed ? 'Closed' : (row.accepter == null ? 'Pending' : 'Open'));
                 console.log("this rows: " + this.rows);
             }).catch(error => {
                 console.log(error);
