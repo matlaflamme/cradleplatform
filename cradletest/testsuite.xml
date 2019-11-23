@@ -240,7 +240,7 @@
 
 
   <TestCase name="Add Medication to Valid Patient">
-    <Request method="POST" uri="/api/patient/001/addMedication">
+    <Request method="POST" uri="/api/patient/001/addMedication" username="vht" password="vht">
       <![CDATA[
       {
         "patientId":"001",
@@ -255,7 +255,7 @@
   </TestCase>
   
   <TestCase name="Add Medication to Invalid Patient">
-    <Request method="POST" uri="/api/patient/1001/addMedication">
+    <Request method="POST" uri="/api/patient/1001/addMedication" username="vht" password="vht">
       <![CDATA[
       {
         "patientId":"001",
@@ -270,7 +270,7 @@
   </TestCase>
 
   <TestCase name="Get Medication from Valid Patient">
-    <Request method="GET" uri="/api/patient/001/getMedications"/>
+    <Request method="GET" uri="/api/patient/001/getMedications" username="vht" password="vht"/>
     <Response status="200">
       <![CDATA[
         [
@@ -287,7 +287,7 @@
   </TestCase>
 
     <TestCase name="Get Medication from Invalid Patient">
-        <Request method="GET" uri="/api/patient/1001/getMedications">
+        <Request method="GET" uri="/api/patient/1001/getMedications" username="vht" password="vht">
             <![CDATA[]]>
         </Request>
         <Response status="404"/>
