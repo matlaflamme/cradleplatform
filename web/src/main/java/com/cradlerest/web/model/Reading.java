@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "reading")
-@DataGenRelativeAmount(base = Patient.class, multiplier = 2.0)
+@DataGenRelativeAmount(base = Patient.class, multiplier = 6.0)
 public class Reading {
 
 	@Id
