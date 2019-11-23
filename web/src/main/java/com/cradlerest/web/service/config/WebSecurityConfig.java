@@ -80,6 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Open endpoints
 				.antMatchers("/api/user/whoami").authenticated()
 				.antMatchers("/api/twilio/**").hasRole("ADMIN")
+				.antMatchers("/api/hc/all").authenticated()
+
 				// Admin only endpoints
 				.antMatchers("/api/hc/**").hasRole("ADMIN")
 				.antMatchers("/api/internal/**").hasRole("ADMIN")
