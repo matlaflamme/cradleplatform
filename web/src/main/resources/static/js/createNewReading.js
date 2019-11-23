@@ -76,8 +76,15 @@ Vue.component('new_reading',{
                     this.snackbar = true;
                 }
                 ).then(response => {
-                    console.log(response)
-                console.log(this.medications)
+                    console.log(response);
+                    let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
+                    let id = urlQuery.get('id'); //search for 'id=' in query and return the value
+                    axios.post('/api/patient/' + id + '/addMedications',
+                        this.medications //array of medication objects
+                    ).then(response => {
+                        console.log(response)
+                });
+                console.log(this.medications);
                     if (response.status == 200) {
                         window.location.assign("/patientSummary?id=" + this.patientID);
                     }
@@ -231,15 +238,15 @@ Vue.component('new_reading',{
         '        required\n' +
         '      >{{input.medication }}  </v-text-field>\n' +
         '        <v-text-field\n' +
-        '        v-model="input.dose"\n' +
+        '        v-model="input.dosage"\n' +
         '        label="Dose"\n' +
         '        required\n' +
-        '      >{{input.dose}}  </v-text-field>\n' +
+        '      >{{input.dosage}}  </v-text-field>\n' +
         '        <v-text-field\n' +
-        '        v-model="input.frequency"\n' +
+        '        v-model="input.usageFrequency"\n' +
         '        label="Usage frequency"\n' +
         '        required\n' +
-        '      >{{ input.frequency}}  </v-text-field>\n' +
+        '      >{{ input.usageFrequency}}  </v-text-field>\n' +
         '      <v-btn color="error" small @click="deleteRow(index)">\n' +
         '      delete</v-btn>' +
         '      </li>\n' +
@@ -257,7 +264,7 @@ Vue.component('new_reading',{
         '      </v-stepper-items>\n' +
         '    </v-stepper>' +
         '<v-snackbar v-model="snackbar">' +
-            'Patient ID does not exist' +
+            'Please check your entries, patient id may not exist' +
             `<v-btn
                 color="pink"
                 @click="snackbar = false"
