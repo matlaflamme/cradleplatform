@@ -333,10 +333,9 @@ Vue.component('patient_info', {
             if (this.patientData.readings[0].symptoms.length !== 0) {
                 this.symptoms = this.patientData.readings[0].symptoms;
                 this.hasSymptoms = true;
-          g  }
+           }
         },
         checkMedications() {
-            //this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //For testing only
             // if (this.patientData.drugHistory !== null) {
                 this.medications= [{patientId:"001",medId:7,medication:"Tylenol",dosage:"1 Extra Strength Pill",usageFrequency:"Morning and Evening"}];
                 // this.medications = this.patientData.drugHistory;
