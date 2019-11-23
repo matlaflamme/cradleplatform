@@ -148,7 +148,7 @@ Vue.component('new_reading',{
 	`
     <div class="customContainer">
 		<div class="customDiv">
-			<v-card>
+			<v-card min-width="200">
 				<v-card-title>
 				<h4>Summary</h4>
 				</v-card-title>
@@ -156,9 +156,9 @@ Vue.component('new_reading',{
 				<v-card-text>
 				<ul>
 					<li>Patient ID: {{patientID}}</li>
-					<li>Heartrate: {{heartRate}}</li>
 					<li>Systolic: {{systolic}}</li>
 					<li>Diastolic: {{diastolic}}</li>
+					<li>Heartrate: {{heartRate}}</li>
 					<li>Pregnant: {{pregnant}}</li>	
 					<li>Gestational age: {{gestationalAge}}</li>	
 				</ul>
@@ -170,7 +170,6 @@ Vue.component('new_reading',{
 				</ul>
 				</v-card-text>
 				<v-card-actions>
-				<v-btn color=success>Click #1</v-btn>
 				<v-spacer></v-spacer>
 				</v-card-actions>
 			</v-card>
