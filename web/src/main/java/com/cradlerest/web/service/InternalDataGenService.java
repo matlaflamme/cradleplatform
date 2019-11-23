@@ -16,6 +16,9 @@ import static com.cradlerest.web.util.Algorithm.removeDuplicates;
  */
 public class InternalDataGenService {
 
+	private static final String USER_DELETE_STMT =
+			"DELETE FROM user u WHERE u.username <> 'admin' AND u.username <> 'health' AND u.username <> 'vht'";
+
 	@Autowired
 	private RawDatabaseAccessRepository repo;
 
@@ -40,7 +43,9 @@ public class InternalDataGenService {
 
 	private static Vec<String> deleteStatements(@NotNull Vec<Data> data) {
 		var tableNames = removeDuplicates(data.map(Data::getTable));
-		return tableNames.map(InternalDataGenService::deleteAllFromTableStatement);
+		return tableNames.filter(name -> !name.equals("user")) // don't delete entries from the user table
+				.map(InternalDataGenService::deleteAllFromTableStatement)
+				.append(USER_DELETE_STMT); // delete all users but our precious initial ones
 	}
 
 	private void executeUpdate(@NotNull String query) {
