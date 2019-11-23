@@ -120,11 +120,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private Referral getReferralFromMessage(ReferralMessage referralMessage) throws Exception {
 		validateReferralMessage(referralMessage);
 
-		// Create or update patient information
-		Patient patient = referralMessage.getPatient();
-		patient.setId(referralMessage.getPatientId());
-		patient = patientManagerService.savePatient(patient);
-
 		// Get user
 		Optional<User> userDetails = userRepository.findByUsername(referralMessage.getReferrerUserName());
 		if (userDetails.isEmpty()){
@@ -138,6 +133,11 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			throw new EntityNotFoundException("Health centre is invalid!");
 		}
 
+		// Create or update patient information
+		Patient patient = referralMessage.getPatient();
+		patient.setId(referralMessage.getPatientId());
+		patient = patientManagerService.savePatient(patient);
+		
 		// Create Reading
 		ReadingView readingView = referralMessage.getReadingView();
 		readingView.setCreatedBy(userDetails.get().getId());
