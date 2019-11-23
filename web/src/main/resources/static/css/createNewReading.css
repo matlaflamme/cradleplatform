@@ -2,3 +2,11 @@ h2 {
     color: #0c9090; /* Green */
     text-align: center;
 }
+
+.customContainer {
+    display: flex;
+}
+
+.customDiv {
+    padding: 5px;
+}

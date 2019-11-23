@@ -9,6 +9,7 @@ Vue.component('new_reading',{
 			Yellow: 1,
 			Red: 2
 		},
+		finished: true, // reading is validated and saved to server
         e1: 0,
         sex: 0,
         snackbar: false,
@@ -145,7 +146,36 @@ Vue.component('new_reading',{
     },
     template: //@TODO Fix indentation
 	`
-    <div>
+    <div class="customContainer">
+		<div class="customDiv">
+			<v-card>
+				<v-card-title>
+				<h4>Summary</h4>
+				</v-card-title>
+<!--				<img id="light" ref="light" :src=item.colorstyle height="50" width="60" style="margin-bottom: 12px">-->
+				<v-card-text>
+				<ul>
+					<li>Patient ID: {{patientID}}</li>
+					<li>Heartrate: {{heartRate}}</li>
+					<li>Systolic: {{systolic}}</li>
+					<li>Diastolic: {{diastolic}}</li>
+					<li>Pregnant: {{pregnant}}</li>	
+					<li>Gestational age: {{gestationalAge}}</li>	
+				</ul>
+				<ul>
+					<li v-for="symptom in symptoms">{{symptom}}</li>
+				</ul>
+				<ul>
+					<li v-for="medication in medications">{{medication}}</li>
+				</ul>
+				</v-card-text>
+				<v-card-actions>
+				<v-btn color=success>Click #1</v-btn>
+				<v-spacer></v-spacer>
+				</v-card-actions>
+			</v-card>
+		</div>
+        <div class="customDiv">
         <v-stepper v-model="e1">
         	<v-stepper-header>
         		<v-stepper-step :complete="e1 > 1" step="1" editable>Vitals</v-stepper-step>
@@ -234,7 +264,7 @@ Vue.component('new_reading',{
                   >
                     Continue
                   </v-btn>
-        // This part is the third tab
+<!--        This part is the third tab-->
                 </v-stepper-content>
                 <v-stepper-content step="3">
                   <v-card  :elevation= "0" min-width="500">
@@ -255,8 +285,7 @@ Vue.component('new_reading',{
                 label="Usage frequency"
                 required
               >- {{ input.frequency}}  </v-text-field>
-              <v-btn color="error" small @click="deleteRow(index)">
-              delete</v-btn>
+              <v-btn color="error" small @click="deleteRow(index)">delete</v-btn>
               </li>
             </ul>
                   </v-card>
@@ -265,12 +294,28 @@ Vue.component('new_reading',{
                   <v-btn
                     color="primary"
                     @click="validate"
-                  >\n
-                    Save reading\n
+                  >
+                    Save reading
                   </v-btn>\n
                 </v-stepper-content>
               </v-stepper-items>
             </v-stepper>
+        </div>
+		<div class="customDiv" v-if="finished" >
+			<v-card>
+				<v-card-title>
+				<h2>Reading Complete. Advice:</h2>
+				</v-card-title>
+<!--				<img id="light" ref="light" :src=item.colorstyle height="50" width="60" style="margin-bottom: 12px">-->
+				\t<v-card-text>Patient is likely health.
+				\tContinue normal care<br>
+				</v-card-text>
+				<v-card-actions>
+				<v-btn color=success>Click #1</v-btn>
+				<v-spacer></v-spacer>
+				</v-card-actions>
+			</v-card>
+		</div>
         <v-snackbar v-model="snackbar">
             'Patient ID does not exist
             <v-btn
@@ -280,10 +325,10 @@ Vue.component('new_reading',{
             'Close' 
             </v-btn>
         </v-snackbar>
+        
     </div>
 	`
 });
-
 
 function getCurrentDate() {
 	let now = new Date(); //new date object

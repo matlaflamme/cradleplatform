@@ -3,7 +3,7 @@
 <head>
     <div th:replace="fragments/head :: headerFragment"></div>
     <title id="pageTitle">New Reading</title>
-
+	<link type="text/css" rel="stylesheet" href="/css/createNewReading.css">
 </head>
 <body>
 <h2>Add a new reading</h2>
@@ -13,8 +13,10 @@
         <div th:replace="fragments/navbar :: navbarFragment"></div>
         <v-content>
             <v-container align-center>
-                <v-layout justify-center align-center>
+                <v-layout>
                     <new_reading></new_reading>
+<!--					<reading_summary></reading_summary>-->
+<!--					<reading_advice></reading_advice>-->
                 </v-layout>
             </v-container>
         </v-content>
