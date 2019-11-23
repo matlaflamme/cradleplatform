@@ -7,11 +7,11 @@ USE cradlerest;
 CREATE TABLE health_centre
 (
     id                   INT PRIMARY KEY AUTO_INCREMENT,
+    phone_number         VARCHAR(255) UNIQUE NOT NULL,
     name                 VARCHAR(255) NOT NULL,
-    zone                 INT          NOT NULL,
-    email                VARCHAR(255) NOT NULL,
-    health_centre_number VARCHAR(255) NOT NULL,
-    manager_phone_number VARCHAR(255) NOT NULL
+    location             VARCHAR(255) NOT NULL,
+    email                VARCHAR(255),
+    manager_phone_number VARCHAR(255)
 );
 
 CREATE TABLE user
@@ -34,8 +34,8 @@ CREATE TABLE patient
 (
     id              VARCHAR(255) PRIMARY KEY,
     name            VARCHAR(255) NOT NULL,
-    village         VARCHAR(255) NOT NULL,
-    zone            VARCHAR(255) NOT NULL,
+    village         VARCHAR(255),
+    zone            VARCHAR(255),
     birth_year      INT          NOT NULL,
     sex             INT          NOT NULL, -- enumerated {male, female, unknown}
     medication      TEXT,
@@ -72,26 +72,50 @@ CREATE TABLE reading
         REFERENCES user (id)
 );
 
+CREATE TABLE diagnosis
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    patient     VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    resolved    BOOLEAN NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (patient)
+        REFERENCES patient (id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE referral
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
-    referred_by INT      NOT NULL,
-    referred_to INT      NOT NULL,
-    reading_id  INT      NOT NULL,
-    comments    TEXT,
-    timestamp   DATETIME NOT NULL,
+    reading_id  INT          NOT NULL,
+    referred_to Int NOT NULL,
+    referred_by VARCHAR(255) NOT NULL,
+    patient     VARCHAR(255) NOT NULL,
+    timestamp   DATETIME     NOT NULL,
+    closed_by   INT,
+    diagnosis   INT,
     closed      DATETIME,
-    accepter    VARCHAR(255),
 
     FOREIGN KEY (referred_by)
-        REFERENCES user (id),
+        REFERENCES user (username),
 
     FOREIGN KEY (referred_to)
-        REFERENCES health_centre (id)
+        REFERENCES health_centre(id)
         ON DELETE CASCADE,
 
     FOREIGN KEY (reading_id)
         REFERENCES reading (id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (closed_by)
+        REFERENCES user (id),
+
+    FOREIGN KEY (patient)
+        REFERENCES patient (id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (diagnosis)
+        REFERENCES diagnosis (id)
         ON DELETE CASCADE
 );
 

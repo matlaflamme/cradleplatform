@@ -31,11 +31,11 @@ public class Patient {
 	@DataGenStringParams(length = 2, charset = StringGenerator.UPPER_ALPHA_CHARSET)
 	private String name;
 
-	@Column(name = "village", nullable = false)
+	@Column(name = "village")
 	@DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
 	private String villageNumber;
 
-    @Column(name = "zone", nullable = false)
+    @Column(name = "zone")
     @DataGenStringParams(length = 3, charset = StringGenerator.DECIMAL_CHARSET)
     private String zoneNumber;
 
