@@ -11,7 +11,7 @@ CREATE TABLE health_centre
     name                 VARCHAR(255) NOT NULL,
     location             VARCHAR(255) NOT NULL,
     email                VARCHAR(255),
-    alternate_phone_number VARCHAR(255)
+    manager_phone_number VARCHAR(255)
 );
 
 CREATE TABLE user

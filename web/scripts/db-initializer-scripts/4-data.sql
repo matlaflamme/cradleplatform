@@ -73,10 +73,10 @@ VALUES (3, '001', 130, 100, 80, FALSE, 2, '2019-09-24 12:31:34', 3);
 INSERT INTO health_centre (name, phone_number, location, email)
 VALUES ('Twilio', '+12053465536', 'London', 'fakeemail12345@gmail.com');
 
-INSERT INTO health_centre (name, location,email, phone_number, alternate_phone_number)
+INSERT INTO health_centre (name, location,email, phone_number, manager_phone_number)
 VALUES ('SFU', 'Uganda', 'fakeemail123456@gmail.com', '+12053465538', '+12053465539');
 
-INSERT INTO health_centre (name, phone_number, location, alternate_phone_number)
+INSERT INTO health_centre (name, phone_number, location, manager_phone_number)
 VALUES ('FSU',  '+12053465530', 'burnaby', '+12053465531');
 
 
@@ -105,7 +105,7 @@ INSERT INTO symptom VALUES (5, 'Unwell');
 
 -- Authentication Test Data
 
-INSERT INTO health_centre (id, name, location, email, phone_number, alternate_phone_number)
+INSERT INTO health_centre (id, name, location, email, phone_number, manager_phone_number)
 VALUES (40001, 'HCA', 'uganda','hca@email.ca', '123 456-7890', '123 456-7890');
 
 INSERT INTO user (id, username, password, role, works_at)

@@ -242,7 +242,7 @@
           "location":"places",
           "email": "1234@gmail.com",
           "phoneNumber": "21503912",
-          "alternatePhoneNumber": "123123"
+          "managerPhoneNumber": "123123"
         }
         ]]>
       </Request>
@@ -257,7 +257,7 @@
           "location":"places",
           "email": "1234mail.com",
           "phoneNumber": "21503912",
-          "alternatePhoneNumber": "123123"
+          "managerPhoneNumber": "123123"
         }
         ]]>
       </Request>
@@ -272,7 +272,7 @@
           "location":"laces",
           "email": "1234@gmail.com",
           "phoneNumber": "123",
-          "alternatePhoneNumber": "12123"
+          "managerPhoneNumber": "12123"
         }
         ]]>
       </Request>
@@ -287,7 +287,7 @@
           "location":"places",
           "email": "1234@gmail.com",
           "phoneNumber": "23103912",
-          "alternatePhoneNumber": "123123"
+          "managerPhoneNumber": "123123"
         }
         ]]>
       </Request>

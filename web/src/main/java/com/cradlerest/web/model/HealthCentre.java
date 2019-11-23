@@ -49,10 +49,10 @@ public class HealthCentre {
 	private String email;
 
 	// Person in charge at this health centre
-	@Column(name = "alternate_phone_number")
+	@Column(name = "manager_phone_number")
 	@Generator(PhoneNumberGenerator.class)
 	@NotNull(message = "Missing manager phone number")
-	private String alternatePhoneNumber;
+	private String managerPhoneNumber;
 
 	HealthCentre() {}
 
@@ -96,12 +96,12 @@ public class HealthCentre {
 		this.email = email;
 	}
 
-	public String getAlternatePhoneNumber() {
-		return alternatePhoneNumber;
+	public String getManagerPhoneNumber() {
+		return managerPhoneNumber;
 	}
 
-	public void setAlternatePhoneNumber(String managerPhoneNumber) {
-		this.alternatePhoneNumber = managerPhoneNumber;
+	public void setManagerPhoneNumber(String managerPhoneNumber) {
+		this.managerPhoneNumber = managerPhoneNumber;
 	}
 
 }
