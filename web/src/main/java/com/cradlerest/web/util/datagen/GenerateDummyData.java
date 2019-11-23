@@ -1,5 +1,6 @@
 package com.cradlerest.web.util.datagen;
 
+import com.cradlerest.web.model.Reading;
 import com.cradlerest.web.model.SymptomReadingRelation;
 import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.error.DeadlockException;
@@ -159,6 +160,7 @@ public class GenerateDummyData {
 	private static DataPassManager dataPassManager() {
 		var manager = new DataPassManager();
 		manager.register(SymptomReadingRelation.class, new SymptomReadingRelationEnforceUniquePass());
+		manager.register(Reading.class, new ReadingColourComputationPass());
 		return manager;
 	}
 
