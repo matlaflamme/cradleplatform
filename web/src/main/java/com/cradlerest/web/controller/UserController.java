@@ -72,11 +72,12 @@ public class UserController {
 		String username = user.getUsername();
 		String password = passwordEncoder.encode(user.getPassword());
 		String roles = user.getRoles();
+		Integer healthCentreId = user.getWorksAtHealthCentreId(); // NULLABLE
 		if (userRepository.findByUsername(username).isPresent()) {
 			throw new AlreadyExistsException(username);
 		}
 		System.out.println("Created user: " + username);
-		return userRepository.save(new User(username, password, roles));
+		return userRepository.save(new User(username, password, roles, healthCentreId));
 	}
 
 	/**
