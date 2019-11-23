@@ -67,7 +67,7 @@ public class Patient {
 	private String generalNotes;
 
 	@Column(name = "created_by")
-	@Omit
+	@DataGenRange(min = 3, max = 4) // always generate as the id for the `vht` user
 	private Integer createdBy;
 
 	public Patient() {

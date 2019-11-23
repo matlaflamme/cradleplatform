@@ -1,13 +1,11 @@
 package com.cradlerest.web.model;
 
-import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
-import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
-import com.cradlerest.web.util.datagen.impl.NameGenerator;
+import com.cradlerest.web.util.datagen.impl.FixedStringGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -31,7 +29,8 @@ public class Referral {
 	private Integer id;
 
 	@Column(name = "referred_by", nullable = false)
-	@ForeignKey(User.class)
+	@Generator(FixedStringGenerator.class)
+	@DataGenFixedString("vht")
 	private String referrerUserName;
 
 	@Column(name = "referred_to", nullable = false)
