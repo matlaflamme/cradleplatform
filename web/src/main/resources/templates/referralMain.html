@@ -32,11 +32,9 @@
 									<td>{{props.rows.healthCentre}}</td>
 									<td>{{props.rows.healthCentreNumber}}</td>
 									</template>
-									<template v-slot:item.view="{ item }">
-										<button v-on:click="viewPatientData(item.patientId)" class="btn btn-outline-info">View Patient Data</button>
-									</template>
-									<template v-slot:item.accept="{ item }">
-										<button v-on:click="accept()" class="btn btn-outline-info">Accept</button>
+									<template v-slot:item.actions="{ item }">
+										<button v-on:click="viewPatientData(item.patientId)" class="btn btn-outline-info btn-sm">Patient Info</button>
+										<button v-on:click="accept(item)" class="btn btn-outline-info btn-sm">Accept</button>
 									</template>
 									<template slot="rows" slot-scope="props">
 										<td>{{props.rows.timestamp}}</td>

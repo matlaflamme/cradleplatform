@@ -11,8 +11,7 @@ let test = new Vue({
                 { text: 'VHT ID', value: 'vhtId' },
                 { text: 'Health Centre', value: 'healthCentre' },
                 { text: 'Health Centre Number', value: 'healthCentreNumber' },
-                { text: 'View', value: 'view', sortable: false },
-                { text: 'Accept', value: 'accept', sortable: false },
+                { text: 'Actions', value: 'actions', sortable: false },
                 { text: 'Time', value: 'timestamp' },
                 { text: 'Assigned To', value: 'accepter' },
                 { text: 'Status', value: 'status' },
@@ -48,6 +47,7 @@ let test = new Vue({
             })
         },
         accept: function() {
+            console.log("Called accept()", arguments);
             // TODO: accept referral, pass in health worker Id, time
             // can't retrieve id at the moment
         }
