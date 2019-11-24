@@ -259,10 +259,23 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	@Override
-	public Diagnosis addDiagnosis(Authentication auth, Integer referralId, Diagnosis diagnosis) throws Exception {
+	public Diagnosis addDiagnosis(Authentication auth, int referralId, Diagnosis diagnosis) throws Exception {
+		Optional<Referral> referralCheck = referralRepository.findById(referralId);
+		if (referralCheck.isEmpty()) {
+			throw new EntityNotFoundException("Referral does not exist");
+		}
+
+		// save diagnosis
 		validateDiagnosis(diagnosis);
 		diagnosis.setResolved(false);
-		return diagnosisRepository.save(diagnosis);
+		diagnosis = diagnosisRepository.save(diagnosis);
+
+		// update referral
+		Referral referral = referralCheck.get();
+		referral.setDiagnosisId(diagnosis.getId());
+		referralRepository.save(referral);
+
+		return diagnosis;
 	}
 
 	private void validateDiagnosis(@NotNull Diagnosis diagnosis) throws BadRequestException {

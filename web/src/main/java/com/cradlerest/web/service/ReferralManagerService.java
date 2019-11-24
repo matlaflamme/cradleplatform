@@ -32,7 +32,7 @@ public interface ReferralManagerService {
 
 	Referral resolveReferral(Authentication auth, int referralId) throws Exception;
 
-	Diagnosis addDiagnosis(Authentication auth, Integer referralId, Diagnosis diagnosis) throws Exception;
+	Diagnosis addDiagnosis(Authentication auth, int referralId, Diagnosis diagnosis) throws Exception;
 
 	List<ReferralView> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
 	List<ReferralView> findAllByOrderByTimestampDesc();

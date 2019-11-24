@@ -91,7 +91,7 @@ public class ReferralController {
 	}
 
 	@PostMapping("{id}/diagnosis")
-	public Diagnosis addDiagnosis(Authentication auth, Integer referralId, @RequestBody Diagnosis diagnosis) throws Exception {
+	public Diagnosis addDiagnosis(Authentication auth, @PathVariable("id") int referralId, @RequestBody Diagnosis diagnosis) throws Exception {
 		assert auth != null;
 		return referralManagerService.addDiagnosis(auth, referralId, diagnosis);
 	}
