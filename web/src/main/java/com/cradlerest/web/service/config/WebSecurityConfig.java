@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Open endpoints
 				.antMatchers("/api/user/whoami").authenticated()
 				.antMatchers("/api/hc/all").authenticated()
+				.regexMatchers("/api/user/(?:check|update)-password").authenticated()
 
 				// Admin only endpoints
 				.antMatchers("/api/hc/**").hasRole("ADMIN")
@@ -94,10 +95,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 				// VHT only endpoints
 				.antMatchers("/api/referral/send/**").hasRole("VHT")
-
-				// Health worker only endpoints
-				.regexMatchers("/api/referral(?:/.+)?/all").hasRole("HEALTHWORKER")
-
+				.antMatchers("/api/referral/new").hasRole("VHT")
+				.antMatchers("/api/referral/**").hasAnyRole("HEALTHWORKER", "VHT")
+				
 				// Deny any other request
 				.antMatchers("/api/**").denyAll()
 				.and()

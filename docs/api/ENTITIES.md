@@ -15,11 +15,11 @@ For an overview of the API methods themselves, see [METHODS.md](METHODS.md).
 
 ## Exception
 
-A common exception type is used for all API methods. In the event of an error, 
+A common exception type is used for all API methods. In the event of an error,
 an object of this type will be sent back as a response.
 
 The `error` field is unique to this entity meaning that a simple check for the
-existence of an `error` field on a JSON object returned by an API method is 
+existence of an `error` field on a JSON object returned by an API method is
 sufficient to determine if the response is an error or not.
 
 ### Fields
@@ -42,8 +42,8 @@ sufficient to determine if the response is an error or not.
 
 ## Patient
 
-Holds direct information about a single patient. This does not include things 
-like readings or symptoms which have a many-to-one relationship with a patient 
+Holds direct information about a single patient. This does not include things
+like readings or symptoms which have a many-to-one relationship with a patient
 entity, and, as such, must be separate entities.
 
 ### Fields
@@ -326,4 +326,3 @@ API currently not supported. Only used currently to verify referral health centr
 | `email` | `string` | `false` | Reading Id |
 | `healthCentreNumber` | `string` | `false` | Name of Health Centre referred to by VHT |
 | `managerPhoneNumber` | `string` | `false` | Number of Health Centre |
-

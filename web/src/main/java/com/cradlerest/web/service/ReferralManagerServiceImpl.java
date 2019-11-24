@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.ReferralController;
+import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
@@ -10,7 +11,6 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
 import com.cradlerest.web.util.BitmapEncoder;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
 import org.apache.http.HttpResponse;
@@ -23,16 +23,17 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.*;
 
-import static com.cradlerest.web.util.CopyFields.copyFields;
+import static com.cradlerest.web.util.AuthenticationExt.hasRole;
 
 /**
  * Implements ReferralManagerService
@@ -49,17 +50,20 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private ReadingManager readingManager;
 	private PatientManagerService patientManagerService;
 	private UserRepository userRepository;
+	private DiagnosisRepository diagnosisRepository;
 
 	public ReferralManagerServiceImpl(ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
 									  ReadingManager readingManager,
 									  PatientManagerService patientManagerService,
-									  UserRepository userRepository) {
+									  UserRepository userRepository,
+									  DiagnosisRepository diagnosisRepository) {
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
 		this.readingManager = readingManager;
 		this.patientManagerService = patientManagerService;
 		this.userRepository = userRepository;
+		this.diagnosisRepository = diagnosisRepository;
 	}
 
 	/**
@@ -83,6 +87,36 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		return Vec.copy(referralRepository.findAllByOrderByTimestampDesc())
 				.map(this::computeReferralView)
 				.toList();
+	}
+
+	@Override
+	public List<ReferralView> allReferrals(@NotNull Authentication auth) {
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) auth.getPrincipal();
+
+		if (hasRole(auth, UserRole.HEALTH_WORKER)) {
+			var hcId = details.getWorksAtHealthCentreId();
+
+			// If a health worker is not assigned to a health centre then return
+			// an empty list of referrals.
+			if (hcId == null) {
+				return new ArrayList<>();
+			}
+
+			// Otherwise, return all referrals made to the health centre that they
+			// work at.
+			return Vec.copy(referralRepository.findAllByHealthCentreId(hcId))
+					.map(this::computeReferralView)
+					.toList();
+		} else if (hasRole(auth, UserRole.VHT)) {
+			// If the user is a VHT, return all of the referrals that the VHT has made.
+			var username = details.getUsername();
+			return Vec.copy(referralRepository.findAllByReferrerUserName(username))
+					.map(this::computeReferralView)
+					.toList();
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	private ReferralView computeReferralView(@NotNull Referral r) {
@@ -120,11 +154,6 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private Referral getReferralFromMessage(ReferralMessage referralMessage) throws Exception {
 		validateReferralMessage(referralMessage);
 
-		// Create or update patient information
-		Patient patient = referralMessage.getPatient();
-		patient.setId(referralMessage.getPatientId());
-		patient = patientManagerService.savePatient(patient);
-
 		// Get user
 		Optional<User> userDetails = userRepository.findByUsername(referralMessage.getReferrerUserName());
 		if (userDetails.isEmpty()){
@@ -138,6 +167,11 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			throw new EntityNotFoundException("Health centre is invalid!");
 		}
 
+		// Create or update patient information
+		Patient patient = referralMessage.getPatient();
+		patient.setId(referralMessage.getPatientId());
+		patient = patientManagerService.savePatient(patient);
+		
 		// Create Reading
 		ReadingView readingView = referralMessage.getReadingView();
 		readingView.setCreatedBy(userDetails.get().getId());
@@ -183,6 +217,81 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		// Create Referral object
 		Referral referral = getReferralFromMessage(referralMessage);
 		return referralRepository.save(referral);
+	}
+
+	/**
+	 * Saves a referral sent with JSON request
+	 * only saves referral
+	 */
+	@Override
+	public Referral saveReferral(Authentication auth, Referral referral) throws Exception {
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) auth.getPrincipal();
+		String username = details.getUsername();
+		if (username == null) {
+			throw new AccessDeniedException("invalid user credentials");
+		}
+		validateReferral(referral);
+		referral.setTimestamp(new Timestamp(new Date().getTime()));
+		referral.setReferrerUserName(username);
+		// Create Referral object
+		return referralRepository.save(referral);
+	}
+
+	@Override
+	public Referral resolveReferral(Authentication auth, int id) throws Exception {
+		// Get user details
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var userDetails = (UserDetailsImpl) auth.getPrincipal();
+		Integer userId = userDetails.getId();
+		if (userId == null) {
+			throw new AccessDeniedException("Invalid user credentials");
+		}
+
+		Optional<Referral> referralOptional = referralRepository.findById(id);
+		if (referralOptional.isEmpty()) {
+			throw new EntityNotFoundException("Referral not found");
+		}
+
+		// If referral is resolved already, don't do it again
+		Referral referral = referralOptional.get();
+		if (referral.getReviewerUserId() != null) {
+			return referral;
+		}
+
+		referral.setClosed(new Timestamp(new Date().getTime()));
+		referral.setReviewerUserId(userId);
+		return referralRepository.save(referral);
+	}
+
+	@Override
+	public Diagnosis addDiagnosis(Authentication auth, int referralId, Diagnosis diagnosis) throws Exception {
+		Optional<Referral> referralCheck = referralRepository.findById(referralId);
+		if (referralCheck.isEmpty()) {
+			throw new EntityNotFoundException("Referral does not exist");
+		}
+
+		// save diagnosis
+		validateDiagnosis(diagnosis);
+		diagnosis.setResolved(false);
+		diagnosis = diagnosisRepository.save(diagnosis);
+
+		// update referral
+		Referral referral = referralCheck.get();
+		referral.setDiagnosisId(diagnosis.getId());
+		referralRepository.save(referral);
+		return diagnosis;
+	}
+
+	private void validateReferral(Referral referral) throws BadRequestException {
+		assertNotNull(referral.getHealthCentreId(), "healthCentreId");
+		assertNotNull(referral.getPatientId(), "patientId");
+		assertNotNull(referral.getReadingId(), "readingId");
+	}
+
+	private void validateDiagnosis(@NotNull Diagnosis diagnosis) throws BadRequestException {
+		assertNotNull(diagnosis.getDescription(), "description");
+		assertNotNull(diagnosis.getPatientId(), "patientId");
 	}
 
 	private void validateReferralMessage(@NotNull ReferralMessage referral) throws BadRequestException {
