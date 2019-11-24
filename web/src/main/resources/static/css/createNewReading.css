@@ -18,3 +18,7 @@ li {
 .customDiv {
     padding: 5px;
 }
+
+#summaryCardTitle {
+    border-bottom: 1px solid black;
+}

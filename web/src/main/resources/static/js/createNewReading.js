@@ -1,6 +1,7 @@
-import { TrafficLightCalc } from '/js/trafficLightCalc.js';
 
 Vue.prototype.$http = axios;
+import {TrafficLightCalc} from './TrafficLightCalc.js'
+import {getReadingColorIcon} from './GetReadingColorIcon.js'
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
@@ -16,6 +17,7 @@ Vue.component('new_reading',{
         symptoms: [],
         medications:[],
         pregnant: false,
+		trafficIcon: null,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
         MIN_SYSTOLIC: 10,
@@ -24,7 +26,6 @@ Vue.component('new_reading',{
         MAX_HEART_RATE: 200,
         MIN_HEART_RATE: 40,
         valid: true,
-        colour: '',
         timestamp: '',
         patientID: '',
         patientIDRules: [
@@ -58,7 +59,7 @@ Vue.component('new_reading',{
     }),
     methods: {
         submit: function() {
-            console.log(new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate));
+            console.log(this.colour);
             //do input validation in a different function
             let NUMBER_OF_DAYS_IN_WEEK = 7;
             axios.post('/api/reading/save',
@@ -67,7 +68,7 @@ Vue.component('new_reading',{
                     heartRate: parseInt(this.heartRate),
                     systolic: parseInt(this.systolic),
                     diastolic: parseInt(this.diastolic),
-                    colour: new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate),
+                    colour: this.colour,
                     pregnant: this.pregnant,
                     gestationalAge: parseInt(this.gestationalAge) * NUMBER_OF_DAYS_IN_WEEK, //convert weeks to days
                     timestamp: getCurrentDate(),
@@ -144,15 +145,24 @@ Vue.component('new_reading',{
 
         })
     },
-    template: //@TODO Fix indentation
+	computed: {
+    	colour: function() {
+			return new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate)
+		},
+	},
+	watch: {
+    	colour: function() {
+    		this.trafficIcon = getReadingColorIcon(this.colour);
+		}
+	},
+    template:
 	`
     <div class="customContainer">
 		<div class="customDiv">
 			<v-card min-width="200">
-				<v-card-title>
+				<v-card-title id="summaryCardTitle">
 				<h4>Summary</h4>
 				</v-card-title>
-<!--				<img id="light" ref="light" :src=item.colorstyle height="50" width="60" style="margin-bottom: 12px">-->
 				<v-card-text>
 				<ul>
 					<li>Patient ID: {{patientID}}</li>
@@ -161,12 +171,22 @@ Vue.component('new_reading',{
 					<li>Heartrate: {{heartRate}}</li>
 					<li>Pregnant: {{pregnant}}</li>	
 					<li>Gestational age: {{gestationalAge}}</li>	
+					<li>Colour int: {{colour}}</li>
+					<li>
+					<img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="50" width="60" style="margin-bottom: 12px">
+					</li>
 				</ul>
 				<ul>
 					<li v-for="symptom in symptoms">{{symptom}}</li>
 				</ul>
 				<ul>
-					<li v-for="medication in medications">{{medication}}</li>
+					<li v-for="medication in medications">
+						<ul>
+							<li>name: {{medication.medicince}}</li>
+							<li>dose: {{medication.dose}}</li>
+							<li>frequency: {{medication.frequency}}</li>
+						</ul>
+					</li>
 				</ul>
 				</v-card-text>
 				<v-card-actions>
@@ -303,7 +323,7 @@ Vue.component('new_reading',{
 		<div class="customDiv" v-if="finished" >
 			<v-card>
 				<v-card-title>
-				<h2>Reading Complete. Advice:</h2>
+				<h4>Reading Saved. Advice:</h4>
 				</v-card-title>
 <!--				<img id="light" ref="light" :src=item.colorstyle height="50" width="60" style="margin-bottom: 12px">-->
 				\t<v-card-text>Patient is likely health.
