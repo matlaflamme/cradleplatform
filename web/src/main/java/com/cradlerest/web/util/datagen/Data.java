@@ -40,6 +40,10 @@ public class Data {
 		return columnValueMap.get(column);
 	}
 
+	public void setValueForColumn(@NotNull String column, @Nullable Object value) {
+		columnValueMap.put(column, value);
+	}
+
 	/**
 	 * Converts this data instance into a SQL INSERT statement.
 	 *

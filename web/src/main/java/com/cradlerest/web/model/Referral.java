@@ -1,13 +1,11 @@
 package com.cradlerest.web.model;
 
-import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.service.DateDeserializer;
 import com.cradlerest.web.service.DateSerializer;
 import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
-import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
-import com.cradlerest.web.util.datagen.impl.NameGenerator;
+import com.cradlerest.web.util.datagen.impl.FixedStringGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -31,7 +29,8 @@ public class Referral {
 	private Integer id;
 
 	@Column(name = "referred_by", nullable = false)
-	@ForeignKey(User.class)
+	@Generator(FixedStringGenerator.class)
+	@DataGenFixedString("vht")
 	private String referrerUserName;
 
 	@Column(name = "referred_to", nullable = false)
@@ -43,11 +42,11 @@ public class Referral {
 	private String patientId;
 
 	@Column(name = "timestamp", nullable = false)
-	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	@Column(name = "closed")
-	@DataGenDateRange(min = "2017-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date closed;
 
 	@Column(name = "closed_by")
@@ -57,6 +56,10 @@ public class Referral {
 	@Column(name = "reading_id", nullable = false)
 	@ForeignKey(Reading.class)
 	private Integer readingId;
+
+	@Column(name = "diagnosis")
+	@ForeignKey(Diagnosis.class)
+	private Integer diagnosisId;
 
 	public Referral() {}
 
@@ -80,6 +83,14 @@ public class Referral {
 
 	public void setHealthCentreId(Integer healthCentreId) {
 		this.healthCentreId = healthCentreId;
+	}
+
+	public void setDiagnosisId(Integer diagnosisId) {
+		this.diagnosisId = diagnosisId;
+	}
+
+	public Integer getDiagnosisId() {
+		return diagnosisId;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)

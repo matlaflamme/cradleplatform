@@ -6,8 +6,17 @@
     <meta charset="UTF-8">
     <title>Error</title>
 </head>
-    <body>
-        <h1>Oops. Something went wrong</h1>
-        <a style="color: blue" th:href="@{/}">Home Page</a>
-    </body>
+<body>
+<h1>Oops! Something went wrong...</h1>
+<h2>Please try to <a th:href="@{/}"> login</a> again.</h2>
+</body>
+
+
+<style>
+    h1,h2 {
+        color: #0c9090; /* Green */
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
 </html>
