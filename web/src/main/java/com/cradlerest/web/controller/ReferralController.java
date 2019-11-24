@@ -1,5 +1,6 @@
 package com.cradlerest.web.controller;
 
+import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
 import com.cradlerest.web.model.view.ReferralView;
@@ -81,6 +82,23 @@ public class ReferralController {
 	@PostMapping("/send")
 	public Referral saveReferral(Authentication auth, @RequestBody ReferralMessage referral) throws Exception {
 		return referralManagerService.saveReferral(referral);
+	}
+
+	@PostMapping("/new")
+	public Referral saveReferral(Authentication auth, @RequestBody Referral referral) throws Exception {
+		return referralManagerService.saveReferral(auth, referral);
+	}
+
+	@PostMapping("/{id}/resolve")
+	public Referral resolveReferral(Authentication auth, @PathVariable("id") int referralId) throws Exception {
+		assert auth != null;
+		return referralManagerService.resolveReferral(auth, referralId);
+	}
+
+	@PostMapping("{id}/diagnosis")
+	public Diagnosis addDiagnosis(Authentication auth, @PathVariable("id") int referralId, @RequestBody Diagnosis diagnosis) throws Exception {
+		assert auth != null;
+		return referralManagerService.addDiagnosis(auth, referralId, diagnosis);
 	}
 
 	/**

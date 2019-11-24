@@ -222,7 +222,8 @@ class DataFactory {
 		return annotation instanceof DataGenRange ||
 		       annotation instanceof DataGenStringParams ||
 		       annotation instanceof DataGenNullChance ||
-		       annotation instanceof DataGenDateRange;
+		       annotation instanceof DataGenDateRange ||
+		       annotation instanceof DataGenFixedString;
 	}
 
 	/**
