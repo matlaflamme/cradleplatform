@@ -212,9 +212,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
 
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) auth.getPrincipal();
+
 		if (checkPatient.isEmpty() && auth != null) {
-			assert auth.getPrincipal() instanceof UserDetailsImpl;
-			var details = (UserDetailsImpl) auth.getPrincipal();
 			patient.setCreatedBy(details.getId());
 		}
 
@@ -223,6 +224,9 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			// If current patient is more recently updated than request patient, don't update current patient
 			if (existingPatient.getLastUpdated().compareTo(patient.getLastUpdated()) > 0) {
 				return existingPatient;
+			}
+			else {
+				existingPatient.setCreatedBy(details.getId());
 			}
 		}
 		validatePatient(patient);
@@ -263,6 +267,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated");
+		assertNotNull(patient.getCreatedBy(), "createdBy");
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {
