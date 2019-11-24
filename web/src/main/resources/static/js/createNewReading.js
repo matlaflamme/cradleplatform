@@ -164,6 +164,18 @@ Vue.component('new_reading',{
     	colour: function() {
     		this.finished = false; // reading changed
     		this.trafficIcon = getReadingColorIcon(this.colour);
+		},
+		symptoms: function() {
+    		this.finished = false;
+		},
+		medications: function() {
+			this.finished = false;
+		},
+		patientID: function() {
+    		this.finished = false;
+		},
+		pregnant: function() {
+    		this.finished = false;
 		}
 	},
     template:
@@ -390,6 +402,7 @@ Vue.component('new_reading',{
 						</v-list-item>
 		          	</v-card>
 		        <v-btn color="primary" @click="validate">Save reading</v-btn>
+		        <v-icon v-if="finished"large color="green darken-2" >mdi-check</v-icon>
 		        </v-stepper-content>
 		  	</v-stepper-items>
 		</v-stepper>
