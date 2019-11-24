@@ -10,16 +10,16 @@ function getReadingColorIcon(digit){
             light = 'green';
             break;
         case 1:
-            light = 'yellow_down';
-            break;
-        case 2:
             light = 'yellow_up';
             break;
+        case 2:
+            light = 'yellow_down';
+            break;
         case 3:
-            light = 'red_down';
+            light = 'red_up';
             break;
         case 4:
-            light = 'red_up';
+            light = 'red_down';
             break;
     }
     return "/img/" + light + ".png";
@@ -220,23 +220,35 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
             '</template>' +
             '<template v-slot:expanded-item="{ headers, item }">' + //this section is for what shows in the expanded row
                 '<td :colspan="headers.length">' +
-                    '<v-list-item three-line>' +
+                    '<v-list-item>' +
                         '<v-list-item-content>' +
-                            '<ul className="list-group">\n'+
-                                '<li className="list-group-item" class="pb-1">Gestational Age: {{item.gestationalAge}}</li>\n'+
-                                '<li className="list-group-item" class="pb-1">Symptoms: {{item.symptoms}}</li>\n'+
-                                '<li className="list-group-item" class="pb-1">Other Notes: {{item.readingNotes}}</li>\n'+
+                            '<ul >\n'+
+                                '<li>Gestational Age:'+
+                                '<ul v-if="item.gestationalAge">\n'+
+                                '<li>{{item.gestationalAge}}</li>\n'+
+                                '</ul>\n'+
+                                '<ul v-if="!item.gestationalAge" className="list-group">' +
+                                '<li className="list-group-item" class="pb-1">N/A</li>' +
+                                '</ul>' +
+                                '</li>' +
+                                '<li>Symptoms:'+
+                                    '<ul v-for="symptom in item.symptoms">\n'+
+                                        '<li>{{symptom}}</li>\n'+
+                                    '</ul>\n'+
+                                    '<ul v-if="item.symptoms.length === 0" className="list-group">' +
+                                    '<li className="list-group-item" class="pb-1">No symptoms recorded</li>' +
+                                    '</ul>' +
+                                    '<ul v-if="item.otherSymptoms != null" className="list-group">\n'+
+                                         '<li className="list-group-item" class="pb-1">{{item.otherSymptoms}}</li>\n'+
+                                    '</ul>\n'+
+                                '</li>' +
+                                // '<li>Other Notes: {{item.readingNotes}}</li>\n'+
                             '</ul>\n' +
                         '</v-list-item-content>' +
                     '</v-list-item>' +
                 '</td>'+
             '</template>' +
         '</v-data-table>' +
-        // '<v-spacer class="pt-5"></v-spacer>' +
-        //'<info_graph :systolicData="graphSystolic" :diastolicData="graphDiastolic" :heartRateData="graphHeartRate" :labels="labels"></info_graph>' +
-        // '<div>\n' +
-        // '<apexchart height="350" type="line" :options="getChartOptions()" :series="getSeries()"></apexchart>\n' +
-        // '</div>' +
     '</div>'
 });
 
@@ -283,6 +295,9 @@ Vue.component('patient_info', {
                     '<ul v-if="hasSymptoms" className="list-group" v-for="symptom in symptoms">\n'+
                         '<li className="list-group-item" class="pb-1">{{symptom}}</li>\n'+
                     '</ul>\n'+
+                    '<ul v-if="patientData.readings[0].otherSymptoms != null" className="list-group">\n'+
+                    '<li className="list-group-item" class="pb-1">{{patientData.readings[0].otherSymptoms}}</li>\n'+
+                    '</ul>\n'+
                     '<ul v-if="!hasSymptoms" className="list-group">' +
                         '<li className="list-group-item" class="pb-1">No symptoms recorded</li>' +
                     '</ul>' +
@@ -291,14 +306,19 @@ Vue.component('patient_info', {
             '<v-list-item three-line>' +
                 '<v-list-item-content>' +
                     '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
-                    '<ul v-if="takingMedication" className="list-group" v-for="medication in medications">\n'+
-                        '<li className="list-group-item" class="pb-1">{{medication}}        '+
-                            '<v-btn small outlined color="red">' +
-                                '<v-icon>delete</v-icon>' +
-                            '</v-btn>' +
+                    '<ul v-if="takingMedication" className="list-group" v-for="(medication, index) in medications">\n'+
+                        '<v-btn class="removebtn" extra small outlined color="red" @click="deleteMedicine(index, medication.medId)" style=" display: table-cell;">' +
+                        '<v-icon>delete</v-icon>' +
+                        '</v-btn>' +
+                        '<li className="list-group-item" class="pb-1">{{medication.medication}}'+
+                            '<ul>\n' +
+                                '<li className="list-group-item" class="pb-1">Dosage: {{medication.dosage}}\n</li>' +
+                                '<li className="list-group-item" class="pb-1">Frequency: {{medication.usageFrequency}}\n</li>\n' +
+                            '</ul>' +
+
                         '</li>' +
                     '</ul>\n'+
-                    '<ul v-if="!takingMedication" className="list-group">' +
+                    '<ul v-if="medications.length == 0" className="list-group">' +
                         '<li className="list-group-item" class="pb-1">Not currently taking any medications</li>' +
                     '</ul>' +
                 '</v-list-item-content>' +
@@ -313,7 +333,7 @@ Vue.component('patient_info', {
             console.log(response.data);
             this.light = getReadingColorIcon(response.data.readings[0].colour);
             this.checkSymptoms();
-            this.checkMedications();
+            this.checkMedications(id);
             this.checkPregnant();
         });
 
@@ -324,14 +344,16 @@ Vue.component('patient_info', {
             if (this.patientData.readings[0].symptoms.length !== 0) {
                 this.symptoms = this.patientData.readings[0].symptoms;
                 this.hasSymptoms = true;
-            }
+           }
         },
-        checkMedications() {
-            //this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //For testing only
-            if (this.patientData.drugHistory !== null) {
-                this.medications = this.patientData.drugHistory;
+        checkMedications(id) {
+            axios.get('/api/patient/' + id + "/getMedications").then(response => {
+                console.log("HIIIII");
+                this.medications= response.data;
                 this.takingMedication = true;
-            }
+                console.log(this.medications);
+            });
+
         },
         checkPregnant() {
             //this.patientData.readings[0].gestationalAge = 130; //For testing only
@@ -348,6 +370,14 @@ Vue.component('patient_info', {
                 return "Male";
             }
         },
+        deleteMedicine: function(index,medID) {
+                let urlQuery = new URLSearchParams(location.search);
+                let id = urlQuery.get('id');
+                axios.delete('/api/patient/' + id + "/removeMedication/" + medID)
+                    .then(response => {
+                        this.medications.splice(index,1)
+                    });
+        }
     }
 });
 
