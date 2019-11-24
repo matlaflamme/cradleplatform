@@ -277,12 +277,14 @@ Vue.component('new_reading',{
 					<v-card  :elevation= "0" min-width="500">
 					<v-container>
 					  <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
-					  <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>
-					  <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>
-					  <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>
-					  <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> 
-					  <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>
-					 <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Bleeding" :disabled="noSymptoms" value="Bleeding"></v-checkbox> 
+					  <v-checkbox v-model="symptoms" label="Feverish" :disabled="noSymptoms" value="Feverish"></v-checkbox>
+					 <v-checkbox v-model="symptoms" label="Unwell" :disabled="noSymptoms" value="Unwell"></v-checkbox>
+					 <v-checkbox v-model="enabled" :disabled="noSymptoms" label="Other:"></v-checkbox>
+					 <v-text-field :disabled="!enabled" label="Other symptoms" v-model="customSymptom"></v-text-field>
 					</v-container>
 						 </v-card>
 						 <v-btn
