@@ -94,12 +94,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/reading/**").hasAnyRole("HEALTHWORKER", "VHT")
 
 				// VHT only endpoints
-				.antMatchers("/api/referral/**").permitAll()
-				//.antMatchers("/api/referral/**").hasRole("HEALTHWORKER")
-//				.antMatchers("/api/referral/send/**").permitAll()
-//
-//				// Health worker only endpoints
-//				.regexMatchers("/api/referral(?:/.+)?/all").hasRole("HEALTHWORKER")
+				.antMatchers("/api/referral/**").hasRole("HEALTHWORKER")
+
+				// Health worker only endpoints
+				.regexMatchers("/api/referral(?:/.+)?/all").hasRole("HEALTHWORKER")
 
 				// Deny any other request
 				.antMatchers("/api/**").denyAll()
