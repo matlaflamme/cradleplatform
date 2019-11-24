@@ -2,12 +2,11 @@
  * generates an "advice" object containing strings for the advice according to:
  * https://d1b10bmlvqabco.cloudfront.net/attach/jzli7yk348i4l5/jcjx7qvtk3138u/k0ew5jkq9s32/CRADLE_VSA_Support_App__RetestAlg.pdf
  * This information should be stored in the (a?) database or somewhere
- * @param digit
- * @returns {null}
+ * @param digit Colour key
+ * @returns advice object containing attributes {light, analysis, summary, condition, details}
  */
 export function getReadingAdvice(digit){
 	let pdf_tail = '_advice.jpg'
-	let light = '';
 	let advice = {};
 	switch (digit) {
 		case 0:

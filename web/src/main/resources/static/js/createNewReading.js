@@ -6,15 +6,11 @@ import {getReadingAdvice} from './GetReadingAdvice.js'
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
-		StepIndex: {
-			Green: 0,
-			Yellow: 1,
-			Red: 2
-		},
-		finished: true, // reading is validated and saved to server
+		finished: false, // reading is validated and saved to server
         e1: 0,
         sex: 0,
-        snackbar: false,
+        error_snackbar: false,
+		success_snackbar: false,
         symptoms: [],
         medications:[],
         pregnant: false,
@@ -76,21 +72,15 @@ Vue.component('new_reading',{
                     timestamp: getCurrentDate(),
                     symptoms: this.symptoms,
                     // medications: this.medications //Not implemented in the server yet
+                }).then(res => {
+                	console.log(res);
+                    this.finished = true;
+                    this.success_snackbar = true;
                 }).catch(error => {
-                    console.error(error);
-                    this.snackbar = true;
-                }
-                ).then(response => {
-                    console.log(response)
-                    if (response.status == 200) {
-                        window.location.assign("/patientSummary?id=" + this.patientID);
-                    }
-                    else {
-                        this.snackbar = true;
-                    }
-                });
+                	console.log(err)
+                	this.error_snackbar = true;
+				});
 
-                //
         },
         validate() {
             if (this.$refs.newReadingForm.validate(this)) {
@@ -102,6 +92,7 @@ Vue.component('new_reading',{
         },
         reset () {
             this.$refs.newReadingForm.reset();
+            this.finished = false;
         },
         resetValidation () {
             this.$refs.newReadingForm.resetValidation();
@@ -111,29 +102,7 @@ Vue.component('new_reading',{
         },
         deleteRow(index) {
             this.medications.splice(index,1)
-        },
-		// Saves / Updates patient state for creating a new reading
-		saveCreateNewReadingState(patientId, step, colour) {
-        	// build patient object
-			let patient = {
-				pid: patientId,
-				step: step,
-				colour: colour
-			};
-			localStorage.setItem(patientId + "createNewReadingState", JSON.stringify(patient));
-		},
-		// Returns patient state object for creating a new reading
-		// if green (retrieve, step1
-		retrieveCreateNewReadingState(patientId) {
-			return JSON.parse(localStorage.getItem(patientId + "createNewReadingState"));
-		}
-		// retest(patientId, step, colour) {
-        // 	let patient = this.retrieveCreateNewReadingState(patientId);
-        // 	if (patient.step == 2) {
-		//
-		// 	}
-		// }
-
+        }
     },
     mounted() {
         let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
@@ -157,6 +126,7 @@ Vue.component('new_reading',{
 	},
 	watch: {
     	colour: function() {
+    		this.finished = false; // reading changed
     		this.trafficIcon = getReadingColorIcon(this.colour);
 		}
 	},
@@ -193,7 +163,6 @@ Vue.component('new_reading',{
 						</ul>
 					</li>
 				</ul>
-				<h5>Saved: {{finished}}</h5>
 				</v-card-text>
 				<v-card-actions>
 				<v-spacer></v-spacer>
@@ -331,14 +300,13 @@ Vue.component('new_reading',{
 
 			</v-card>
 		</div>
-        <v-snackbar v-model="snackbar">
-            'Patient ID does not exist
-            <v-btn
-                color="pink"
-                @click="snackbar = false"
-            >
-            'Close' 
-            </v-btn>
+        <v-snackbar v-model="error_snackbar">
+            Error: Patient ID does not exist
+            <v-btn color="red" @click="error_snackbar = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="success_snackbar">
+            Success! Reading saved.
+            <v-btn color="green" @click="success_snackbar = false">Close</v-btn>
         </v-snackbar>
         
     </div>
