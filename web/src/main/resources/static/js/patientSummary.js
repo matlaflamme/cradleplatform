@@ -223,9 +223,14 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
                     '<v-list-item>' +
                         '<v-list-item-content>' +
                             '<ul >\n'+
-                                '<ul v-if="item.gestationalAge">'+
-                                    '<li>Gestational Age: {{item.gestationalAge}}</li>\n'+
-                               '</ul>'+
+                                '<li>Gestational Age:'+
+                                '<ul v-if="item.gestationalAge">\n'+
+                                '<li>{{item.gestationalAge}}</li>\n'+
+                                '</ul>\n'+
+                                '<ul v-if="!item.gestationalAge" className="list-group">' +
+                                '<li className="list-group-item" class="pb-1">N/A</li>' +
+                                '</ul>' +
+                                '</li>' +
                                 '<li>Symptoms:'+
                                     '<ul v-for="symptom in item.symptoms">\n'+
                                         '<li>{{symptom}}</li>\n'+
@@ -244,11 +249,6 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
                 '</td>'+
             '</template>' +
         '</v-data-table>' +
-        // '<v-spacer class="pt-5"></v-spacer>' +
-        //'<info_graph :systolicData="graphSystolic" :diastolicData="graphDiastolic" :heartRateData="graphHeartRate" :labels="labels"></info_graph>' +
-        // '<div>\n' +
-        // '<apexchart height="350" type="line" :options="getChartOptions()" :series="getSeries()"></apexchart>\n' +
-        // '</div>' +
     '</div>'
 });
 
