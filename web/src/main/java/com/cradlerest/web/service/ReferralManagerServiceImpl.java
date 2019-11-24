@@ -185,6 +185,12 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		return referralRepository.save(referral);
 	}
 
+	@Override
+	public Referral resolveReferral(Authentication auth, int id) {
+		return null;
+	}
+
+
 	private void validateReferralMessage(@NotNull ReferralMessage referral) throws BadRequestException {
 		assertNotNull(referral, "referral");
 		assertNotNull(referral.getReadingView(), "reading");

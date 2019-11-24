@@ -26,6 +26,7 @@ public interface ReferralManagerService {
 	Referral saveReferral(ReferralMessage referral) throws Exception;
 	Referral saveReferral(Map<String, String[]> mmsMessage) throws Exception;
 
+	Referral resolveReferral(@Nullable Authentication auth, int referralId) throws Exception;
 
 	List<ReferralView> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
 	List<ReferralView> findAllByOrderByTimestampDesc();

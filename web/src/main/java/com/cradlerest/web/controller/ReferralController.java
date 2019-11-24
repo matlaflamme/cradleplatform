@@ -83,6 +83,11 @@ public class ReferralController {
 		return referralManagerService.saveReferral(referral);
 	}
 
+	@PostMapping("{id}/resolve")
+	public Referral resolveReferral(Authentication auth, @PathVariable("id") int referralId) throws Exception {
+		return referralManagerService.resolveReferral(auth, referralId);
+	}
+
 	/**
 	 * Returns all referrals sorted by timestamp in descending order
 	 *
