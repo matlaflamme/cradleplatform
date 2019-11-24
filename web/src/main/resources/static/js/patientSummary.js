@@ -228,8 +228,11 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
                                     '<ul v-for="symptom in item.symptoms">\n'+
                                         '<li>{{symptom}}</li>\n'+
                                     '</ul>\n'+
+                                    '<ul v-if="item.otherSymptoms != null" className="list-group">\n'+
+                                         '<li className="list-group-item" class="pb-1">{{item.otherSymptoms}}</li>\n'+
+                                    '</ul>\n'+
                                 '</li>' +
-                                '<li>Other Notes: {{item.readingNotes}}</li>\n'+
+                                // '<li>Other Notes: {{item.readingNotes}}</li>\n'+
                             '</ul>\n' +
                         '</v-list-item-content>' +
                     '</v-list-item>' +
@@ -286,6 +289,9 @@ Vue.component('patient_info', {
                     '<h3 class="font-weight-light pb-5">Symptoms</h3>\n' +
                     '<ul v-if="hasSymptoms" className="list-group" v-for="symptom in symptoms">\n'+
                         '<li className="list-group-item" class="pb-1">{{symptom}}</li>\n'+
+                    '</ul>\n'+
+                    '<ul v-if="patientData.readings[0].otherSymptoms != null" className="list-group">\n'+
+                    '<li className="list-group-item" class="pb-1">{{patientData.readings[0].otherSymptoms}}</li>\n'+
                     '</ul>\n'+
                     '<ul v-if="!hasSymptoms" className="list-group">' +
                         '<li className="list-group-item" class="pb-1">No symptoms recorded</li>' +
@@ -367,7 +373,7 @@ Vue.component('patient_info', {
         deleteMedicine: function(index,medID) {
                 let urlQuery = new URLSearchParams(location.search);
                 let id = urlQuery.get('id');
-                axios.delete('/api/patient/' + id + "/deleteMedication/" + medID)
+                axios.delete('/api/patient/' + id + "/removeMedication/" + medID)
                     .then(response => {
                         this.medications.splice(index,1)
                     });
