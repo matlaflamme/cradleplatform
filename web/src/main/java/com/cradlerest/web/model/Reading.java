@@ -6,6 +6,7 @@ import com.cradlerest.web.util.datagen.annotations.*;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
 import com.cradlerest.web.util.datagen.impl.GibberishSentenceGenerator;
+import com.cradlerest.web.util.datagen.impl.ReadingColourComputationPass;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,8 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "reading")
-@DataGenRelativeAmount(base = Patient.class, multiplier = 2.0)
+@DataGenRelativeAmount(base = Patient.class, multiplier = 6.0)
+@DataGenPass(ReadingColourComputationPass.class)
 public class Reading {
 
 	@Id
@@ -33,7 +35,7 @@ public class Reading {
 	private String patientId;
 
 	@Column(name = "systolic", nullable = false)
-	@DataGenRange(min = 80, max = 150)
+	@DataGenRange(min = 100, max = 165)
 	private Integer systolic;
 
 	@Column(name = "diastolic", nullable = false)
@@ -56,7 +58,7 @@ public class Reading {
 	private ReadingColour colour; // Use *INTEGER* values {0..4}
 
 	@Column(name = "timestamp", nullable = false)
-	@DataGenDateRange(min = "2016-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date timestamp; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	@Column(name = "other_symptoms")
