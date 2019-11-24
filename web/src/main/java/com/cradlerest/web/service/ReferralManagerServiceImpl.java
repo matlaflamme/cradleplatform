@@ -45,16 +45,19 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private ReferralRepository referralRepository; // Saving referrals
 	private HealthCentreRepository healthCentreRepository;
 	private ReadingManager readingManager;
+	private PatientRepository patientRepository;
 	private PatientManagerService patientManagerService;
 	private UserRepository userRepository;
 
 	public ReferralManagerServiceImpl(ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
+									  PatientRepository patientRepository,
 									  ReadingManager readingManager,
 									  PatientManagerService patientManagerService,
 									  UserRepository userRepository) {
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
+		this.patientRepository = patientRepository;
 		this.readingManager = readingManager;
 		this.patientManagerService = patientManagerService;
 		this.userRepository = userRepository;
@@ -148,16 +151,13 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private Referral getReferralFromMessage(ReferralMessage referralMessage) throws Exception {
 		validateReferralMessage(referralMessage);
 
-		// Create or update patient information
-		Patient patient = referralMessage.getPatient();
-		patient.setId(referralMessage.getPatientId());
-		patient = patientManagerService.savePatient(patient);
-
 		// Get user
 		Optional<User> userDetails = userRepository.findByUsername(referralMessage.getReferrerUserName());
 		if (userDetails.isEmpty()){
 			throw new EntityNotFoundException("User is invalid");
 		}
+
+		Integer userId = userDetails.get().getId();
 
 		// Get Health Centre
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByPhoneNumber(
@@ -166,9 +166,21 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			throw new EntityNotFoundException("Health centre is invalid!");
 		}
 
+		// Create or update patient information
+		Patient patient = referralMessage.getPatient();
+		Optional<Patient> patientOptional = patientRepository.findById(referralMessage.getPatientId());
+		if (patientOptional.isEmpty()){
+			patient.setId(referralMessage.getPatientId());
+			patient.setCreatedBy(userId);
+			patient = patientManagerService.savePatient(patient);
+		}
+		else {
+			patient = patientOptional.get();
+		}
+
 		// Create Reading
 		ReadingView readingView = referralMessage.getReadingView();
-		readingView.setCreatedBy(userDetails.get().getId());
+		readingView.setCreatedBy(userId);
 		readingView.setPatientId(referralMessage.getPatientId());
 		Reading reading = readingManager.saveReadingView(null, readingView);
 
