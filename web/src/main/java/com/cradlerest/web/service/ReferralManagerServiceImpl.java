@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.ReferralController;
+import com.cradlerest.web.controller.exceptions.AccessDeniedException;
 import com.cradlerest.web.controller.exceptions.BadRequestException;
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
 import com.cradlerest.web.model.*;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.*;
 
 import static com.cradlerest.web.util.CopyFields.copyFields;
@@ -186,8 +189,29 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	@Override
-	public Referral resolveReferral(Authentication auth, int id) {
-		return null;
+	public Referral resolveReferral(Authentication auth, int id) throws Exception {
+		// Get user details
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var userDetails = (UserDetailsImpl) auth.getPrincipal();
+		Integer userId = userDetails.getId();
+		if (userId == null) {
+			throw new AccessDeniedException("Invalid user credentials");
+		}
+
+		Optional<Referral> referralOptional = referralRepository.findById(id);
+		if (referralOptional.isEmpty()) {
+			throw new EntityNotFoundException("Referral not found");
+		}
+
+		// If referral is resolved already, don't do it again
+		Referral referral = referralOptional.get();
+		if (referral.getReviewerUserId() != null) {
+			return referral;
+		}
+
+		referral.setClosed(new Timestamp(new Date().getTime()));
+		referral.setReviewerUserId(userId);
+		return referralRepository.save(referral);
 	}
 
 
