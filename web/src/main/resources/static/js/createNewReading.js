@@ -426,7 +426,6 @@ Vue.component('new_reading',{
 						<v-list-item-title>{{advice.condition}}</v-list-item-title>
 					</v-list-item-content>
 				</v-list>
-
 			</v-card>
 		</div>
         <v-snackbar v-model="error_snackbar">

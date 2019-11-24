@@ -12,6 +12,7 @@ import com.cradlerest.web.service.AuthorizerFactory;
 import com.cradlerest.web.service.MedicationManager;
 import com.cradlerest.web.service.PatientManagerService;
 import com.cradlerest.web.service.ReadingManager;
+import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -123,16 +124,23 @@ public class PatientController {
 		requestAccessToPatient(auth, id);
 		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
 
-		for (Medication newMedication: medications) {
-			if(patientMedications.size() == 0){
-				newMedication.setMedId(0);
-			}else {
-				newMedication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + 1);
-			}
-			newMedication.setPatientId(id);
-			 medicationManager.saveMedication(newMedication);
+		int i = 0;
+
+		// If there are already existing medications, start our incrementer at
+		// 1 + max(existing medication ids).
+		if (!patientMedications.isEmpty()) {
+			var max = Vec.copy(patientMedications)
+					.map(Medication::getMedId)
+					.max(Integer::compareTo);
+			i = max + 1;
 		}
 
+		for (Medication newMedication: medications) {
+			newMedication.setMedId(i);
+			i++;
+			newMedication.setPatientId(id);
+			medicationManager.saveMedication(newMedication);
+		}
 	}
 
 	@GetMapping("/{id}/getMedications")

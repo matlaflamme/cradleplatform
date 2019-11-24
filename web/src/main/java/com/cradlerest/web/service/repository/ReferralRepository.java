@@ -16,4 +16,5 @@ import java.util.NoSuchElementException;
 public interface ReferralRepository extends JpaRepository<Referral, Integer> {
 	List<Referral> findAllByOrderByTimestampDesc();
 	List<Referral> findAllByHealthCentreId(Integer id);
+	List<Referral> findAllByReferrerUserName(String username);
 }
