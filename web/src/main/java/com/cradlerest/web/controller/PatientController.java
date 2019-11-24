@@ -123,7 +123,7 @@ public class PatientController {
 		requestAccessToPatient(auth, id);
 		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
 
-		int i = 0;
+		int i = 1;
 		for (Medication newMedication: medications) {
 			if(patientMedications.size() == 0){
 				newMedication.setMedId(0);
