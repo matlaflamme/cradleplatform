@@ -27,3 +27,7 @@ h3 {
     bottom: 12px;
     left: 15px;
 }
+
+#app {
+    overflow: scroll;
+}

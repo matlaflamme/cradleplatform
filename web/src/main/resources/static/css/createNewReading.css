@@ -19,6 +19,16 @@ li {
     padding: 5px;
 }
 
-#summaryCardTitle {
-    border-bottom: 1px solid black;
+.v-list {
+    padding: 12px;
+}
+
+.adviceDetailsImg {
+    padding-left:2px;
+    padding-right:20px;
+    padding-bottom:20px;
+}
+
+#app {
+    overflow: scroll;
 }

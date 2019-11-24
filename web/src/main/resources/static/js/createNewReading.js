@@ -2,6 +2,7 @@
 Vue.prototype.$http = axios;
 import {TrafficLightCalc} from './TrafficLightCalc.js'
 import {getReadingColorIcon} from './GetReadingColorIcon.js'
+import {getReadingAdvice} from './GetReadingAdvice.js'
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
@@ -18,6 +19,7 @@ Vue.component('new_reading',{
         medications:[],
         pregnant: false,
 		trafficIcon: null,
+		readingAdvice: null,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
         MIN_SYSTOLIC: 10,
@@ -149,6 +151,9 @@ Vue.component('new_reading',{
     	colour: function() {
 			return new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate)
 		},
+		advice: function() {
+    		return getReadingAdvice(this.colour);
+		}
 	},
 	watch: {
     	colour: function() {
@@ -159,7 +164,7 @@ Vue.component('new_reading',{
 	`
     <div class="customContainer">
 		<div class="customDiv">
-			<v-card min-width="200">
+			<v-card min-width="220">
 				<v-card-title id="summaryCardTitle">
 				<h4>Summary</h4>
 				</v-card-title>
@@ -188,6 +193,7 @@ Vue.component('new_reading',{
 						</ul>
 					</li>
 				</ul>
+				<h5>Saved: {{finished}}</h5>
 				</v-card-text>
 				<v-card-actions>
 				<v-spacer></v-spacer>
@@ -217,7 +223,8 @@ Vue.component('new_reading',{
                 <v-text-field v-model="patientID"
                 			  :rules="patientIDRules"
                 			  label="Patient ID"
-                			  required></v-text-field>
+                			  required>
+				</v-text-field>
                 <v-text-field v-model="systolic"
                 			  :rules="systolicRules"
                 			  label="Systolic" 
@@ -233,7 +240,7 @@ Vue.component('new_reading',{
                 			  label="Heart Rate"
                 			  required>
                 </v-text-field>
-                <template v-if=" sex == 1 || sex == 2 "> <!-- if woman >-->
+                <template v-if="sex != 0"> <!-- if woman >-->
                     <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>
                 </template>
                 <template v-if= "pregnant === true">
@@ -303,18 +310,25 @@ Vue.component('new_reading',{
             </v-stepper>
         </div>
 		<div class="customDiv" v-if="finished" >
-			<v-card>
+			<v-card class="list-card">
 				<v-card-title>
-				<h4>Reading Saved. Advice:</h4>
+				<h4>Reading Saved. Instructions:</h4>
 				</v-card-title>
-<!--				<img id="light" ref="light" :src=item.colorstyle height="50" width="60" style="margin-bottom: 12px">-->
-				\t<v-card-text>Patient is likely health.
-				\tContinue normal care<br>
-				</v-card-text>
-				<v-card-actions>
-				<v-btn color=success>Click #1</v-btn>
-				<v-spacer></v-spacer>
-				</v-card-actions>
+				<v-list>
+					<v-list-item-content>
+						<v-list-item-title>{{advice.analysis}}</v-list-item-title>
+						<v-list-item-title>{{advice.summary}}</v-list-item-title>
+					</v-list-item-content>
+					<v-list-item-content>
+						<v-list-item-title>Advice Details:</v-list-item-title>
+						<v-img class="adviceDetailsImg" v-if="advice.details" :src=advice.details contain></v-img>
+					</v-list-item-content>
+					<v-list-item-content>
+						<v-list-item-title>Condition:</v-list-item-title>
+						<v-list-item-title>{{advice.condition}}</v-list-item-title>
+					</v-list-item-content>
+				</v-list>
+
 			</v-card>
 		</div>
         <v-snackbar v-model="snackbar">
