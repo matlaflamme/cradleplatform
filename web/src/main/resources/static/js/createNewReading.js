@@ -173,7 +173,7 @@ Vue.component('new_reading',{
 					<li>Gestational age: {{gestationalAge}}</li>	
 					<li>Colour int: {{colour}}</li>
 					<li>
-					<img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="50" width="60" style="margin-bottom: 12px">
+					<img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
 					</li>
 				</ul>
 				<ul>
@@ -210,102 +210,84 @@ Vue.component('new_reading',{
                 <v-card  :elevation= "0" min-width="500">
                 <v-card-title>
                 </v-card-title>
-                <v-form
-                    ref="newReadingForm"
-                    v-model="valid"
-                    lazy-validation
-                    class="ma-5 px-3"
-                    >
-                <v-text-field
-                v-model="patientID"
-                :rules="patientIDRules"
-                label="Patient ID"
-                required
-              ></v-text-field>
-                <v-text-field
-                v-model="systolic"
-                :rules="systolicRules"
-                label="Systolic"
-                required
-              ></v-text-field>
-                <v-text-field
-                v-model="diastolic"
-                :rules="diastolicRules"
-                label="Diastolic"
-                required
-              ></v-text-field>
-                <v-text-field
-                v-model="heartRate"
-               :rules="heartRateRules"
-               label="Heart Rate"
-                required
-             ></v-text-field>
-               <template v-if=" sex == 1 || sex == 2 "> <!-- if woman >-->
+                <v-form ref="newReadingForm"
+                    	v-model="valid"
+                    	lazy-validation
+                    	class="ma-5 px-3">
+                <v-text-field v-model="patientID"
+                			  :rules="patientIDRules"
+                			  label="Patient ID"
+                			  required></v-text-field>
+                <v-text-field v-model="systolic"
+                			  :rules="systolicRules"
+                			  label="Systolic" 
+                			  required>
+				</v-text-field>
+                <v-text-field v-model="diastolic"
+                			  :rules="diastolicRules"
+                			  label="Diastolic"
+                  			  required>
+             	</v-text-field>
+                <v-text-field v-model="heartRate"
+                			  :rules="heartRateRules"
+                			  label="Heart Rate"
+                			  required>
+                </v-text-field>
+                <template v-if=" sex == 1 || sex == 2 "> <!-- if woman >-->
                     <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>
                 </template>
                 <template v-if= "pregnant === true">
-                <v-text-field
-                v-model="gestationalAge"
-                label="Pregnancy week"
-                :rules="gestationalAgeRules"
-              ></v-text-field>
+                <v-text-field v-model="gestationalAge"
+                			  label="Pregnancy week"
+                           	  :rules="gestationalAgeRules">
+				</v-text-field>
                 </template>
-                 </v-card>
-                 <v-btn
-                    color="primary"
-                   @click="e1 = 2"
-                  >
-                    Continue
-                  </v-btn>
-                  <v-btn
-                    color="error"
-                    @click="reset"
-                  >
-                    reset
-                  </v-btn>
-<!--        This part is the second tab-->
-                </v-stepper-content>
-                <v-stepper-content step="2">
-                   <v-card  :elevation= "0" min-width="500">
-            <v-container>
-              <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
-              <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>
-              <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>
-              <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>
-              <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> 
-              <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>
-             <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>
-            </v-container>
-                 </v-card>
-                 <v-btn
-                   color="primary"
-                    @click="e1 = 3"
-                  >
-                    Continue
-                  </v-btn>
+                </v-card>
+                <v-btn color="primary" @click="e1 = 2">Continue</v-btn>
+                <v-btn color="error" @click="reset">reset</v-btn>
+            </v-stepper-content>
+            <!--        This part is the second tab-->
+            <v-stepper-content step="2">
+            	<v-card  :elevation= "0" min-width="500">
+				<v-container>
+				  <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
+				  <v-checkbox v-model="symptoms" label="Headache" value="Headache"></v-checkbox>
+				  <v-checkbox v-model="symptoms" label="Blurred Vision" value="Blurred Vision"></v-checkbox>
+				  <v-checkbox v-model="symptoms" label="Abdominal Pain" value="Abdominal Pain"></v-checkbox>
+				  <v-checkbox v-model="symptoms" label="Bleeding" value="Bleeding"></v-checkbox> 
+				  <v-checkbox v-model="symptoms" label="Feverish" value="Feverish"></v-checkbox>
+				 <v-checkbox v-model="symptoms" label="Unwell" value="Unwell"></v-checkbox>
+				</v-container>
+					 </v-card>
+					 <v-btn
+					   color="primary"
+						@click="e1 = 3"
+					  >
+						Continue
+					  </v-btn>
+			</v-stepper-content>
 <!--        This part is the third tab-->
-                </v-stepper-content>
-                <v-stepper-content step="3">
-                  <v-card  :elevation= "0" min-width="500">
+            <v-stepper-content step="3">
+            <v-card  :elevation= "0" min-width="500">
             <ul>
-              <li v-for="(input, index) in medications">
-                <v-text-field
-                v-model="input.medicince"
-                label="Medication"
-                required
-              >{{input.dose }}  </v-text-field>
-                <v-text-field
-               v-model="input.dose"
-               label="Dose"
-               required
-              >{{input.dose}}  </v-text-field>
-                <v-text-field
-                v-model="input.frequency"
-                label="Usage frequency"
-                required
-              >- {{ input.frequency}}  </v-text-field>
-              <v-btn color="error" small @click="deleteRow(index)">delete</v-btn>
-              </li>
+              	<li v-for="(input, index) in medications">
+                <v-text-field v-model="input.medicince"
+                			  label="Medication"
+                			  required>
+				{{input.dose }}  
+				</v-text-field>
+                <v-text-field v-model="input.dose"
+               				  label="Dose"
+               				  required>
+				{{input.dose}}  
+				</v-text-field>
+                <v-text-field v-model="input.frequency"
+                			  label="Usage frequency"
+                			  required>
+				- {{ input.frequency}}  
+				</v-text-field>
+                <v-btn color="error" small @click="deleteRow(index)">delete</v-btn>
+                </li>
             </ul>
                   </v-card>
               <v-btn @click="addRow">
