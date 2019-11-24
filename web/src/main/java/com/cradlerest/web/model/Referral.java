@@ -58,6 +58,10 @@ public class Referral {
 	@ForeignKey(Reading.class)
 	private Integer readingId;
 
+	@Column(name = "diagnosis")
+	@ForeignKey(Diagnosis.class)
+	private Integer diagnosisId;
+
 	public Referral() {}
 
 	public Integer getId() {
@@ -80,6 +84,14 @@ public class Referral {
 
 	public void setHealthCentreId(Integer healthCentreId) {
 		this.healthCentreId = healthCentreId;
+	}
+
+	public void setDiagnosisId(Integer diagnosisId) {
+		this.diagnosisId = diagnosisId;
+	}
+
+	public Integer getDiagnosisId() {
+		return diagnosisId;
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
