@@ -84,6 +84,11 @@ public class ReferralController {
 		return referralManagerService.saveReferral(referral);
 	}
 
+	@PostMapping("/new")
+	public Referral saveReferral(Authentication auth, @RequestBody Referral referral) throws Exception {
+		return referralManagerService.saveReferral(auth, referral);
+	}
+
 	@PostMapping("/{id}/resolve")
 	public Referral resolveReferral(Authentication auth, @PathVariable("id") int referralId) throws Exception {
 		assert auth != null;

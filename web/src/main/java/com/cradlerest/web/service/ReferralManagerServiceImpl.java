@@ -227,7 +227,13 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	public Referral saveReferral(Authentication auth, Referral referral) throws Exception {
 		assert auth.getPrincipal() instanceof UserDetailsImpl;
 		var details = (UserDetailsImpl) auth.getPrincipal();
-
+		String username = details.getUsername();
+		if (username == null) {
+			throw new AccessDeniedException("invalid user credentials");
+		}
+		validateReferral(referral);
+		referral.setTimestamp(new Timestamp(new Date().getTime()));
+		referral.setReferrerUserName(username);
 		// Create Referral object
 		return referralRepository.save(referral);
 	}
@@ -274,8 +280,13 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		Referral referral = referralCheck.get();
 		referral.setDiagnosisId(diagnosis.getId());
 		referralRepository.save(referral);
-
 		return diagnosis;
+	}
+
+	private void validateReferral(Referral referral) throws BadRequestException {
+		assertNotNull(referral.getHealthCentreId(), "healthCentreId");
+		assertNotNull(referral.getPatientId(), "patientId");
+		assertNotNull(referral.getReadingId(), "readingId");
 	}
 
 	private void validateDiagnosis(@NotNull Diagnosis diagnosis) throws BadRequestException {
