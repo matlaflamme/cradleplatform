@@ -1,28 +1,28 @@
 Vue.prototype.$http = axios;
 
 function getReadingColorIcon(digit){
-	let light = 'white';
-	switch (digit) {
-		case null:
-			light = 'white';
-			break;
-		case 0:
-			light = 'green';
-			break;
-		case 1:
-			light = 'yellow_down';
-			break;
-		case 2:
-			light = 'yellow_up';
-			break;
-		case 3:
-			light = 'red_down';
-			break;
-		case 4:
-			light = 'red_up';
-			break;
-	}
-	return "/img/" + light + ".png";
+    let light = 'white';
+    switch (digit) {
+        case null:
+            light = 'white';
+            break;
+        case 0:
+            light = 'green';
+            break;
+        case 1:
+            light = 'yellow_up';
+            break;
+        case 2:
+            light = 'yellow_down';
+            break;
+        case 3:
+            light = 'red_up';
+            break;
+        case 4:
+            light = 'red_down';
+            break;
+    }
+    return "/img/" + light + ".png";
 };
 
 
@@ -242,113 +242,131 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
 
 // This component is for the left side of the page, it reads the patient info and gives a summary on the patient info and last reading
 Vue.component('patient_info', {
-	props: {
-		title: String, //Usage: {{title}} inside of the template is replaced with the prop
-		//Prop is given a value inside of the component's html tag in the html file where its used
-	},
-	data: function() {
-		return {
-			patientData: //starter data so that "patientData" is not null when the page is loaded
-				{"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
-					"gestationalAge":0,"medicalHistory":null,"drugHistory":null,"symptoms":[],"pregnant":null,
-					"readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
-						"timestamp":""}]}, //data in the form of json string
-			hasSymptoms: false,
-			symptoms: [],
-			takingMedication: false,
-			medications: [],
-			pregnant: false,
-		}
-	},
-	template:
-		'<div class="mx-auto">' +
-		'<v-list-item three-line>\n' +
-		'<v-list-item-content>\n' +
-		'<h3 class="font-weight-light">Latest Reading</h3>\n' +
-		'</v-list-item-content>' +
-		'</v-list-item three-line>' +
-		'<img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
-		'<p id="heart_beat" class="title">{{patientData.readings[0].heartRate}}</p>\n' +
-		'<img id="light" ref="light" :src= this.light height="50" width="60" style="margin-bottom: 12px">\n' +
-		'<v-list-item three-line>\n' +
-		'<v-list-item-content>\n' +
-		'<p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
-		'<p><strong class="font-weight-regular title">Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
-		'<p v-if="pregnant"><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.readings[0].gestationalAge}} weeks</p>' +
-		'</v-list-item-content>' +
-		'</v-list-item>' +
-		'<v-list-item three-line>' +
-		'<v-list-item-content>' +
-		'<h3 class="font-weight-light pb-5">Symptoms</h3>\n' +
-		'<ul v-if="hasSymptoms" className="list-group" v-for="symptom in symptoms">\n'+
-		'<li className="list-group-item" class="pb-1">{{symptom}}</li>\n'+
-		'</ul>\n'+
-		'<ul v-if="!hasSymptoms" className="list-group">' +
-		'<li className="list-group-item" class="pb-1">No symptoms recorded</li>' +
-		'</ul>' +
-		'</v-list-item-content>' +
-		'</v-list-item>' +
-		'<v-list-item three-line>' +
-		'<v-list-item-content>' +
-		'<h3 class="font-weight-light pb-5">Medications </h3>\n' +
-		'<ul v-if="takingMedication" className="list-group" v-for="medication in medications">\n'+
-		'<li className="list-group-item" class="pb-1">{{medication}}        '+
-		'<v-btn small outlined color="red">' +
-		'<v-icon>delete</v-icon>' +
-		'</v-btn>' +
-		'</li>' +
-		'</ul>\n'+
-		'<ul v-if="!takingMedication" className="list-group">' +
-		'<li className="list-group-item" class="pb-1">Not currently taking any medications</li>' +
-		'</ul>' +
-		'</v-list-item-content>' +
-		'</v-list-item>' +
-		'</div>',
+    props: {
+        title: String, //Usage: {{title}} inside of the template is replaced with the prop
+        //Prop is given a value inside of the component's html tag in the html file where its used
+    },
+    data: function() {
+        return {
+            patientData: //starter data so that "patientData" is not null when the page is loaded
+                {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
+                    "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"symptoms":[],"pregnant":null,
+                    "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
+                        "timestamp":""}]}, //data in the form of json string
+            hasSymptoms: false,
+            symptoms: [],
+            takingMedication: false,
+            medications: [],
+            pregnant: false,
+        }
+    },
+    template:
+        '<div class="mx-auto">' +
+            '<v-list-item three-line>\n' +
+                '<v-list-item-content>\n' +
+                    '<h3 class="font-weight-light">Latest Reading</h3>\n' +
+                '</v-list-item-content>' +
+            '</v-list-item three-line>' +
+            '<img src="/img/cardiology.png" height="50" width="50" style="margin-bottom: 12px; margin-left: 30px">\n' +
+            '<p id="heart_beat" class="title">{{patientData.readings[0].heartRate}}</p>\n' +
+            '<img id="light" ref="light" :src= this.light height="50" width="60" style="margin-bottom: 12px">\n' +
+            '<v-list-item three-line>\n' +
+                '<v-list-item-content>\n' +
+                    '<p><strong class="font-weight-regular title">Systolic: </strong>{{patientData.readings[0].systolic}}</p>' +
+                    '<p><strong class="font-weight-regular title">Diastolic: </strong>{{patientData.readings[0].diastolic}}</p>' +
+                    '<p v-if="pregnant"><strong class="font-weight-regular title">Gestational Age: </strong>{{patientData.readings[0].gestationalAge}} weeks</p>' +
+                '</v-list-item-content>' +
+            '</v-list-item>' +
+            '<v-list-item three-line>' +
+                '<v-list-item-content>' +
+                    '<h3 class="font-weight-light pb-5">Symptoms</h3>\n' +
+                    '<ul v-if="hasSymptoms" className="list-group" v-for="symptom in symptoms">\n'+
+                        '<li className="list-group-item" class="pb-1">{{symptom}}</li>\n'+
+                    '</ul>\n'+
+                    '<ul v-if="patientData.readings[0].otherSymptoms != null" className="list-group">\n'+
+                    '<li className="list-group-item" class="pb-1">{{patientData.readings[0].otherSymptoms}}</li>\n'+
+                    '</ul>\n'+
+                    '<ul v-if="!hasSymptoms" className="list-group">' +
+                        '<li className="list-group-item" class="pb-1">No symptoms recorded</li>' +
+                    '</ul>' +
+                '</v-list-item-content>' +
+            '</v-list-item>' +
+            '<v-list-item three-line>' +
+                '<v-list-item-content>' +
+                    '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
+                    '<ul v-if="takingMedication" className="list-group" v-for="(medication, index) in medications">\n'+
+                        '<v-btn class="removebtn" extra small outlined color="red" @click="deleteMedicine(index, medication.medId)" style=" display: table-cell;">' +
+                        '<v-icon>delete</v-icon>' +
+                        '</v-btn>' +
+                        '<li className="list-group-item" class="pb-1">{{medication.medication}}'+
+                            '<ul>\n' +
+                                '<li className="list-group-item" class="pb-1">Dosage: {{medication.dosage}}\n</li>' +
+                                '<li className="list-group-item" class="pb-1">Frequency: {{medication.usageFrequency}}\n</li>\n' +
+                            '</ul>' +
 
-	mounted() {
-		let urlQuery = new URLSearchParams(location.search);
-		let id = urlQuery.get('id');
-		axios.get('/api/patient/' + id).then(response => {
-			this.patientData = response.data;
-			console.log(response.data);
-			this.light = getReadingColorIcon(response.data.readings[0].colour);
-			this.checkSymptoms();
-			this.checkMedications();
-			this.checkPregnant();
-		});
+                        '</li>' +
+                    '</ul>\n'+
+                    '<ul v-if="medications.length == 0" className="list-group">' +
+                        '<li className="list-group-item" class="pb-1">Not currently taking any medications</li>' +
+                    '</ul>' +
+                '</v-list-item-content>' +
+            '</v-list-item>' +
+        '</div>',
 
-	},
-	methods: {
-		checkSymptoms() {
-			//this.patientData.readings[0].symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //For testing only
-			if (this.patientData.readings[0].symptoms.length !== 0) {
-				this.symptoms = this.patientData.readings[0].symptoms;
-				this.hasSymptoms = true;
-			}
-		},
-		checkMedications() {
-			//this.patientData.drugHistory = ['tylenol', 'Warfarin', 'Ibuprofen']; //For testing only
-			if (this.patientData.drugHistory !== null) {
-				this.medications = this.patientData.drugHistory;
-				this.takingMedication = true;
-			}
-		},
-		checkPregnant() {
-			//this.patientData.readings[0].gestationalAge = 130; //For testing only
-			if (this.patientData.readings[0].gestationalAge) {
-				this.pregnant = true;
-				this.patientData.readings[0].gestationalAge = Math.round(this.patientData.readings[0].gestationalAge / 7);
-			}
-		},
-		getPatientSex: function(sexVal) {
-			if (sexVal === 1) {
-				return "Female";
-			}
-			else {
-				return "Male";
-			}
-		},
-	}
+    mounted() {
+        let urlQuery = new URLSearchParams(location.search);
+        let id = urlQuery.get('id');
+        axios.get('/api/patient/' + id).then(response => {
+            this.patientData = response.data;
+            console.log(response.data);
+            this.light = getReadingColorIcon(response.data.readings[0].colour);
+            this.checkSymptoms();
+            this.checkMedications(id);
+            this.checkPregnant();
+        });
+
+    },
+    methods: {
+        checkSymptoms() {
+            //this.patientData.readings[0].symptoms = ['Headache', 'Feverish', 'Blurred Vision']; //For testing only
+            if (this.patientData.readings[0].symptoms.length !== 0) {
+                this.symptoms = this.patientData.readings[0].symptoms;
+                this.hasSymptoms = true;
+           }
+        },
+        checkMedications(id) {
+            axios.get('/api/patient/' + id + "/getMedications").then(response => {
+                console.log("HIIIII");
+                this.medications= response.data;
+                this.takingMedication = true;
+                console.log(this.medications);
+            });
+
+        },
+        checkPregnant() {
+            //this.patientData.readings[0].gestationalAge = 130; //For testing only
+            if (this.patientData.readings[0].gestationalAge) {
+                this.pregnant = true;
+                this.patientData.readings[0].gestationalAge = Math.round(this.patientData.readings[0].gestationalAge / 7);
+            }
+        },
+        getPatientSex: function(sexVal) {
+            if (sexVal === 1) {
+                return "Female";
+            }
+            else {
+                return "Male";
+            }
+        },
+        deleteMedicine: function(index,medID) {
+                let urlQuery = new URLSearchParams(location.search);
+                let id = urlQuery.get('id');
+                axios.delete('/api/patient/' + id + "/removeMedication/" + medID)
+                    .then(response => {
+                        this.medications.splice(index,1)
+                    });
+        }
+    }
 });
 
 Vue.component('info_graph', { //Ideally would use this component instead of what is above. (time permitting)

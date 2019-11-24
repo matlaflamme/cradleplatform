@@ -1,6 +1,13 @@
 package com.cradlerest.web.model;
 
+import com.cradlerest.web.util.datagen.annotations.DataGenFixedString;
+import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
+import com.cradlerest.web.util.datagen.annotations.Generator;
+import com.cradlerest.web.util.datagen.impl.AutoIncrementGenerator;
+import com.cradlerest.web.util.datagen.impl.FixedStringGenerator;
+import com.cradlerest.web.util.datagen.impl.MedicationNameGenerator;
+import com.cradlerest.web.util.datagen.impl.UsageFrequencyGenerator;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -9,9 +16,9 @@ import java.io.Serializable;
 
 
 @Entity
-
 @IdClass(Medication.IdType.class)
 @Table(name = "medication")
+@DataGenRelativeAmount(base = Patient.class, multiplier = 0.7)
 public class Medication {
 
     public static class IdType implements Serializable {
@@ -72,16 +79,21 @@ public class Medication {
     private String patientId;
 
     @Id
-    @Column(name = "med_id")
+    @Column(name = "med_id", nullable = false)
+    @Generator(AutoIncrementGenerator.class)
     private Integer medId;
 
-    @Column(name = "medication")
+    @Column(name = "medication", nullable = false)
+    @Generator(MedicationNameGenerator.class)
     private String medication;
 
-    @Column(name = "dosage")
+    @Column(name = "dosage", nullable = false)
+    @Generator(FixedStringGenerator.class)
+    @DataGenFixedString("200 mg")
     private String dosage;
 
-    @Column(name = "usage_frequency")
+    @Column(name = "usage_frequency", nullable = false)
+    @Generator(UsageFrequencyGenerator.class)
     private String usageFrequency;
 
     public Medication(
