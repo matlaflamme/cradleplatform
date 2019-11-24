@@ -76,7 +76,6 @@ Vue.component('new_reading',{
 				timestamp: getCurrentDate(),
 				symptoms: this.symptoms,
 				otherSymptoms: this.checkCustomSymptoms()
-				// medications: this.medications //Not implemented in the server yet
             }).then(res => {
             	console.log(res);
             	this.finished = true;
@@ -136,6 +135,9 @@ Vue.component('new_reading',{
         hasMedications() {
             console.log(this.medications.length);
             return this.medications.length !== 0;
+        },
+        toPatient() {
+            window.location.assign('/patientSummary?id=' + this.patientID)
         }
     },
     mounted() {
@@ -179,44 +181,10 @@ Vue.component('new_reading',{
 		}
 	},
     template:
+
 	`
-    <div class="customContainer">
-		<div class="customDiv">
-			<v-card min-width="220">
-				<v-card-title id="summaryCardTitle">
-				<h4>Summary</h4>
-				</v-card-title>
-				<v-card-text>
-				<ul>
-					<li>Patient ID: {{patientID}}</li>
-					<li>Systolic: {{systolic}}</li>
-					<li>Diastolic: {{diastolic}}</li>
-					<li>Heartrate: {{heartRate}}</li>
-					<li>Pregnant: {{pregnant}}</li>	
-					<li>Gestational age: {{gestationalAge}}</li>	
-					<li>Colour int: {{colour}}</li>
-					<li>
-					<img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
-					</li>
-				</ul>
-				<ul>
-					<li v-for="symptom in symptoms">{{symptom}}</li>
-				</ul>
-				<ul>
-					<li v-for="medication in medications">
-						<ul>
-							<li>name: {{medication.medication}}</li>
-							<li>dose: {{medication.dose}}</li>
-							<li>frequency: {{medication.frequency}}</li>
-						</ul>
-					</li>
-				</ul>
-				</v-card-text>
-				<v-card-actions>
-				<v-spacer></v-spacer>
-				</v-card-actions>
-			</v-card>
-		</div>
+<div class="customContainer">
+	
         <div class="customDiv">
         <v-stepper v-model="currentStep">
         	<v-stepper-header>
@@ -224,7 +192,7 @@ Vue.component('new_reading',{
                	<v-divider></v-divider>
               	<v-stepper-step :complete="currentStep > 2" step="2" editable>Symptoms</v-stepper-step>
                	<v-divider></v-divider>
-            	<v-stepper-step step="currentStep > 3" step="3" editable>Medications</v-stepper-step>
+            	<v-stepper-step :complete="currentStep > 3" step="3" editable>Medications</v-stepper-step>
             	<v-divider></v-divider>
             	<v-stepper-step step="4" editable>Review</v-stepper-step>
             </v-stepper-header>
@@ -232,7 +200,7 @@ Vue.component('new_reading',{
 <!--        //This part is the first tab-->
 				<v-stepper-content step="1">
 					<v-card
-					<v-card  :elevation= "0" min-width="500">
+					<v-card  :elevation= "0" min-width="500" max-width="500">
 					<v-card-title>
 					</v-card-title>
 					<v-form ref="newReadingForm"
@@ -274,9 +242,9 @@ Vue.component('new_reading',{
 				</v-stepper-content>
 				<!--        This part is the second tab-->
 				<v-stepper-content step="2">
-					<v-card  :elevation= "0" min-width="500">
+					<v-card  :elevation= "0" min-width="500" max-width="500">
 					<v-container>
-					  <v-checkbox v-model="noSymptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
+					  <v-checkbox v-model="noSymptoms" label="No Symptoms"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>
@@ -405,23 +373,27 @@ Vue.component('new_reading',{
 		          	</v-card>
 		        <v-btn color="primary" @click="validate">Save reading</v-btn>
 		        <v-icon v-if="finished"large color="green darken-2" >mdi-check</v-icon>
+		        <v-btn v-if="finished" color="secondary" @click="toPatient">Back to patient</v-btn>
 		        </v-stepper-content>
 		  	</v-stepper-items>
 		</v-stepper>
 		</div>
 		<div class="customDiv" v-if="finished" >
-			<v-card class="list-card">
+			<v-card class="list-card" max-width="500">
 				<v-card-title>
 				<h4>Reading Saved. Instructions:</h4>
 				</v-card-title>
 				<v-list>
 					<v-list-item-content>
+					    <li>
+                            <img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
+                        </li>
 						<v-list-item-title>{{advice.analysis}}</v-list-item-title>
-						<v-list-item-title>{{advice.summary}}</v-list-item-title>
+						<v-list-item-title class="text-justify text-left white-space-wrap">{{advice.summary}}</v-list-item-title>
 					</v-list-item-content>
 					<v-list-item-content>
 						<v-list-item-title>Advice Details:</v-list-item-title>
-						<v-img class="adviceDetailsImg" v-if="advice.details" :src=advice.details contain></v-img>
+						<p class="text-justify text-left caption white-space-wrap">{{advice.details}}</p>
 					</v-list-item-content>
 					<v-list-item-content>
 						<v-list-item-title>Condition:</v-list-item-title>
