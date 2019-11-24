@@ -52,17 +52,20 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private ReadingManager readingManager;
 	private PatientManagerService patientManagerService;
 	private UserRepository userRepository;
+	private DiagnosisRepository diagnosisRepository;
 
 	public ReferralManagerServiceImpl(ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
 									  ReadingManager readingManager,
 									  PatientManagerService patientManagerService,
-									  UserRepository userRepository) {
+									  UserRepository userRepository,
+									  DiagnosisRepository diagnosisRepository) {
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
 		this.readingManager = readingManager;
 		this.patientManagerService = patientManagerService;
 		this.userRepository = userRepository;
+		this.diagnosisRepository = diagnosisRepository;
 	}
 
 	/**
@@ -214,6 +217,18 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		return referralRepository.save(referral);
 	}
 
+	@Override
+	public Diagnosis addDiagnosis(Authentication auth, Diagnosis diagnosis) throws Exception {
+		validateDiagnosis(diagnosis);
+		return diagnosisRepository.save(diagnosis);
+	}
+
+	private void validateDiagnosis(@NotNull Diagnosis diagnosis) throws BadRequestException {
+		assertNotNull(diagnosis.getDescription(), "description");
+		assertNotNull(diagnosis.getPatientId(), "patientId");
+		assertNotNull(diagnosis.getReferralId(), "referralId");
+		assertNotNull(diagnosis.getResolved(), "resolved");
+	}
 
 	private void validateReferralMessage(@NotNull ReferralMessage referral) throws BadRequestException {
 		assertNotNull(referral, "referral");

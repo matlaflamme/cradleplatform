@@ -27,6 +27,10 @@ public class Diagnosis {
 	@ForeignKey(Patient.class)
 	private String patientId;
 
+	@Column(name = "referral", nullable = false)
+	@ForeignKey(Referral.class)
+	private String referralId;
+
 	@Column(name = "description", nullable = false)
 	@Generator(GibberishSentenceGenerator.class)
 	private String description;
@@ -51,6 +55,14 @@ public class Diagnosis {
 
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
+	}
+
+	public String getReferralId() {
+		return referralId;
+	}
+
+	public void setReferralId(String referralId) {
+		this.referralId = referralId;
 	}
 
 	public void setDescription(String description) {

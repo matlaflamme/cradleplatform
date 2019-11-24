@@ -90,6 +90,12 @@ public class ReferralController {
 		return referralManagerService.resolveReferral(auth, referralId);
 	}
 
+	@PostMapping("/diagnosis")
+	public Diagnosis addDiagnosis(Authentication auth, @RequestBody Diagnosis diagnosis) throws Exception {
+		assert auth != null;
+		return referralManagerService.addDiagnosis(auth, diagnosis);
+	}
+
 	/**
 	 * Returns all referrals sorted by timestamp in descending order
 	 *
