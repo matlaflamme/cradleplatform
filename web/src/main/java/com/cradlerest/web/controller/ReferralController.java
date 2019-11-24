@@ -90,8 +90,8 @@ public class ReferralController {
 	 */
 	@GetMapping("/all")
 	public @ResponseBody
-	List<ReferralView> allReferralsSortByTimestamp() {
-		return referralManagerService.findAllByOrderByTimestampDesc();
+	List<ReferralView> all(Authentication auth) {
+		return referralManagerService.allReferrals(auth);
 	}
 
 	@GetMapping("/{healthCentreName}/all")

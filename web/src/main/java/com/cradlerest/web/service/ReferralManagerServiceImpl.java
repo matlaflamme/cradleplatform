@@ -10,7 +10,6 @@ import com.cradlerest.web.model.view.ReadingView;
 import com.cradlerest.web.model.view.ReferralView;
 import com.cradlerest.web.service.repository.*;
 import com.cradlerest.web.util.BitmapEncoder;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maumay.jflow.vec.Vec;
 import org.apache.http.HttpResponse;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -32,7 +30,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static com.cradlerest.web.util.CopyFields.copyFields;
+import static com.cradlerest.web.util.AuthenticationExt.hasRole;
 
 /**
  * Implements ReferralManagerService
@@ -83,6 +81,36 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		return Vec.copy(referralRepository.findAllByOrderByTimestampDesc())
 				.map(this::computeReferralView)
 				.toList();
+	}
+
+	@Override
+	public List<ReferralView> allReferrals(@NotNull Authentication auth) {
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) auth.getPrincipal();
+
+		if (hasRole(auth, UserRole.HEALTH_WORKER)) {
+			var hcId = details.getWorksAtHealthCentreId();
+
+			// If a health worker is not assigned to a health centre then return
+			// an empty list of referrals.
+			if (hcId == null) {
+				return new ArrayList<>();
+			}
+
+			// Otherwise, return all referrals made to the health centre that they
+			// work at.
+			return Vec.copy(referralRepository.findAllByHealthCentreId(hcId))
+					.map(this::computeReferralView)
+					.toList();
+		} else if (hasRole(auth, UserRole.VHT)) {
+			// If the user is a VHT, return all of the referrals that the VHT has made.
+			var username = details.getUsername();
+			return Vec.copy(referralRepository.findAllByReferrerUserName(username))
+					.map(this::computeReferralView)
+					.toList();
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	private ReferralView computeReferralView(@NotNull Referral r) {

@@ -5,6 +5,7 @@ import com.cradlerest.web.model.Referral;
 import com.cradlerest.web.model.ReferralMessage;
 import com.cradlerest.web.model.view.ReferralView;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 
@@ -30,5 +31,10 @@ public interface ReferralManagerService {
 	List<ReferralView> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
 	List<ReferralView> findAllByOrderByTimestampDesc();
 
-
+	/**
+	 * Returns a list of referrals available for a specific user.
+	 * @param auth An authentication object for a user.
+	 * @return A list of referrals.
+	 */
+	List<ReferralView> allReferrals(@NotNull Authentication auth);
 }
