@@ -448,4 +448,3 @@ new Vue({
 		drawer: null
 	})
 });
-
