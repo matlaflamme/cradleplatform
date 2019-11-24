@@ -90,10 +90,10 @@ public class ReferralController {
 		return referralManagerService.resolveReferral(auth, referralId);
 	}
 
-	@PostMapping("/diagnosis")
-	public Diagnosis addDiagnosis(Authentication auth, @RequestBody Diagnosis diagnosis) throws Exception {
+	@PostMapping("{id}/diagnosis")
+	public Diagnosis addDiagnosis(Authentication auth, Integer referralId, @RequestBody Diagnosis diagnosis) throws Exception {
 		assert auth != null;
-		return referralManagerService.addDiagnosis(auth, diagnosis);
+		return referralManagerService.addDiagnosis(auth, referralId, diagnosis);
 	}
 
 	/**

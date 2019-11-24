@@ -1,16 +1,16 @@
 # API Methods
 
-This file outlines the various API methods exposed by the web framework. For 
-information about the entities returned by these methods see 
+This file outlines the various API methods exposed by the web framework. For
+information about the entities returned by these methods see
 [ENTITIES.md](ENTITIES.md).
 
-> Note: Any method marked with "Not yet implemented" is an active API method 
+> Note: Any method marked with "Not yet implemented" is an active API method
 > which may be called, but it will always return a `NotImplementedException`.
 
 
 * [Referral Methods](#referral-methods)
-    * [`GET /api/referral/all`]() - Get all referrals 
-    * [`GET /api/referral/{healthCentreName}/all`]() - Get all referrals referred to a health centre (name) 
+    * [`GET /api/referral/all`]() - Get all referrals
+    * [`GET /api/referral/{healthCentreName}/all`]() - Get all referrals referred to a health centre (name)
     * [`POST /api/referral/send`]() - Sends a new referral. Valid patientId, vht name and health centre required.
     * ```json
       {
@@ -50,6 +50,7 @@ information about the entities returned by these methods see
     * [`GET /api/hc/{id}/patients`](#get-apihcidpatients)
     * [`GET /api/user/{id}/patients`](#get-apiuseridpatients)
     * [`GET /api/user/{id}/readings`](#get-apiuseridreadings)
+    * [`POST /api/referral/{id}/diagnosis`]
 * [User Methods](#user-methods)
     * [`GET /api/user/all`](get-apiuserall)
     * [`GET /api/user/{id}`](get-apiuserid)
@@ -78,13 +79,13 @@ Upon successful request, returns a [patient profile](ENTITIES.md#patient-profile
 
 #### Errors
 
-Returns an `EntityNotFound` (404) exception if no patient with path variable 
+Returns an `EntityNotFound` (404) exception if no patient with path variable
 `id` can be found in the database.
 
 
 ### `GET /api/patient/{id}/info`
 
-Returns only the direct information for the patient with a given `id`. 
+Returns only the direct information for the patient with a given `id`.
 This does not include things like a the list or readings or symptoms.
 
 #### Path Variables
@@ -99,7 +100,7 @@ Upon successful request, returns a [patient](ENTITIES.md#patient) entity.
 
 #### Errors
 
-Returns an `EntityNotFound` (404) exception if no patient with path variable 
+Returns an `EntityNotFound` (404) exception if no patient with path variable
 `id` can be found in the database.
 
 
@@ -188,7 +189,7 @@ Returns only the readings for the patient with a given `id`.
 #### Returns
 
 Returns a JSON array of [reading view](ENTITIES.md#reading-view) entities. If unable to
-find a patient with the requested `id`, or if there are no readings for the 
+find a patient with the requested `id`, or if there are no readings for the
 requested patient, an empty array is returned.
 
 #### Errors
@@ -415,6 +416,27 @@ A list of all readings created by the user with a given id.
 
 A list of [reading views](ENTITIES.md#reading-view). Returns an empty array in the event that `id` is invalid.
 
+
+### `GET /api/referral/{id}/diagnosis`
+
+Create a diagnosis for a patient
+
+### Fields
+
+| Field | Type | Nullable | Description |
+|:-:|:-:|:-:|:-|
+| `patientId` | `string` | `false` | Patient Id |
+| `description` | `string` | `false` | Description of diagnosis |
+
+
+### Example
+
+```json
+{
+	"description": "this is a description",
+	"patientId":"001",
+}
+```
 
 ## User Methods
 

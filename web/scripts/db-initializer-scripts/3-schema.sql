@@ -75,16 +75,11 @@ CREATE TABLE diagnosis
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
     patient     VARCHAR(255) NOT NULL,
-    referral    INT,
     description TEXT NOT NULL,
     resolved    BOOLEAN NOT NULL DEFAULT 0,
 
     FOREIGN KEY (patient)
         REFERENCES patient (id)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (referral)
-        REFERENCES referral (id)
         ON DELETE CASCADE
 );
 

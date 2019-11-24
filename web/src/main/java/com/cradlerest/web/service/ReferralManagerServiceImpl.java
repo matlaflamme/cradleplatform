@@ -219,6 +219,19 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		return referralRepository.save(referral);
 	}
 
+	/**
+	 * Saves a referral sent with JSON request
+	 * only saves referral
+	 */
+	@Override
+	public Referral saveReferral(Authentication auth, Referral referral) throws Exception {
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) auth.getPrincipal();
+
+		// Create Referral object
+		return referralRepository.save(referral);
+	}
+
 	@Override
 	public Referral resolveReferral(Authentication auth, int id) throws Exception {
 		// Get user details
@@ -246,16 +259,15 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	}
 
 	@Override
-	public Diagnosis addDiagnosis(Authentication auth, Diagnosis diagnosis) throws Exception {
+	public Diagnosis addDiagnosis(Authentication auth, Integer referralId, Diagnosis diagnosis) throws Exception {
 		validateDiagnosis(diagnosis);
+		diagnosis.setResolved(false);
 		return diagnosisRepository.save(diagnosis);
 	}
 
 	private void validateDiagnosis(@NotNull Diagnosis diagnosis) throws BadRequestException {
 		assertNotNull(diagnosis.getDescription(), "description");
 		assertNotNull(diagnosis.getPatientId(), "patientId");
-		assertNotNull(diagnosis.getReferralId(), "referralId");
-		assertNotNull(diagnosis.getResolved(), "resolved");
 	}
 
 	private void validateReferralMessage(@NotNull ReferralMessage referral) throws BadRequestException {
