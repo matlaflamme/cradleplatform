@@ -123,11 +123,13 @@ public class PatientController {
 		requestAccessToPatient(auth, id);
 		List <Medication> patientMedications =  medicationManager.getAllMedicationsForPatient(id);
 
+		int i = 0;
 		for (Medication newMedication: medications) {
 			if(patientMedications.size() == 0){
 				newMedication.setMedId(0);
 			}else {
-				newMedication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + 1);
+				newMedication.setMedId(patientMedications.get(patientMedications.size() - 1).getMedId() + i);
+				i++;
 			}
 			newMedication.setPatientId(id);
 			 medicationManager.saveMedication(newMedication);
