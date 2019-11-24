@@ -49,8 +49,9 @@ information about the entities returned by these methods see
     * [`POST /api/reading/save`](#post-apireadingsave)
     * [`GET /api/hc/{id}/patients`](#get-apihcidpatients)
     * [`GET /api/user/{id}/patients`](#get-apiuseridpatients)
-    * [`GET /api/user/{id}/readings`](#get-apiuseridreadings)
-    * [`POST /api/referral/{id}/diagnosis`]
+    * ['POST /api/referral/{id}/resolve'](#post-apireferralidresolve)
+    * [`GET /api/user/{id}/readings`](#post-apiuseridreadings)
+    * [`POST /api/referral/{id}/diagnosis`](#post-apireferraliddiagnosis)
 * [User Methods](#user-methods)
     * [`GET /api/user/all`](get-apiuserall)
     * [`GET /api/user/{id}`](get-apiuserid)
@@ -416,8 +417,32 @@ A list of all readings created by the user with a given id.
 
 A list of [reading views](ENTITIES.md#reading-view). Returns an empty array in the event that `id` is invalid.
 
+### `POST /api/referral/new`
 
-### `GET /api/referral/{id}/diagnosis`
+Create a referral for a patient
+
+| Field | Type | Mandatory | Description |
+|:-:|:-:|:-:|:-|
+| `id` | `number` | `no` | Reading primary key, auto-generated if no present |
+| `patentId` | `string` | `yes` | Id of the patient that this reading is for |
+| `readingId` | `int` | `yes` | Id of the reading |
+| `healthCentreId` | `int` | `yes` | Id of the healthcentre being referred to |
+| `timestamp` | `string` | `no` | Time of the reading, in format "yyyy-MM-dd HH:mm:ss" (24h clock) |
+
+```json
+{
+	"patientId":"001",
+	"readingId":1,
+	"healthCentreId":1
+}
+```
+
+### `POST /api/referral/{id}/resolve`
+
+Resolves the referral
+
+
+### `POST /api/referral/{id}/diagnosis`
 
 Create a diagnosis for a patient
 
