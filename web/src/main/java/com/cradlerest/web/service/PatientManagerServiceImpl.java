@@ -226,7 +226,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 				return existingPatient;
 			}
 			else {
-				existingPatient.setCreatedBy(details.getId());
+				patient.setCreatedBy(details.getId());
 			}
 		}
 		validatePatient(patient);
