@@ -354,11 +354,6 @@ Vue.component('patient_info', {
                 console.log(this.medications);
             });
 
-            // // if (this.patientData.drugHistory !== null) {
-            //     this.medications= [{patientId:"001",medId:7,medication:"Tylenol",dosage:"1 Extra Strength Pill",usageFrequency:"Morning and Evening"}];
-            //     // this.medications = this.patientData.drugHistory;
-            //     this.takingMedication = true;
-            // // }
         },
         checkPregnant() {
             //this.patientData.readings[0].gestationalAge = 130; //For testing only
