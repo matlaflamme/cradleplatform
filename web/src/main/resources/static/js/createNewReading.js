@@ -276,7 +276,7 @@ Vue.component('new_reading',{
 				<v-stepper-content step="2">
 					<v-card  :elevation= "0" min-width="500">
 					<v-container>
-					  <v-checkbox v-model="symptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
+					  <v-checkbox v-model="noSymptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>
