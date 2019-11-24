@@ -1,3 +1,5 @@
+
+// Returns traffic icon path based on "Colour key"
 export function getReadingColorIcon(digit){
 	let light = 'white';
 	switch (digit) {
