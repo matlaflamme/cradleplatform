@@ -302,10 +302,10 @@ Vue.component('patient_info', {
                 '<v-list-item-content>' +
                     '<h3 class="font-weight-light pb-5">Medications </h3>\n' +
                     '<ul v-if="takingMedication" className="list-group" v-for="(medication, index) in medications">\n'+
+                        '<v-btn class="removebtn" extra small outlined color="red" @click="deleteMedicine(index, medication.medId)" style=" display: table-cell;">' +
+                        '<v-icon>delete</v-icon>' +
+                        '</v-btn>' +
                         '<li className="list-group-item" class="pb-1">{{medication.medication}}'+
-                            '<v-btn class="removebtn" extra small outlined color="red" @click="deleteMedicine(index, medication.medId)" style=" display: table-cell;">' +
-                                '<v-icon>delete</v-icon>' +
-                            '</v-btn>' +
                             '<ul>\n' +
                                 '<li className="list-group-item" class="pb-1">Dosage: {{medication.dosage}}\n</li>' +
                                 '<li className="list-group-item" class="pb-1">Frequency: {{medication.usageFrequency}}\n</li>\n' +
