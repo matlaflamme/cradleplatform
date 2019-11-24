@@ -223,11 +223,16 @@ Vue.component('readings_table' , { //Ideally, the graph would be in a separate c
                     '<v-list-item>' +
                         '<v-list-item-content>' +
                             '<ul >\n'+
-                                '<li >Gestational Age: {{item.gestationalAge}}</li>\n'+
-                                '<li>Symptoms'+
+                                '<ul v-if="item.gestationalAge">'+
+                                    '<li>Gestational Age: {{item.gestationalAge}}</li>\n'+
+                               '</ul>'+
+                                '<li>Symptoms:'+
                                     '<ul v-for="symptom in item.symptoms">\n'+
                                         '<li>{{symptom}}</li>\n'+
                                     '</ul>\n'+
+                                    '<ul v-if="item.symptoms.length === 0" className="list-group">' +
+                                    '<li className="list-group-item" class="pb-1">No symptoms recorded</li>' +
+                                    '</ul>' +
                                     '<ul v-if="item.otherSymptoms != null" className="list-group">\n'+
                                          '<li className="list-group-item" class="pb-1">{{item.otherSymptoms}}</li>\n'+
                                     '</ul>\n'+
