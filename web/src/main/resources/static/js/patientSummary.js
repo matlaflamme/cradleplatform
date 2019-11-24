@@ -365,6 +365,8 @@ Vue.component('patient_info', {
             }
         },
         deleteMedicine: function(index,medID) {
+                let urlQuery = new URLSearchParams(location.search);
+                let id = urlQuery.get('id');
                 axios.delete('/api/patient/' + id + "/deleteMedication/" + medID)
                     .then(response => {
                         this.medications.splice(index,1)
