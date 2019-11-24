@@ -12,7 +12,7 @@ Vue.component('new_reading',{
         selectedHealthCentre: null,
         healthCentreList: ['Empty'],
         customSymptom: "",
-        e1: 0,
+        currentStep: 0,
         sex: 0,
         error_snackbar: false,
 		success_snackbar: false,
@@ -206,13 +206,13 @@ Vue.component('new_reading',{
 			</v-card>
 		</div>
         <div class="customDiv">
-        <v-stepper v-model="e1">
+        <v-stepper v-model="currentStep">
         	<v-stepper-header>
-        		<v-stepper-step :complete="e1 > 1" step="1" editable>Vitals</v-stepper-step>
+        		<v-stepper-step :complete="currentStep > 1" step="1" editable>Vitals</v-stepper-step>
                	<v-divider></v-divider>
-              	<v-stepper-step :complete="e1 > 2" step="2" editable>Symptoms</v-stepper-step>
+              	<v-stepper-step :complete="currentStep > 2" step="2" editable>Symptoms</v-stepper-step>
                	<v-divider></v-divider>
-            	<v-stepper-step step="e1 > 3" step="3" editable>Medications</v-stepper-step>
+            	<v-stepper-step step="currentStep > 3" step="3" editable>Medications</v-stepper-step>
             	<v-divider></v-divider>
             	<v-stepper-step step="4" editable>Review</v-stepper-step>
             </v-stepper-header>
@@ -257,7 +257,7 @@ Vue.component('new_reading',{
 					</v-text-field>
 					</template>
 					</v-card>
-					<v-btn color="primary" @click="e1 = 2">Continue</v-btn>
+					<v-btn color="primary" @click="currentStep = 2">Continue</v-btn>
 					<v-btn color="error" @click="reset">reset</v-btn>
 				</v-stepper-content>
 				<!--        This part is the second tab-->
@@ -275,7 +275,7 @@ Vue.component('new_reading',{
 						 </v-card>
 						 <v-btn
 						   color="primary"
-							@click="e1 = 3"
+							@click="currentStep = 3"
 						  >
 							Continue
 						  </v-btn>
@@ -305,7 +305,7 @@ Vue.component('new_reading',{
 						</ul>
 					</v-card>
 					<v-btn @click="addRow"> Add new medication</v-btn>
-					<v-btn color="primary" @click="e1 = 4">Continue</v-btn>
+					<v-btn color="primary" @click="currentStep = 4">Continue</v-btn>
 				</v-stepper-content>
 <!--				This part is the 4th step-->
 				<v-stepper-content step="4">
