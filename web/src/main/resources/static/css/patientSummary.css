@@ -61,5 +61,6 @@ ul ul ul li::before {
     background: #0dcdcd;
 }
 .removebtn {
-    margin-left: 120px;
+    position: absolute;
+    right: 0px;
 }
