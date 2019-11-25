@@ -380,7 +380,6 @@ Vue.component('new_reading',{
 				</v-card-actions>
 			</v-card>
 		</div>
-	<div class="customContainer">
         <div class="customDiv">
         <v-stepper v-model="currentStep">
         	<v-stepper-header>
