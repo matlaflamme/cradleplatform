@@ -1,5 +1,7 @@
 package com.cradlerest.web.model.view;
 
+import com.cradlerest.web.model.Diagnosis;
+import com.cradlerest.web.model.HealthCentre;
 import com.cradlerest.web.model.Referral;
 import com.cradlerest.web.service.DateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,12 +21,13 @@ public interface ReferralView {
 	int getReadingId();
 	String getHealthCentre();
 	String getHealthCentreNumber();
+	Diagnosis getDiagnosis();
 	@JsonSerialize(using = DateSerializer.class)
 	Date getTimestamp();
 	@JsonSerialize(using = DateSerializer.class)
 	Date getClosed();
 
-	static ReferralView fromReferral(Referral referral, String hcName, String hcNumber, String pid) {
+	static ReferralView fromReferral(Referral referral, HealthCentre hc, Diagnosis diagnosis) {
 		return new ReferralView() {
 			@Override
 			public int getId() {
@@ -33,7 +36,12 @@ public interface ReferralView {
 
 			@Override
 			public String getPatientId() {
-				return pid;
+				return referral.getPatientId();
+			}
+
+			@Override
+			public Diagnosis getDiagnosis() {
+				return diagnosis;
 			}
 
 			@Override
@@ -48,12 +56,12 @@ public interface ReferralView {
 
 			@Override
 			public String getHealthCentre() {
-				return hcName;
+				return hc.getName();
 			}
 
 			@Override
 			public String getHealthCentreNumber() {
-				return hcNumber;
+				return hc.getPhoneNumber();
 			}
 
 			@Override
