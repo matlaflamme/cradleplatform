@@ -7,6 +7,8 @@ Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
 		finished: false, // reading is validated and saved to server
+		retestStep: 0, // 0..2
+		retestDialog: false,
         enabled: false,
         noSymptoms: true,
         selectedHealthCentre: null,
@@ -16,10 +18,12 @@ Vue.component('new_reading',{
         sex: 0,
         error_snackbar: false,
 		success_snackbar: false,
+		wait_snackbar: false,
+		timer: null,
         symptoms: [],
         medications: [],
         pregnant: false,
-		trafficIcon: null,
+		trafficIconCurrent: null,
 		readingAdvice: null,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
@@ -61,7 +65,7 @@ Vue.component('new_reading',{
         ]
     }),
     methods: {
-        submit: function() {
+        submit: function(readingFinished) {
             console.log(this.colour);
             //do input validation in a different function
             let NUMBER_OF_DAYS_IN_WEEK = 7;
@@ -79,7 +83,9 @@ Vue.component('new_reading',{
 				// medications: this.medications //Not implemented in the server yet
             }).then(res => {
             	console.log(res);
-            	this.finished = true;
+            	if (readingFinished) {
+					this.finished = true;
+				}
             	this.success_snackbar = true;
             	let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
 				let id = urlQuery.get('id'); //search for 'id=' in query and return the value
@@ -96,14 +102,114 @@ Vue.component('new_reading',{
                 	this.error_snackbar = true;
 				});
         },
-        validate() {
-            if (this.$refs.newReadingForm.validate(this)) {
-                if (this.symptoms.includes("No Symptoms")){
-                    this.symptoms = []; //If no symptom is selected we have to return an empty list
-                }
-                this.submit();
-            }
+		// validate to be saved
+        validate(readingFinished, bypass) {
+        	this.retestDialog = !readingFinished;
+        	if (bypass) { // removes all
+        		localStorage.removeItem(this.patientID);
+        		localStorage.removeItem(this.patientID+1);
+			}
+			if (this.$refs.newReadingForm.validate(this)) {
+				if (this.symptoms.includes("No Symptoms")) {
+					this.symptoms = []; //If no symptom is selected we have to return an empty list
+				}
+			}
+			this.submit(readingFinished);
         },
+		// src: https://www.w3resource.com/javascript-exercises/javascript-date-exercise-44.php
+		equalDates(dt2, dt1) {
+			return (dt2-dt1 === 0)
+		},
+		retestValidator() {
+        	if (localStorage.getItem(this.patientID+1) !== null) {
+        		// third reading
+        		this.validate(true, false); // finished
+				this.clearLocalStorage();
+				return;
+			}
+        	if (localStorage.getItem(this.patientID) !== null) {
+        		// second reading
+        		let patientObj = JSON.parse(localStorage.getItem(this.patientID));
+        		console.log("testing 123: " + patientObj.pid);
+        		if (patientObj.colour === 1 || patientObj.colour === 2) { // 1st reading was yellow
+        			// check timer
+					if (!this.equalDates(patientObj.date, new Date().toLocaleTimeString())) {
+						this.wait_snackbar = true;
+						return;
+					} else {
+						if (patientObj.colour === 1 || patientObj.colour === 2) { // 2nd reading yellow
+							if (this.colour === 1 || this.colour === 2) {
+								this.validate(true, false);
+								this.clearLocalStorage();
+								return;
+							} else { // 2nd reading green or red
+								this.validate(false, false); // save but reading not done
+								localStorage.setItem(this.patientID+1, JSON.stringify(this.buildCurrentPatientObject()));
+								return;
+							}
+						}
+					}
+				} else { // 1st reading was red
+					if (this.colour === 3 || this.colour === 4) {
+						// 2nd reading is read. reading process is done
+						this.validate(true, false);
+						this.clearLocalStorage();
+						return;
+					} else {
+						this.validate(false, false);
+						this.retestDialog = true;
+						return;
+					}
+				}
+			} else {
+        		console.log("First reading");
+        		// this is the first reading
+				if (this.colour === 0) { // GREEN
+					console.log("Green");
+					this.validate(true, false);
+					return;
+				} else {
+					console.log("YELLOW");
+					if (this.colour === 1 || this.colour === 2) { // YELLOW
+						this.validate(false, false);
+						localStorage.setItem(this.patientID, JSON.stringify(this.buildCurrentPatientObject(true))); // wait time 15 mins
+					} else { // RED
+						console.log("RED");
+						this.validate(false, false);
+						localStorage.setItem(this.patientID, JSON.stringify(this.buildCurrentPatientObject()));
+					}
+				}
+
+			}
+		},
+		// builds patient object as needed for retest logic
+		buildCurrentPatientObject(wait) {
+        	if (wait) {
+				let oldDate = new Date();
+				return {
+					pid: this.patientID,
+					colour: this.colour,
+					date: new Date(oldDate.getTime() + 15*60000).toLocaleTimeString()
+				}
+			} else {
+        		return {
+        			pid: this.patientID,
+					colour: this.colour
+				}
+			}
+
+		},
+		clearLocalStorage() {
+        	this.retestDialog = false;
+        	localStorage.clear();
+		},
+		printLocalStorage() {
+        	var values = [], keys = Object.keys(localStorage), i = keys.length;
+        	while (i--) {
+        		values.push(localStorage.getItem(keys[i]))
+			}
+			console.log(values);
+		},
         reset () {
             this.$refs.newReadingForm.reset();
             this.finished = false;
@@ -158,12 +264,23 @@ Vue.component('new_reading',{
 		},
 		advice: function() {
     		return getReadingAdvice(this.colour);
+		},
+		waitTime: function() {
+    		let patientObj = JSON.parse(localStorage.getItem(this.patientID));
+    		if (patientObj === null) {
+    			console.log("NO DATE");
+    			return null;
+			}
+			console.log("getting waittime: " + patientObj.date);
+			console.log("typeof: " + typeof(patientObj));
+    		console.log("DATE: " + patientObj.date);
+    		return patientObj.date;
 		}
 	},
 	watch: {
     	colour: function() {
     		this.finished = false; // reading changed
-    		this.trafficIcon = getReadingColorIcon(this.colour);
+    		this.trafficIconCurrent = getReadingColorIcon(this.colour);
 		},
 		symptoms: function() {
     		this.finished = false;
@@ -175,6 +292,9 @@ Vue.component('new_reading',{
     		this.finished = false;
 		},
 		pregnant: function() {
+    		this.finished = false;
+		},
+		noSymptoms: function() {
     		this.finished = false;
 		}
 	},
@@ -196,7 +316,7 @@ Vue.component('new_reading',{
 					<li>Gestational age: {{gestationalAge}}</li>	
 					<li>Colour int: {{colour}}</li>
 					<li>
-					<img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
+					<img id="light" ref="light" v-if="trafficIconCurrent" :src=trafficIconCurrent height="35" width="45" style="margin-bottom: 7px">
 					</li>
 				</ul>
 				<ul>
@@ -403,7 +523,9 @@ Vue.component('new_reading',{
 							</v-list-item-content>
 						</v-list-item>
 		          	</v-card>
-		        <v-btn color="primary" @click="validate">Save reading</v-btn>
+		        <v-btn color="primary" @click="retestValidator">Save reading</v-btn>
+		        <v-btn color="error" small @click="clearLocalStorage">Clear Retests</v-btn>
+		        <v-btn color="error" small @click="printLocalStorage">Print Retests</v-btn>
 		        <v-icon v-if="finished"large color="green darken-2" >mdi-check</v-icon>
 		        </v-stepper-content>
 		  	</v-stepper-items>
@@ -430,6 +552,26 @@ Vue.component('new_reading',{
 				</v-list>
 			</v-card>
 		</div>
+		<div class="customDiv" v-if="retestDialog" >
+			<v-card class="list-card">
+				<v-card-title>
+				<h4 v-if="waitTime">Retest Dialog</h4>
+				</v-card-title>
+				<v-list>
+					<v-list-item-content>
+						<v-list-item-title>Reading results:</v-list-item-title>
+						<img id="light" ref="light" v-if="trafficIconCurrent" :src=trafficIconCurrent height="45" width="55" style="margin 7px"/>
+					</v-list-item-content>
+					<v-list-item-content v-if="waitTime">
+						<v-list-item-title>Please perform a retest for patient id: {{patientID}} after 15 minutes: {{waitTime}}</v-list-item-title>
+					</v-list-item-content>
+					<v-list-item-content v-else>
+						<v-list-item-title>Please perform a retest for patient id: {{patientID}} immediately</v-list-item-title>
+					</v-list-item-content>
+					
+				</v-list>
+			</v-card>
+		</div>
         <v-snackbar v-model="error_snackbar">
             Error: Patient ID does not exist
             <v-btn color="red" @click="error_snackbar = false">Close</v-btn>
@@ -437,6 +579,10 @@ Vue.component('new_reading',{
         <v-snackbar v-model="success_snackbar">
             Success! Reading saved.
             <v-btn color="green" @click="success_snackbar = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="wait_snackbar">
+            Wait until {{waitTime}} to create reading for patient: {{patientID}}
+            <v-btn color="green" @click="validate(true, true)">Save anyway</v-btn>
         </v-snackbar>
     </div>
 	`
@@ -446,7 +592,6 @@ function getCurrentDate() {
 	let now = new Date(); //new date object
 	let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
 	let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
-	console.log(date + ' ' + time);
 	return date + ' ' + time; //date and time string returned
 }
 
