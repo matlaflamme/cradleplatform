@@ -101,9 +101,10 @@ let test = new Vue({
                 console.log(response);
                 axios.post('/api/referral/' + this.editedItem.readingId +'/resolve').then(response => {
                     console.log(response);
+                    window.location.assign('/referrals')
                 })
             });
-            this.close()
+            this.close();
         },
     },
     computed: {
