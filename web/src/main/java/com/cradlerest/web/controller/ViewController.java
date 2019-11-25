@@ -12,6 +12,11 @@ import java.util.Set;
 @Controller
 public class ViewController {
 
+	@RequestMapping(value = "/healthcentres", method = RequestMethod.GET)
+	public String HealthCentres(Authentication authentication) {
+		return "healthcentres";
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String HomePage(Authentication authentication) {
 		if (authentication == null) {
