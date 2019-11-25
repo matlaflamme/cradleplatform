@@ -77,6 +77,9 @@ Vue.component('sidebar_item', {
             else if (clicked === "healthcentres") {
                 window.location.assign("/healthcentres")
             }
+            else if (clicked === "createHealthCenter") {
+                window.location.assign("/createHealthCenter")
+            }
         },
     }
 });
