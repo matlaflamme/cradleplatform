@@ -129,7 +129,15 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		}
 		var hc = optHc.get();
 
-		return ReferralView.fromReferral(r, hc.getName(), hc.getPhoneNumber(), r.getPatientId());
+		Diagnosis d = null;
+		if ( r.getDiagnosisId() != null) {
+			var optDiagnosis = diagnosisRepository.findById(r.getDiagnosisId());
+			if (optDiagnosis.isPresent()) {
+				d = optDiagnosis.get();
+			}
+		}
+
+		return ReferralView.fromReferral(r, hc, d);
 	}
 
 
