@@ -26,20 +26,56 @@
 									:headers="headers"
 									:items="rows"
 									class="elevation-1">
+								<template v-slot:top>
+									<v-toolbar flat color="white">
+										<v-toolbar-title>Referrals</v-toolbar-title>
+										<v-divider
+												class="mx-4"
+												inset
+												vertical
+										></v-divider>
+										<v-spacer></v-spacer>
+										<v-dialog v-model="dialog" max-width="500px">
+											<template v-slot:activator="{ on }">
+												<v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+											</template>
+											<v-card>
+												<v-card-title>
+												<span class="headline">Add diagnosis</span>
+											</v-card-title>
+
+												<v-card-text>
+													<v-container>
+														<v-row>
+															<v-col cols="12" sm="6" md="4">
+																<v-text-field v-model="editedItem.patientId" label="Dessert name"></v-text-field>
+															</v-col>
+															<v-col cols="12" sm="6" md="4">
+																<v-text-field v-model="editedItem.id" label="Calories"></v-text-field>
+															</v-col>
+														</v-row>
+													</v-container>
+												</v-card-text>
+												<v-card-actions>
+													<v-spacer></v-spacer>
+													<v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+													<v-btn color="blue darken-1" text @click="save">Save</v-btn>
+												</v-card-actions>
+											</v-card>
+										</v-dialog>
+									</v-toolbar>
+								</template>
 									<template slot="rows" slot-scope="props">
-									<td>{{props.rows.id}}</td>
-									<td>{{props.rows.patientId}}</td>
-									<td>{{props.rows.vhtId}}</td>
-									<td>{{props.rows.healthCentre}}</td>
-									<td>{{props.rows.healthCentreNumber}}</td>
+										<td>{{props.rows.id}}</td>
+										<td>{{props.rows.patientId}}</td>
+										<td>{{props.rows.referrerUserName}}</td>
+										<td>{{props.rows.healthCentre}}</td>
 									</template>
 									<template v-slot:item.actions="{ item }">
 										<button v-on:click="viewPatientData(item.patientId)" style="min-width: 90px" class="custom-btn-margin btn btn-outline-info btn-sm">Patient Info</button>
 									</template>
-									<template slot="rows" slot-scope="props">
-										<td>{{props.rows.timestamp}}</td>
-										<td>{{props.rows.accepter}}</td>
-										<td>{{props.rows.status}}</td>
+									<template v-slot:item.resolve="{ item }">
+										<v-btn outlined color="error" small @click="editItem(item)">Add diagnosis</v-btn>
 									</template>
 							</v-data-table>
 

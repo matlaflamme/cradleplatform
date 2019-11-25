@@ -58,11 +58,11 @@ Vue.component('basic_info', {
                 '<v-col md="4" cols="12">' +
                     '<strong class="font-weight-thin display-2">Patient Details</strong>' +
                 '</v-col>' +
-                '<v-col md="2" cols="12" id="header">' +
-                    '<span id="header-content" class="headline">ID: <span class="font-weight-light">{{patientInformation.id}}</span></span>' +
+                '<v-col md="3" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">ID: <span class="title font-weight-light">{{patientInformation.id}}</span></span>' +
                 '</v-col>' +
                 '<v-col md="2" cols="12" id="header">' +
-                    '<span id="header-content" class="headline">Initials: <span class="font-weight-light">{{patientInformation.name}}</span></span>' +
+                    '<span id="header-content" class="headline">Initials: <span class="title font-weight-light">{{patientInformation.name}}</span></span>' +
                 '</v-col>' +
                 '<v-col md="2" cols="12" id="header">' +
                     '<span id="header-content" class="headline">Sex: <span class="font-weight-light">{{patientInformation.sex}}</span></span>' +
