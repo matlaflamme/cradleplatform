@@ -35,12 +35,6 @@
 									</template>
 									<template v-slot:item.actions="{ item }">
 										<button v-on:click="viewPatientData(item.patientId)" style="min-width: 90px" class="custom-btn-margin btn btn-outline-info btn-sm">Patient Info</button>
-										<span sec:authorize="hasRole('ROLE_HCW')">
-											<button disabled="{{props.rows.btn_accept_disabled}}" v-on:click="accept(item)" class="custom-btn-referral-action custom-btn-margin btn btn-outline-success btn-sm">Accept</button>
-										</span>
-										<span sec:authorize="hasRole('ROLE_VHT')">
-											<button disabled="{{props.rows.btn_accept_disabled}}" v-on:click="close(item)" class="custom-btn-referral-action custom-btn-margin btn btn-outline-danger btn-sm">Close</button>
-										</span>
 									</template>
 									<template slot="rows" slot-scope="props">
 										<td>{{props.rows.timestamp}}</td>

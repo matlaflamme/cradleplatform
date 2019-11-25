@@ -40,11 +40,6 @@ let test = new Vue({
             axios.get('/api/referral/all').then(response => {
                 console.log(response);
                 this.rows = response.data;
-                this.rows.forEach(row => {
-                    row.status = row.closed ? 'Closed' : (row.accepter == null ? 'Pending' : 'Open');
-                    row.btn_accept_disabled = (row.accepter == null && !row.closed) ? "" : "disabled";
-                    row.btn_close_disable = (row.accepter != null && !row.closed) ? "" : "disabled";
-                });
                 console.log("this rows: " + this.rows);
             }).catch(error => {
                 console.log(error);
@@ -52,6 +47,11 @@ let test = new Vue({
         },
         accept: function() {
             console.log("Called accept()", arguments);
+            // TODO: accept referral, pass in health worker Id, time
+            // can't retrieve id at the moment
+        },
+        close: function() {
+            console.log("Called close()", arguments);
             // TODO: accept referral, pass in health worker Id, time
             // can't retrieve id at the moment
         }
