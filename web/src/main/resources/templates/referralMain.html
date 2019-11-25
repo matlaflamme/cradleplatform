@@ -38,17 +38,18 @@
 										<v-dialog v-model="dialog" max-width="500px">
 											<v-card>
 												<v-card-title>
-												<span class="headline">Add diagnosis</span>
-											</v-card-title>
+													<span v-if="!currItemResolved" class="headline">Add diagnosis</span>
+													<span v-if="currItemResolved" class="headline">View diagnosis</span>
+												</v-card-title>
 
 												<v-card-text>
 													<v-container>
 														<v-row>
-															<v-col cols="12" sm="6" md="4">
-																<v-text-field v-model="editedItem.diagnosisString" label="Diagnosis"></v-text-field>
-															</v-col>
-															<v-col cols="12" sm="6" md="4">
-																<v-text-field v-model="editedItem.id" label="Calories"></v-text-field>
+															<v-col cols="12">
+																<v-text-field v-if="!currItemResolved" v-model="editedItem.diagnosisString" label="Diagnosis"></v-text-field>
+																<p v-if="currItemResolved" class="title">
+																	Diagnosis: {{editedItem.diagnosis.description}}
+																</p>
 															</v-col>
 														</v-row>
 													</v-container>
@@ -56,7 +57,7 @@
 												<v-card-actions>
 													<v-spacer></v-spacer>
 													<v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-													<v-btn color="blue darken-1" text @click="save">Save</v-btn>
+													<v-btn v-if="!currItemResolved" color="blue darken-1" text @click="save">Save</v-btn>
 												</v-card-actions>
 											</v-card>
 										</v-dialog>
@@ -72,7 +73,11 @@
 									</template>
 									<template v-slot:item.resolve="{ item }">
 										<v-btn v-if="!item.diagnosis" outlined color="error" small @click="editItem(item)">Add diagnosis</v-btn>
-										<v-btn v-if="item.diagnosis" outlined color="error" small>View diagnosis</v-btn>
+										<v-btn v-if="item.diagnosis" outlined color="secondary" small @click="viewItem(item)">View diagnosis</v-btn>
+									</template>
+									<template v-slot:item.status="{ item }">
+										<v-icon v-if="item.diagnosis">check_circle_outline</v-icon>
+										<v-icon v-if="!item.diagnosis">schedule</v-icon>
 									</template>
 							</v-data-table>
 

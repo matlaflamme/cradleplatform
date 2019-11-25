@@ -17,7 +17,7 @@ let test = new Vue({
             rows: [], //empty to start
             editedIndex: -1,
             dialog: false,
-            resolveReferral: false,
+            currItemResolved: false,
             editedItem: {
                 closed: null,
                 healthCentre: '',
@@ -78,11 +78,18 @@ let test = new Vue({
             this.editedItem = Object.assign({}, item);
             this.dialog = true
         },
+        viewItem(item) {
+            this.editedIndex = this.rows.indexOf(item);
+            this.editedItem = Object.assign({}, item);
+            this.currItemResolved = !!this.editedItem.closed;
+            this.dialog = true;
+        },
         close () {
             this.dialog = false;
             setTimeout(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
-                this.editedIndex = -1
+                this.editedIndex = -1;
+                this.currItemResolved = false;
             }, 300)
         },
 
@@ -92,11 +99,9 @@ let test = new Vue({
                 description: this.editedItem.diagnosisString
             }).then(response => {
                 console.log(response);
-                if (this.resolveReferral) {
-                    axios.post('/api/referral/' + this.editedItem.readingId +'/resolve').then(response => {
-                        console.log(response);
-                    })
-                }
+                axios.post('/api/referral/' + this.editedItem.readingId +'/resolve').then(response => {
+                    console.log(response);
+                })
             });
             this.close()
         },
