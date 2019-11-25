@@ -19,10 +19,11 @@ public class NameGenerator implements Generator<String> {
 	@Override
 	public String generate() {
 		return gibberishSentenceGenerator
-				.with("min", 1)
-				.with("max", 2)
+				.with("min", 2)
+				.with("max", 4)
 				.generate()
-				.replace(".", "");
+				.replace(".", "")
+				.replace(" ", "");
 	}
 
 	@Override

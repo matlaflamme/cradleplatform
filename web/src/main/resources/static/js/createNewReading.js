@@ -1,20 +1,27 @@
-import { TrafficLightCalc } from '/js/trafficLightCalc.js';
 
 Vue.prototype.$http = axios;
+import {TrafficLightCalc} from './TrafficLightCalc.js'
+import {getReadingColorIcon} from './GetReadingColorIcon.js'
+import {getReadingAdvice} from './GetReadingAdvice.js'
 Vue.component('new_reading',{
     vuetify: new Vuetify(),
     data: () => ({
+		finished: false, // reading is validated and saved to server
         enabled: false,
         noSymptoms: true,
+        readingId: 0,
         selectedHealthCentre: null,
         healthCentreList: ['Empty'],
         customSymptom: "",
-        e1: 0,
+        currentStep: 0,
         sex: 0,
-        snackbar: false,
+        error_snackbar: false,
+		success_snackbar: false,
         symptoms: [],
         medications: [],
         pregnant: false,
+		trafficIcon: null,
+		readingAdvice: null,
         //For input validation. @TODO rules refuse to recognize these.
         MAX_SYSTOLIC: 300,
         MIN_SYSTOLIC: 10,
@@ -23,7 +30,6 @@ Vue.component('new_reading',{
         MAX_HEART_RATE: 200,
         MIN_HEART_RATE: 40,
         valid: true,
-        colour: '',
         timestamp: '',
         patientID: '',
         patientIDRules: [
@@ -56,59 +62,55 @@ Vue.component('new_reading',{
         ]
     }),
     methods: {
-        submit: function() {
-            console.log(new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate));
+        submit: function(sendRef) {
+            console.log(this.colour);
             //do input validation in a different function
             let NUMBER_OF_DAYS_IN_WEEK = 7;
-            axios.post('/api/reading/save',
-                {
-                    patientId: this.patientID,
-                    heartRate: parseInt(this.heartRate),
-                    systolic: parseInt(this.systolic),
-                    diastolic: parseInt(this.diastolic),
-                    colour: new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate),
-                    pregnant: this.pregnant,
-                    gestationalAge: parseInt(this.gestationalAge) * NUMBER_OF_DAYS_IN_WEEK, //convert weeks to days
-                    timestamp: getCurrentDate(),
-                    symptoms: this.symptoms,
-                    otherSymptoms: this.checkCustomSymptoms()
-                    // medications: this.medications //Not implemented in the server yet
-                }).catch(error => {
-                    console.error(error);
-                    this.snackbar = true;
+            axios.post('/api/reading/save', {
+            	patientId: this.patientID,
+				heartRate: parseInt(this.heartRate),
+				systolic: parseInt(this.systolic),
+				diastolic: parseInt(this.diastolic),
+				colour: this.colour,
+				pregnant: this.pregnant,
+				gestationalAge: parseInt(this.gestationalAge) * NUMBER_OF_DAYS_IN_WEEK, //convert weeks to days
+				timestamp: getCurrentDate(),
+				symptoms: this.symptoms,
+				otherSymptoms: this.checkCustomSymptoms()
+            }).then(res => {
+            	console.log(res);
+            	this.finished = true;
+            	this.success_snackbar = true;
+            	let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
+				let id = urlQuery.get('id'); //search for 'id=' in query and return the value
+				if (this.medications !== null && this.medications.length > 0) {
+					axios.post('/api/patient/'+ id + '/addMedications', this.medications).then(response => {
+						console.log(response)
+					}).catch(error => {
+						console.log(error);
+					});
+				}
+					console.log(this.medications);
+				this.readingId = res.data.id;
+				if(sendRef) {
+                    this.sendReferral()
                 }
-                ).then(response => {
-                    console.log(response);
-                    let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
-                    let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-                    if (this.medications !== null) {
-                        axios.post('/api/patient/' + id + '/addMedications',
-                            this.medications //array of medication objects
-                        ).then(response => {
-                            console.log(response)
-                        });
-                    }
-                console.log(this.medications);
-                    if (response.status == 200) {
-                        window.location.assign("/patientSummary?id=" + this.patientID);
-                    }
-                    else {
-                        this.snackbar = true;
-                    }
-                });
-
-                //
+                }).catch(error => {
+                	console.log(error)
+                	this.error_snackbar = true;
+				});
         },
-        validate() {
+        validate(sendRef) {
             if (this.$refs.newReadingForm.validate(this)) {
                 if (this.symptoms.includes("No Symptoms")){
                     this.symptoms = []; //If no symptom is selected we have to return an empty list
                 }
-                this.submit();
+                this.submit(sendRef);
             }
         },
         reset () {
             this.$refs.newReadingForm.reset();
+            this.finished = false;
         },
         resetValidation () {
             this.$refs.newReadingForm.resetValidation();
@@ -128,7 +130,9 @@ Vue.component('new_reading',{
         getAllHealthCentreOptions() {
             //waiting for merge of updated permissions for this api
             axios.get('/api/hc/all').then(response => {
+                console.log(response.data)
                 this.healthCentreList = response.data;
+                this.healthCentreList.unshift({id: "0", name: "No Health Centre"});
             }).catch(error => {
                 console.error(error);
             });
@@ -138,6 +142,42 @@ Vue.component('new_reading',{
         hasMedications() {
             console.log(this.medications.length);
             return this.medications.length !== 0;
+        },
+        toPatient() {
+            window.location.assign('/patientSummary?id=' + this.patientID)
+        },
+        sendReferral() {
+            console.log("send that referral");
+            console.log(this.getVHTName());
+            console.log(this.getPatientName());
+            console.log(this.patientID);
+                axios.post('/api/referral/new', {
+                patientId: this.patientID,
+                readingId: this.readingId,
+                healthCentreId: this.selectedHealthCentre.id
+
+            }).then(response => {
+                console.log(response)
+                })
+
+        },
+        getVHTName() {
+            axios.get('/api/user/whoami').then(response => {
+                console.log("Username: " + response);
+                return response.data
+            })
+        },
+        getPatientName() {
+            axios.get('/api/patient/' + this.patientID + '/info').then(response => {
+                console.log(response.data);
+                return response.data.name;
+            })
+        },
+        healthCenterSelected() {
+            if (this.selectedHealthCentre === null) {
+                return false;
+            }
+            else return this.selectedHealthCentre.name !== "No Health Centre";
         }
     },
     mounted() {
@@ -154,251 +194,275 @@ Vue.component('new_reading',{
         console.log(this.medications)
         this.getAllHealthCentreOptions();
     },
-    template: //@TODO Fix indentation
-    '<div>' +
-    '    <v-stepper v-model="e1">\n' +
-        '      <v-stepper-header>\n' +
-        '        <v-stepper-step :complete="e1 > 1" step="1" editable>Vitals</v-stepper-step>\n' +
-        '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step :complete="e1 > 2" step="2" editable>Symptoms</v-stepper-step>\n' +
-        '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step :complete="e1 > 3" step="3" editable>Medications</v-stepper-step>\n' +
-        '        <v-divider></v-divider>\n' +
-        '        <v-stepper-step step="4" editable>Review</v-stepper-step>\n' +
-        '      </v-stepper-header>\n' +
-        '      <v-stepper-items>\n' +
-        //This part is the first tab
-        '        <v-stepper-content step="1">\n' +
-        '          <v-card\n' +
-        '        <v-card  :elevation= "0" min-width="500">\n' +
-        '        <v-card-title>\n' +
-        '        </v-card-title>' +
-        '        <v-form\n' +
-        '            ref="newReadingForm"\n' +
-        '            v-model="valid"\n' +
-        '            lazy-validation\n' +
-        '            class="ma-5 px-3"\n' +
-        '            >' +
-        '        <v-text-field\n' +
-        '        v-model="patientID"\n' +
-        '        :rules="patientIDRules"\n' +
-        '        label="Patient ID"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="systolic"\n' +
-        '        :rules="systolicRules"\n' +
-        '        label="Systolic"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="diastolic"\n' +
-        '        :rules="diastolicRules"\n' +
-        '        label="Diastolic"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="heartRate"\n' +
-        '        :rules="heartRateRules"\n' +
-        '        label="Heart Rate"\n' +
-        '        required\n' +
-        '      ></v-text-field>\n' +
-        '        <template v-if=" sex == 1 || sex == 2 ">\n' + // If patient is not a man show the pregnant option
-        '            <v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>' +
-        '        </template>' +
-        '        <template v-if= "pregnant === true">\n' +
-        '        <v-text-field\n' +
-        '        v-model="gestationalAge"\n' +
-        '        label="Pregnancy week"\n' +
-        '        :rules="gestationalAgeRules"\n' +
-        '      ></v-text-field>\n' +
-        '        </template>' +
-        '          </v-card>\n' +
-        '          <v-btn\n' +
-        '            color="primary"\n' +
-        '            @click="e1 = 2"\n' +
-        '          >\n' +
-        '            Continue\n' +
-        '          </v-btn>\n' +
-        '          <v-btn\n' +
-        '            color="error"'+
-        '            @click="reset"\n' +
-        '          >\n' +
-        '            reset\n' +
-        '          </v-btn>\n' +
-        //This part is the second tab
-        '        </v-stepper-content>\n' +
-        '        <v-stepper-content step="2">\n' +
-        '           <v-card  :elevation= "0" min-width="500">\n' +
-        '    <v-container>\n' +
-        '      <v-checkbox v-model="noSymptoms" label="No Symptoms"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Bleeding" :disabled="noSymptoms" value="Bleeding"></v-checkbox> \n' +
-        '      <v-checkbox v-model="symptoms" label="Feverish" :disabled="noSymptoms" value="Feverish"></v-checkbox>\n' +
-        '      <v-checkbox v-model="symptoms" label="Unwell" :disabled="noSymptoms" value="Unwell"></v-checkbox>' +
-        '      <v-checkbox v-model="enabled" :disabled="noSymptoms" label="Other:"></v-checkbox>' +
-        '      <v-text-field :disabled="!enabled" label="Other symptoms" v-model="customSymptom"></v-text-field>' +
-        '</v-container>\n' +
-        '          </v-card>\n' +
-        '          <v-btn\n' +
-        '            color="primary"\n' +
-        '            @click="e1 = 3"\n' +
-        '          >\n' +
-        '            Continue\n' +
-        '          </v-btn>\n' +
-        //This part is the third tab
-        '        </v-stepper-content>\n' +
-        '        <v-stepper-content step="3">\n' +
-        '          <v-card  :elevation= "0" min-width="500">\n' +
-        '    <ul>\n' +
-        '      <li v-for="(input, index) in medications">\n' +
-        '        <v-text-field\n' +
-        '        v-model="input.medication"\n' +
-        '        label="Medication"\n' +
-        '        required\n' +
-        '      >{{input.medication }}  </v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="input.dosage"\n' +
-        '        label="Dose"\n' +
-        '        required\n' +
-        '      >{{input.dosage}}  </v-text-field>\n' +
-        '        <v-text-field\n' +
-        '        v-model="input.usageFrequency"\n' +
-        '        label="Usage frequency"\n' +
-        '        required\n' +
-        '      >{{ input.usageFrequency}}  </v-text-field>\n' +
-        '      <v-btn color="error" small @click="deleteRow(index)">\n' +
-        '      delete</v-btn>' +
-        '      </li>\n' +
-        '    </ul>\n' +
-        '          </v-card>\n' +
-        '      <v-btn @click="addRow">\n' +
-        '      Add new medication</v-btn>' +
-        '          <v-btn\n' +
-        '            color="primary"\n' +
-        '            @click="e1 = 4"\n' +
-        '          >\n' +
-        '            Continue\n' +
-        '          </v-btn>\n' +
-        '        </v-stepper-content>\n' +
-        //This is the 4th step
-        '<v-stepper-content step="4">\n' +
-            '<v-card  :elevation= "0" min-width="500">\n' +
-                //review items go here
-                '<v-list-item>' +
-                    '<v-list-content>' +
-                        '<v-list-item-title>Heart Rate</v-list-item-title>' +
-                        '<v-list-item-subtitle>{{heartRate}}</v-list-item-subtitle>' +
-                    '</v-list-content>' +
-                '</v-list-item>' +
-                '<v-list-item>' +
-                    '<v-list-content>' +
-                        '<v-list-item-title>Systolic</v-list-item-title>' +
-                        '<v-list-item-subtitle>{{systolic}}</v-list-item-subtitle>' +
-                    '</v-list-content>' +
-                '</v-list-item>' +
-                '<v-list-item>' +
-                    '<v-list-content>' +
-                        '<v-list-item-title>Diastolic</v-list-item-title>' +
-                        '<v-list-item-subtitle>{{diastolic}}</v-list-item-subtitle>' +
-                    '</v-list-content>' +
-                '</v-list-item>' +
-                '<v-list-item>' +
-                    '<v-list-content>' +
-                        '<v-list-item-title>Gestational Age</v-list-item-title>' +
-                        '<v-list-item-subtitle v-if="pregnant">{{gestationalAge}} weeks</v-list-item-subtitle>' +
-                        '<v-list-item-subtitle v-if="!pregnant">Not pregnant</v-list-item-subtitle>' +
-                    '</v-list-content>' +
-                '</v-list-item>' +
-        '<v-spacer></v-spacer>' +
-                '<v-list-item>' +
-                    '<v-list-content dense>' +
-                        '<v-list-item-title>Symptoms</v-list-item-title>' +
-                        '<ul v-if="!noSymptoms">\n'+
-                            '<li v-for="symptom in symptoms">{{symptom}}</li>\n'+
-                            '<li v-if="enabled">{{customSymptom}}</li>' +
-                        '</ul>\n'+
-                        '<ul v-if="noSymptoms">' +
-                            '<li>No symptoms recorded</li>' +
-                        '</ul>' +
-                    '</v-list-content>' +
-                '</v-list-item>' +
-                '<v-list-item>' +
-                    '<v-list-content>' +
-                        '<v-list-item-title>Medications</v-list-item-title>' +
-                        '<ul v-if="hasMedications" className="list-group">\n'+
-                            '<li className="list-group-item" class="pb-1" v-for="medication in medications">' +
-                                '<v-list-item dense>' +
-                                    '<v-list-content dense>' +
-                                        '<v-list-item-title>{{medication.medication}}</v-list-item-title>' +
-                                        '<v-list-item-subtitle>{{medication.dosage}}</v-list-item-subtitle>' +
-                                        '<v-list-item-subtitle>{{medication.usageFrequency}}</v-list-item-subtitle>' +
-                                    '</v-list-content>' +
-                                '</v-list-item>' +
-                            '</li>' +
-                        '</ul>\n'+
-                        '<ul v-if="!hasMedications" className="list-group">' +
-                            '<li className="list-group-item" class="pb-1">No medications</li>' +
-                        '</ul>' +
-                    '</v-list-content>' +
-                '</v-list-item>' +
-                //referral stuff here
-                '<v-divider></v-divider>' +
-                '<v-list-item>' +
-                    '<v-list-item-content>' +
-                        '<v-list-item-title>Make a referral (optional)</v-list-item-title>' +
-                            '<v-layout wrap align-center id="new">\n' +
-                                '<v-flex xs12 sm6 d-flex>\n' +
-                                    '<v-select \n' +
-                                    ' v-model="selectedHealthCentre"\n' +
-                                    ' :items="healthCentreList"\n' +
-                                    ' label="Select Health Centre"\n' +
-                                    ' return-object> \n' +
-                                        '<template v-slot:selection="data">\n' +
-                                            '{{data.item.id}} - {{data.item.name}}\n' +
-                                        '</template>\n' +
-                                        '<template v-slot:item="data">\n' +
-                                            '{{data.item.id}} - {{data.item.name}}\n' +
-                                        '</template>\n' +
-                                    '</v-select>\n' +
-                                '</v-flex>\n' +
-                            '</v-layout>' +
-                        '</v-list-item-content>' +
-                    '</v-list-item>' +
-'          </v-card>\n' +
-'          <v-btn\n' +
-'            color="primary"\n' +
-'            @click="validate"\n' +
-'          >\n' +
-'            Save reading\n' +
-'          </v-btn>\n' +
-'        </v-stepper-content>\n' +
-'      </v-stepper-items>\n' +
-'    </v-stepper>' +
-        //stepper is finished, snackbars start here
-        '<v-snackbar v-model="snackbar">' +
-            'Please check your entries, patient id may not exist' +
-            `<v-btn
-                color="pink"
-                @click="snackbar = false"
-            >` +
-            'Close' +
-            '</v-btn>' +
-        '</v-snackbar>' +
-    '</div>'
+	computed: {
+    	colour: function() {
+			return new TrafficLightCalc().getColour(this.systolic, this.diastolic, this.heartRate)
+		},
+		advice: function() {
+    		return getReadingAdvice(this.colour);
+		}
+	},
+	watch: {
+    	colour: function() {
+    		this.finished = false; // reading changed
+    		this.trafficIcon = getReadingColorIcon(this.colour);
+		},
+		symptoms: function() {
+    		this.finished = false;
+		},
+		medications: function() {
+			this.finished = false;
+		},
+		patientID: function() {
+    		this.finished = false;
+		},
+		pregnant: function() {
+    		this.finished = false;
+		}
+	},
+    template:
 
+	`
+<div class="customContainer">
+	
+        <div class="customDiv">
+        <v-stepper v-model="currentStep">
+        	<v-stepper-header>
+        		<v-stepper-step :complete="currentStep > 1" step="1" editable>Vitals</v-stepper-step>
+               	<v-divider></v-divider>
+              	<v-stepper-step :complete="currentStep > 2" step="2" editable>Symptoms</v-stepper-step>
+               	<v-divider></v-divider>
+            	<v-stepper-step :complete="currentStep > 3" step="3" editable>Medications</v-stepper-step>
+            	<v-divider></v-divider>
+            	<v-stepper-step step="4" editable>Review</v-stepper-step>
+            </v-stepper-header>
+            <v-stepper-items>
+<!--        //This part is the first tab-->
+				<v-stepper-content step="1">
+					<v-card
+					<v-card  :elevation= "0" min-width="500" max-width="500">
+					<v-card-title>
+					</v-card-title>
+					<v-form ref="newReadingForm"
+							v-model="valid"
+							lazy-validation
+							class="ma-5 px-3">
+					<v-text-field v-model="patientID"
+								  :rules="patientIDRules"
+								  label="Patient ID"
+								  required>
+					</v-text-field>
+					<v-text-field v-model="systolic"
+								  :rules="systolicRules"
+								  label="Systolic" 
+								  required>
+					</v-text-field>
+					<v-text-field v-model="diastolic"
+								  :rules="diastolicRules"
+								  label="Diastolic"
+								  required>
+					</v-text-field>
+					<v-text-field v-model="heartRate"
+								  :rules="heartRateRules"
+								  label="Heart Rate"
+								  required>
+					</v-text-field>
+					<template v-if="sex != 0"> <!-- if woman >-->
+						<v-checkbox v-model="pregnant" label="Pregnant"></v-checkbox>
+					</template>
+					<template v-if= "pregnant === true">
+					<v-text-field v-model="gestationalAge"
+								  label="Pregnancy week"
+								  :rules="gestationalAgeRules">
+					</v-text-field>
+					</template>
+					</v-card>
+					<v-btn color="primary" @click="currentStep = 2">Continue</v-btn>
+					<v-btn color="error" @click="reset">reset</v-btn>
+				</v-stepper-content>
+				<!--        This part is the second tab-->
+				<v-stepper-content step="2">
+					<v-card  :elevation= "0" min-width="500" max-width="500">
+					<v-container>
+					  <v-checkbox v-model="noSymptoms" label="No Symptoms"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>
+					  <v-checkbox v-model="symptoms" label="Bleeding" :disabled="noSymptoms" value="Bleeding"></v-checkbox> 
+					  <v-checkbox v-model="symptoms" label="Feverish" :disabled="noSymptoms" value="Feverish"></v-checkbox>
+					 <v-checkbox v-model="symptoms" label="Unwell" :disabled="noSymptoms" value="Unwell"></v-checkbox>
+					 <v-checkbox v-model="enabled" :disabled="noSymptoms" label="Other:"></v-checkbox>
+					 <v-text-field :disabled="!enabled" label="Other symptoms" v-model="customSymptom"></v-text-field>
+					</v-container>
+						 </v-card>
+						 <v-btn
+						   color="primary"
+							@click="currentStep = 3"
+						  >
+							Continue
+						  </v-btn>
+				</v-stepper-content>
+	<!--        This part is the third tab-->
+				<v-stepper-content step="3">
+					<v-card  :elevation= "0" min-width="500">
+						<ul>
+							<li v-for="(input, index) in medications">
+								<v-text-field v-model="input.medication"
+											  label="Medication"
+											  required>
+								{{input.medication }}  
+								</v-text-field>
+								<v-text-field v-model="input.dosage"
+											  label="Dose"
+											  required>
+								{{input.dosage}}  
+								</v-text-field>
+								<v-text-field v-model="input.usageFrequency"
+											  label="Usage frequency"
+											  required>
+								- {{input.usageFrequency}}  
+								</v-text-field>
+								<v-btn color="error" small @click="deleteRow(index)">delete</v-btn>
+							</li>
+						</ul>
+					</v-card>
+					<v-btn @click="addRow"> Add new medication</v-btn>
+					<v-btn color="primary" @click="currentStep = 4">Continue</v-btn>
+				</v-stepper-content>
+<!--				This part is the 4th step-->
+				<v-stepper-content step="4">
+					<v-card  :elevation= "0" min-width="500">
+<!--						//review items go here-->
+						<v-list-item>
+							<v-list-content>
+								<v-list-item-title>Heart Rate</v-list-item-title>
+								<v-list-item-subtitle>{{heartRate}}</v-list-item-subtitle>
+							</v-list-content>
+						</v-list-item>
+						<v-list-item>
+							<v-list-content>
+								<v-list-item-title>Systolic</v-list-item-title>
+								<v-list-item-subtitle>{{systolic}}</v-list-item-subtitle>
+							</v-list-content>
+						</v-list-item>
+						<v-list-item>
+							<v-list-content>
+								<v-list-item-title>Diastolic</v-list-item-title>
+								<v-list-item-subtitle>{{diastolic}}</v-list-item-subtitle>
+							</v-list-content>
+						</v-list-item>
+						<v-list-item>
+							<v-list-content>
+								<v-list-item-title>Gestational Age</v-list-item-title>
+								<v-list-item-subtitle v-if="pregnant">{{gestationalAge}} weeks</v-list-item-subtitle>
+								<v-list-item-subtitle v-if="!pregnant">Not pregnant</v-list-item-subtitle>
+							</v-list-content>
+						</v-list-item>
+						<v-spacer></v-spacer>
+						<v-list-item>
+							<v-list-content dense>
+								<v-list-item-title>Symptoms</v-list-item-title>
+								<ul v-if="!noSymptoms">
+									<li v-for="symptom in symptoms">{{symptom}}</li>
+									<li v-if="enabled">{{customSymptom}}</li>
+								</ul>
+								<ul v-if="noSymptoms">
+									<li>No symptoms recorded</li>
+								</ul>
+							</v-list-content>
+						</v-list-item>
+						<v-list-item>
+							<v-list-content>
+								<v-list-item-title>Medications</v-list-item-title>
+								<ul v-if="hasMedications" className="list-group">
+									<li className="list-group-item" class="pb-1" v-for="medication in medications">
+										<v-list-item dense>
+											<v-list-content dense>
+												<v-list-item-title>{{medication.medication}}</v-list-item-title>
+												<v-list-item-subtitle>{{medication.dosage}}</v-list-item-subtitle>
+												<v-list-item-subtitle>{{medication.usageFrequency}}</v-list-item-subtitle>
+											</v-list-content>
+										</v-list-item>
+									</li>
+								</ul>
+								<ul v-if="!hasMedications" className="list-group">
+									<li className="list-group-item" class="pb-1">No medications</li>
+								</ul>
+							</v-list-content>
+						</v-list-item>
+<!--						//referral stuff here-->
+						<v-divider></v-divider>
+						<v-list-item>
+							<v-list-item-content>
+								<v-list-item-title>Make a referral (optional)</v-list-item-title>
+								<v-layout wrap align-center id="new">
+									<v-flex xs12 sm6 d-flex>
+										<v-select v-model="selectedHealthCentre"
+												  :items="healthCentreList"
+												  label="Select Health Centre"
+											 	  return-object> 
+											<template v-slot:selection="data">{{data.item.id}} - {{data.item.name}}
+											</template>
+											<template v-slot:item="data">{{data.item.id}} - {{data.item.name}}
+											</template>
+										</v-select>
+									</v-flex>
+								</v-layout>
+							</v-list-item-content>
+						</v-list-item>
+		          	</v-card>
+		        <v-btn v-if="!healthCenterSelected()" color="primary" @click="validate(false)">Save reading</v-btn>
+		        <v-btn v-if="healthCenterSelected()" @click="validate(true)" color="error">Send referral</v-btn>
+		        <v-icon v-if="finished" large color="green darken-2" >mdi-check</v-icon>
+		        <v-btn v-if="finished" color="secondary" @click="toPatient">Back to patient</v-btn>
+		        </v-stepper-content>
+		  	</v-stepper-items>
+		</v-stepper>
+		</div>
+		<div class="customDiv" v-if="finished" >
+			<v-card class="list-card" max-width="500">
+				<v-card-title>
+				<h4>Reading Saved. Instructions:</h4>
+				</v-card-title>
+				<v-list>
+					<v-list-item-content>
+					    <li>
+                            <img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
+                        </li>
+						<v-list-item-title>{{advice.analysis}}</v-list-item-title>
+						<v-list-item-title class="text-justify text-left white-space-wrap">{{advice.summary}}</v-list-item-title>
+					</v-list-item-content>
+					<v-list-item-content>
+						<v-list-item-title>Advice Details:</v-list-item-title>
+						<p class="text-justify text-left caption white-space-wrap">{{advice.details}}</p>
+					</v-list-item-content>
+					<v-list-item-content>
+						<v-list-item-title>Condition:</v-list-item-title>
+						<v-list-item-title>{{advice.condition}}</v-list-item-title>
+					</v-list-item-content>
+				</v-list>
+			</v-card>
+		</div>
+        <v-snackbar v-model="error_snackbar">
+            Error: Patient ID does not exist
+            <v-btn color="red" @click="error_snackbar = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="success_snackbar">
+            Success! Reading saved.
+            <v-btn color="green" @click="success_snackbar = false">Close</v-btn>
+        </v-snackbar>
+    </div>
+	`
 });
 
-
 function getCurrentDate() {
-    let now = new Date(); //new date object
-    let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
-    let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
-    console.log(date + ' ' + time);
-    return date + ' ' + time; //date and time string returned
+	let now = new Date(); //new date object
+	let date = now.getFullYear() + '-' + (now.getMonth() + 1) +'-' + now.getDate(); //create date string
+	let time = now.getHours() + ':' + now.getMinutes() + ":" + now.getSeconds(); //create time string
+	console.log(date + ' ' + time);
+	return date + ' ' + time; //date and time string returned
 }
+
 
 new Vue({
     el: '#app',

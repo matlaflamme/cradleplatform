@@ -1,6 +1,7 @@
 package com.cradlerest.web.service;
 
 import com.cradlerest.web.controller.exceptions.EntityNotFoundException;
+import com.cradlerest.web.model.Diagnosis;
 import com.cradlerest.web.model.Referral;
 import com.cradlerest.web.model.ReferralMessage;
 import com.cradlerest.web.model.view.ReferralView;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 
+import java.sql.Ref;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -24,9 +26,13 @@ public interface ReferralManagerService {
 	 * @param referral
 	 * @return Referral object saved
 	 */
-	Referral saveReferral(ReferralMessage referral) throws Exception;
+	Referral saveReferral(Authentication auth, ReferralMessage referral) throws Exception;
 	Referral saveReferral(Map<String, String[]> mmsMessage) throws Exception;
+	Referral saveReferral(Authentication auth, Referral referral) throws Exception;
 
+	Referral resolveReferral(Authentication auth, int referralId) throws Exception;
+
+	Diagnosis addDiagnosis(Authentication auth, int referralId, Diagnosis diagnosis) throws Exception;
 
 	List<ReferralView> findAllByHealthCentre(String healthCentreName) throws NoSuchElementException, EntityNotFoundException;
 	List<ReferralView> findAllByOrderByTimestampDesc();

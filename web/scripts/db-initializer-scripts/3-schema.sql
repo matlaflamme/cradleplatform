@@ -92,7 +92,7 @@ CREATE TABLE referral
     patient     VARCHAR(255) NOT NULL,
     timestamp   DATETIME     NOT NULL,
     closed_by   INT,
-    diagnosis   INT,
+    diagnosis   INT UNIQUE,
     closed      DATETIME,
 
     FOREIGN KEY (referred_by)
@@ -151,5 +151,5 @@ CREATE TABLE medication
 
     FOREIGN KEY (pid)
         REFERENCES patient(id)
-
+        ON DELETE CASCADE
 );

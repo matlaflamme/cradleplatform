@@ -1,6 +1,7 @@
 package com.cradlerest.web.model;
 
 import com.cradlerest.web.util.datagen.annotations.DataGenAmount;
+import com.cradlerest.web.util.datagen.annotations.DataGenRelativeAmount;
 import com.cradlerest.web.util.datagen.annotations.ForeignKey;
 import com.cradlerest.web.util.datagen.annotations.Generator;
 import com.cradlerest.web.util.datagen.impl.*;
@@ -14,7 +15,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "diagnosis")
-@DataGenAmount(3)
+@DataGenAmount(5) // can't have this depend on referral as it creates a cycle
 public class Diagnosis {
 
 	@Id

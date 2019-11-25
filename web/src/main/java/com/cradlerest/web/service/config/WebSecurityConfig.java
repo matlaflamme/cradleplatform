@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 				// Open endpoints
 				.antMatchers("/api/user/whoami").authenticated()
+				.antMatchers("/api/twilio/**").hasRole("ADMIN")
 				.antMatchers("/api/hc/all").authenticated()
 				.regexMatchers("/api/user/(?:check|update)-password").authenticated()
 
@@ -86,17 +87,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/hc/**").hasRole("ADMIN")
 				.antMatchers("/api/internal/**").hasRole("ADMIN")
 				.antMatchers("/api/stats/**").hasRole("ADMIN")
-				.antMatchers("/api/twilio/**").hasRole("ADMIN")
 				.antMatchers("/api/user/**").hasRole("ADMIN")
 
 				// VHT/Health Worker endpoints
 				.antMatchers("/api/patient/**").hasAnyRole("HEALTHWORKER", "VHT")
 				.antMatchers("/api/reading/**").hasAnyRole("HEALTHWORKER", "VHT")
-				.regexMatchers("/api/referral(?:/.+)?/all").hasAnyRole("HEALTHWORKER", "VHT")
 
 				// VHT only endpoints
+				.antMatchers("/api/referral/send/sms").permitAll()
 				.antMatchers("/api/referral/send/**").hasRole("VHT")
-
+				.antMatchers("/api/referral/new").hasRole("VHT")
+				.antMatchers("/api/referral/**").hasAnyRole("HEALTHWORKER", "VHT")
+				
 				// Deny any other request
 				.antMatchers("/api/**").denyAll()
 				.and()

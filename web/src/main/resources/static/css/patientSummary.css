@@ -9,15 +9,6 @@ h3 {
 
 }
 
-.dot {
-    height: 25px;
-    width: 25px;
-    background-color: #07b839;
-    border-radius: 50%;
-    display: inline-block;
-    margin-top: 10px;
-}
-
 #header {
     position: relative;
 }
@@ -27,3 +18,53 @@ h3 {
     bottom: 12px;
     left: 15px;
 }
+#app {
+    overflow: scroll;
+}
+
+/*ul li::before {*/
+/*    content: "\2022";*/
+/*    color: #0c9090; !* Green *!*/
+/*    font-weight: bold;*/
+/*    display: inline-block;*/
+/*    width: 1em;*/
+/*    margin-left: -1em;*/
+/*}*/
+
+
+/*ul {*/
+/*    list-style: none;*/
+/*    counter-reset: my-awesome-counter;*/
+/*}*/
+/*li {*/
+/*    counter-increment: my-awesome-counter;*/
+/*    margin: 0.25rem;*/
+/*}*/
+
+ul {
+    list-style: none;
+}
+
+li {
+    margin: 0.25rem;
+}
+li::before {
+    content: "";
+    background: #0b6c6d;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+ul ul li::before {
+    background: #0cabab;
+}
+ul ul ul li::before {
+    background: #0dcdcd;
+}
+.removebtn {
+    position: absolute;
+    right: 0px;
+}
+
