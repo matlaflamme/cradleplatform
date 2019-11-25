@@ -58,7 +58,7 @@ public class Patient {
 	private String drugHistory;
 
 	@Column(name = "last_updated", nullable = false)
-	@DataGenDateRange(min = "2018-01-01", max = "2019-12-31")
+	@DataGenDateRange(min = "2019-10-01", max = "2019-11-31")
 	private Date lastUpdated; // USE FORMAT: YYYY-MM-DD HH:MM:SS
 
 	@Column(name = "notes")
@@ -66,8 +66,8 @@ public class Patient {
 	@DataGenNullChance(0.7)
 	private String generalNotes;
 
-	@Column(name = "created_by")
-	@Omit
+	@Column(name = "created_by", nullable = false)
+	@DataGenRange(min = 3, max = 4) // always generate as the id for the `vht` user
 	private Integer createdBy;
 
 	public Patient() {

@@ -71,16 +71,16 @@ function getReadingColorIcon(digit) {
             light = 'green';
             break;
         case 1:
-            light = 'yellow_down';
-            break;
-        case 2:
             light = 'yellow_up';
             break;
+        case 2:
+            light = 'yellow_down';
+            break;
         case 3:
-            light = 'red_down';
+            light = 'red_up';
             break;
         case 4:
-            light = 'red_up';
+            light = 'red_down';
             break;
     }
     return "/img/" + light + ".png";
