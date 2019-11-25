@@ -35,7 +35,7 @@
                 <sidebar_item title="Health Centres" icon="add_circle" clickable="healthcentres"></sidebar_item>
             </div>
 
-            <v-subheader class="mt-3 grey--text text--darken-1">Currently signed in as: {{current_user}}</v-subheader>
+            <v-subheader class="mt-3 text--darken-1">Currently signed in as: [[${#httpServletRequest.remoteUser}]]</v-subheader>
             <sidebar_item title="Account Settings" icon="settings" clickable="accountSetting"></sidebar_item>
             <div sec:authorize="hasRole('ROLE_VHT')">
                 <sidebar_item title="Help" icon="help" clickable="help"></sidebar_item>
