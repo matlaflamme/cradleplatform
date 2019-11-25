@@ -18,6 +18,9 @@ h3 {
     bottom: 12px;
     left: 15px;
 }
+#app {
+    overflow: scroll;
+}
 
 /*ul li::before {*/
 /*    content: "\2022";*/
@@ -64,3 +67,4 @@ ul ul ul li::before {
     position: absolute;
     right: 0px;
 }
+

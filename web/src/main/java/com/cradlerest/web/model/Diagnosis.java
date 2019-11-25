@@ -15,7 +15,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "diagnosis")
-@DataGenRelativeAmount(base = Referral.class, multiplier = 0.9)
+@DataGenAmount(5) // can't have this depend on referral as it creates a cycle
 public class Diagnosis {
 
 	@Id
