@@ -9,6 +9,7 @@ Vue.component('new_reading',{
 		finished: false, // reading is validated and saved to server
 		retestStep: 0, // 0..2
 		retestDialog: false,
+		waitTime: null, // For first yellow reading - retest logic
         enabled: false,
         noSymptoms: true,
         readingId: 0,
@@ -147,8 +148,8 @@ Vue.component('new_reading',{
 								this.clearLocalStorage();
 								return;
 							} else { // 2nd reading green or red
-								this.validate(sendRef,false, false); // save but reading not done
 								localStorage.setItem(this.patientID+1, JSON.stringify(this.buildCurrentPatientObject()));
+								this.validate(sendRef,false, false); // save but reading not done
 								return;
 							}
 						}
@@ -173,15 +174,14 @@ Vue.component('new_reading',{
 					this.validate(sendRef, true, false);
 					return;
 				} else {
-					console.log("YELLOW");
 					if (this.colour === 1 || this.colour === 2) { // YELLOW
-						this.validate(sendRef,false, false);
+						console.log("YELLOW");
 						localStorage.setItem(this.patientID, JSON.stringify(this.buildCurrentPatientObject(true))); // wait time 15 mins
 					} else { // RED
 						console.log("RED");
-						this.validate(sendRef, false, false);
 						localStorage.setItem(this.patientID, JSON.stringify(this.buildCurrentPatientObject()));
 					}
+					this.validate(sendRef,false, false);
 				}
 
 			}
@@ -207,8 +207,8 @@ Vue.component('new_reading',{
         	this.retestDialog = false;
         	localStorage.clear();
 		},
-		printLocalStorage() {
-        	var values = [], keys = Object.keys(localStorage), i = keys.length;
+		printLocalStorage() { // displays all objects in local storage for testing purposes
+        	let values = [], keys = Object.keys(localStorage), i = keys.length;
         	while (i--) {
         		values.push(localStorage.getItem(keys[i]))
 			}
@@ -310,13 +310,22 @@ Vue.component('new_reading',{
 		waitTime: function() {
     		let patientObj = JSON.parse(localStorage.getItem(this.patientID));
     		if (patientObj === null) {
-    			console.log("NO DATE");
+    			console.log("Nothing stored for this patient");
     			return null;
 			}
-			console.log("getting waittime: " + patientObj.date);
-			console.log("typeof: " + typeof(patientObj));
     		console.log("DATE: " + patientObj.date);
     		return patientObj.date;
+		},
+		trafficIconRetestDialog: function() {
+    		if (localStorage.getItem(this.patientID+1) !== null) {
+				let patientObj = JSON.parse(localStorage.getItem(this.patientID+1));
+				return getReadingColorIcon(patientObj.colour)
+			} else if (localStorage.getItem(this.patientID) !== null) {
+    			let patientObj = JSON.parse(localStorage.getItem(this.patientID));
+				return getReadingColorIcon(patientObj.colour)
+			} else {
+    			return null;
+			}
 		}
 	},
 	watch: {
@@ -331,13 +340,23 @@ Vue.component('new_reading',{
 			this.finished = false;
 		},
 		patientID: function() {
+    		if (localStorage.getItem(this.patientID) !== null) {
+    			this.retestDialog = true;
+			}
     		this.finished = false;
+			this.waitTime = JSON.parse(localStorage.getItem(this.patientID)).date
 		},
 		pregnant: function() {
     		this.finished = false;
 		},
 		noSymptoms: function() {
     		this.finished = false;
+		},
+		retestDialog: function() {
+    		if (this.retestDialog) {
+    			this.finished = false;
+			}
+    		this.waitTime = JSON.parse(localStorage.getItem(this.patientID)).date
 		}
 	},
     template:
@@ -585,7 +604,7 @@ Vue.component('new_reading',{
 					    <li>
                             <img id="light" ref="light" v-if="trafficIconCurrent" :src=trafficIconCurrent height="35" width="45" style="margin-bottom: 7px">
                         </li>
-						<v-list-item-title>{{advice.analysis}}</v-list-item-title>
+						<v-list-item-title><b>{{advice.analysis}}</b></v-list-item-title>
 						<v-list-item-title class="text-justify text-left white-space-wrap">{{advice.summary}}</v-list-item-title>
 					</v-list-item-content>
 					<v-list-item-content>
@@ -606,14 +625,14 @@ Vue.component('new_reading',{
 				</v-card-title>
 				<v-list>
 					<v-list-item-content>
-						<v-list-item-title>Reading results:</v-list-item-title>
-						<img id="light" ref="light" v-if="trafficIconCurrent" :src=trafficIconCurrent height="45" width="55" style="margin 7px"/>
+						<v-list-item-title>Latest reading result for patient: <b>{{patientID}}</b></v-list-item-title>
+						<v-img height="50px" width="60px" padding="5px" align="left" v-if="trafficIconRetestDialog" :src=trafficIconRetestDialog contain></v-img>
 					</v-list-item-content>
 					<v-list-item-content v-if="waitTime">
-						<v-list-item-title>Please perform a retest for patient id: {{patientID}} after 15 minutes: {{waitTime}}</v-list-item-title>
+						<v-list-item-title>Please perform a retest at: <b>{{waitTime}}</b></v-list-item-title>
 					</v-list-item-content>
 					<v-list-item-content v-else>
-						<v-list-item-title>Please perform a retest for patient id: {{patientID}} immediately</v-list-item-title>
+						<v-list-item-title>Please perform a retest <b>immediately</b></v-list-item-title>
 					</v-list-item-content>
 					
 				</v-list>
