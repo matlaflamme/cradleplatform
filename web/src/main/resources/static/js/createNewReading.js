@@ -376,7 +376,6 @@ Vue.component('new_reading',{
 					<li>Pregnant: {{pregnant}}</li>	
 					<li>Gestational age: {{gestationalAge}}</li>	
 					<li>Colour int: {{colour}}</li>
-					<li>
 					<img id="light" ref="light" v-if="trafficIconCurrent" :src=trafficIconCurrent height="35" width="45" style="margin-bottom: 7px">
 					</li>
 				</ul>
@@ -648,7 +647,7 @@ Vue.component('new_reading',{
         </v-snackbar>
         <v-snackbar v-model="wait_snackbar">
             Wait until {{waitTime}} to create reading for patient: {{patientID}}
-            <v-btn color="green" @click="validate(false, true, true)">Save anyway</v-btn>
+            <v-btn color="green" @click="wait_snackbar = false; validate(false, true, true)">Save anyway</v-btn>
         </v-snackbar>
     </div>
 	`
