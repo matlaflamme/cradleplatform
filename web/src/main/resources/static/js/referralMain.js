@@ -6,7 +6,6 @@ let test = new Vue({
     data () {
         return {
             headers: [ //Value is the key for the items (in html, it'll use this key to know what column data will go in)
-                { text: 'Referral ID', align: 'left', value: 'id'},
                 { text: 'Patient ID', value: 'patientId' },
                 { text: 'VHT ID', value: 'referrerUserName' },
                 { text: 'Health Centre', value: 'healthCentre' },
@@ -18,11 +17,13 @@ let test = new Vue({
             rows: [], //empty to start
             editedIndex: -1,
             dialog: false,
+            resolveReferral: false,
             editedItem: {
                 closed: null,
                 healthCentre: '',
                 healthCentreNumber: '',
                 id: 0,
+                diagnosisString: '',
                 patientId: '',
                 readingId: 0,
                 referrerUserName: '',
@@ -33,6 +34,7 @@ let test = new Vue({
                 healthCentre: '',
                 healthCentreNumber: '',
                 id: 0,
+                diagnosisString: '',
                 patientId: '',
                 readingId: 0,
                 referrerUserName: '',
@@ -71,20 +73,11 @@ let test = new Vue({
             // TODO: accept referral, pass in health worker Id, time
             // can't retrieve id at the moment
         },
-        resolveReferral: function(referralId) {
-            console.log("Called close()")
-        },
         editItem (item) {
             this.editedIndex = this.rows.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true
         },
-
-        deleteItem (item) {
-            const index = this.rows.indexOf(item);
-            confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1)
-        },
-
         close () {
             this.dialog = false;
             setTimeout(() => {
@@ -94,11 +87,17 @@ let test = new Vue({
         },
 
         save () {
-            if (this.editedIndex > -1) {
-                Object.assign(this.rows[this.editedIndex], this.editedItem)
-            } else {
-                this.rows.push(this.editedItem)
-            }
+            axios.post('/api/referral/' + this.editedItem.readingId + '/diagnosis', {
+                patientId: this.editedItem.patientId,
+                description: this.editedItem.diagnosisString
+            }).then(response => {
+                console.log(response);
+                if (this.resolveReferral) {
+                    axios.post('/api/referral/' + this.editedItem.readingId +'/resolve').then(response => {
+                        console.log(response);
+                    })
+                }
+            });
             this.close()
         },
     },

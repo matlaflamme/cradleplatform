@@ -36,9 +36,6 @@
 										></v-divider>
 										<v-spacer></v-spacer>
 										<v-dialog v-model="dialog" max-width="500px">
-											<template v-slot:activator="{ on }">
-												<v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
-											</template>
 											<v-card>
 												<v-card-title>
 												<span class="headline">Add diagnosis</span>
@@ -48,7 +45,7 @@
 													<v-container>
 														<v-row>
 															<v-col cols="12" sm="6" md="4">
-																<v-text-field v-model="editedItem.patientId" label="Dessert name"></v-text-field>
+																<v-text-field v-model="editedItem.diagnosisString" label="Diagnosis"></v-text-field>
 															</v-col>
 															<v-col cols="12" sm="6" md="4">
 																<v-text-field v-model="editedItem.id" label="Calories"></v-text-field>
@@ -66,7 +63,6 @@
 									</v-toolbar>
 								</template>
 									<template slot="rows" slot-scope="props">
-										<td>{{props.rows.id}}</td>
 										<td>{{props.rows.patientId}}</td>
 										<td>{{props.rows.referrerUserName}}</td>
 										<td>{{props.rows.healthCentre}}</td>
@@ -75,7 +71,8 @@
 										<button v-on:click="viewPatientData(item.patientId)" style="min-width: 90px" class="custom-btn-margin btn btn-outline-info btn-sm">Patient Info</button>
 									</template>
 									<template v-slot:item.resolve="{ item }">
-										<v-btn outlined color="error" small @click="editItem(item)">Add diagnosis</v-btn>
+										<v-btn v-if="!item.diagnosis" outlined color="error" small @click="editItem(item)">Add diagnosis</v-btn>
+										<v-btn v-if="item.diagnosis" outlined color="error" small>View diagnosis</v-btn>
 									</template>
 							</v-data-table>
 
