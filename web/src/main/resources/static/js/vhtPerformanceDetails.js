@@ -54,7 +54,7 @@ Vue.component('vht_details', {
             '</v-row>' +
         '</div>',
     mounted() {
-        axios.get('/api/stats/overview/' + this.id).then((response) => {
+        axios.get('/api/stats/overview/' + this.username).then((response) => {
             this.stats = response.data;
             this.getValuesFromDB();
             console.log(response.data);

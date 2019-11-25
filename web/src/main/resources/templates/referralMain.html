@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform"
-	  xmlns:v-on="http://www.w3.org/1999/xhtml">
+	  xmlns:v-on="http://www.w3.org/1999/xhtml"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<div th:replace="fragments/head :: headerFragment"></div>
 	<title id="pageTitle">Referrals</title>
@@ -25,23 +26,58 @@
 									:headers="headers"
 									:items="rows"
 									class="elevation-1">
+								<template v-slot:top>
+									<v-toolbar flat color="white">
+										<v-toolbar-title>Referrals</v-toolbar-title>
+										<v-divider
+												class="mx-4"
+												inset
+												vertical
+										></v-divider>
+										<v-spacer></v-spacer>
+										<v-dialog v-model="dialog" max-width="500px">
+											<v-card>
+												<v-card-title>
+													<span v-if="!currItemResolved" class="headline">Add diagnosis</span>
+													<span v-if="currItemResolved" class="headline">View diagnosis</span>
+												</v-card-title>
+
+												<v-card-text>
+													<v-container>
+														<v-row>
+															<v-col cols="12">
+																<v-text-field v-if="!currItemResolved" v-model="editedItem.diagnosisString" label="Diagnosis"></v-text-field>
+																<p v-if="currItemResolved" class="title">
+																	Diagnosis: {{editedItem.diagnosis.description}}
+																</p>
+															</v-col>
+														</v-row>
+													</v-container>
+												</v-card-text>
+												<v-card-actions>
+													<v-spacer></v-spacer>
+													<v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+													<v-btn v-if="!currItemResolved" color="blue darken-1" text @click="save">Save</v-btn>
+												</v-card-actions>
+											</v-card>
+										</v-dialog>
+									</v-toolbar>
+								</template>
 									<template slot="rows" slot-scope="props">
-									<td>{{props.rows.id}}</td>
-									<td>{{props.rows.patientId}}</td>
-									<td>{{props.rows.vhtId}}</td>
-									<td>{{props.rows.healthCentre}}</td>
-									<td>{{props.rows.healthCentreNumber}}</td>
+										<td>{{props.rows.patientId}}</td>
+										<td>{{props.rows.referrerUserName}}</td>
+										<td>{{props.rows.healthCentre}}</td>
 									</template>
-									<template v-slot:item.view="{ item }">
-										<button v-on:click="viewPatientData(item.patientId)" class="btn btn-outline-info">View Patient Data</button>
+									<template v-slot:item.actions="{ item }">
+										<button v-on:click="viewPatientData(item.patientId)" style="min-width: 90px" class="custom-btn-margin btn btn-outline-info btn-sm">Patient Info</button>
 									</template>
-									<template v-slot:item.accept="{ item }">
-										<button v-on:click="accept()" class="btn btn-outline-info">Accept</button>
+									<template v-slot:item.resolve="{ item }">
+										<v-btn v-if="!item.diagnosis" outlined color="error" small @click="editItem(item)">Add diagnosis</v-btn>
+										<v-btn v-if="item.diagnosis" outlined color="secondary" small @click="viewItem(item)">View diagnosis</v-btn>
 									</template>
-									<template slot="rows" slot-scope="props">
-										<td>{{props.rows.timestamp}}</td>
-										<td>{{props.rows.accepter}}</td>
-										<td>{{props.rows.closed}}</td>
+									<template v-slot:item.status="{ item }">
+										<v-icon v-if="item.diagnosis">check_circle_outline</v-icon>
+										<v-icon v-if="!item.diagnosis">schedule</v-icon>
 									</template>
 							</v-data-table>
 
