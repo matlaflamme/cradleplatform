@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 				// Open endpoints
 				.antMatchers("/api/user/whoami").authenticated()
+				.antMatchers("/api/twilio/**").hasRole("ADMIN")
 				.antMatchers("/api/hc/all").authenticated()
 				.regexMatchers("/api/user/(?:check|update)-password").authenticated()
 
@@ -86,7 +87,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/hc/**").hasRole("ADMIN")
 				.antMatchers("/api/internal/**").hasRole("ADMIN")
 				.antMatchers("/api/stats/**").hasRole("ADMIN")
-				.antMatchers("/api/twilio/**").hasRole("ADMIN")
 				.antMatchers("/api/user/**").hasRole("ADMIN")
 
 				// VHT/Health Worker endpoints

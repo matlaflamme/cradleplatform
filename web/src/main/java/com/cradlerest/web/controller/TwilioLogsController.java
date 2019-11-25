@@ -25,18 +25,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/twilio")
 public class TwilioLogsController {
-	@Value("$ {twilio.account_sid}")
+	@Value("${twilio.account_sid}")
 	private String account_sid;
 
-	@Value("$ {twilio.auth_token}")
+	@Value("${twilio.auth_token}")
 	private String auth_token;
 
 	/**
-	 * Fetches SMS logs from Twilio account (security details above)
+	 * Fetches Array of all SMS logs from Twilio account (Twilio security details above)
 	 *
 	 * For testing purposes as having the auth_token available is not secure.
 	 *
-	 * @return
+	 * @return Array containing JSON formatted objects of ALL SMS Logs
 	 */
 	@GetMapping("/logs")
 	public @ResponseBody List<Message> getLogs() {
@@ -53,7 +53,13 @@ public class TwilioLogsController {
 		return messagesList;
 	}
 
-	// Alerts are errors
+	/**
+	 * Retrieves Array of all alerts from our Twilio account
+	 * Alerts == errors
+	 *
+	 *
+	 * @return Array containing JSON formatted objects of ALL alerts
+	 */
 	// TODO: Currently outputs 2008 API format instead of 2010 API (latest). Not sure why...
 	@GetMapping("/alerts")
 	public @ResponseBody List<Alert> getAlerts() {
