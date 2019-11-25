@@ -1,6 +1,6 @@
 
 Vue.prototype.$http = axios;
-import {TrafficLightCalc} from './TrafficLightCalc.js'
+import {TrafficLightCalc} from './trafficLightCalc.js'
 import {getReadingColorIcon} from './GetReadingColorIcon.js'
 import {getReadingAdvice} from './GetReadingAdvice.js'
 Vue.component('new_reading',{
