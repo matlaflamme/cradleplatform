@@ -9,6 +9,7 @@ Vue.component('new_reading',{
 		finished: false, // reading is validated and saved to server
         enabled: false,
         noSymptoms: true,
+        readingId: 0,
         selectedHealthCentre: null,
         healthCentreList: ['Empty'],
         customSymptom: "",
@@ -61,7 +62,7 @@ Vue.component('new_reading',{
         ]
     }),
     methods: {
-        submit: function() {
+        submit: function(sendRef) {
             console.log(this.colour);
             //do input validation in a different function
             let NUMBER_OF_DAYS_IN_WEEK = 7;
@@ -82,7 +83,7 @@ Vue.component('new_reading',{
             	this.success_snackbar = true;
             	let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
 				let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-				if (this.medications !== null) {
+				if (this.medications !== null && this.medications.length > 0) {
 					axios.post('/api/patient/'+ id + '/addMedications', this.medications).then(response => {
 						console.log(response)
 					}).catch(error => {
@@ -90,17 +91,21 @@ Vue.component('new_reading',{
 					});
 				}
 					console.log(this.medications);
+				this.readingId = res.data.id;
+				if(sendRef) {
+                    this.sendReferral()
+                }
                 }).catch(error => {
                 	console.log(error)
                 	this.error_snackbar = true;
 				});
         },
-        validate() {
+        validate(sendRef) {
             if (this.$refs.newReadingForm.validate(this)) {
                 if (this.symptoms.includes("No Symptoms")){
                     this.symptoms = []; //If no symptom is selected we have to return an empty list
                 }
-                this.submit();
+                this.submit(sendRef);
             }
         },
         reset () {
@@ -125,7 +130,9 @@ Vue.component('new_reading',{
         getAllHealthCentreOptions() {
             //waiting for merge of updated permissions for this api
             axios.get('/api/hc/all').then(response => {
+                console.log(response.data)
                 this.healthCentreList = response.data;
+                this.healthCentreList.unshift({id: "0", name: "No Health Centre"});
             }).catch(error => {
                 console.error(error);
             });
@@ -138,6 +145,39 @@ Vue.component('new_reading',{
         },
         toPatient() {
             window.location.assign('/patientSummary?id=' + this.patientID)
+        },
+        sendReferral() {
+            console.log("send that referral");
+            console.log(this.getVHTName());
+            console.log(this.getPatientName());
+            console.log(this.patientID);
+                axios.post('/api/referral/new', {
+                patientId: this.patientID,
+                readingId: this.readingId,
+                healthCentreId: this.selectedHealthCentre.id
+
+            }).then(response => {
+                console.log(response)
+                })
+
+        },
+        getVHTName() {
+            axios.get('/api/user/whoami').then(response => {
+                console.log("Username: " + response);
+                return response.data
+            })
+        },
+        getPatientName() {
+            axios.get('/api/patient/' + this.patientID + '/info').then(response => {
+                console.log(response.data);
+                return response.data.name;
+            })
+        },
+        healthCenterSelected() {
+            if (this.selectedHealthCentre === null) {
+                return false;
+            }
+            else return this.selectedHealthCentre.name !== "No Health Centre";
         }
     },
     mounted() {
@@ -371,8 +411,9 @@ Vue.component('new_reading',{
 							</v-list-item-content>
 						</v-list-item>
 		          	</v-card>
-		        <v-btn color="primary" @click="validate">Save reading</v-btn>
-		        <v-icon v-if="finished"large color="green darken-2" >mdi-check</v-icon>
+		        <v-btn v-if="!healthCenterSelected()" color="primary" @click="validate(false)">Save reading</v-btn>
+		        <v-btn v-if="healthCenterSelected()" @click="validate(true)" color="error">Send referral</v-btn>
+		        <v-icon v-if="finished" large color="green darken-2" >mdi-check</v-icon>
 		        <v-btn v-if="finished" color="secondary" @click="toPatient">Back to patient</v-btn>
 		        </v-stepper-content>
 		  	</v-stepper-items>
