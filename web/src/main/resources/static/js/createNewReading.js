@@ -596,7 +596,7 @@ Vue.component('new_reading',{
 		<div class="customDiv" v-if="finished" >
 			<v-card class="list-card" max-width="500">
 				<v-card-title>
-				<h4>Reading Saved. Instructions:</h4>
+				<h4>Reading advice:</h4>
 				</v-card-title>
 				<v-list>
 					<v-list-item-content>
