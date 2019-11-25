@@ -48,18 +48,21 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	private ReferralRepository referralRepository; // Saving referrals
 	private HealthCentreRepository healthCentreRepository;
 	private ReadingManager readingManager;
+	private PatientRepository patientRepository;
 	private PatientManagerService patientManagerService;
 	private UserRepository userRepository;
 	private DiagnosisRepository diagnosisRepository;
 
 	public ReferralManagerServiceImpl(ReferralRepository referralRepository,
 									  HealthCentreRepository healthCentreRepository,
+									  PatientRepository patientRepository,
 									  ReadingManager readingManager,
 									  PatientManagerService patientManagerService,
 									  UserRepository userRepository,
 									  DiagnosisRepository diagnosisRepository) {
 		this.referralRepository = referralRepository;
 		this.healthCentreRepository = healthCentreRepository;
+		this.patientRepository = patientRepository;
 		this.readingManager = readingManager;
 		this.patientManagerService = patientManagerService;
 		this.userRepository = userRepository;
@@ -126,7 +129,15 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 		}
 		var hc = optHc.get();
 
-		return ReferralView.fromReferral(r, hc.getName(), hc.getPhoneNumber(), r.getPatientId());
+		Diagnosis d = null;
+		if ( r.getDiagnosisId() != null) {
+			var optDiagnosis = diagnosisRepository.findById(r.getDiagnosisId());
+			if (optDiagnosis.isPresent()) {
+				d = optDiagnosis.get();
+			}
+		}
+
+		return ReferralView.fromReferral(r, hc, d);
 	}
 
 
@@ -160,6 +171,8 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 			throw new EntityNotFoundException("User is invalid");
 		}
 
+		var details = userDetails.get();
+
 		// Get Health Centre
 		Optional<HealthCentre> healthCentre = healthCentreRepository.findByPhoneNumber(
 				referralMessage.getHealthCentrePhoneNumber());
@@ -169,12 +182,19 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 
 		// Create or update patient information
 		Patient patient = referralMessage.getPatient();
-		patient.setId(referralMessage.getPatientId());
-		patient = patientManagerService.savePatient(patient);
-		
+		Optional<Patient> patientOptional = patientRepository.findById(referralMessage.getPatientId());
+		if (patientOptional.isEmpty()){
+			patient.setId(referralMessage.getPatientId());
+			patient.setCreatedBy(details.getId());
+			patient = patientManagerService.savePatientWithUser(details, patient);
+		}
+		else {
+			patient = patientOptional.get();
+		}
+
 		// Create Reading
 		ReadingView readingView = referralMessage.getReadingView();
-		readingView.setCreatedBy(userDetails.get().getId());
+		readingView.setCreatedBy(details.getId());
 		readingView.setPatientId(referralMessage.getPatientId());
 		Reading reading = readingManager.saveReadingView(null, readingView);
 
@@ -213,7 +233,7 @@ public class ReferralManagerServiceImpl implements ReferralManagerService {
 	 * Corresponding reading and patient is saved in their own tables
 	 */
 	@Override
-	public Referral saveReferral(@Nullable ReferralMessage referralMessage) throws Exception {
+	public Referral saveReferral(Authentication auth, @Nullable ReferralMessage referralMessage) throws Exception {
 		// Create Referral object
 		Referral referral = getReferralFromMessage(referralMessage);
 		return referralRepository.save(referral);

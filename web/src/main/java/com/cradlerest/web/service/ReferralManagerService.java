@@ -26,7 +26,7 @@ public interface ReferralManagerService {
 	 * @param referral
 	 * @return Referral object saved
 	 */
-	Referral saveReferral(ReferralMessage referral) throws Exception;
+	Referral saveReferral(Authentication auth, ReferralMessage referral) throws Exception;
 	Referral saveReferral(Map<String, String[]> mmsMessage) throws Exception;
 	Referral saveReferral(Authentication auth, Referral referral) throws Exception;
 

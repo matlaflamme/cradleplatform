@@ -14,6 +14,7 @@ import com.github.maumay.jflow.vec.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +46,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	/**
 	 * Returns an entire patient profile by combining a patient entity with all
 	 * of the readings associated with it.
-	 *
+	 * <p>
 	 * Return type is a local class which is serializable to a JSON object
 	 * which contains all of the fields of {@code Patient} along with a
 	 * {@code readings} field: which contain an array of {@code Reading} objects.
@@ -53,7 +54,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * @param id The identifier for the desired user.
 	 * @return An aggregate object containing the full profile for the user.
 	 * @throws EntityNotFoundException If no such user with the given {@param id}
-	 * 	exists in the database.
+	 *                                 exists in the database.
 	 */
 	@Override
 	public Object getFullPatientProfile(@NotNull String id) throws EntityNotFoundException {
@@ -76,6 +77,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 	/**
 	 * Returns the {@code Patient} object with a given {@param id}.
+	 *
 	 * @param id Unique identifier for the requested patient.
 	 * @return The patient with {@param id}.
 	 * @throws EntityNotFoundException If no such patient exists or an error occurred.
@@ -92,6 +94,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 	/**
 	 * Returns the list of all patients in the database.
+	 *
 	 * @return All patients.
 	 */
 	@Override
@@ -110,6 +113,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * Returns the list of all patients in the the database paired with their
 	 * latest reading. If a patient has no readings, then {@code null} is
 	 * returned in place of one.
+	 *
 	 * @return A list of patient/reading pairs.
 	 */
 	@Override
@@ -133,9 +137,10 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	/**
 	 * Returns the list of readings associated with the patient with a given
 	 * {@param id}.
+	 *
 	 * @param id Unique identifier for a patient.
 	 * @return A list of readings, or, in the case of no such patient with the
-	 * 	requested id, an empty list.
+	 * requested id, an empty list.
 	 */
 	@Override
 	public List<Reading> getReadingsForPatientWithId(@NotNull String id) {
@@ -145,6 +150,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	/**
 	 * Returns all of the patients which have been referred to a specific
 	 * health center.
+	 *
 	 * @param healthCenterId The id of the health center to query patients for.
 	 * @return A list of patients.
 	 */
@@ -158,6 +164,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	/**
 	 * Returns all of the patients who have a reading created by a specific
 	 * user.
+	 *
 	 * @param userId The id of the user to get patients for.
 	 * @return A list of patients.
 	 */
@@ -177,6 +184,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 	/**
 	 * Takes a patient and pairs it with its latest reading.
+	 *
 	 * @param patient The patient to pair with.
 	 * @return The patient along with its latest reading.
 	 */
@@ -192,18 +200,25 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 	 * will be overwritten with the contents of {@param patient}. If no such
 	 * patient already exists, then a new one is created.
 	 *
-	 * @implNote The returned patient is not guarantied to be the same object
-	 * 	as {@param patient}.
-	 *
 	 * @param patient The patient to persist.
 	 * @return The saved patient.
 	 * @throws BadRequestException If an error occurred.
+	 * @implNote The returned patient is not guarantied to be the same object
+	 * as {@param patient}.
 	 */
 	@Override
 	public Patient savePatient(@Nullable Authentication auth, @Nullable Patient patient) throws BadRequestException {
 		if (patient == null) {
 			throw new BadRequestException("request body is null");
 		}
+		assert auth != null;
+		assert auth.getPrincipal() instanceof UserDetailsImpl;
+		var details = (UserDetailsImpl) auth.getPrincipal();
+		return savePatientWithUser(details, patient);
+	}
+
+	@Override
+	public Patient savePatientWithUser(User user, @Nullable Patient patient) throws BadRequestException {
 
 		// If patient doesn't have a last updated field, set it to the current time.
 		if (patient.getLastUpdated() == null) {
@@ -212,10 +227,8 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 
 		Optional<Patient> checkPatient = patientRepository.findById(patient.getId());
 
-		if (checkPatient.isEmpty() && auth != null) {
-			assert auth.getPrincipal() instanceof UserDetailsImpl;
-			var details = (UserDetailsImpl) auth.getPrincipal();
-			patient.setCreatedBy(details.getId());
+		if (checkPatient.isEmpty()) {
+			patient.setCreatedBy(user.getId());
 		}
 
 		if (checkPatient.isPresent()) {
@@ -223,6 +236,8 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 			// If current patient is more recently updated than request patient, don't update current patient
 			if (existingPatient.getLastUpdated().compareTo(patient.getLastUpdated()) > 0) {
 				return existingPatient;
+			} else {
+				patient.setCreatedBy(user.getId());
 			}
 		}
 		validatePatient(patient);
@@ -263,6 +278,7 @@ public class PatientManagerServiceImpl implements PatientManagerService {
 		assertNotNull(patient.getBirthYear(), "birthYear");
 		assertNotNull(patient.getSex(), "sex");
 		assertNotNull(patient.getLastUpdated(), "lastUpdated");
+		assertNotNull(patient.getCreatedBy(), "createdBy");
 	}
 
 	private void validateReading(@NotNull Reading reading) throws BadRequestException {

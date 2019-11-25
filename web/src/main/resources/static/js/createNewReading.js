@@ -11,6 +11,7 @@ Vue.component('new_reading',{
 		retestDialog: false,
         enabled: false,
         noSymptoms: true,
+        readingId: 0,
         selectedHealthCentre: null,
         healthCentreList: ['Empty'],
         customSymptom: "",
@@ -65,7 +66,7 @@ Vue.component('new_reading',{
         ]
     }),
     methods: {
-        submit: function(readingFinished) {
+        submit: function(sendRef, readingFinished) {
             console.log(this.colour);
             //do input validation in a different function
             let NUMBER_OF_DAYS_IN_WEEK = 7;
@@ -80,7 +81,6 @@ Vue.component('new_reading',{
 				timestamp: getCurrentDate(),
 				symptoms: this.symptoms,
 				otherSymptoms: this.checkCustomSymptoms()
-				// medications: this.medications //Not implemented in the server yet
             }).then(res => {
             	console.log(res);
             	if (readingFinished) {
@@ -89,7 +89,7 @@ Vue.component('new_reading',{
             	this.success_snackbar = true;
             	let urlQuery = new URLSearchParams(location.search); //retrieves everything after the '?' in url
 				let id = urlQuery.get('id'); //search for 'id=' in query and return the value
-				if (this.medications !== null) {
+				if (this.medications !== null && this.medications.length > 0) {
 					axios.post('/api/patient/'+ id + '/addMedications', this.medications).then(response => {
 						console.log(response)
 					}).catch(error => {
@@ -97,13 +97,17 @@ Vue.component('new_reading',{
 					});
 				}
 					console.log(this.medications);
+				this.readingId = res.data.id;
+				if(sendRef) {
+                    this.sendReferral()
+                }
                 }).catch(error => {
                 	console.log(error)
                 	this.error_snackbar = true;
 				});
         },
 		// validate to be saved
-        validate(readingFinished, bypass) {
+        validate(sendRef, readingFinished, bypass) {
         	this.retestDialog = !readingFinished;
         	if (bypass) { // removes all
         		localStorage.removeItem(this.patientID);
@@ -114,16 +118,16 @@ Vue.component('new_reading',{
 					this.symptoms = []; //If no symptom is selected we have to return an empty list
 				}
 			}
-			this.submit(readingFinished);
+			this.submit(sendRef, readingFinished);
         },
 		// src: https://www.w3resource.com/javascript-exercises/javascript-date-exercise-44.php
 		equalDates(dt2, dt1) {
 			return (dt2-dt1 === 0)
 		},
-		retestValidator() {
+		retestValidator(sendRef) {
         	if (localStorage.getItem(this.patientID+1) !== null) {
         		// third reading
-        		this.validate(true, false); // finished
+        		this.validate(sendRef, true, false); // finished
 				this.clearLocalStorage();
 				return;
 			}
@@ -134,16 +138,17 @@ Vue.component('new_reading',{
         		if (patientObj.colour === 1 || patientObj.colour === 2) { // 1st reading was yellow
         			// check timer
 					if (!this.equalDates(patientObj.date, new Date().toLocaleTimeString())) {
+						this.retestDialog = true;
 						this.wait_snackbar = true;
 						return;
 					} else {
 						if (patientObj.colour === 1 || patientObj.colour === 2) { // 2nd reading yellow
 							if (this.colour === 1 || this.colour === 2) {
-								this.validate(true, false);
+								this.validate(sendRef, true, false);
 								this.clearLocalStorage();
 								return;
 							} else { // 2nd reading green or red
-								this.validate(false, false); // save but reading not done
+								this.validate(sendRef,false, false); // save but reading not done
 								localStorage.setItem(this.patientID+1, JSON.stringify(this.buildCurrentPatientObject()));
 								return;
 							}
@@ -152,11 +157,11 @@ Vue.component('new_reading',{
 				} else { // 1st reading was red
 					if (this.colour === 3 || this.colour === 4) {
 						// 2nd reading is read. reading process is done
-						this.validate(true, false);
+						this.validate(sendRef, true, false);
 						this.clearLocalStorage();
 						return;
 					} else {
-						this.validate(false, false);
+						this.validate(sendRef, false, false);
 						this.retestDialog = true;
 						return;
 					}
@@ -166,16 +171,16 @@ Vue.component('new_reading',{
         		// this is the first reading
 				if (this.colour === 0) { // GREEN
 					console.log("Green");
-					this.validate(true, false);
+					this.validate(sendRef, true, false);
 					return;
 				} else {
 					console.log("YELLOW");
 					if (this.colour === 1 || this.colour === 2) { // YELLOW
-						this.validate(false, false);
+						this.validate(sendRef,false, false);
 						localStorage.setItem(this.patientID, JSON.stringify(this.buildCurrentPatientObject(true))); // wait time 15 mins
 					} else { // RED
 						console.log("RED");
-						this.validate(false, false);
+						this.validate(sendRef, false, false);
 						localStorage.setItem(this.patientID, JSON.stringify(this.buildCurrentPatientObject()));
 					}
 				}
@@ -232,7 +237,9 @@ Vue.component('new_reading',{
         getAllHealthCentreOptions() {
             //waiting for merge of updated permissions for this api
             axios.get('/api/hc/all').then(response => {
+                console.log(response.data)
                 this.healthCentreList = response.data;
+                this.healthCentreList.unshift({id: "0", name: "No Health Centre"});
             }).catch(error => {
                 console.error(error);
             });
@@ -242,6 +249,42 @@ Vue.component('new_reading',{
         hasMedications() {
             console.log(this.medications.length);
             return this.medications.length !== 0;
+        },
+        toPatient() {
+            window.location.assign('/patientSummary?id=' + this.patientID)
+        },
+        sendReferral() {
+            console.log("send that referral");
+            console.log(this.getVHTName());
+            console.log(this.getPatientName());
+            console.log(this.patientID);
+                axios.post('/api/referral/new', {
+                patientId: this.patientID,
+                readingId: this.readingId,
+                healthCentreId: this.selectedHealthCentre.id
+
+            }).then(response => {
+                console.log(response)
+                })
+
+        },
+        getVHTName() {
+            axios.get('/api/user/whoami').then(response => {
+                console.log("Username: " + response);
+                return response.data
+            })
+        },
+        getPatientName() {
+            axios.get('/api/patient/' + this.patientID + '/info').then(response => {
+                console.log(response.data);
+                return response.data.name;
+            })
+        },
+        healthCenterSelected() {
+            if (this.selectedHealthCentre === null) {
+                return false;
+            }
+            else return this.selectedHealthCentre.name !== "No Health Centre";
         }
     },
     mounted() {
@@ -337,6 +380,7 @@ Vue.component('new_reading',{
 				</v-card-actions>
 			</v-card>
 		</div>
+	<div class="customContainer">
         <div class="customDiv">
         <v-stepper v-model="currentStep">
         	<v-stepper-header>
@@ -344,7 +388,7 @@ Vue.component('new_reading',{
                	<v-divider></v-divider>
               	<v-stepper-step :complete="currentStep > 2" step="2" editable>Symptoms</v-stepper-step>
                	<v-divider></v-divider>
-            	<v-stepper-step step="currentStep > 3" step="3" editable>Medications</v-stepper-step>
+            	<v-stepper-step :complete="currentStep > 3" step="3" editable>Medications</v-stepper-step>
             	<v-divider></v-divider>
             	<v-stepper-step step="4" editable>Review</v-stepper-step>
             </v-stepper-header>
@@ -352,7 +396,7 @@ Vue.component('new_reading',{
 <!--        //This part is the first tab-->
 				<v-stepper-content step="1">
 					<v-card
-					<v-card  :elevation= "0" min-width="500">
+					<v-card  :elevation= "0" min-width="500" max-width="500">
 					<v-card-title>
 					</v-card-title>
 					<v-form ref="newReadingForm"
@@ -394,9 +438,9 @@ Vue.component('new_reading',{
 				</v-stepper-content>
 				<!--        This part is the second tab-->
 				<v-stepper-content step="2">
-					<v-card  :elevation= "0" min-width="500">
+					<v-card  :elevation= "0" min-width="500" max-width="500">
 					<v-container>
-					  <v-checkbox v-model="noSymptoms" label="No Symptoms" value="No Symptoms"></v-checkbox>
+					  <v-checkbox v-model="noSymptoms" label="No Symptoms"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Headache" :disabled="noSymptoms" value="Headache"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Blurred Vision" :disabled="noSymptoms" value="Blurred Vision"></v-checkbox>
 					  <v-checkbox v-model="symptoms" label="Abdominal Pain" :disabled="noSymptoms" value="Abdominal Pain"></v-checkbox>
@@ -523,27 +567,32 @@ Vue.component('new_reading',{
 							</v-list-item-content>
 						</v-list-item>
 		          	</v-card>
-		        <v-btn color="primary" @click="retestValidator">Save reading</v-btn>
+		        <v-btn v-if="!healthCenterSelected()" color="primary" @click="retestValidator(false)">Save reading</v-btn>
 		        <v-btn color="error" small @click="clearLocalStorage">Clear Retests</v-btn>
-		        <v-btn color="error" small @click="printLocalStorage">Print Retests</v-btn>
-		        <v-icon v-if="finished"large color="green darken-2" >mdi-check</v-icon>
+<!--		        // <v-btn color="error" small @click="printLocalStorage">Print Retests</v-btn>-->
+		        <v-btn v-if="healthCenterSelected()" @click="retestValidator(true)" color="error">Send referral</v-btn>
+		        <v-icon v-if="finished" large color="green darken-2" >mdi-check</v-icon>
+		        <v-btn v-if="finished" color="secondary" @click="toPatient">Back to patient</v-btn>
 		        </v-stepper-content>
 		  	</v-stepper-items>
 		</v-stepper>
 		</div>
 		<div class="customDiv" v-if="finished" >
-			<v-card class="list-card">
+			<v-card class="list-card" max-width="500">
 				<v-card-title>
 				<h4>Reading Saved. Instructions:</h4>
 				</v-card-title>
 				<v-list>
 					<v-list-item-content>
+					    <li>
+                            <img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
+                        </li>
 						<v-list-item-title>{{advice.analysis}}</v-list-item-title>
-						<v-list-item-title>{{advice.summary}}</v-list-item-title>
+						<v-list-item-title class="text-justify text-left white-space-wrap">{{advice.summary}}</v-list-item-title>
 					</v-list-item-content>
 					<v-list-item-content>
 						<v-list-item-title>Advice Details:</v-list-item-title>
-						<v-img class="adviceDetailsImg" v-if="advice.details" :src=advice.details contain></v-img>
+						<p class="text-justify text-left caption white-space-wrap">{{advice.details}}</p>
 					</v-list-item-content>
 					<v-list-item-content>
 						<v-list-item-title>Condition:</v-list-item-title>
@@ -582,7 +631,7 @@ Vue.component('new_reading',{
         </v-snackbar>
         <v-snackbar v-model="wait_snackbar">
             Wait until {{waitTime}} to create reading for patient: {{patientID}}
-            <v-btn color="green" @click="validate(true, true)">Save anyway</v-btn>
+            <v-btn color="green" @click="validate(false, true, true)">Save anyway</v-btn>
         </v-snackbar>
     </div>
 	`
