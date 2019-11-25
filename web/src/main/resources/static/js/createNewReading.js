@@ -109,7 +109,7 @@ Vue.component('new_reading',{
 		// validate to be saved
         validate(sendRef, readingFinished, bypass) {
         	this.retestDialog = !readingFinished;
-        	if (bypass) { // removes all
+        	if (bypass) { // remove retest tracking for this patient
         		localStorage.removeItem(this.patientID);
         		localStorage.removeItem(this.patientID+1);
 			}
@@ -585,7 +585,7 @@ Vue.component('new_reading',{
 				<v-list>
 					<v-list-item-content>
 					    <li>
-                            <img id="light" ref="light" v-if="trafficIcon" :src=trafficIcon height="35" width="45" style="margin-bottom: 7px">
+                            <img id="light" ref="light" v-if="trafficIconCurrent" :src=trafficIconCurrent height="35" width="45" style="margin-bottom: 7px">
                         </li>
 						<v-list-item-title>{{advice.analysis}}</v-list-item-title>
 						<v-list-item-title class="text-justify text-left white-space-wrap">{{advice.summary}}</v-list-item-title>
