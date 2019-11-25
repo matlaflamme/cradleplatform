@@ -81,7 +81,7 @@ public class ReferralController {
 
 	@PostMapping("/send")
 	public Referral saveReferral(Authentication auth, @RequestBody ReferralMessage referral) throws Exception {
-		return referralManagerService.saveReferral(referral);
+		return referralManagerService.saveReferral(auth, referral);
 	}
 
 	@PostMapping("/new")

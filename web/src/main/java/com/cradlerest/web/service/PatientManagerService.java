@@ -1,8 +1,6 @@
 package com.cradlerest.web.service;
 
-import com.cradlerest.web.model.Patient;
-import com.cradlerest.web.model.PatientWithLatestReadingView;
-import com.cradlerest.web.model.Reading;
+import com.cradlerest.web.model.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.Authentication;
@@ -110,7 +108,7 @@ public interface PatientManagerService {
 	 * @throws Exception If an error occurred.
 	 */
 	Patient savePatient(@Nullable Authentication auth, @Nullable Patient patient) throws Exception;
-
+	public Patient savePatientWithUser(User user, @Nullable Patient patient) throws Exception;
 	@Deprecated
 	default Patient savePatient(@Nullable Patient patient) throws Exception {
 		return savePatient(null, patient);
