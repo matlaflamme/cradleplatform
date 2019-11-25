@@ -120,7 +120,6 @@ Vue.component('new_reading',{
 			}
 			this.submit(sendRef, readingFinished);
         },
-		// src: https://www.w3resource.com/javascript-exercises/javascript-date-exercise-44.php
 		equalDates(dt2, dt1) {
 			return (dt2-dt1 === 0)
 		},
