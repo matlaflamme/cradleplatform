@@ -27,51 +27,51 @@ function getReadingColorIcon(digit){
 
 
 Vue.component('basic_info', {
-	vuetify: new Vuetify(),
-	data: () => ({
-		patientInformation: {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
-			"gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
-			"readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
-				"timestamp":""}]}
-	}),
-	mounted() {
-		let urlQuery = new URLSearchParams(location.search);
-		let id = urlQuery.get('id');
-		axios.get('/api/patient/' + id).then(response => {
-			this.patientInformation = response.data;
-			this.getSexValueAsString();
-		});
-	},
-	methods: {
-		getSexValueAsString() {
-			if (this.patientInformation.sex === 0) {
-				this.patientInformation.sex = "Male";
-			}
-			else {
-				this.patientInformation.sex = "Female";
-			}
-		}
-	},
-	template:
-		'<div>' +
-		'<v-row>' +
-		'<v-col md="4" cols="12">' +
-		'<strong class="font-weight-thin display-2">Patient Details</strong>' +
-		'</v-col>' +
-		'<v-col md="2" cols="12" id="header">' +
-		'<span id="header-content" class="headline">ID: <span class="font-weight-light">{{patientInformation.id}}</span></span>' +
-		'</v-col>' +
-		'<v-col md="2" cols="12" id="header">' +
-		'<span id="header-content" class="headline">Initials: <span class="font-weight-light">{{patientInformation.name}}</span></span>' +
-		'</v-col>' +
-		'<v-col md="2" cols="12" id="header">' +
-		'<span id="header-content" class="headline">Sex: <span class="font-weight-light">{{patientInformation.sex}}</span></span>' +
-		'</v-col>' +
-		'<v-col md="2" cols="12" id="header">' +
-		'<span id="header-content" class="headline">Birth Year: <span class="font-weight-light">{{patientInformation.birthYear}}</span></span>' +
-		'</v-col>' +
-		'</v-row>' +
-		'</div>'
+    vuetify: new Vuetify(),
+    data: () => ({
+        patientInformation: {"id":"","name":"","villageNumber":"","birthYear":0,"sex":0,
+            "gestationalAge":0,"medicalHistory":null,"drugHistory":null,"otherSymptoms":null,"pregnant":null,
+            "readings":[{"id":0,"patientId":"","systolic":0,"diastolic":0,"heartRate":0,"colour":0,
+                "timestamp":""}]}
+    }),
+    mounted() {
+        let urlQuery = new URLSearchParams(location.search);
+        let id = urlQuery.get('id');
+        axios.get('/api/patient/' + id).then(response => {
+            this.patientInformation = response.data;
+            this.getSexValueAsString();
+        });
+    },
+    methods: {
+        getSexValueAsString() {
+            if (this.patientInformation.sex === 0) {
+                this.patientInformation.sex = "Male";
+            }
+            else {
+                this.patientInformation.sex = "Female";
+            }
+        }
+    },
+    template:
+        '<div>' +
+            '<v-row>' +
+                '<v-col md="4" cols="12">' +
+                    '<strong class="font-weight-thin display-2">Patient Details</strong>' +
+                '</v-col>' +
+                '<v-col md="3" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">ID: <span class="title font-weight-light">{{patientInformation.id}}</span></span>' +
+                '</v-col>' +
+                '<v-col md="2" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">Initials: <span class="title font-weight-light">{{patientInformation.name}}</span></span>' +
+                '</v-col>' +
+                '<v-col md="2" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">Sex: <span class="font-weight-light">{{patientInformation.sex}}</span></span>' +
+                '</v-col>' +
+                '<v-col md="2" cols="12" id="header">' +
+                    '<span id="header-content" class="headline">Birth Year: <span class="font-weight-light">{{patientInformation.birthYear}}</span></span>' +
+                '</v-col>' +
+            '</v-row>' +
+        '</div>'
 });
 
 // This compnent is for the right of the page, it shows a table of all the patient readings

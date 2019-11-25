@@ -74,6 +74,12 @@ Vue.component('sidebar_item', {
             else if (clicked === "accountSetting") {
                 window.location.assign("/accountSetting")
             }
+            else if (clicked === "healthcentres") {
+                window.location.assign("/healthcentres")
+            }
+            else if (clicked === "createHealthCenter") {
+                window.location.assign("/createHealthCenter")
+            }
         },
     }
 });
